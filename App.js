@@ -25,7 +25,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import SearchHall  from './src/screens/search-halls/search-hall'
+import SearchHall  from './src/screens/SearchHall/SearchHall'
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View,Text } from "react-native";
 
-function SearchHall(props) {
+function SearchHalls(props) {
   return (
     <View style={styles.container}>
       <View style={styles.rect}>
@@ -34,4 +34,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SearchHall;
+export default SearchHalls;
