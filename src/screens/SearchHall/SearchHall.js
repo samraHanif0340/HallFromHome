@@ -1,100 +1,178 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, FlatList } from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import Svg, { Ellipse } from "react-native-svg";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
+// import { SearchBar, Rating } from 'react-native-elements';
+// import SearchBar from "react-native-dynamic-search-bar";
 
 function SearchHall(props) {
+
+  const [hallList, setHallList] = React.useState([
+    {
+      hallName: "Majestic Banquet",
+      seatingCapacity: 700,
+      price: "150,000 PKR",
+      rating: 4.5,
+      imgURL: "../../assets/images/download2.jpg"
+    },
+    {
+      hallName: "Majestic Banquet",
+      seatingCapacity: 700,
+      price: "150,000 PKR",
+      rating: 4.5,
+      imgURL: "../../assets/images/download2.jpg"
+    },
+    {
+      hallName: "Majestic Banquet",
+      seatingCapacity: 700,
+      price: "150,000 PKR",
+      rating: 4.5,
+      imgURL: "../../assets/images/download2.jpg"
+    },
+    {
+      hallName: "Majestic Banquet",
+      seatingCapacity: 700,
+      price: "150,000 PKR",
+      rating: 4.5,
+      imgURL: "../../assets/images/download2.jpg"
+    },
+    {
+      hallName: "Majestic Banquet",
+      seatingCapacity: 700,
+      price: "150,000 PKR",
+      rating: 4.5,
+      imgURL: "../../assets/images/download2.jpg"
+    }
+  ])
+
+
+  // const searchFilterFunction = (searchText) => {
+  //   if (searchText) {
+  //     hallList = hallList.filter((eachRow) => {
+  //       return eachRow.title ? eachRow.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1 : null
+  //     })
+  //   }
+  //   this.setState({
+  //     searchText: searchText,
+  //     hallList: hallList
+  //   })
+
+  // }
+
   return (
     <View style={styles.container}>
-      <View style={styles.rect}>
-        <View style={styles.rect3Stack}>
-          <View style={styles.rect3}>
-            <View style={styles.rect4Row}>
-              <View style={styles.rect4}>
-                <View style={styles.icon3Row}>
-                  <FontAwesomeIcon
-                    name="search"
-                    style={styles.icon3}
-                  ></FontAwesomeIcon>
-                  <Text style={styles.loremIpsum}>
-                    Search for halls, banquets...
-                  </Text>
+      <View style={styles.rectRow}>
+        <View style={styles.rect}>
+          <View style={styles.rect3Stack}>
+
+            {/* <View style={styles.rect3}>
+              <View style={styles.rect4Row}>
+                <View style={styles.rect4}>
+                  <View style={styles.icon3Row}>
+                    <FontAwesomeIcon
+                      name="search"
+                      style={styles.icon3}
+                    ></FontAwesomeIcon>
+                    <Text style={styles.loremIpsum}>
+                      Search for halls, banquets...
+                    </Text>
+                  </View>
                 </View>
+                <FontAwesomeIcon
+                  name="sliders"
+                  style={styles.icon2}
+                ></FontAwesomeIcon>
               </View>
-              <FontAwesomeIcon
-                name="sliders"
-                style={styles.icon2}
-              ></FontAwesomeIcon>
+            </View> */}
+
+            {/* <SearchBar
+              lightTheme
+              round
+              searchIcon={{ size: 24 }}
+              placeholder="Search for halls, banquets..."
+              value="dasdas"
+              onChangeText={text => searchFilterFunction(text)}
+            />   */}
+
+{/* <SearchBar
+  fontColor="#c6c6c6"
+  iconColor="#c6c6c6"
+  shadowColor="#282828"
+  cancelIconColor="#c6c6c6"
+  backgroundColor="#353d5e"
+  placeholder="Search for halls, banquets..."
+  onChangeText={text => searchFilterFunction(text)}
+  onSearchPress={() => console.log("Search Icon is pressed")}
+  onClearPress={() => this.filterList("")}
+  onPress={() => alert("onPress")}
+/> */}
+ 
+            <View style={styles.rect2}>
+              <View style={styles.ellipseStackRow}>
+                <View style={styles.ellipseStack}>
+                  <Svg viewBox="0 0 56 56" style={styles.ellipse}>
+                    <Ellipse
+                      stroke="rgba(230, 230, 230,1)"
+                      strokeWidth={0}
+                      fill="rgba(230, 230, 230,1)"
+                      cx={28}
+                      cy={28}
+                      rx={28}
+                      ry={28}
+                    ></Ellipse>
+                  </Svg>
+                  <EntypoIcon name="menu" style={styles.icon}></EntypoIcon>
+                </View>
+                <Text style={styles.home}>Home</Text>
+                <MaterialIconsIcon
+                  name="favorite-border"
+                  style={styles.icon4}
+                ></MaterialIconsIcon>
+                <MaterialCommunityIconsIcon
+                  name="file-document-box-multiple"
+                  style={styles.icon5}
+                ></MaterialCommunityIconsIcon>
+              </View>
             </View>
           </View>
-          <View style={styles.rect2}>
-            <View style={styles.ellipseStackRow}>
-              <View style={styles.ellipseStack}>
-                <Svg viewBox="0 0 56 56" style={styles.ellipse}>
-                  <Ellipse
-                    stroke="rgba(230, 230, 230,1)"
-                    strokeWidth={0}
-                    fill="rgba(230, 230, 230,1)"
-                    cx={28}
-                    cy={28}
-                    rx={28}
-                    ry={28}
-                  ></Ellipse>
-                </Svg>
-                <EntypoIcon name="menu" style={styles.icon}></EntypoIcon>
+
+
+          <FlatList
+            data={hallList}
+            renderItem={({ item }) => (
+              <View style={styles.imageStackStack}>
+                <View style={styles.imageStack}>
+                  <Image
+                    source={require("../../assets/images/download2.jpg")}
+                    // source={{ uri: item.imgURL }}
+                    resizeMode="contain"
+                    style={styles.image}
+                  ></Image>
+                  <Text style={styles.majesticBanquet}>{item.hallName}</Text>
+                  <Text style={styles.limit700Persons}>Limit {item.seatingCapacity} Persons</Text>
+                </View>
+                <View style={styles.loremIpsum2Stack}>
+                  <Text style={styles.loremIpsum2}>{item.price}</Text>
+                  <FontAwesomeIcon
+                    name="star"
+                    style={styles.icon6}
+                  ></FontAwesomeIcon>
+                </View>
+                <Text style={styles.loremIpsum3}>({item.rating})</Text>
               </View>
-              <Text style={styles.home}>Home</Text>
-              <MaterialIconsIcon
-                name="favorite-border"
-                style={styles.icon4}
-              ></MaterialIconsIcon>
-              <MaterialCommunityIconsIcon
-                name="file-document-box-multiple"
-                style={styles.icon5}
-              ></MaterialCommunityIconsIcon>
-            </View>
-          </View>
-        </View>
-        <View style={styles.imageStackStack}>
-          <View style={styles.imageStack}>
-            <Image
-              source={require("../../assets/images/download2.jpg")}
-              resizeMode="contain"
-              style={styles.image}
-            ></Image>
-            <Text style={styles.majesticBanquet}>Majestic Banquet</Text>
-            <Text style={styles.limit700Persons}>Limit 700 Persons</Text>
-          </View>
-          <View style={styles.loremIpsum2Stack}>
-            <Text style={styles.loremIpsum2}>150,000 - 250,000 PKR</Text>
-            <FontAwesomeIcon name="star" style={styles.icon6}></FontAwesomeIcon>
-          </View>
-          <Text style={styles.loremIpsum3}>(4.5)</Text>
+            )}
+          />
+
         </View>
         <Image
-          source={require("../../assets/images/download2.jpg")}
+          source={require("../../assets/images/download21.jpg")}
           resizeMode="contain"
-          style={styles.image1}
+          style={styles.image2}
         ></Image>
-        <View style={styles.ayanHallStackRow}>
-          <View style={styles.ayanHallStack}>
-            <Text style={styles.ayanHall}>Ayan Hall</Text>
-            <Text style={styles.limit500Persons}>Limit 500Persons</Text>
-          </View>
-          <View style={styles.loremIpsum4Column}>
-            <Text style={styles.loremIpsum4}>75,000 - 150,000 PKR</Text>
-            <View style={styles.icon7Row}>
-              <FontAwesomeIcon
-                name="star"
-                style={styles.icon7}
-              ></FontAwesomeIcon>
-              <Text style={styles.loremIpsum5}>(3.9)</Text>
-            </View>
-          </View>
-        </View>
+
       </View>
     </View>
   );
@@ -103,13 +181,13 @@ function SearchHall(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(176,163,163,1)"
+    backgroundColor: "rgba(176,163,163,1)",
+    flexDirection: "row"
   },
   rect: {
     width: 360,
-    height: 720,
-    backgroundColor: "rgba(222,206,206,1)",
-    marginTop: 18
+    height: 760,
+    backgroundColor: "rgba(222,206,206,1)"
   },
   rect3: {
     height: 80,
@@ -155,25 +233,25 @@ const styles = StyleSheet.create({
     height: 24,
     flexDirection: "row",
     flex: 1,
-    marginRight: 85,
-    marginLeft: 9,
-    marginTop: 11
+    marginRight: 86,
+    marginLeft: 8,
+    marginTop: 13
   },
   icon2: {
     color: "rgba(182,10,10,1)",
     fontSize: 32,
     height: 32,
     width: 27,
-    marginLeft: 15,
-    marginTop: 6
+    marginLeft: 14,
+    marginTop: 8
   },
   rect4Row: {
     height: 48,
     flexDirection: "row",
     flex: 1,
     marginRight: 22,
-    marginLeft: 11,
-    marginTop: 20
+    marginLeft: 12,
+    marginTop: 13
   },
   rect2: {
     top: 0,
@@ -237,8 +315,8 @@ const styles = StyleSheet.create({
     marginTop: 15
   },
   rect3Stack: {
-    height: 156,
-    marginTop: 5
+    height: 161,
+    marginTop: 23
   },
   image: {
     top: 0,
@@ -250,14 +328,14 @@ const styles = StyleSheet.create({
   },
   majesticBanquet: {
     top: 173,
-    left: 9,
+    left: 11,
     position: "absolute",
     fontFamily: "georgia-regular",
     color: "rgba(66,62,62,1)"
   },
   limit700Persons: {
     top: 191,
-    left: 9,
+    left: 11,
     position: "absolute",
     fontFamily: "roboto-italic",
     color: "rgba(0,0,0,1)",
@@ -292,14 +370,14 @@ const styles = StyleSheet.create({
   },
   loremIpsum2Stack: {
     top: 178,
-    left: 208,
+    left: 210,
     width: 119,
     height: 31,
     position: "absolute"
   },
   loremIpsum3: {
     top: 192,
-    left: 293,
+    left: 295,
     position: "absolute",
     fontFamily: "roboto-700",
     color: "rgba(0,0,0,1)",
@@ -308,8 +386,8 @@ const styles = StyleSheet.create({
   imageStackStack: {
     width: 335,
     height: 209,
-    marginTop: 16,
-    marginLeft: 11
+    marginTop: 11,
+    marginLeft: 9
   },
   image1: {
     width: 335,
@@ -375,6 +453,19 @@ const styles = StyleSheet.create({
     marginTop: 6,
     marginLeft: 17,
     marginRight: 15
+  },
+  image2: {
+    width: 335,
+    height: 175,
+    borderRadius: 16,
+    marginLeft: 2138,
+    marginTop: 117
+  },
+  rectRow: {
+    height: 760,
+    flexDirection: "row",
+    flex: 1,
+    marginRight: -2473
   }
 });
 
