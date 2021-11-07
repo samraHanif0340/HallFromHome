@@ -5,12 +5,12 @@ import Svg, { Ellipse } from "react-native-svg";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
-// import { SearchBar, Rating } from 'react-native-elements';
+import { SearchBar, Rating } from 'react-native-elements';
 // import SearchBar from "react-native-dynamic-search-bar";
 
 function SearchScreenPage(props) {
 
-  const [hallList, setHallList] = React.useState([
+  let [hallList, setHallList] = React.useState([
     {
       hallName: "Majestic Banquet",
       seatingCapacity: 700,
@@ -49,22 +49,22 @@ function SearchScreenPage(props) {
   ])
 
 
-  // const searchFilterFunction = (searchText) => {
-  //   if (searchText) {
-  //     hallList = hallList.filter((eachRow) => {
-  //       return eachRow.title ? eachRow.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1 : null
-  //     })
-  //   }
-  //   this.setState({
-  //     searchText: searchText,
-  //     hallList: hallList
-  //   })
+  const searchFilterFunction = (searchText) => {
+    if (searchText) {
+      hallList = hallList.filter((eachRow) => {
+        return eachRow.title ? eachRow.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1 : null
+      })
+    }
+    this.setState({
+      searchText: searchText,
+      hallList: hallList
+    })
 
-  // }
+  }
 
   return (
     <View style={styles.container}>
-      <View style={styles.rectRow}>
+    
 
 
             {/* <View style={styles.rect3}>
@@ -87,14 +87,7 @@ function SearchScreenPage(props) {
               </View>
             </View> */}
 
-            {/* <SearchBar
-              lightTheme
-              round
-              searchIcon={{ size: 24 }}
-              placeholder="Search for halls, banquets..."
-              value="dasdas"
-              onChangeText={text => searchFilterFunction(text)}
-            />   */}
+          
 
             {/* <SearchBar
   fontColor="#c6c6c6"
@@ -109,13 +102,20 @@ function SearchScreenPage(props) {
   onPress={() => alert("onPress")}
 /> */}
 
-           
+<SearchBar
+              lightTheme
+              round
+              searchIcon={{ size: 24 }}
+              placeholder="Search for halls, banquets..."
+              
+              onChangeText={text => searchFilterFunction(text)}
+            />            
 <FlatList
 data={hallList}
 renderItem={({ item }) => (
   <View style={styles.imageStackStack}>
     <View style={styles.imageStack}>
-      <TouchableHighlight onPress={() => this.props.navigation.navigate('HallDetails')}>
+      <TouchableHighlight onPress={() => props.navigation.navigate('Bookings')}>
         <Image
           source={require("../../assets/images/download2.jpg")}
           // source={{ uri: item.imgURL }}
@@ -140,7 +140,7 @@ renderItem={({ item }) => (
 )}
 />
 
-      </View>
+  
     </View>
   );
 }
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "rgba(176,163,163,1)",
-    flexDirection: "row"
+    flexDirection: "column"
   },
   rect: {
     width: 360,
