@@ -7,6 +7,9 @@
  */
 
 import React from 'react';
+// import { NavigationContainer } from '@react-navigation/native';
+// import { createStackNavigator } from '@react-navigation/stack';
+
 import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -25,7 +28,11 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import SearchHall  from './src/screens/SearchHall/SearchHall'
+import SearchScreenPage  from './src/screens/SearchHall/SearchHall'
+// const Stack = createStackNavigator();
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+const Drawer = createDrawerNavigator();
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -88,7 +95,24 @@ const App: () => Node = () => {
     //     </View>
     //   </ScrollView>
     // </SafeAreaView>
-    <SearchHall/>
+<NavigationContainer>
+<Drawer.Navigator initialRouteName="Home">
+				<Drawer.Screen name="Home" component={SearchScreenPage} />
+				<Drawer.Screen name="Bookings" component={SearchScreenPage} />
+				<Drawer.Screen name="Reviews" component={SearchScreenPage} />
+			</Drawer.Navigator>
+        {/* <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={SearchHall}
+          />
+          <Stack.Screen
+            name="HallDetails"
+            component={BookingDetailPage}
+          />
+        </Stack.Navigator> */}
+      </NavigationContainer>
+    // <SearchHall/>
   );
 };
 

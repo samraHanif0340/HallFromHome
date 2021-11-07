@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, FlatList } from "react-native";
+import { StyleSheet, View, Text, Image, FlatList,TouchableHighlight  } from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import Svg, { Ellipse } from "react-native-svg";
 import EntypoIcon from "react-native-vector-icons/Entypo";
@@ -8,7 +8,7 @@ import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommun
 // import { SearchBar, Rating } from 'react-native-elements';
 // import SearchBar from "react-native-dynamic-search-bar";
 
-function SearchHall(props) {
+function SearchScreenPage(props) {
 
   const [hallList, setHallList] = React.useState([
     {
@@ -65,8 +65,7 @@ function SearchHall(props) {
   return (
     <View style={styles.container}>
       <View style={styles.rectRow}>
-        <View style={styles.rect}>
-          <View style={styles.rect3Stack}>
+
 
             {/* <View style={styles.rect3}>
               <View style={styles.rect4Row}>
@@ -97,7 +96,7 @@ function SearchHall(props) {
               onChangeText={text => searchFilterFunction(text)}
             />   */}
 
-{/* <SearchBar
+            {/* <SearchBar
   fontColor="#c6c6c6"
   iconColor="#c6c6c6"
   shadowColor="#282828"
@@ -109,69 +108,37 @@ function SearchHall(props) {
   onClearPress={() => this.filterList("")}
   onPress={() => alert("onPress")}
 /> */}
- 
-            <View style={styles.rect2}>
-              <View style={styles.ellipseStackRow}>
-                <View style={styles.ellipseStack}>
-                  <Svg viewBox="0 0 56 56" style={styles.ellipse}>
-                    <Ellipse
-                      stroke="rgba(230, 230, 230,1)"
-                      strokeWidth={0}
-                      fill="rgba(230, 230, 230,1)"
-                      cx={28}
-                      cy={28}
-                      rx={28}
-                      ry={28}
-                    ></Ellipse>
-                  </Svg>
-                  <EntypoIcon name="menu" style={styles.icon}></EntypoIcon>
-                </View>
-                <Text style={styles.home}>Home</Text>
-                <MaterialIconsIcon
-                  name="favorite-border"
-                  style={styles.icon4}
-                ></MaterialIconsIcon>
-                <MaterialCommunityIconsIcon
-                  name="file-document-box-multiple"
-                  style={styles.icon5}
-                ></MaterialCommunityIconsIcon>
-              </View>
-            </View>
-          </View>
 
-
-          <FlatList
-            data={hallList}
-            renderItem={({ item }) => (
-              <View style={styles.imageStackStack}>
-                <View style={styles.imageStack}>
-                  <Image
-                    source={require("../../assets/images/download2.jpg")}
-                    // source={{ uri: item.imgURL }}
-                    resizeMode="contain"
-                    style={styles.image}
-                  ></Image>
-                  <Text style={styles.majesticBanquet}>{item.hallName}</Text>
-                  <Text style={styles.limit700Persons}>Limit {item.seatingCapacity} Persons</Text>
-                </View>
-                <View style={styles.loremIpsum2Stack}>
-                  <Text style={styles.loremIpsum2}>{item.price}</Text>
-                  <FontAwesomeIcon
-                    name="star"
-                    style={styles.icon6}
-                  ></FontAwesomeIcon>
-                </View>
-                <Text style={styles.loremIpsum3}>({item.rating})</Text>
-              </View>
-            )}
-          />
-
-        </View>
+           
+<FlatList
+data={hallList}
+renderItem={({ item }) => (
+  <View style={styles.imageStackStack}>
+    <View style={styles.imageStack}>
+      <TouchableHighlight onPress={() => this.props.navigation.navigate('HallDetails')}>
         <Image
-          source={require("../../assets/images/download21.jpg")}
+          source={require("../../assets/images/download2.jpg")}
+          // source={{ uri: item.imgURL }}
+
           resizeMode="contain"
-          style={styles.image2}
+          style={styles.image}
         ></Image>
+      </TouchableHighlight>
+
+      <Text style={styles.majesticBanquet}>{item.hallName}</Text>
+      <Text style={styles.limit700Persons}>Limit {item.seatingCapacity} Persons</Text>
+    </View>
+    <View style={styles.loremIpsum2Stack}>
+      <Text style={styles.loremIpsum2}>{item.price}</Text>
+      <FontAwesomeIcon
+        name="star"
+        style={styles.icon6}
+      ></FontAwesomeIcon>
+    </View>
+    <Text style={styles.loremIpsum3}>({item.rating})</Text>
+  </View>
+)}
+/>
 
       </View>
     </View>
@@ -469,4 +436,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SearchHall;
+export default SearchScreenPage;
+
+
