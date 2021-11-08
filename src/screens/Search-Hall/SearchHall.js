@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, FlatList,TouchableHighlight  } from "react-native";
+import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight } from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import Svg, { Ellipse } from "react-native-svg";
 import EntypoIcon from "react-native-vector-icons/Entypo";
@@ -8,7 +8,7 @@ import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommun
 import { SearchBar, Rating } from 'react-native-elements';
 // import SearchBar from "react-native-dynamic-search-bar";
 
-function SearchScreenPage(props) {
+function SearchPage(props) {
 
   let [hallList, setHallList] = React.useState([
     {
@@ -19,14 +19,14 @@ function SearchScreenPage(props) {
       imgURL: "../../assets/images/download2.jpg"
     },
     {
-      hallName: "Majestic Banquet",
+      hallName: "Ayan Banquet",
       seatingCapacity: 700,
       price: "150,000 PKR",
       rating: 4.5,
       imgURL: "../../assets/images/download2.jpg"
     },
     {
-      hallName: "Majestic Banquet",
+      hallName: "Modern Banquet",
       seatingCapacity: 700,
       price: "150,000 PKR",
       rating: 4.5,
@@ -48,26 +48,49 @@ function SearchScreenPage(props) {
     }
   ])
 
+  let [searchText, setSearchText] = React.useState('')
+
 
   const searchFilterFunction = (searchText) => {
     if (searchText) {
       hallList = hallList.filter((eachRow) => {
-        return eachRow.title ? eachRow.title.toLowerCase().indexOf(searchText.toLowerCase()) > -1 : null
+        return eachRow.hallName ? eachRow.hallName.toLowerCase().indexOf(searchText.toLowerCase()) > -1 : hallList
       })
     }
-    this.setState({
-      searchText: searchText,
-      hallList: hallList
-    })
-
+    // this.setState({
+    //   searchText: searchText,
+    //   hallList: hallList
+    // })
+    setSearchText(searchText);
+    setHallList(hallList);
+    
   }
+
+  // const searchFilterFunction = text => {
+  //   const formattedQuery = text.toLowerCase();
+  //   const filteredData = filter(fullData, user => {
+  //     return contains(user, formattedQuery);
+  //   });
+  //   setData(filteredData);
+  //   setQuery(text);
+  // };
+  
+  // const contains = ({ name, email }, query) => {
+  //   const { first, last } = name;
+  
+  //   if (first.includes(query) || last.includes(query) || email.includes(query)) {
+  //     return true;
+  //   }
+  
+  //   return false;
+  // };
 
   return (
     <View style={styles.container}>
-    
 
 
-            {/* <View style={styles.rect3}>
+
+      {/* <View style={styles.rect3}>
               <View style={styles.rect4Row}>
                 <View style={styles.rect4}>
                   <View style={styles.icon3Row}>
@@ -87,9 +110,9 @@ function SearchScreenPage(props) {
               </View>
             </View> */}
 
-          
 
-            {/* <SearchBar
+
+      {/* <SearchBar
   fontColor="#c6c6c6"
   iconColor="#c6c6c6"
   shadowColor="#282828"
@@ -102,45 +125,45 @@ function SearchScreenPage(props) {
   onPress={() => alert("onPress")}
 /> */}
 
-<SearchBar
-              lightTheme
-              round
-              searchIcon={{ size: 24 }}
-              placeholder="Search for halls, banquets..."
-              
-              onChangeText={text => searchFilterFunction(text)}
-            />            
-<FlatList
-data={hallList}
-renderItem={({ item }) => (
-  <View style={styles.imageStackStack}>
-    <View style={styles.imageStack}>
-      <TouchableHighlight onPress={() => props.navigation.navigate('Bookings')}>
-        <Image
-          source={require("../../assets/images/download2.jpg")}
-          // source={{ uri: item.imgURL }}
+      <SearchBar
+        lightTheme
+        round
+        searchIcon={{ size: 24 }}
+        placeholder="Search for halls, banquets..."
+value={searchText}
+        onChangeText={text => searchFilterFunction(text)}
+      />
+      <FlatList
+        data={hallList}
+        renderItem={({ item }) => (
+          <View style={styles.imageStackStack}>
+            <View style={styles.imageStack}>
+              <TouchableHighlight onPress={() => props.navigation.navigate('Hall Details')}>
+                <Image
+                  source={require("../../assets/images/download2.jpg")}
+                  // source={{ uri: item.imgURL }}
 
-          resizeMode="contain"
-          style={styles.image}
-        ></Image>
-      </TouchableHighlight>
+                  resizeMode="contain"
+                  style={styles.image}
+                ></Image>
+              </TouchableHighlight>
 
-      <Text style={styles.majesticBanquet}>{item.hallName}</Text>
-      <Text style={styles.limit700Persons}>Limit {item.seatingCapacity} Persons</Text>
-    </View>
-    <View style={styles.loremIpsum2Stack}>
-      <Text style={styles.loremIpsum2}>{item.price}</Text>
-      <FontAwesomeIcon
-        name="star"
-        style={styles.icon6}
-      ></FontAwesomeIcon>
-    </View>
-    <Text style={styles.loremIpsum3}>({item.rating})</Text>
-  </View>
-)}
-/>
+              <Text style={styles.majesticBanquet}>{item.hallName}</Text>
+              <Text style={styles.limit700Persons}>Limit {item.seatingCapacity} Persons</Text>
+            </View>
+            <View style={styles.loremIpsum2Stack}>
+              <Text style={styles.loremIpsum2}>{item.price}</Text>
+              <FontAwesomeIcon
+                name="star"
+                style={styles.icon6}
+              ></FontAwesomeIcon>
+            </View>
+            <Text style={styles.loremIpsum3}>({item.rating})</Text>
+          </View>
+        )}
+      />
 
-  
+
     </View>
   );
 }
@@ -436,6 +459,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SearchScreenPage;
+export default SearchPage;
 
 

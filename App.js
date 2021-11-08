@@ -10,7 +10,7 @@ import React from 'react';
 // import { NavigationContainer } from '@react-navigation/native';
 // import { createStackNavigator } from '@react-navigation/stack';
 
-import type {Node} from 'react';
+import type { Node } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -28,13 +28,18 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import SearchScreenPage  from './src/screens/SearchHall/SearchHall'
+
 // const Stack = createStackNavigator();
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+
+import SearchPage from './src/screens/Search-Hall/SearchHall';
+import HallDetailPage from './src/screens/Hall-Details-Page/HallDetailsPage';
+
+
 const Drawer = createDrawerNavigator();
 
-const Section = ({children, title}): Node => {
+const Section = ({ children, title }): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -95,13 +100,14 @@ const App: () => Node = () => {
     //     </View>
     //   </ScrollView>
     // </SafeAreaView>
-<NavigationContainer>
-<Drawer.Navigator initialRouteName="Home">
-				<Drawer.Screen name="Home" component={SearchScreenPage} />
-				<Drawer.Screen name="Bookings" component={SearchScreenPage} />
-				<Drawer.Screen name="Reviews" component={SearchScreenPage} />
-			</Drawer.Navigator>
-        {/* <Stack.Navigator>
+    <NavigationContainer>
+      <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Screen name="Home" component={SearchPage} />
+        <Drawer.Screen name="Hall Details" component={HallDetailPage} />
+        <Drawer.Screen name="Bookings" component={SearchPage} />
+        <Drawer.Screen name="Reviews" component={SearchPage} />
+      </Drawer.Navigator>
+      {/* <Stack.Navigator>
           <Stack.Screen
             name="Home"
             component={SearchHall}
@@ -111,7 +117,7 @@ const App: () => Node = () => {
             component={BookingDetailPage}
           />
         </Stack.Navigator> */}
-      </NavigationContainer>
+    </NavigationContainer>
     // <SearchHall/>
   );
 };
