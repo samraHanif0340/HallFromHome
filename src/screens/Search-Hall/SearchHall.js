@@ -33,14 +33,14 @@ function SearchPage(props) {
       imgURL: "../../assets/images/download2.jpg"
     },
     {
-      hallName: "Majestic Banquet",
+      hallName: "Magnolia Banquet",
       seatingCapacity: 700,
       price: "150,000 PKR",
       rating: 4.5,
       imgURL: "../../assets/images/download2.jpg"
     },
     {
-      hallName: "Majestic Banquet",
+      hallName: "Diamond Palace",
       seatingCapacity: 700,
       price: "150,000 PKR",
       rating: 4.5,

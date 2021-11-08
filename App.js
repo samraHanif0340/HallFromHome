@@ -29,16 +29,23 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-// const Stack = createStackNavigator();
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
-import SearchPage from './src/screens/Search-Hall/SearchHall';
-import HallDetailPage from './src/screens/Hall-Details-Page/HallDetailsPage';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
-const Drawer = createDrawerNavigator();
+// import SearchPage from './src/screens/Search-Hall/SearchHall';
+// import HallDetailPage from './src/screens/Hall-Details-Page/HallDetailsPage';
+import Login from './src/screens/auth/Login/Login';
+import DrawerNavigator from './src/components/navigations/Navigations';
 
+
+// const Drawer = createDrawerNavigator();
+
+
+  
+const Stack = createStackNavigator();
 const Section = ({ children, title }): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
@@ -64,6 +71,8 @@ const Section = ({ children, title }): Node => {
     </View>
   );
 };
+
+
 
 const App: () => Node = () => {
   // const isDarkMode = useColorScheme() === 'dark';
@@ -101,22 +110,26 @@ const App: () => Node = () => {
     //   </ScrollView>
     // </SafeAreaView>
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
+      {/* <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={SearchPage} />
         <Drawer.Screen name="Hall Details" component={HallDetailPage} />
-        <Drawer.Screen name="Bookings" component={SearchPage} />
-        <Drawer.Screen name="Reviews" component={SearchPage} />
-      </Drawer.Navigator>
-      {/* <Stack.Navigator>
+        <Drawer.Screen name="Tracking/Status" component={SearchPage} />
+        <Drawer.Screen name="Lodge Complaint/Feedback" component={SearchPage} />
+        <Drawer.Screen name="Personalize Settings" component={SearchPage} />
+        <Drawer.Screen name="Notifications" component={SearchPage} />
+        <Drawer.Screen name="Logout" component={SearchPage} />
+      </Drawer.Navigator> */}
+      <Stack.Navigator>
+      <Stack.Screen
+            name="Login"
+            component={Login}
+          />
           <Stack.Screen
             name="Home"
-            component={SearchHall}
+            component={DrawerNavigator}
           />
-          <Stack.Screen
-            name="HallDetails"
-            component={BookingDetailPage}
-          />
-        </Stack.Navigator> */}
+        
+        </Stack.Navigator>
     </NavigationContainer>
     // <SearchHall/>
   );
