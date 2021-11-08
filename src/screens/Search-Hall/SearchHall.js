@@ -9,62 +9,150 @@ import { SearchBar, Rating } from 'react-native-elements';
 // import SearchBar from "react-native-dynamic-search-bar";
 
 function SearchPage(props) {
-
-  let [hallList, setHallList] = React.useState([
-    {
-      hallName: "Majestic Banquet",
-      seatingCapacity: 700,
-      price: "150,000 PKR",
-      rating: 4.5,
-      imgURL: "../../assets/images/download2.jpg"
-    },
-    {
-      hallName: "Ayan Banquet",
-      seatingCapacity: 700,
-      price: "150,000 PKR",
-      rating: 4.5,
-      imgURL: "../../assets/images/download2.jpg"
-    },
-    {
-      hallName: "Modern Banquet",
-      seatingCapacity: 700,
-      price: "150,000 PKR",
-      rating: 4.5,
-      imgURL: "../../assets/images/download2.jpg"
-    },
-    {
-      hallName: "Magnolia Banquet",
-      seatingCapacity: 700,
-      price: "150,000 PKR",
-      rating: 4.5,
-      imgURL: "../../assets/images/download2.jpg"
-    },
-    {
-      hallName: "Diamond Palace",
-      seatingCapacity: 700,
-      price: "150,000 PKR",
-      rating: 4.5,
-      imgURL: "../../assets/images/download2.jpg"
-    }
-  ])
+  const [filteredData, setfilteredData] =  React.useState([{
+        hallName: "Majestic Banquet",
+        seatingCapacity: 700,
+        price: "150,000 PKR",
+        rating: 4.5,
+        imgURL: "../../assets/images/download2.jpg"
+      },
+      {
+        hallName: "Ayan Banquet",
+        seatingCapacity: 700,
+        price: "150,000 PKR",
+        rating: 4.5,
+        imgURL: "../../assets/images/download2.jpg"
+      },
+      {
+        hallName: "Modern Banquet",
+        seatingCapacity: 700,
+        price: "150,000 PKR",
+        rating: 4.5,
+        imgURL: "../../assets/images/download2.jpg"
+      },
+      {
+        hallName: "Magnolia Banquet",
+        seatingCapacity: 700,
+        price: "150,000 PKR",
+        rating: 4.5,
+        imgURL: "../../assets/images/download2.jpg"
+      },
+      {
+        hallName: "Diamond Palace",
+        seatingCapacity: 700,
+        price: "150,000 PKR",
+        rating: 4.5,
+        imgURL: "../../assets/images/download2.jpg"
+      }]);
+  const [masterData, setmasterData] =  React.useState([{
+    hallName: "Majestic Banquet",
+    seatingCapacity: 700,
+    price: "150,000 PKR",
+    rating: 4.5,
+    imgURL: "../../assets/images/download2.jpg"
+  },
+  {
+    hallName: "Ayan Banquet",
+    seatingCapacity: 700,
+    price: "150,000 PKR",
+    rating: 4.5,
+    imgURL: "../../assets/images/download2.jpg"
+  },
+  {
+    hallName: "Modern Banquet",
+    seatingCapacity: 700,
+    price: "150,000 PKR",
+    rating: 4.5,
+    imgURL: "../../assets/images/download2.jpg"
+  },
+  {
+    hallName: "Magnolia Banquet",
+    seatingCapacity: 700,
+    price: "150,000 PKR",
+    rating: 4.5,
+    imgURL: "../../assets/images/download2.jpg"
+  },
+  {
+    hallName: "Diamond Palace",
+    seatingCapacity: 700,
+    price: "150,000 PKR",
+    rating: 4.5,
+    imgURL: "../../assets/images/download2.jpg"
+  }]);
+  // let [hallList, setHallList] = React.useState([
+  //   {
+  //     hallName: "Majestic Banquet",
+  //     seatingCapacity: 700,
+  //     price: "150,000 PKR",
+  //     rating: 4.5,
+  //     imgURL: "../../assets/images/download2.jpg"
+  //   },
+  //   {
+  //     hallName: "Ayan Banquet",
+  //     seatingCapacity: 700,
+  //     price: "150,000 PKR",
+  //     rating: 4.5,
+  //     imgURL: "../../assets/images/download2.jpg"
+  //   },
+  //   {
+  //     hallName: "Modern Banquet",
+  //     seatingCapacity: 700,
+  //     price: "150,000 PKR",
+  //     rating: 4.5,
+  //     imgURL: "../../assets/images/download2.jpg"
+  //   },
+  //   {
+  //     hallName: "Magnolia Banquet",
+  //     seatingCapacity: 700,
+  //     price: "150,000 PKR",
+  //     rating: 4.5,
+  //     imgURL: "../../assets/images/download2.jpg"
+  //   },
+  //   {
+  //     hallName: "Diamond Palace",
+  //     seatingCapacity: 700,
+  //     price: "150,000 PKR",
+  //     rating: 4.5,
+  //     imgURL: "../../assets/images/download2.jpg"
+  //   }
+  // ])
 
   let [searchText, setSearchText] = React.useState('')
 
 
+  // const searchFilterFunction = (searchText) => {
+  //   if (searchText) {
+  //     const newData = hallList.filter((eachRow) => {
+  //       return eachRow.hallName ? eachRow.hallName.toLowerCase().indexOf(searchText.toLowerCase()) > -1 : hallList
+  //     })
+  //     setSearchText(searchText);
+  //   setHallList(newData);
+  //   }
+  //   else{
+  //     setSearchText(searchText);
+  //     setHallList(hallList);
+  //   }
+ 
+  // }
+
   const searchFilterFunction = (searchText) => {
     if (searchText) {
-      hallList = hallList.filter((eachRow) => {
-        return eachRow.hallName ? eachRow.hallName.toLowerCase().indexOf(searchText.toLowerCase()) > -1 : hallList
-      })
+
+      const newData = masterData.filter(
+        function (item) {
+          const itemData = item.hallName
+            ? item.hallName.toUpperCase()
+            : ''.toUpperCase();
+          const textData = searchText.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+      });
+      setfilteredData(newData);
+      setSearchText(searchText);
+    } else {
+      setfilteredData(masterData);
+      setSearchText(searchText);
     }
-    // this.setState({
-    //   searchText: searchText,
-    //   hallList: hallList
-    // })
-    setSearchText(searchText);
-    setHallList(hallList);
-    
-  }
+  };
 
   // const searchFilterFunction = text => {
   //   const formattedQuery = text.toLowerCase();
@@ -134,7 +222,7 @@ value={searchText}
         onChangeText={text => searchFilterFunction(text)}
       />
       <FlatList
-        data={hallList}
+        data={filteredData}
         renderItem={({ item }) => (
           <View style={styles.imageStackStack}>
             <View style={styles.imageStack}>
@@ -172,7 +260,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "rgba(176,163,163,1)",
-    flexDirection: "column"
+    // flexDirection: "column"
   },
   rect: {
     width: 360,

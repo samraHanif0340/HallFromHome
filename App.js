@@ -123,6 +123,7 @@ const App: () => Node = () => {
       <Stack.Screen
             name="Login"
             component={Login}
+            headerTitle="dfasd"
           />
           <Stack.Screen
             name="Home"

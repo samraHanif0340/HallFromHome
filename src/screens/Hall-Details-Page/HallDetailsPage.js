@@ -18,17 +18,8 @@ import MaterialButtonWithVioletText1 from "../../components/MaterialButtonWithVi
 function HallDetailPage(props) {
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-      <View style={styles.button2StackRow}>
-        <View style={styles.button2Stack}>
-          <TouchableOpacity
-            onPress={() =>
-              props.navigation.navigate("Hall Details")
-            }
-            style={styles.button2}
-          ></TouchableOpacity>
           <ImageBackground
-            style={styles.rect}
+            style={styles.container}
             imageStyle={styles.rect_imageStyle}
             source={require("../../assets/images/Gradient_MI39RPu.png")}
           >
@@ -107,9 +98,9 @@ function HallDetailPage(props) {
               style={styles.materialButtonWithVioletText1}
             ></MaterialButtonWithVioletText1>
           </ImageBackground>
-        </View>
-        <Text style={styles.bookingDetail2}>BOOKING DETAIL</Text>
-      </View>
+        
+        {/* <Text style={styles.bookingDetail2}>BOOKING DETAIL</Text> */}
+      
     </View>
   );
 }
@@ -118,9 +109,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    flexDirection: "column"
+    // flexDirection: "column",
   },
   button2: {
+    flex:1,
     top: 557,
     left: 92,
     width: 177,
