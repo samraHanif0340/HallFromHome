@@ -56,11 +56,11 @@ const RegistrationPage = ({ navigation }) => {
                    
                     <TextField
                         placeholder="Mobile Number"
-                        keyboardType='email-address'
+                        keyboardType='phone-pad'
                         placeholderTextColor="rgba(255,255,255,1)"
                         nameOfIcon="user"
                         // defaultValue={this.state.userEmail}
-                        maxLength={50}
+                        maxLength={11}
                     />     
                     <View style={styles.button1Column}>
                   <TouchableOpacity

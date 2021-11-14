@@ -5,7 +5,7 @@ import {
   StatusBar,
   ImageBackground,
   Text,
-  TextInput,TouchableOpacity
+  TextInput, TouchableOpacity
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
@@ -14,29 +14,29 @@ function BookingConfirmedPage(props) {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
 
-        <ImageBackground
-          style={styles.rect1}
-          imageStyle={styles.rect1_imageStyle}
-          source={require("../../assets/images/Gradient_MI39RPu.png")}
-        >
-          <Text style={styles.bookingConfirmed}>BOOKING CONFIRMED</Text>
-          <Icon name="check-circle-o" style={styles.icon}></Icon>
-          <TextInput
-            placeholder="Venue owner will get back to you soon"
-            placeholderTextColor="rgba(255,255,255,1)"
-            selectionColor="rgba(255,255,255,1)"
-            style={styles.textInput2}
-          ></TextInput>
-        </ImageBackground>
+      <ImageBackground
+        style={styles.rect1}
+        imageStyle={styles.rect1_imageStyle}
+        source={require("../../assets/images/Gradient_MI39RPu.png")}
+      >
+        <Text style={styles.bookingConfirmed}>BOOKING CONFIRMED</Text>
+        <Icon name="check-circle-o" style={styles.icon}></Icon>
         <TextInput
-          placeholder="Your booking has been confirmed successfully"
+          placeholder="Venue owner will get back to you soon"
           placeholderTextColor="rgba(255,255,255,1)"
           selectionColor="rgba(255,255,255,1)"
-          style={styles.textInput}
+          style={styles.textInput2}
         ></TextInput>
-        <TouchableOpacity style={styles.okHall} onPress={()=>props.navigation.navigate('Home')}><Text style={styles.okHall.content}>OK</Text></TouchableOpacity>
+      </ImageBackground>
+      <TextInput
+        placeholder="Your booking has been confirmed successfully"
+        placeholderTextColor="rgba(255,255,255,1)"
+        selectionColor="rgba(255,255,255,1)"
+        style={styles.textInput}
+      ></TextInput>
+      <TouchableOpacity style={styles.okHall} onPress={() => props.navigation.navigate('Home')}><Text style={styles.okHall.content}>OK</Text></TouchableOpacity>
 
-      </View>
+    </View>
 
   );
 }
@@ -46,24 +46,22 @@ const styles = StyleSheet.create({
     flex: 1
   },
   rect1: {
- 
-flex:1
-   
+    flex: 1
   },
-  okHall:{ 
+  okHall: {
     backgroundColor: "rgba(142,7,27,1)",
-    marginLeft:15,
-    marginTop:15,
-    marginRight:15,
-    marginBottom:15,
-    content:{
+    marginLeft: 15,
+    marginTop: 15,
+    marginRight: 15,
+    marginBottom: 15,
+    content: {
       fontFamily: "roboto-regular",
-      fontSize:24,
-      color:'rgba(255,255,255,1)',
+      fontSize: 24,
+      color: 'rgba(255,255,255,1)',
       textAlign: "center",
-     
+
     }
-    },
+  },
   rect1_imageStyle: {},
   bookingConfirmed: {
     fontFamily: "roboto-regular",

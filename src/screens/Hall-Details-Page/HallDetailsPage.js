@@ -14,10 +14,10 @@ import MaterialButtonWithShadow from "../../components/MaterialButtonWithShadow"
 import MaterialButtonWithShadow1 from "../../components/MaterialButtonWithShadow1";
 import MaterialButtonViolet4 from "../../components/MaterialButtonViolet4";
 import MaterialButtonWithVioletText1 from "../../components/MaterialButtonWithVioletText1";
-import {HallDetailTabs} from '../../components/navigations/Navigations';
+import { HallDetailTabs } from '../../components/navigations/Navigations';
 
 function HallDetailPage(props) {
-  const {data, setData} =  React.useState({
+  const { data, setData } = React.useState({
     hallName: "Majestic Banquet",
     seatingCapacity: 700,
     price: "150,000 PKR",
@@ -26,24 +26,26 @@ function HallDetailPage(props) {
   });
   return (
     <View style={styles.container}>
-           <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            <ImageBackground
-                style={styles.rect1}
-                imageStyle={styles.rect1_imageStyle}
-                source={require("../../assets/images/Gradient_MI39RPu.png")}
-            >
-              <View style={styles.hallFromHome2Column}>
-                        <Text style={styles.bookingDetail}>BOOKING DETAILS</Text>
-                    </View>
-              <Image
-                  source={require("../../assets/images/download2.jpg")}
-                  // source={{ uri: item.imgURL }}
-                  resizeMode="contain"
-                  style={styles.image2}
-                ></Image>
-              <HallDetailTabs/>
-              <TouchableOpacity style={styles.bookHall} onPress={()=>props.navigation.navigate('Booking Confirmed')}><Text style={styles.bookHall.content}>BOOK</Text></TouchableOpacity>
-            </ImageBackground>
+      <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
+      <ImageBackground
+        style={styles.rect1}
+        imageStyle={styles.rect1_imageStyle}
+        source={require("../../assets/images/Gradient_MI39RPu.png")}
+      >
+        <View style={styles.hallFromHome2Column}>
+          <Text style={styles.bookingDetail}>BOOKING DETAILS</Text>
+        </View>
+        <Image
+          source={require("../../assets/images/download2.jpg")}
+          // source={{ uri: item.imgURL }}
+          resizeMode="contain"
+          style={styles.image2}
+        ></Image>
+        <HallDetailTabs />
+        <TouchableOpacity style={styles.bookHall} onPress={() => props.navigation.navigate('Booking Confirmed')}><Text style={styles.bookHall.content}>CHECK AVAILABILITY</Text></TouchableOpacity>
+
+        <TouchableOpacity style={styles.bookHall} onPress={() => props.navigation.navigate('Booking Confirmed')}><Text style={styles.bookHall.content}>BOOK</Text></TouchableOpacity>
+      </ImageBackground>
     </View>
   );
 }
@@ -51,40 +53,42 @@ function HallDetailPage(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection:'column'
+    flexDirection: 'column'
   },
   rect1: {
-    flex:1
-    },
-    bookingDetail: {
-      fontFamily: "roboto-regular",
-      color: "rgba(255,255,255,1)",
-      fontSize: 25,
-      textAlign:"center",
-      
-    },
-    image2: {
-      marginLeft:45,
-      borderRadius: 6,
-      alignItems:"center",
-      textAlign:"center",
-    },
-    bookHall:{ 
+    flex: 1
+  },
+  bookingDetail: {
+    fontFamily: "roboto-regular",
+    color: "rgba(255,255,255,1)",
+    fontSize: 25,
+    textAlign: "center",
+
+  },
+  image2: {
+    marginLeft: 20,
+    marginBottom: 10,
+    marginTop: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    textAlign: "center",
+  },
+  bookHall: {
     backgroundColor: "rgba(142,7,27,1)",
-    marginLeft:15,
-    marginTop:15,
-    marginRight:15,
-    marginBottom:15,
-    content:{
+    marginLeft: 15,
+    marginTop: 15,
+    marginRight: 15,
+    marginBottom: 15,
+    content: {
       fontFamily: "roboto-regular",
-      fontSize:24,
-      color:'rgba(255,255,255,1)',
+      fontSize: 24,
+      color: 'rgba(255,255,255,1)',
       textAlign: "center",
-     
+
     }
-    },
+  },
   button2: {
-    flex:1,
+    flex: 1,
     top: 557,
     left: 92,
     width: 177,
@@ -100,7 +104,7 @@ const styles = StyleSheet.create({
     top: 0
   },
   rect_imageStyle: {},
- 
+
   image1: {
     width: 335,
     height: 175,
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
     overflow: "hidden"
   },
   image1_imageStyle: {},
-  
+
   materialButtonViolet2: {
     height: 41,
     width: 100,

@@ -105,14 +105,18 @@ function HallReviewsPage(props) {
                 source={require("../../assets/images/Gradient_MI39RPu.png")}
             >
         
-      <SearchBar
-        lightTheme
-        round
-        searchIcon={{ size: 24 }}
-        placeholder="Search for hall reviews..."
-        value={searchText}
-        onChangeText={text => searchFilterFunction(text)}
-      />
+        <SearchBar
+          lightTheme
+          searchIcon={{ size: 24 }}
+          placeholder="Search for halls reviews..."
+          value={searchText}
+          onChangeText={text => searchFilterFunction(text)}
+          containerStyle={styles.searchBar}
+          placeholderTextColor="white"
+          leftIconContainerStyle={styles.searchBar.icon}
+          // showLoading="true"
+          inputStyle={styles.searchBar.inputStyle}
+        />
       <FlatList
         data={filteredData}
         renderItem={({ item }) => (
@@ -192,6 +196,16 @@ const styles = StyleSheet.create({
       fontSize:10,
       color:'yellow',
     },
+  },
+  searchBar:{
+    backgroundColor:'rgba(142,7,27,1)',
+    opacity:0.7,
+    icon:{
+      color:'black'
+    },
+    inputStyle:{
+      color:'white'
+    }
   },
   rect: {
     width: 360,

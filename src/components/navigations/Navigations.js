@@ -14,6 +14,8 @@ import SearchPage from '../../screens/Search-Hall/SearchHall';
 import HallDetailPage from '../../screens/Hall-Details-Page/HallDetailsPage';
 
 import HallReviewsPage from '../../screens/HallDetailChilds/ReviewsPage';
+import DetailOfHallPage from '../../screens/HallDetailChilds/DetailsPage';
+
 
 import LoginPage from '../../screens/auth/Login/LoginPage';
 
@@ -125,7 +127,7 @@ const Tab = createMaterialTopTabNavigator();
 const HallDetailTabs = () => {
   return (
     <Tab.Navigator>
-    <Tab.Screen name="Details" component={HallReviewsPage} />
+    <Tab.Screen name="Details" component={DetailOfHallPage} />
     <Tab.Screen name="Add ons" component={HallReviewsPage} />
     <Tab.Screen name="Reviews" component={HallReviewsPage} />
   </Tab.Navigator>

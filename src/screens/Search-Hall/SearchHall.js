@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight } from "react-native";
+import { StyleSheet, View, Text, Image, FlatList, ImageBackground, StatusBar, TouchableHighlight } from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import Svg, { Ellipse } from "react-native-svg";
 import EntypoIcon from "react-native-vector-icons/Entypo";
@@ -10,42 +10,42 @@ import { TouchableOpacity } from "react-native";
 // import SearchBar from "react-native-dynamic-search-bar";
 
 function SearchPage(props) {
-  const [filteredData, setfilteredData] =  React.useState([{
-        hallName: "Majestic Banquet",
-        seatingCapacity: 700,
-        price: "150,000 PKR",
-        rating: 4.5,
-        imgURL: "../../assets/images/download2.jpg"
-      },
-      {
-        hallName: "Ayan Banquet",
-        seatingCapacity: 700,
-        price: "150,000 PKR",
-        rating: 4.5,
-        imgURL: "../../assets/images/download2.jpg"
-      },
-      {
-        hallName: "Modern Banquet",
-        seatingCapacity: 700,
-        price: "150,000 PKR",
-        rating: 4.5,
-        imgURL: "../../assets/images/download2.jpg"
-      },
-      {
-        hallName: "Magnolia Banquet",
-        seatingCapacity: 700,
-        price: "150,000 PKR",
-        rating: 4.5,
-        imgURL: "../../assets/images/download2.jpg"
-      },
-      {
-        hallName: "Diamond Palace",
-        seatingCapacity: 700,
-        price: "150,000 PKR",
-        rating: 4.5,
-        imgURL: "../../assets/images/download2.jpg"
-      }]);
-  const [masterData, setmasterData] =  React.useState([{
+  const [filteredData, setfilteredData] = React.useState([{
+    hallName: "Majestic Banquet",
+    seatingCapacity: 700,
+    price: "150,000 PKR",
+    rating: 4.5,
+    imgURL: "../../assets/images/download2.jpg"
+  },
+  {
+    hallName: "Ayan Banquet",
+    seatingCapacity: 700,
+    price: "150,000 PKR",
+    rating: 4.5,
+    imgURL: "../../assets/images/download2.jpg"
+  },
+  {
+    hallName: "Modern Banquet",
+    seatingCapacity: 700,
+    price: "150,000 PKR",
+    rating: 4.5,
+    imgURL: "../../assets/images/download2.jpg"
+  },
+  {
+    hallName: "Magnolia Banquet",
+    seatingCapacity: 700,
+    price: "150,000 PKR",
+    rating: 4.5,
+    imgURL: "../../assets/images/download2.jpg"
+  },
+  {
+    hallName: "Diamond Palace",
+    seatingCapacity: 700,
+    price: "150,000 PKR",
+    rating: 4.5,
+    imgURL: "../../assets/images/download2.jpg"
+  }]);
+  const [masterData, setmasterData] = React.useState([{
     hallName: "Majestic Banquet",
     seatingCapacity: 700,
     price: "150,000 PKR",
@@ -133,7 +133,7 @@ function SearchPage(props) {
   //     setSearchText(searchText);
   //     setHallList(hallList);
   //   }
- 
+
   // }
 
   const searchFilterFunction = (searchText) => {
@@ -146,7 +146,7 @@ function SearchPage(props) {
             : ''.toUpperCase();
           const textData = searchText.toUpperCase();
           return itemData.indexOf(textData) > -1;
-      });
+        });
       setfilteredData(newData);
       setSearchText(searchText);
     } else {
@@ -163,96 +163,70 @@ function SearchPage(props) {
   //   setData(filteredData);
   //   setQuery(text);
   // };
-  
+
   // const contains = ({ name, email }, query) => {
   //   const { first, last } = name;
-  
+
   //   if (first.includes(query) || last.includes(query) || email.includes(query)) {
   //     return true;
   //   }
-  
+
   //   return false;
   // };
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
+      <ImageBackground
+        style={styles.rect1}
+        imageStyle={styles.rect1_imageStyle}
+        source={require("../../assets/images/Gradient_MI39RPu.png")}
+      >
+  
 
+        <SearchBar
+          lightTheme
+          searchIcon={{ size: 24 }}
+          placeholder="Search for halls, banquets..."
+          value={searchText}
+          onChangeText={text => searchFilterFunction(text)}
+          containerStyle={styles.searchBar}
+          placeholderTextColor="white"
+          leftIconContainerStyle={styles.searchBar.icon}
+          // showLoading="true"
+          inputStyle={styles.searchBar.inputStyle}
+        />
+        <FlatList
+          data={filteredData}
+          renderItem={({ item }) => (
+            <View style={styles.imageStackStack}>
+              <View style={styles.imageStack}>
+                <TouchableOpacity activeOpacity={0.2} onPress={() => props.navigation.navigate('Hall Details')}>
+                  <Image
+                    source={require("../../assets/images/download2.jpg")}
+                    // source={{ uri: item.imgURL }}
 
+                    resizeMode="contain"
+                    style={styles.image}
+                  ></Image>
+                </TouchableOpacity>
 
-      {/* <View style={styles.rect3}>
-              <View style={styles.rect4Row}>
-                <View style={styles.rect4}>
-                  <View style={styles.icon3Row}>
-                    <FontAwesomeIcon
-                      name="search"
-                      style={styles.icon3}
-                    ></FontAwesomeIcon>
-                    <Text style={styles.loremIpsum}>
-                      Search for halls, banquets...
-                    </Text>
-                  </View>
-                </View>
+                <Text style={styles.majesticBanquet}>{item.hallName}</Text>
+                <Text style={styles.limit700Persons}>Limit {item.seatingCapacity} Persons</Text>
+              </View>
+              <View style={styles.loremIpsum2Stack}>
+                <Text style={styles.loremIpsum2}>{item.price}</Text>
                 <FontAwesomeIcon
-                  name="sliders"
-                  style={styles.icon2}
+                  name="star"
+                  style={styles.icon6}
                 ></FontAwesomeIcon>
               </View>
-            </View> */}
-
-
-
-      {/* <SearchBar
-  fontColor="#c6c6c6"
-  iconColor="#c6c6c6"
-  shadowColor="#282828"
-  cancelIconColor="#c6c6c6"
-  backgroundColor="#353d5e"
-  placeholder="Search for halls, banquets..."
-  onChangeText={text => searchFilterFunction(text)}
-  onSearchPress={() => console.log("Search Icon is pressed")}
-  onClearPress={() => this.filterList("")}
-  onPress={() => alert("onPress")}
-/> */}
-
-      <SearchBar
-        lightTheme
-        round
-        searchIcon={{ size: 24 }}
-        placeholder="Search for halls, banquets..."
-value={searchText}
-        onChangeText={text => searchFilterFunction(text)}
-      />
-      <FlatList
-        data={filteredData}
-        renderItem={({ item }) => (
-          <View style={styles.imageStackStack}>
-            <View style={styles.imageStack}>
-              <TouchableOpacity onPress={() => props.navigation.navigate('Hall Details')}>
-                <Image
-                  source={require("../../assets/images/download2.jpg")}
-                  // source={{ uri: item.imgURL }}
-
-                  resizeMode="contain"
-                  style={styles.image}
-                ></Image>
-              </TouchableOpacity>
-
-              <Text style={styles.majesticBanquet}>{item.hallName}</Text>
-              <Text style={styles.limit700Persons}>Limit {item.seatingCapacity} Persons</Text>
+              <Text style={styles.loremIpsum3}>({item.rating})</Text>
             </View>
-            <View style={styles.loremIpsum2Stack}>
-              <Text style={styles.loremIpsum2}>{item.price}</Text>
-              <FontAwesomeIcon
-                name="star"
-                style={styles.icon6}
-              ></FontAwesomeIcon>
-            </View>
-            <Text style={styles.loremIpsum3}>({item.rating})</Text>
-          </View>
-        )}
-      />
+          )}
+        />
 
-
+      </ImageBackground>
     </View>
   );
 }
@@ -260,13 +234,20 @@ value={searchText}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(176,163,163,1)",
-    // flexDirection: "column"
+
   },
   rect: {
-    width: 360,
-    height: 760,
-    backgroundColor: "rgba(222,206,206,1)"
+    flex: 1,
+  },
+  searchBar:{
+    backgroundColor:'rgba(142,7,27,1)',
+    opacity:0.7,
+    icon:{
+      color:'black'
+    },
+    inputStyle:{
+      color:'white'
+    }
   },
   rect3: {
     height: 80,
@@ -402,22 +383,21 @@ const styles = StyleSheet.create({
     left: 0,
     width: 335,
     height: 175,
-    position: "absolute",
-    borderRadius: 16
+    borderRadius: 10
   },
   majesticBanquet: {
     top: 173,
     left: 11,
     position: "absolute",
     fontFamily: "georgia-regular",
-    color: "rgba(66,62,62,1)"
+    color: "rgba(255,255,255,1)"
   },
   limit700Persons: {
     top: 191,
     left: 11,
     position: "absolute",
     fontFamily: "roboto-italic",
-    color: "rgba(0,0,0,1)",
+    color: "rgba(255,255,255,1)",
     fontSize: 12
   },
   imageStack: {
@@ -425,14 +405,15 @@ const styles = StyleSheet.create({
     left: 0,
     width: 335,
     height: 207,
-    position: "absolute"
+    position: "absolute",
+
   },
   loremIpsum2: {
     top: 0,
     left: 0,
     position: "absolute",
     fontFamily: "roboto-700",
-    color: "#121212",
+    color: "rgba(255,255,255,1)",
     height: 14,
     width: 119,
     textAlign: "left",
@@ -459,7 +440,7 @@ const styles = StyleSheet.create({
     left: 295,
     position: "absolute",
     fontFamily: "roboto-700",
-    color: "rgba(0,0,0,1)",
+    color: "rgba(255,255,255,1)",
     fontSize: 12
   },
   imageStackStack: {
