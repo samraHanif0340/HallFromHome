@@ -1,62 +1,71 @@
 
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, StatusBar, ImageBackground, TextInput } from "react-native";
 import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 import TextField from '../../../components/customComponents/customComponents'
 import validate from '../../../shared-services/validationFunctions'
-import {styles} from './LoginPage.component.style.js'
+import { styles } from './LoginPage.component.style.js'
 
 const LoginPage = ({ navigation }) => {
     return (
-     
+
         <View style={styles.parentContainer}>
-            <View style={styles.header}>
-            <Text style={styles.headText}>Welcome To Hall from Home</Text>
-            </View>
-            <View style={styles.body}>
-            <TextField 
-                placeholder="Email"
-                keyboardType='email-address'
-                placeholderTextColor ='black'
-                // defaultValue={this.state.userEmail}
-                maxLength={50}
-                // onChangeText={value => this.setState({
-                //     userEmail: value.trim(),
-                //     emailError: validate('userEmail', this.state.userEmail, 'email')
-                // })}
-                // error={this.state.emailError}
-            />
-            <TextField 
-                // labelName='Password'
-                placeholder='Password'
-                placeholderTextColor ='black'
-                secureTextEntry
-                // defaultValue={this.state.userPassword}
-                maxLength={50}
-                // onChangeText={value => this.setState({
-                //     userPassword: value.trim(),
-                //     passwordError: validate('userPassword', this.state.userPassword, 'password')
-                // })}
-                // error={this.state.passwordError}
-            />
-        
-            <TouchableHighlight style={styles.buttonField}   onPress={()=> navigation.navigate('Home')}    ><Text style={styles.buttonTextStyle}>LOGIN</Text></TouchableHighlight>
 
-            <Text style={styles.linksStyle} onPress={() => navigation.navigate('SearchPage')} >Forgot Your Login Details?</Text>
+            <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
+            <ImageBackground
+                style={styles.rect1}
+                imageStyle={styles.rect1_imageStyle}
+                source={require("../../../assets/images/Gradient_MI39RPu.png")}
+            >
+                <View style={styles.logo1}>
+                    <View style={styles.endWrapperFiller}></View>
+                    <View style={styles.hallFromHome2Column}>
+                        <Text style={styles.hallFromHome2}>Hall From Home</Text>
+                        <View style={styles.rect4}></View>
+                    </View>
+                </View>
+                <View style={styles.body}>
 
-            <Text style={styles.linksStyle} onPress={() => navigation.navigate('SignUp')}>Create an account?</Text>
-            </View>
+                    <TextField
+                        placeholder="Username/Email"
+                        keyboardType='email-address'
+                        placeholderTextColor="rgba(255,255,255,1)"
+                        nameOfIcon="user"
+                        // defaultValue={this.state.userEmail}
+                        maxLength={50}
+                    // onChangeText={value => this.setState({
+                    //     userEmail: value.trim(),
+                    //     emailError: validate('userEmail', this.state.userEmail, 'email')
+                    // })}
+                    // error={this.state.emailError}
+                    />
+                    <TextField
+                        placeholder='Password'
+                        placeholderTextColor='rgba(255,255,255,1)'
+                        secureTextEntry
+                        nameOfIcon="lock"
+                        // defaultValue={this.state.userPassword}
+                        maxLength={50}
+                    // onChangeText={value => this.setState({
+                    //     userPassword: value.trim(),
+                    //     passwordError: validate('userPassword', this.state.userPassword, 'password')
+                    // })}
+                    // error={this.state.passwordError}
+                    />
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('Home')}
+                        style={styles.button2}
+                    >
+                        <Text style={styles.text5}>Login</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.linksStyle} onPress={() => navigation.navigate('SearchPage')} >Forgot Your Login Details?</Text>
+
+                    <Text style={styles.linksStyle} onPress={() => navigation.navigate('Customer Registration')}>Create an account?</Text>
+                </View>
+            </ImageBackground>
         </View>
-    
+
     );
-  };
-  
-  // const styles = StyleSheet.create({
-  //   center: {
-  //     flex: 1,
-  //     justifyContent: "center",
-  //     alignItems: "center",
-  //     textAlign: "center",
-  //   },
-  // });
+};
+
 export default LoginPage;

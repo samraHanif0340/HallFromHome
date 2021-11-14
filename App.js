@@ -38,9 +38,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 // import SearchPage from './src/screens/Search-Hall/SearchHall';
 // import HallDetailPage from './src/screens/Hall-Details-Page/HallDetailsPage';
 import LoginPage from './src/screens/auth/Login/LoginPage';
+import RegistrationPage from './src/screens/auth/Registration/RegistrationPage';
+import BookingConfirmedPage from './src/components/sharedComponents/BookingConfirmedPage';
 
 
-import DrawerNavigator from './src/components/navigations/Navigations';
+
+
+import {CustomerDrawerNavigator} from './src/components/navigations/Navigations';
 
 
 // const Drawer = createDrawerNavigator();
@@ -116,12 +120,23 @@ const App: () => Node = () => {
       <Stack.Screen
             name="Login"
             component={LoginPage}
+            options={{ headerShown: false }}
+          />
+           <Stack.Screen
+            name="Customer Registration"
+            component={RegistrationPage}
+            options={{ headerShown: false }}
+          />
+             <Stack.Screen
+            name="Booking Confirmed"
+            component={BookingConfirmedPage}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="Home"
-            component={DrawerNavigator}
+            component={CustomerDrawerNavigator}
+            options={{ headerShown: false }}
           />
-        
         </Stack.Navigator>
     </NavigationContainer>
     // <SearchHall/>

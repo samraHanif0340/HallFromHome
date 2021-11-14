@@ -61,20 +61,28 @@ export const colors  = {
         flex:1,
         backgroundColor:'khaki'
     },
-    textField:{
-       
-        // backgroundColor: 'grey',
-        // color:'black',
-        alignSelf:'stretch',
-        borderWidth:2,
-        opacity:0.4,
-        borderRadius: 50,
-        marginBottom:1,
-        color:'black',
-        height:50,
-        textAlign:'center'
-        
+    textFieldWrapper:{
+    height: 59,
+    backgroundColor: "rgba(251,247,247,0.25)",
+    borderRadius: 5,
+    flexDirection: "row",
+    marginRight: 20,
+    marginLeft: 20,
+    marginTop: 14,
+    marginBottom:14
     },
+    textField:{
+        height: 50,
+        color: "rgba(255,255,255,1)",
+        marginTop: 14     
+    },
+      icon2: {
+        color: "rgba(255,255,255,1)",
+        fontSize: 30,
+        marginLeft: 20,
+        alignSelf: "center"
+      },
+   
     ButtonField:{
         color:'black',
         backgroundColor:'orange',

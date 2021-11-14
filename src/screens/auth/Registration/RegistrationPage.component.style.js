@@ -28,6 +28,13 @@ export const styles = StyleSheet.create({
     fontFamily: "dancing-script-regular",
     marginBottom: 28
   },
+  createAccount1: {
+    color: "rgba(255,255,255,1)",
+    fontSize: 24,
+    // marginTop: 14,
+    // marginLeft: 36,
+    textAlign: "center",
+  },
   rect4: {
     height: 8,
     backgroundColor: "rgba(236,241,243,1)",

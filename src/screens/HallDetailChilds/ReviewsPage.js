@@ -1,140 +1,82 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight } from "react-native";
+import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground } from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
-import Svg, { Ellipse } from "react-native-svg";
-import EntypoIcon from "react-native-vector-icons/Entypo";
-import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
-import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
 // import SearchBar from "react-native-dynamic-search-bar";
 
-function SearchPage(props) {
-  const [filteredData, setfilteredData] =  React.useState([{
-        hallName: "Majestic Banquet",
-        seatingCapacity: 700,
-        price: "150,000 PKR",
-        rating: 4.5,
-        imgURL: "../../assets/images/download2.jpg"
-      },
-      {
-        hallName: "Ayan Banquet",
-        seatingCapacity: 700,
-        price: "150,000 PKR",
-        rating: 4.5,
-        imgURL: "../../assets/images/download2.jpg"
-      },
-      {
-        hallName: "Modern Banquet",
-        seatingCapacity: 700,
-        price: "150,000 PKR",
-        rating: 4.5,
-        imgURL: "../../assets/images/download2.jpg"
-      },
-      {
-        hallName: "Magnolia Banquet",
-        seatingCapacity: 700,
-        price: "150,000 PKR",
-        rating: 4.5,
-        imgURL: "../../assets/images/download2.jpg"
-      },
-      {
-        hallName: "Diamond Palace",
-        seatingCapacity: 700,
-        price: "150,000 PKR",
-        rating: 4.5,
-        imgURL: "../../assets/images/download2.jpg"
-      }]);
-  const [masterData, setmasterData] =  React.useState([{
+function HallReviewsPage(props) {
+  const [filteredData, setfilteredData] = React.useState([{
     hallName: "Majestic Banquet",
-    seatingCapacity: 700,
-    price: "150,000 PKR",
+    userName: 'Samra Hanif',
+    review: "Nice serving as well as in budget",
     rating: 4.5,
     imgURL: "../../assets/images/download2.jpg"
   },
   {
-    hallName: "Ayan Banquet",
-    seatingCapacity: 700,
-    price: "150,000 PKR",
-    rating: 4.5,
+    hallName: "Ayan Hall",
+    userName: 'Muzna Akhter',
+    review: "Nice serving as well as in budget, have great lightening",
+    rating: 4.8,
     imgURL: "../../assets/images/download2.jpg"
   },
   {
     hallName: "Modern Banquet",
-    seatingCapacity: 700,
-    price: "150,000 PKR",
-    rating: 4.5,
+    userName: 'Muzna Akhter',
+    review: "Nice serving as well as in budget, have great lightening",
+    rating: 4.8,
     imgURL: "../../assets/images/download2.jpg"
   },
   {
     hallName: "Magnolia Banquet",
-    seatingCapacity: 700,
-    price: "150,000 PKR",
-    rating: 4.5,
+    userName: 'Ali Khan',
+    review: "Nice serving as well as in budget, have great lightening",
+    rating: 4.8,
     imgURL: "../../assets/images/download2.jpg"
   },
   {
     hallName: "Diamond Palace",
-    seatingCapacity: 700,
-    price: "150,000 PKR",
-    rating: 4.5,
+    userName: 'Humayun Mukhtar',
+    review: "Nice serving as well as in budget, have great lightening",
+    rating: 3.6,
     imgURL: "../../assets/images/download2.jpg"
   }]);
-  // let [hallList, setHallList] = React.useState([
-  //   {
-  //     hallName: "Majestic Banquet",
-  //     seatingCapacity: 700,
-  //     price: "150,000 PKR",
-  //     rating: 4.5,
-  //     imgURL: "../../assets/images/download2.jpg"
-  //   },
-  //   {
-  //     hallName: "Ayan Banquet",
-  //     seatingCapacity: 700,
-  //     price: "150,000 PKR",
-  //     rating: 4.5,
-  //     imgURL: "../../assets/images/download2.jpg"
-  //   },
-  //   {
-  //     hallName: "Modern Banquet",
-  //     seatingCapacity: 700,
-  //     price: "150,000 PKR",
-  //     rating: 4.5,
-  //     imgURL: "../../assets/images/download2.jpg"
-  //   },
-  //   {
-  //     hallName: "Magnolia Banquet",
-  //     seatingCapacity: 700,
-  //     price: "150,000 PKR",
-  //     rating: 4.5,
-  //     imgURL: "../../assets/images/download2.jpg"
-  //   },
-  //   {
-  //     hallName: "Diamond Palace",
-  //     seatingCapacity: 700,
-  //     price: "150,000 PKR",
-  //     rating: 4.5,
-  //     imgURL: "../../assets/images/download2.jpg"
-  //   }
-  // ])
-
+  const [masterData, setmasterData] = React.useState([{
+    hallName: "Majestic Banquet",
+    userName: 'Samra Hanif',
+    review: "Nice serving as well as in budget",
+    rating: 4.5,
+    imgURL: "../../assets/images/download2.jpg"
+  },
+  {
+    hallName: "Ayan Hall",
+    userName: 'Muzna Akhter',
+    review: "Nice serving as well as in budget, have great lightening",
+    rating: 4.8,
+    imgURL: "../../assets/images/download2.jpg"
+  },
+  {
+    hallName: "Modern Banquet",
+    userName: 'Muzna Akhter',
+    review: "Nice serving as well as in budget, have great lightening",
+    rating: 4.8,
+    imgURL: "../../assets/images/download2.jpg"
+  },
+  {
+    hallName: "Magnolia Banquet",
+    userName: 'Ali Khan',
+    review: "Nice serving as well as in budget, have great lightening",
+    rating: 4.8,
+    imgURL: "../../assets/images/download2.jpg"
+  },
+  {
+    hallName: "Diamond Palace",
+    userName: 'Humayun Mukhtar',
+    review: "Nice serving as well as in budget, have great lightening",
+    rating: 3.6,
+    imgURL: "../../assets/images/download2.jpg"
+  }]);
   let [searchText, setSearchText] = React.useState('')
-
-
-  // const searchFilterFunction = (searchText) => {
-  //   if (searchText) {
-  //     const newData = hallList.filter((eachRow) => {
-  //       return eachRow.hallName ? eachRow.hallName.toLowerCase().indexOf(searchText.toLowerCase()) > -1 : hallList
-  //     })
-  //     setSearchText(searchText);
-  //   setHallList(newData);
-  //   }
-  //   else{
-  //     setSearchText(searchText);
-  //     setHallList(hallList);
-  //   }
- 
-  // }
 
   const searchFilterFunction = (searchText) => {
     if (searchText) {
@@ -146,7 +88,7 @@ function SearchPage(props) {
             : ''.toUpperCase();
           const textData = searchText.toUpperCase();
           return itemData.indexOf(textData) > -1;
-      });
+        });
       setfilteredData(newData);
       setSearchText(searchText);
     } else {
@@ -154,80 +96,29 @@ function SearchPage(props) {
       setSearchText(searchText);
     }
   };
-
-  // const searchFilterFunction = text => {
-  //   const formattedQuery = text.toLowerCase();
-  //   const filteredData = filter(fullData, user => {
-  //     return contains(user, formattedQuery);
-  //   });
-  //   setData(filteredData);
-  //   setQuery(text);
-  // };
-  
-  // const contains = ({ name, email }, query) => {
-  //   const { first, last } = name;
-  
-  //   if (first.includes(query) || last.includes(query) || email.includes(query)) {
-  //     return true;
-  //   }
-  
-  //   return false;
-  // };
-
   return (
     <View style={styles.container}>
-
-
-
-      {/* <View style={styles.rect3}>
-              <View style={styles.rect4Row}>
-                <View style={styles.rect4}>
-                  <View style={styles.icon3Row}>
-                    <FontAwesomeIcon
-                      name="search"
-                      style={styles.icon3}
-                    ></FontAwesomeIcon>
-                    <Text style={styles.loremIpsum}>
-                      Search for halls, banquets...
-                    </Text>
-                  </View>
-                </View>
-                <FontAwesomeIcon
-                  name="sliders"
-                  style={styles.icon2}
-                ></FontAwesomeIcon>
-              </View>
-            </View> */}
-
-
-
-      {/* <SearchBar
-  fontColor="#c6c6c6"
-  iconColor="#c6c6c6"
-  shadowColor="#282828"
-  cancelIconColor="#c6c6c6"
-  backgroundColor="#353d5e"
-  placeholder="Search for halls, banquets..."
-  onChangeText={text => searchFilterFunction(text)}
-  onSearchPress={() => console.log("Search Icon is pressed")}
-  onClearPress={() => this.filterList("")}
-  onPress={() => alert("onPress")}
-/> */}
-
+       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
+            <ImageBackground
+                style={styles.rect1}
+                imageStyle={styles.rect1_imageStyle}
+                source={require("../../assets/images/Gradient_MI39RPu.png")}
+            >
+        
       <SearchBar
         lightTheme
         round
         searchIcon={{ size: 24 }}
-        placeholder="Search for halls, banquets..."
-value={searchText}
+        placeholder="Search for hall reviews..."
+        value={searchText}
         onChangeText={text => searchFilterFunction(text)}
       />
       <FlatList
         data={filteredData}
         renderItem={({ item }) => (
-          <View style={styles.imageStackStack}>
-            <View style={styles.imageStack}>
-              <TouchableOpacity onPress={() => props.navigation.navigate('Hall Details')}>
+          <View style={styles.eachItem}>
+
+              {/* <TouchableOpacity onPress={() => props.navigation.navigate('Hall Details')}>
                 <Image
                   source={require("../../assets/images/download2.jpg")}
                   // source={{ uri: item.imgURL }}
@@ -235,24 +126,31 @@ value={searchText}
                   resizeMode="contain"
                   style={styles.image}
                 ></Image>
-              </TouchableOpacity>
-
-              <Text style={styles.majesticBanquet}>{item.hallName}</Text>
-              <Text style={styles.limit700Persons}>Limit {item.seatingCapacity} Persons</Text>
-            </View>
-            <View style={styles.loremIpsum2Stack}>
-              <Text style={styles.loremIpsum2}>{item.price}</Text>
-              <FontAwesomeIcon
+              </TouchableOpacity> */}
+              {/* <FontAwesomeIcon
                 name="star"
                 style={styles.icon6}
-              ></FontAwesomeIcon>
-            </View>
-            <Text style={styles.loremIpsum3}>({item.rating})</Text>
+              ></FontAwesomeIcon> */}
+              <View style={styles.leftAlign}>
+              <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
+              </View>
+               <View style={styles.centeredAlign}>
+               <Text style={styles.centeredAlign.content}>{item.hallName}</Text>
+              <Text style={styles.centeredAlign.content}>{item.userName}</Text>
+              <Text style={styles.centeredAlign.content}>{item.review}</Text>
+               </View>
+              
+              <View style={styles.rightAligned}>
+              <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
+              <Text style={styles.rightAligned.content}>({item.rating})</Text>
+              </View>
+        
+       <View></View>
           </View>
         )}
       />
 
-
+</ImageBackground>
     </View>
   );
 }
@@ -260,8 +158,40 @@ value={searchText}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(176,163,163,1)",
-    // flexDirection: "column"
+  },
+  eachItem: 
+  {
+    flex:1,
+    flexDirection:'row',
+    color:'rgba(222,206,206,1)',
+    marginBottom : 10
+    // backgroundColor:'yellow'
+  },
+  leftAlign:{
+    marginLeft:14,
+    flex:2,
+    icon:{
+      fontSize:45,
+      color:'rgba(255,255,255,1)',
+    }
+  },
+  centeredAlign:{
+    content:{
+      color:'rgba(255,255,255,1)',   
+    },
+    flex:6,
+  },
+  rightAligned:{
+    flex:2,
+    flexDirection:'row',
+    alignItems:'center',
+    content:{
+      color:'rgba(255,255,255,1)',   
+    },   
+    icon:{
+      fontSize:10,
+      color:'yellow',
+    },
   },
   rect: {
     width: 360,
@@ -548,6 +478,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SearchPage;
+export default HallReviewsPage;
 
 
