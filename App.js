@@ -37,7 +37,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 // import SearchPage from './src/screens/Search-Hall/SearchHall';
 // import HallDetailPage from './src/screens/Hall-Details-Page/HallDetailsPage';
-import Login from './src/screens/auth/Login/Login';
+import LoginPage from './src/screens/auth/Login/LoginPage';
+
+
 import DrawerNavigator from './src/components/navigations/Navigations';
 
 
@@ -110,20 +112,10 @@ const App: () => Node = () => {
     //   </ScrollView>
     // </SafeAreaView>
     <NavigationContainer>
-      {/* <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={SearchPage} />
-        <Drawer.Screen name="Hall Details" component={HallDetailPage} />
-        <Drawer.Screen name="Tracking/Status" component={SearchPage} />
-        <Drawer.Screen name="Lodge Complaint/Feedback" component={SearchPage} />
-        <Drawer.Screen name="Personalize Settings" component={SearchPage} />
-        <Drawer.Screen name="Notifications" component={SearchPage} />
-        <Drawer.Screen name="Logout" component={SearchPage} />
-      </Drawer.Navigator> */}
       <Stack.Navigator>
       <Stack.Screen
             name="Login"
-            component={Login}
-            headerTitle="dfasd"
+            component={LoginPage}
           />
           <Stack.Screen
             name="Home"
