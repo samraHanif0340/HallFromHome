@@ -35,13 +35,13 @@ export const styles = StyleSheet.create({
     marginRight: 21
   },
   rect1_imageStyle: {},
-  header:{
-    flex:3,
-    alignItems:'center',
-    justifyContent:'center'
-  },
+  // header:{
+  //   flex:3,
+  //   alignItems:'center',
+  //   justifyContent:'center'
+  // },
   body:{
-    flex:7
+    // flex:7
   },
   headText:{
       fontSize:24,

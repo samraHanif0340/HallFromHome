@@ -1,14 +1,15 @@
 
 import React from "react";
+import { SafeAreaView, View, Text, StyleSheet,Alert } from 'react-native';
 
 import {
   createDrawerNavigator, DrawerContentScrollView,
   DrawerItem
 } from "@react-navigation/drawer";
-
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
+
 
 import SearchPage from '../../screens/Search-Hall/SearchHall';
 import HallDetailPage from '../../screens/Hall-Details-Page/HallDetailsPage';
@@ -18,11 +19,36 @@ import DetailOfHallPage from '../../screens/HallDetailChilds/DetailsPage';
 
 
 import LoginPage from '../../screens/auth/Login/LoginPage';
+import RegistrationPage from '../../screens/auth/Registration/RegistrationPage';
+
 
 
 // import { ContactStackNavigator } from "./StackNavigator";
 // import TabNavigator from "./TabNavigator";
 
+// AUTH ROUTES //
+const Stack = createStackNavigator();
+const AuthRoutes = () => {
+  return (
+<Stack.Navigator>
+      <Stack.Screen
+            name="Login"
+            component={LoginPage}
+            options={{ headerShown: false }}
+          />
+           <Stack.Screen
+            name="Customer Registration"
+            component={RegistrationPage}
+            options={{ headerShown: false }}
+          />
+             <Stack.Screen
+            name="Forgot Password"
+            component={RegistrationPage}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+  )
+}
 // DRAWER NAVIGATION // 
 const Drawer = createDrawerNavigator();
 
@@ -113,7 +139,29 @@ const CustomSidebar = (props) => {
         })}
          <DrawerItem
         label="Logout"              
-                onPress={() => navigation.navigate('Login')}
+        onPress={() => {
+          navigation.toggleDrawer();
+          Alert.alert(
+            'Logout',
+            'Are you sure, you want to logout?',
+            [
+              {
+                text: 'No',
+                onPress: () => {
+                  return null;
+                },
+              },
+              {
+                text: 'Yes',
+                onPress: () => {
+                  // AsyncStorage.clear();
+                  navigation.replace('Auth');
+                },
+              },
+            ],
+            {cancelable: false},
+          );
+        }}
               />
       </DrawerContentScrollView>
     </SafeAreaView>
@@ -121,7 +169,7 @@ const CustomSidebar = (props) => {
 };
 
 // export default DrawerNavigator;
-
+// HALL DETAILS TABS //
 const Tab = createMaterialTopTabNavigator();
 
 const HallDetailTabs = () => {
@@ -134,7 +182,7 @@ const HallDetailTabs = () => {
   );
 }
 
-export { CustomerDrawerNavigator,HallDetailTabs};
+export { CustomerDrawerNavigator,HallDetailTabs,AuthRoutes};
 
 
 

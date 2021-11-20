@@ -3,7 +3,8 @@ const validatorsDictionary = {
   
   textField:{
     presence:{
-      message:"^*REQUIRED"
+      allowEmpty: false,
+      message: '^*REQUIRED',
     },
     length:{
       minimum:4,
@@ -21,9 +22,14 @@ const validatorsDictionary = {
       message: '^Enter a valid EMAIL (abc@abc.com)'
     },
     presence:
+    // {
+      
+    //   message: '^*REQUIRED',
+    // },
     {
+      allowEmpty: false,
       message: '^*REQUIRED',
-    },
+    }
   },
 
 

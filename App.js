@@ -45,6 +45,8 @@ import BookingConfirmedPage from './src/components/sharedComponents/BookingConfi
 
 
 import {CustomerDrawerNavigator} from './src/components/navigations/Navigations';
+import {AuthRoutes} from './src/components/navigations/Navigations';
+
 
 
 // const Drawer = createDrawerNavigator();
@@ -118,11 +120,11 @@ const App: () => Node = () => {
     <NavigationContainer>
       <Stack.Navigator>
       <Stack.Screen
-            name="Login"
-            component={LoginPage}
+            name="Auth"
+            component={AuthRoutes}
             options={{ headerShown: false }}
           />
-           <Stack.Screen
+           {/* <Stack.Screen
             name="Customer Registration"
             component={RegistrationPage}
             options={{ headerShown: false }}
@@ -131,7 +133,7 @@ const App: () => Node = () => {
             name="Booking Confirmed"
             component={BookingConfirmedPage}
             options={{ headerShown: false }}
-          />
+          /> */}
           <Stack.Screen
             name="Home"
             component={CustomerDrawerNavigator}
