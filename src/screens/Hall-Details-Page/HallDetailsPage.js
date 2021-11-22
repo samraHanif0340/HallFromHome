@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component,useState } from "react";
 import {
   StyleSheet,
   View,
@@ -16,6 +16,7 @@ import MaterialButtonViolet4 from "../../components/MaterialButtonViolet4";
 import MaterialButtonWithVioletText1 from "../../components/MaterialButtonWithVioletText1";
 import { HallDetailTabs } from '../../components/navigations/Navigations';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import { TouchableHighlight } from "react-native";
 // import {LocaleConfig} from 'react-native-calendars';
 
 // LocaleConfig.locales['fr'] = {
@@ -27,8 +28,9 @@ import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 // };
 // LocaleConfig.defaultLocale = 'pak';
 
-function HallDetailPage(props) {
-  const { data, setData } = React.useState({
+const HallDetailPage = ({navigation}) => {
+  const [ pageState, setPageState ] = useState('parent-page');
+  const [data, setData ] = useState({
     hallName: "Majestic Banquet",
     seatingCapacity: 700,
     price: "150,000 PKR",
@@ -36,13 +38,32 @@ function HallDetailPage(props) {
     imgURL: "../../assets/images/download2.jpg"
   });
 
-  function openCalender(){
-    console.log('inside calendar'
-    )
-    return (
-     <Calendar
-      />
-    )
+
+  const openCloseCalendar = (pageState) => {
+    console.log('inside calender')
+   setPageState(pageState)
+  }
+
+  const CalendarComponent = () => {
+   return(
+     <View>
+       <TouchableHighlight onPress={()=>setPageState('parent-page')}><Text>Close Calendar</Text></TouchableHighlight>
+ <Calendar
+     markedDates={{
+      '2021-11-20': {customStyles:styles.stylesReserved,disableTouchEvent: true},
+      '2021-11-22': {startingDay: true, color: 'green',disableTouchEvent: true,customStyles:styles.stylesReserved},
+      '2021-11-23': {selected: true, endingDay: true, customStyles:styles.stylesReserved,disableTouchEvent: true},
+      '2021-11-04': {disabled: true, startingDay: true, customStyles:styles.stylesReserved,disableTouchEvent: true},
+      '2021-12-06': {disabled: true, startingDay: true, customStyles:styles.stylesReserved,disableTouchEvent: true}
+    }}
+    current={new Date()}
+    minDate={new Date()}
+    onDayPress={(day) => {console.log('selected day', day)}}
+    markingType={'custom'}
+    />
+     </View>
+    
+   )
   }
   return (
     
@@ -63,11 +84,10 @@ function HallDetailPage(props) {
           style={styles.image2}
         ></Image>
         <HallDetailTabs />
-        <Calendar
-      />
-        <TouchableOpacity style={styles.bookHall} onPress={openCalender}><Text style={styles.bookHall.content}>CHECK AVAILABILITY</Text></TouchableOpacity>
-
-        <TouchableOpacity style={styles.bookHall} onPress={() => props.navigation.navigate('Booking Confirmed')}><Text style={styles.bookHall.content}>BOOK</Text></TouchableOpacity>
+       
+        <TouchableOpacity style={styles.bookHall} onPress={() => setPageState('child-page-1')}><Text style={styles.bookHall.content}>CHECK AVAILABILITY</Text></TouchableOpacity>
+{pageState === 'child-page-1' ? <CalendarComponent/> : null}
+        <TouchableOpacity style={styles.bookHall} onPress={() => navigation.navigate('Booking Confirmed')}><Text style={styles.bookHall.content}>BOOK</Text></TouchableOpacity>
       </ImageBackground>
     </View>
   );
@@ -110,6 +130,16 @@ const styles = StyleSheet.create({
 
     }
   },
+  stylesReserved:{
+    container: {
+      backgroundColor: 'red'
+    },
+    text: {
+      color: 'black',
+      fontWeight: 'bold'
+    }
+  },
+  
   button2: {
     flex: 1,
     top: 557,

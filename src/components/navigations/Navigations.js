@@ -13,6 +13,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import SearchPage from '../../screens/Search-Hall/SearchHall';
 import HallDetailPage from '../../screens/Hall-Details-Page/HallDetailsPage';
+import TrackingStatusPage from '../../screens/TrackingStatus/TrackingStatus';
+
 
 import HallReviewsPage from '../../screens/HallDetailChilds/ReviewsPage';
 import DetailOfHallPage from '../../screens/HallDetailChilds/DetailsPage';
@@ -55,7 +57,7 @@ const Drawer = createDrawerNavigator();
 const CustomerDrawerNavigator = () => {
   return (
     <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <CustomSidebar {...props} />}>
-      <Drawer.Screen name="Home" options={{
+      <Drawer.Screen  name="Home" options={{
         drawerLabel: 'Home',
         // groupName: 'Category 1',
         activeTintColor: '#FF6F00',
@@ -71,7 +73,8 @@ const CustomerDrawerNavigator = () => {
         drawerLabel: 'Tracking/Status',
         activeTintColor: '#FF6F00',
       }}
-        component={SearchPage} />
+        component={TrackingStatusPage} />
+        
       <Drawer.Screen name="Lodge Complaint/Feedback" options={{
         drawerLabel: 'Lodge Complaint/Feedback',
         activeTintColor: '#FF6F00',
