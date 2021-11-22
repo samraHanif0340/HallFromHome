@@ -15,6 +15,17 @@ import MaterialButtonWithShadow1 from "../../components/MaterialButtonWithShadow
 import MaterialButtonViolet4 from "../../components/MaterialButtonViolet4";
 import MaterialButtonWithVioletText1 from "../../components/MaterialButtonWithVioletText1";
 import { HallDetailTabs } from '../../components/navigations/Navigations';
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+// import {LocaleConfig} from 'react-native-calendars';
+
+// LocaleConfig.locales['fr'] = {
+//   monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+//   monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
+//   dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+//   dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+//   today: 'Aujourd\'hui'
+// };
+// LocaleConfig.defaultLocale = 'pak';
 
 function HallDetailPage(props) {
   const { data, setData } = React.useState({
@@ -24,7 +35,17 @@ function HallDetailPage(props) {
     rating: 4.5,
     imgURL: "../../assets/images/download2.jpg"
   });
+
+  function openCalender(){
+    console.log('inside calendar'
+    )
+    return (
+     <Calendar
+      />
+    )
+  }
   return (
+    
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
       <ImageBackground
@@ -42,7 +63,9 @@ function HallDetailPage(props) {
           style={styles.image2}
         ></Image>
         <HallDetailTabs />
-        <TouchableOpacity style={styles.bookHall} onPress={() => props.navigation.navigate('Booking Confirmed')}><Text style={styles.bookHall.content}>CHECK AVAILABILITY</Text></TouchableOpacity>
+        <Calendar
+      />
+        <TouchableOpacity style={styles.bookHall} onPress={openCalender}><Text style={styles.bookHall.content}>CHECK AVAILABILITY</Text></TouchableOpacity>
 
         <TouchableOpacity style={styles.bookHall} onPress={() => props.navigation.navigate('Booking Confirmed')}><Text style={styles.bookHall.content}>BOOK</Text></TouchableOpacity>
       </ImageBackground>

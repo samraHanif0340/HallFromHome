@@ -128,12 +128,12 @@ const App: () => Node = () => {
             name="Customer Registration"
             component={RegistrationPage}
             options={{ headerShown: false }}
-          />
+          /> */}
              <Stack.Screen
             name="Booking Confirmed"
             component={BookingConfirmedPage}
             options={{ headerShown: false }}
-          /> */}
+          />
           <Stack.Screen
             name="Home"
             component={CustomerDrawerNavigator}

@@ -35,14 +35,19 @@ const LoginPage = ({ navigation }) => {
         // }
         // formBody = formBody.join('&');
         console.log(dataToSend)
-        if(dataToSend.email == 'samra.hanif@yahoo.com' && dataToSend.password == 'admin12345'){
-            alert('LOGIN SUCCESSFUL')
-            navigation.replace('Home');
-        }
-        else{
-            alert('INCORRECT EMAIL OR PASSWORD')
-        }
+        navigation.replace('Home');
+
+
+        // if(dataToSend.email == 'samra.hanif@yahoo.com' && dataToSend.password == 'admin12345'){
+        //     alert('LOGIN SUCCESSFUL')
+        //     navigation.replace('Home');
+        // }
+        // else{
+        //     alert('INCORRECT EMAIL OR PASSWORD')
+        // }
        
+
+        
         // fetch('http://localhost:3000/api/user/login', {
         //   method: 'POST',
         //   body: formBody,
