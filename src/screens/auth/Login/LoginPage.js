@@ -35,16 +35,16 @@ const LoginPage = ({ navigation }) => {
         // }
         // formBody = formBody.join('&');
         console.log(dataToSend)
-        navigation.replace('Home');
+        // navigation.replace('Home');
 
 
-        // if(dataToSend.email == 'samra.hanif@yahoo.com' && dataToSend.password == 'admin12345'){
-        //     alert('LOGIN SUCCESSFUL')
-        //     navigation.replace('Home');
-        // }
-        // else{
-        //     alert('INCORRECT EMAIL OR PASSWORD')
-        // }
+        if(dataToSend.email == 'samra.hanif@yahoo.com' && dataToSend.password == 'admin12345'){
+            alert('LOGIN SUCCESSFUL')
+            navigation.replace('Home');
+        }
+        else{
+            alert('INCORRECT EMAIL OR PASSWORD')
+        }
        
 
         

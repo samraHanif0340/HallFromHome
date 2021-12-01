@@ -31,26 +31,22 @@ import {
 
 
 import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 
 
 // import SearchPage from './src/screens/Search-Hall/SearchHall';
 // import HallDetailPage from './src/screens/Hall-Details-Page/HallDetailsPage';
-import LoginPage from './src/screens/auth/Login/LoginPage';
-import RegistrationPage from './src/screens/auth/Registration/RegistrationPage';
 import BookingConfirmedPage from './src/components/sharedComponents/BookingConfirmedPage';
-
-
-
 
 import {CustomerDrawerNavigator} from './src/components/navigations/Navigations';
 import {AuthRoutes} from './src/components/navigations/Navigations';
 
+import SplashScreen from './src/screens/SplashScreen/SplashScreen';
+
+
 
 
 // const Drawer = createDrawerNavigator();
-
 
   
 const Stack = createStackNavigator();
@@ -118,17 +114,18 @@ const App: () => Node = () => {
     //   </ScrollView>
     // </SafeAreaView>
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="SplashScreen">
+      <Stack.Screen
+            name="SplashScreen"
+            component={SplashScreen}
+            options={{ headerShown: false }}
+          />
       <Stack.Screen
             name="Auth"
             component={AuthRoutes}
             options={{ headerShown: false }}
           />
-           {/* <Stack.Screen
-            name="Customer Registration"
-            component={RegistrationPage}
-            options={{ headerShown: false }}
-          /> */}
+
              <Stack.Screen
             name="Booking Confirmed"
             component={BookingConfirmedPage}

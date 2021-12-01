@@ -11,8 +11,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 
 
-import SearchPage from '../../screens/Search-Hall/SearchHall';
-import HallDetailPage from '../../screens/Hall-Details-Page/HallDetailsPage';
+import SearchPage from '../../screens/SearchHall/SearchHall';
+import HallDetailPage from '../../screens/HallDetailsPage/HallDetailsPage';
 import TrackingStatusPage from '../../screens/TrackingStatus/TrackingStatus';
 
 
@@ -23,10 +23,6 @@ import DetailOfHallPage from '../../screens/HallDetailChilds/DetailsPage';
 import LoginPage from '../../screens/auth/Login/LoginPage';
 import RegistrationPage from '../../screens/auth/Registration/RegistrationPage';
 
-
-
-// import { ContactStackNavigator } from "./StackNavigator";
-// import TabNavigator from "./TabNavigator";
 
 // AUTH ROUTES //
 const Stack = createStackNavigator();
@@ -51,6 +47,8 @@ const AuthRoutes = () => {
         </Stack.Navigator>
   )
 }
+
+
 // DRAWER NAVIGATION // 
 const Drawer = createDrawerNavigator();
 
@@ -92,7 +90,6 @@ const CustomerDrawerNavigator = () => {
     </Drawer.Navigator>
   );
 }
-
 const CustomSidebar = (props) => {
   const { state, descriptors, navigation } = props;
   let lastGroupName = '';
@@ -171,7 +168,6 @@ const CustomSidebar = (props) => {
   );
 };
 
-// export default DrawerNavigator;
 // HALL DETAILS TABS //
 const Tab = createMaterialTopTabNavigator();
 
@@ -186,7 +182,6 @@ const HallDetailTabs = () => {
 }
 
 export { CustomerDrawerNavigator,HallDetailTabs,AuthRoutes};
-
 
 
 const styles = StyleSheet.create({
