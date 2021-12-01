@@ -29,6 +29,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import { DefaultTheme,Provider as PaperProvider } from 'react-native-paper';
+
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -77,6 +79,15 @@ const Section = ({ children, title }): Node => {
 };
 
 
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#3498db',
+    accent: '#f1c40f',
+  },
+};
 
 const App: () => Node = () => {
   // const isDarkMode = useColorScheme() === 'dark';
@@ -86,33 +97,7 @@ const App: () => Node = () => {
   // };
 
   return (
-    // <SafeAreaView style={backgroundStyle}>
-    //   <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-    //   <ScrollView
-    //     contentInsetAdjustmentBehavior="automatic"
-    //     style={backgroundStyle}>
-    //     <Header />
-    //     <View
-    //       style={{
-    //         backgroundColor: isDarkMode ? Colors.black : Colors.white,
-    //       }}>
-    //       <Section title="Step One">
-    //         Edit <Text style={styles.highlight}>App.js</Text> to change this
-    //         screen and then come back to see your edits.
-    //       </Section>
-    //       <Section title="See Your Changes">
-    //         <ReloadInstructions />
-    //       </Section>
-    //       <Section title="Debug">
-    //         <DebugInstructions />
-    //       </Section>
-    //       <Section title="Learn More">
-    //         Read the docs to discover what to do next:
-    //       </Section>
-    //       <LearnMoreLinks />
-    //     </View>
-    //   </ScrollView>
-    // </SafeAreaView>
+    <PaperProvider theme={theme}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
@@ -138,6 +123,7 @@ const App: () => Node = () => {
           />
         </Stack.Navigator>
     </NavigationContainer>
+    </PaperProvider>
     // <SearchHall/>
   );
 };

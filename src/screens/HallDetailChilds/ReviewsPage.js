@@ -3,7 +3,9 @@ import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,I
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
-// import SearchBar from "react-native-dynamic-search-bar";
+import { Avatar, Card, Divider } from 'react-native-paper';
+
+const LeftContent = props => <Avatar.Icon {...props} icon="account-circle-outline" />
 
 function HallReviewsPage(props) {
   const [filteredData, setfilteredData] = React.useState([{
@@ -120,37 +122,40 @@ function HallReviewsPage(props) {
       <FlatList
         data={filteredData}
         renderItem={({ item }) => (
-          <View style={styles.eachItem}>
-
-              {/* <TouchableOpacity onPress={() => props.navigation.navigate('Hall Details')}>
-                <Image
-                  source={require("../../assets/images/download2.jpg")}
-                  // source={{ uri: item.imgURL }}
-
-                  resizeMode="contain"
-                  style={styles.image}
-                ></Image>
-              </TouchableOpacity> */}
-              {/* <FontAwesomeIcon
-                name="star"
-                style={styles.icon6}
-              ></FontAwesomeIcon> */}
-              <View style={styles.leftAlign}>
-              <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
-              </View>
-               <View style={styles.centeredAlign}>
-               <Text style={styles.centeredAlign.content}>{item.hallName}</Text>
-              <Text style={styles.centeredAlign.content}>{item.userName}</Text>
-              <Text style={styles.centeredAlign.content}>{item.review}</Text>
-               </View>
+      //     <View style={styles.eachItem}>
+      //         <View style={styles.leftAlign}>
+      //         <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
+      //         </View>
+      //          <View style={styles.centeredAlign}>
+      //          <Text style={styles.centeredAlign.content}>{item.hallName}</Text>
+      //         <Text style={styles.centeredAlign.content}>{item.userName}</Text>
+      //         <Text style={styles.centeredAlign.content}>{item.review}</Text>
+      //          </View>
               
-              <View style={styles.rightAligned}>
-              <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
-              <Text style={styles.rightAligned.content}>({item.rating})</Text>
-              </View>
+      //         <View style={styles.rightAligned}>
+      //         <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
+      //         <Text style={styles.rightAligned.content}>({item.rating})</Text>
+      //         </View>
         
-       <View></View>
-          </View>
+      //  <View>
+
+      //  </View>
+      //     </View>
+      <Card style={styles.card}>
+      <Card.Title titleStyle={styles.cardTitle} title={item.userName} subtitle={item.review} left={LeftContent} />
+      {/* <Card.Content>
+        <Title>{item.hallName}</Title>
+        <Paragraph>{item.review}</Paragraph>
+      </Card.Content> */}
+      {/* <Card.Cover source={{ uri: 'https://picsum.photos/700' }} /> */}
+      {/* <Card.Actions>
+        <Button>Cancel</Button>
+        <Button>Ok</Button>
+      </Card.Actions> */}
+       <Divider />
+    </Card>
+   
+
         )}
       />
 
@@ -162,6 +167,12 @@ function HallReviewsPage(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  card:{
+backgroundColor: 'white'
+  },
+  cardTitle : {
+    color: 'black'
   },
   eachItem: 
   {
