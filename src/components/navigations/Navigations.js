@@ -14,6 +14,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SearchPage from '../../screens/SearchHall/SearchHall';
 import HallDetailPage from '../../screens/HallDetailsPage/HallDetailsPage';
 import TrackingStatusPage from '../../screens/TrackingStatus/TrackingStatus';
+import LodgeComplaintPage from '../../screens/LodgeComplaint/LodgeComplaint';
+
 
 
 import HallReviewsPage from '../../screens/HallDetailChilds/ReviewsPage';
@@ -59,33 +61,45 @@ const CustomerDrawerNavigator = () => {
         drawerLabel: 'Home',
         // groupName: 'Category 1',
         activeTintColor: '#FF6F00',
-      }}
-        component={SearchPage} />
+      }} component={SearchPage} />
+
+
       <Drawer.Screen name="Hall Details" options={{
         drawerLabel: 'Hall Details',
         // groupName: 'Category 1',
         activeTintColor: '#FF6F00',
       }}
         component={HallDetailPage} />
+
+
       <Drawer.Screen name="Tracking/Status" options={{
         drawerLabel: 'Tracking/Status',
         activeTintColor: '#FF6F00',
       }}
         component={TrackingStatusPage} />
+
+
         
       <Drawer.Screen name="Lodge Complaint/Feedback" options={{
         drawerLabel: 'Lodge Complaint/Feedback',
         activeTintColor: '#FF6F00',
       }}
         component={SearchPage} />
+
       <Drawer.Screen name="Personalize Settings" options={{
         drawerLabel: 'Personalize Settings',
         activeTintColor: '#FF6F00',
       }} component={SearchPage} />
+
       <Drawer.Screen name="Notifications" options={{
         drawerLabel: 'Notifications',
         activeTintColor: '#FF6F00',
       }} component={SearchPage} />
+
+      <Drawer.Screen name="Lodge Camplaint" options={{
+        drawerLabel: 'Lodge Camplaint',
+        activeTintColor: '#FF6F00',
+      }} component={LodgeComplaintPage} />
 
     </Drawer.Navigator>
   );

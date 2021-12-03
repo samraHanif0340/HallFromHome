@@ -3,10 +3,9 @@ import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,I
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
-import {  Button, Card, Title, Paragraph,Divider } from 'react-native-paper';
 // import SearchBar from "react-native-dynamic-search-bar";
 
-const  TrackingStatusPage = (props) => {
+const  LodgeComplaintPage = (props) => {
   const [filteredData, setfilteredData] = React.useState([{
     hallName: "Majestic Banquet",
     userName: 'Samra Hanif',
@@ -119,40 +118,26 @@ const  TrackingStatusPage = (props) => {
       <FlatList
         data={filteredData}
         renderItem={({ item }) => (
-          // <View style={styles.eachItem}>
-          //     <View style={styles.leftAlign}>
-          //     <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
-          //     </View>
-          //      <View style={styles.centeredAlign}>
-          //      <Text style={styles.centeredAlign.content}>{item.hallName}</Text>
-          //     <Text style={styles.centeredAlign.content}>{item.userName}</Text>
-          //     <Text style={styles.centeredAlign.content}>{item.status}</Text>
-          //      </View>
+          <View style={styles.eachItem}>
+              <View style={styles.leftAlign}>
+              <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
+              </View>
+               <View style={styles.centeredAlign}>
+               <Text style={styles.centeredAlign.content}>{item.hallName}</Text>
+              <Text style={styles.centeredAlign.content}>{item.userName}</Text>
+              <Text style={styles.centeredAlign.content}>{item.status}</Text>
+               </View>
               
-          //     <View style={styles.rightAligned}>
+              <View style={styles.rightAligned}>
               
-          //     <Text style={styles.rightAligned.content}>({item.pricePaid})</Text>
-          //     </View>
+              <Text style={styles.rightAligned.content}>({item.pricePaid})</Text>
+              </View>
 
-          //     <View >
-          //         <Text style={styles.comments}>{item.comments}</Text>
-          //     </View>
+              <View >
+                  <Text style={styles.comments}>{item.comments}</Text>
+              </View>
     
-          // </View>
-          <Card>
-    <Card.Title title={item.hallName} subtitle={item.status}  />
-    <Card.Content>
-      <Title>{item.pricePaid}</Title>
-      <Paragraph>{item.comments}</Paragraph>
-    </Card.Content>
-
-    <Card.Actions>
-      <Button>Cancel</Button>
-      <Button>Ok</Button>
-    </Card.Actions>
-    <Divider />
-  </Card>
-  
+          </View>
         )}
       />
 
@@ -497,6 +482,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default TrackingStatusPage;
+export default LodgeComplaintPage;
 
 
