@@ -47,6 +47,10 @@ const styles = StyleSheet.create({
         color: "rgba(255,255,255,1)",
         marginTop: 4,
     },
+    snackbar: {
+        flex: 1,
+        justifyContent: 'space-between',
+      },
     icon2: {
         flex: 2,
         color: "rgba(255,255,255,1)",

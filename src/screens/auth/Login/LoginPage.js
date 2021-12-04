@@ -2,7 +2,7 @@
 import React , {useState}from "react";
 import { View, Text, StyleSheet, StatusBar, ImageBackground, TextInput } from "react-native";
 import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
-import TextField from '../../../components/customComponents/customComponents'
+import {TextField} from '../../../components/customComponents/customComponents'
 import validate from '../../../shared-services/validationFunctions'
 import { styles } from './LoginPage.component.style.js'
 
