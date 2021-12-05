@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   },
   searchBar:{
     backgroundColor:'rgba(142,7,27,1)',
-    opacity:0.6,
+    opacity:0.5,
     icon:{
       color:'black'
     },

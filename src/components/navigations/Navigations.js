@@ -60,21 +60,24 @@ const CustomerDrawerNavigator = () => {
       <Drawer.Screen  name="Home" options={{
         drawerLabel: 'Home',
         // groupName: 'Category 1',
-        activeTintColor: '#FF6F00',
+        //activeTintColor: '#FF6F00',
+        activeTintColor: '#8b0000',
       }} component={SearchPage} />
 
 
       <Drawer.Screen name="Hall Details" options={{
         drawerLabel: 'Hall Details',
         // groupName: 'Category 1',
-        activeTintColor: '#FF6F00',
+        //activeTintColor: '#FF6F00',
+        activeTintColor: '#8b0000',
       }}
         component={HallDetailPage} />
 
 
-      <Drawer.Screen name="Tracking/Status" options={{
+     <Drawer.Screen name="Tracking/Status"  options={{
         drawerLabel: 'Tracking/Status',
-        activeTintColor: '#FF6F00',
+        //activeTintColor: '#FF6F00',
+        activeTintColor: '#8b0000',
       }}
         component={TrackingStatusPage} />
 
@@ -201,6 +204,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
+  },
+  HeaderColor: {
+    flex: 1,
+    alignItems: 'right',
+    justifyContent: 'left',
+    padding: 10,
+    color: 'red',
+   
   },
 
   sectionView: {
