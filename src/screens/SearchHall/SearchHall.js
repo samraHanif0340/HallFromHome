@@ -8,6 +8,8 @@ import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommun
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
 // import SearchBar from "react-native-dynamic-search-bar";
+import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { Divider } from "react-native-elements/dist/divider/Divider";
 
 function SearchPage(props) {
   const [filteredData, setfilteredData] = React.useState([{
@@ -186,7 +188,7 @@ function SearchPage(props) {
 
         <SearchBar
           lightTheme
-          searchIcon={{ size: 24 }}
+          searchIcon={{ size: 25 , color: 'white'}}
           placeholder="Search for halls, banquets..."
           value={searchText}
           onChangeText={text => searchFilterFunction(text)}
@@ -197,8 +199,22 @@ function SearchPage(props) {
           inputStyle={styles.searchBar.inputStyle}
         />
         <FlatList
+        
           data={filteredData}
+          
           renderItem={({ item }) => (
+            
+  //           <Card style={styles.card}>
+             
+  //   <Card.Cover source={require("../../assets/images/download2.jpg")} />
+    
+ 
+  //   <Card.Title titleStyle={styles.cardTitle} title={item.hallName} subtitle={item.seatingCapacity} />
+  //   <Card.Title titleStyle={styles.cardTitle} title={item.price} subtitle={item.rating} />
+  //   <TouchableOpacity activeOpacity={0.2} onPress={() => props.navigation.navigate('Hall Details')}></TouchableOpacity>
+  // </Card>
+  
+
             <View style={styles.imageStackStack}>
               <View style={styles.imageStack}>
                 <TouchableOpacity activeOpacity={0.2} onPress={() => props.navigation.navigate('Hall Details')}>
@@ -206,7 +222,7 @@ function SearchPage(props) {
                     source={require("../../assets/images/download2.jpg")}
                     // source={{ uri: item.imgURL }}
 
-                    resizeMode="contain"
+                    resizeMode="stretch"
                     style={styles.image}
                   ></Image>
                 </TouchableOpacity>
@@ -222,6 +238,7 @@ function SearchPage(props) {
                 ></FontAwesomeIcon>
               </View>
               <Text style={styles.loremIpsum3}>({item.rating})</Text>
+              <Divider style={styles.DividerColor} />
             </View>
           )}
         />
@@ -236,12 +253,23 @@ const styles = StyleSheet.create({
     flex: 1,
 
   },
+  DividerColor: {
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    left: -20,
+  },
+  card:{
+  backgroundColor: 'white'
+    },
+    cardTitle : {
+      color: 'black'
+    },
   rect: {
     flex: 1,
   },
   searchBar:{
     backgroundColor:'rgba(142,7,27,1)',
-    opacity:0.7,
+    opacity:0.6,
     icon:{
       color:'black'
     },
@@ -380,30 +408,32 @@ const styles = StyleSheet.create({
   },
   image: {
     top: 0,
-    left: 0,
-    width: 335,
+    left: -10,
+    width: 355,
     height: 175,
-    borderRadius: 10
+    borderRadius: 5
   },
   majesticBanquet: {
     top: 173,
-    left: 11,
+    left: -11,
+    fontSize: 15,
+    fontWeight: 'bold',
     position: "absolute",
     fontFamily: "georgia-regular",
     color: "rgba(255,255,255,1)"
   },
   limit700Persons: {
     top: 191,
-    left: 11,
+    left: -11,
     position: "absolute",
     fontFamily: "roboto-italic",
     color: "rgba(255,255,255,1)",
-    fontSize: 12
+    fontSize: 11
   },
   imageStack: {
     top: 0,
     left: 0,
-    width: 335,
+    width: 344,
     height: 207,
     position: "absolute",
 
@@ -415,39 +445,39 @@ const styles = StyleSheet.create({
     fontFamily: "roboto-700",
     color: "rgba(255,255,255,1)",
     height: 14,
-    width: 119,
+    width: 139,
     textAlign: "left",
     fontSize: 11
   },
   icon6: {
-    top: 11,
-    left: 66,
+    top: 15,
+    left: 18,
     position: "absolute",
     color: "rgba(248,179,28,1)",
-    fontSize: 20,
+    fontSize: 15,
     height: 20,
     width: 19
   },
   loremIpsum2Stack: {
     top: 178,
-    left: 210,
-    width: 119,
-    height: 31,
+    left: 260,
+    width: 109,
+    height: 20,
     position: "absolute"
   },
   loremIpsum3: {
     top: 192,
-    left: 295,
+    left: 297,
     position: "absolute",
     fontFamily: "roboto-700",
     color: "rgba(255,255,255,1)",
-    fontSize: 12
+    fontSize: 11
   },
   imageStackStack: {
-    width: 335,
+    width: 499,
     height: 209,
     marginTop: 11,
-    marginLeft: 9
+    marginLeft: 25,
   },
   image1: {
     width: 335,

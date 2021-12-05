@@ -186,12 +186,12 @@ const HallDetailPage = ({ navigation }) => {
         <Image
           source={require("../../assets/images/download2.jpg")}
           // source={{ uri: item.imgURL }}
-          resizeMode="contain"
+          resizeMode="cover"
           style={styles.image2}
         ></Image>
         <HallDetailTabs />
 
-        {pageState === 'parent-page' ? <TouchableOpacity style={styles.bookHall} onPress={() => setPageState('child-page-1')}><Text style={styles.bookHall.content}>CHECK AVAILABILITY</Text></TouchableOpacity> : null}
+        {pageState === 'parent-page' ? <TouchableOpacity style={styles.checkAvailability} onPress={() => setPageState('child-page-1')}><Text style={styles.checkAvailability.Availabilitycontent}>CHECK AVAILABILITY</Text></TouchableOpacity> : null}
         {pageState === 'child-page-1' ? <CalendarComponent /> : null}
         {pageState === 'child-page-2' ? <TimeComponent /> : null}
 
@@ -213,6 +213,7 @@ const styles = StyleSheet.create({
     fontFamily: "roboto-regular",
     color: "rgba(255,255,255,1)",
     fontSize: 25,
+    marginTop: 10,
     textAlign: "center",
 
   },
@@ -223,22 +224,48 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   image2: {
-    marginLeft: 20,
-    marginBottom: 10,
+    marginLeft: 15,
+    marginBottom: 20,
     marginTop: 10,
+    width: 360,
+    height: 175,
     borderRadius: 10,
     alignItems: "center",
     textAlign: "center",
   },
   bookHall: {
     backgroundColor: "rgba(142,7,27,1)",
-    marginLeft: 15,
-    marginTop: 15,
-    marginRight: 15,
-    marginBottom: 15,
-    content: {
+    marginLeft: 45,
+    marginTop: 5,
+    marginRight: 40,
+    marginBottom: 20,
+    width: 288,
+    height: 42,
+    Bookingcontent: {
       fontFamily: "roboto-regular",
-      fontSize: 24,
+      fontSize: 20,
+      flex: 1,
+      marginHorizontal: 6,
+      marginVertical: 6,
+      color: 'rgba(255,255,255,1)',
+      textAlign: "center",
+
+    }
+  },
+  checkAvailability: {
+    backgroundColor: "rgba(142,7,27,1)",
+    marginLeft: 45,
+    marginTop: 20,
+    marginRight: 40,
+    marginBottom: 15,
+    width: 288,
+    height: 45,
+    Availabilitycontent: {
+      fontFamily: "roboto-regular",
+      fontSize: 20,
+      flex: 1,
+      marginHorizontal: 6,
+      marginVertical: 6,
       color: 'rgba(255,255,255,1)',
       textAlign: "center",
 
