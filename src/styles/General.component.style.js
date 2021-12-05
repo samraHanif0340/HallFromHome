@@ -34,6 +34,28 @@ const styles = StyleSheet.create({
         marginTop: 14,
         marginBottom: 14
     },
+    textField: {
+        flex: 8,
+        height: 50,
+        color: "rgba(255,255,255,1)",
+        marginTop: 4,
+    },
+    selectFieldWrapper:{
+        height: 59,
+        backgroundColor: "rgba(251,247,247,0.25)",
+        borderRadius: 5,
+        flexDirection: "row", 
+        marginRight: 20,
+        marginLeft: 20,
+        marginTop: 14,
+        marginBottom: 14
+    },
+    selectField:{
+        flex: 8,
+        height: 50,
+        color: "rgba(255,255,255,1)",
+        marginTop: 4,
+    },
     dropdownField: {
         height: 59,
         backgroundColor: "rgba(251,247,247,0.25)",
@@ -83,12 +105,8 @@ const styles = StyleSheet.create({
         color:'white',
         fontSize:20
     },
-    textField: {
-        flex: 8,
-        height: 50,
-        color: "rgba(255,255,255,1)",
-        marginTop: 4,
-    },
+ 
+ 
     snackbar: {
         flex: 1,
         justifyContent: 'space-between',
