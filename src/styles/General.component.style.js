@@ -34,6 +34,44 @@ const styles = StyleSheet.create({
         marginTop: 14,
         marginBottom: 14
     },
+    dropdownField: {
+        height: 59,
+        backgroundColor: "rgba(251,247,247,0.25)",
+        borderRadius: 5, 
+        alignContent: 'center',  
+    },
+    shadow: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
+        elevation: 2,
+      },
+
+      placeholderStyle: {
+        fontSize: 16,
+        marginLeft:20,
+
+      },
+      selectedTextStyle: {
+        fontSize: 16,
+        marginLeft:20,
+
+      },
+      iconStyle: {
+        width: 20,
+        height: 20,
+      },
+      inputSearchStyle: {
+        height: 40,
+        fontSize: 16,
+        marginLeft:20,
+        backgroundColor:'rgba(251,247,247,0.5)',
+        color:'white'
+      },
     // outerTextField: {
     //     flex: 6,
     //     flexDirection: "row"
@@ -41,6 +79,10 @@ const styles = StyleSheet.create({
     // errorField: {
     //     flex: 4
     // },
+    selectLabel:{
+        color:'white',
+        fontSize:20
+    },
     textField: {
         flex: 8,
         height: 50,
