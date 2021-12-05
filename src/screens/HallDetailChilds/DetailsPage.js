@@ -3,6 +3,8 @@ import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,I
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
+import { Divider } from 'react-native-paper';
+
 // import SearchBar from "react-native-dynamic-search-bar";
 
 function DetailOfHallPage(props) {
@@ -47,9 +49,13 @@ function DetailOfHallPage(props) {
            
                <View style={styles.centeredAlign}>
                <Text style={styles.centeredAlign.content}>Hall Name: {filteredData.hallName}</Text>
+               <Divider style={styles.DividerColor} />
               <Text style={styles.centeredAlign.content}>Accomodation: {filteredData.seatingCapacity}</Text>
+              <Divider style={styles.DividerColor} />
               <Text style={styles.centeredAlign.content}>Price: {filteredData.price}</Text>
+              <Divider style={styles.DividerColor} />
               <Text style={styles.centeredAlign.content}>Lightening Included: {filteredData.lighteningProvided}</Text>
+              <Divider style={styles.DividerColor} />
               <Text style={styles.centeredAlign.content}>Rating : ({filteredData.rating})</Text>
 
                </View>
@@ -72,6 +78,9 @@ const styles = StyleSheet.create({
   rect1:{
       flex:1
   },
+  DividerColor: {
+    backgroundColor: 'white' ,
+  },
   eachItem: 
   {
     flex:1,
@@ -84,14 +93,14 @@ const styles = StyleSheet.create({
     marginLeft:14,
     flex:2,
     icon:{
-      fontSize:45,
+      fontSize:35,
       color:'rgba(255,255,255,1)',
     }
   },
   centeredAlign:{
     content:{
       color:'rgba(255,255,255,1)',   
-      fontSize:24,
+      fontSize:18,
      margin: 10,
     },
     flex:6,

@@ -5,6 +5,7 @@ import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
 import { Avatar, Card, Divider } from 'react-native-paper';
 
+
 const LeftContent = props => <Avatar.Icon {...props} icon="account-circle-outline" />
 
 function HallReviewsPage(props) {
@@ -109,7 +110,7 @@ function HallReviewsPage(props) {
         
         <SearchBar
           lightTheme
-          searchIcon={{ size: 24 }}
+          searchIcon={{ size: 25, color: 'white'}}
           placeholder="Search for halls reviews..."
           value={searchText}
           onChangeText={text => searchFilterFunction(text)}
@@ -121,41 +122,41 @@ function HallReviewsPage(props) {
         />
       <FlatList
         data={filteredData}
+       
         renderItem={({ item }) => (
-      //     <View style={styles.eachItem}>
-      //         <View style={styles.leftAlign}>
-      //         <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
-      //         </View>
-      //          <View style={styles.centeredAlign}>
-      //          <Text style={styles.centeredAlign.content}>{item.hallName}</Text>
-      //         <Text style={styles.centeredAlign.content}>{item.userName}</Text>
-      //         <Text style={styles.centeredAlign.content}>{item.review}</Text>
-      //          </View>
+          
+          <View style={styles.eachItem}>
+              <View style={styles.leftAlign}>
+              <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
               
-      //         <View style={styles.rightAligned}>
-      //         <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
-      //         <Text style={styles.rightAligned.content}>({item.rating})</Text>
-      //         </View>
-        
-      //  <View>
-
-      //  </View>
-      //     </View>
-      <Card style={styles.card}>
-      <Card.Title titleStyle={styles.cardTitle} title={item.userName} subtitle={item.review} left={LeftContent} />
-      {/* <Card.Content>
-        <Title>{item.hallName}</Title>
-        <Paragraph>{item.review}</Paragraph>
-      </Card.Content> */}
-      {/* <Card.Cover source={{ uri: 'https://picsum.photos/700' }} /> */}
-      {/* <Card.Actions>
-        <Button>Cancel</Button>
-        <Button>Ok</Button>
-      </Card.Actions> */}
-       <Divider />
-    </Card>
+              </View>
+               <View style={styles.centeredAlign}>
+               <Text style={styles.HallNameStyle.Hallnamecontent}>{item.hallName}</Text>
+              <Text style={styles.UserNameStyle.Usernamecontent}>{item.userName}</Text>
+              <Text style={styles.centeredAlign.content}>{item.review}</Text>
+               </View>
+              
+              <View style={styles.rightAligned}>
+              <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
+              <Text style={styles.rightAligned.content}>({item.rating})</Text>
+              </View>
+       </View>
+      
+    //   <Card style={styles.card}>
+    //   <Card.Title titleStyle={styles.cardTitle} title={item.userName} subtitle={item.review} left={LeftContent} />
+    //   {/* <Card.Content>
+    //     <Title>{item.hallName}</Title>
+    //     <Paragraph>{item.review}</Paragraph>
+    //   </Card.Content> */}
+    //   {/* <Card.Cover source={{ uri: 'https://picsum.photos/700' }} /> */}
+    //   {/* <Card.Actions>
+    //     <Button>Cancel</Button>
+    //     <Button>Ok</Button>
+    //   </Card.Actions> */}
+    //    <Divider />
+    // </Card>
    
-
+  
         )}
       />
 
@@ -179,20 +180,38 @@ backgroundColor: 'white'
     flex:1,
     flexDirection:'row',
     color:'rgba(222,206,206,1)',
-    marginBottom : 10
+    marginBottom : 10,
     // backgroundColor:'yellow'
   },
   leftAlign:{
     marginLeft:14,
     flex:2,
     icon:{
-      fontSize:45,
+      fontSize:30,
       color:'rgba(255,255,255,1)',
     }
   },
   centeredAlign:{
+    marginLeft:-25,
     content:{
-      color:'rgba(255,255,255,1)',   
+      color:'rgba(255,255,255,1)', 
+    },
+    flex:6,
+  },
+  UserNameStyle:{
+    Usernamecontent:{
+      color:'rgba(255,255,255,1)', 
+      fontWeight: 'normal', 
+      fontStyle: 'italic',
+      fontSize: 14,
+    },
+    flex:6,
+  },
+  HallNameStyle:{
+    Hallnamecontent:{
+      color:'rgba(255,255,255,1)', 
+      fontWeight: 'bold', 
+      fontSize: 17,
     },
     flex:6,
   },
@@ -210,12 +229,12 @@ backgroundColor: 'white'
   },
   searchBar:{
     backgroundColor:'rgba(142,7,27,1)',
-    opacity:0.7,
+    opacity:0.5,
     icon:{
-      color:'black'
+    color:'Blue',
     },
     inputStyle:{
-      color:'white'
+      color:'white',
     }
   },
   rect: {
