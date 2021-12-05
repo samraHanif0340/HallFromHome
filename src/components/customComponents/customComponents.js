@@ -21,14 +21,17 @@ export const Inputs = (type, label, value, onChange) => {
 
 export const SelectField = props => {
   return(
-  <View >
-    <Text style={styles.selectLabel}>{props.labelName}</Text>
-    <Picker   style={styles.dropdownField} selectedValue={props.selectedValue} mode={props.mode}  placeholder={props.placeholder} selectedValue={props.value} onValueChange={props.onChangeText}>
+    <View>
+  <View style={styles.selectFieldWrapper}>
+    {/* <Text style={styles.selectLabel}>{props.labelName}</Text> */}
+    {props.nameOfIcon ? <EvilIconsIcon name={props.nameOfIcon} style={styles.icon2}></EvilIconsIcon> : null}
+    <Picker style={styles.selectField}   selectedValue={props.selectedValue} mode={props.mode}  placeholder={props.placeholder} selectedValue={props.value} onValueChange={props.onChangeText}>
       {props.items.map(item => (
         <Picker.Item key={item.value} label={item.label} value={item.value} enabled={item.enable}
         />
       ))}
     </Picker>
+    </View>
     {props.error ? props.error.map((error) => <Text style={styles.errorMsg}>{error}</Text>) : null}
 
   </View>

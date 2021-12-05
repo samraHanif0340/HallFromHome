@@ -140,6 +140,7 @@ const HallDetailPage = ({ navigation }) => {
           size={50}
         // containerStyle={{flex: 2, alignSelf:'flex-end'}}
         />
+        <Text style={styles.textEvent}>Select Time for the Event</Text>
         {/* <DropdownField
           dropdownList={timeList}
           search="true"
@@ -159,7 +160,7 @@ const HallDetailPage = ({ navigation }) => {
             />
           }
         /> */}
-        <SelectField items={timeList} selectedValue={selectedTime} labelName="Select Time" mode="dialog" />
+        <SelectField items={timeList} selectedValue={selectedTime} nameOfIcon="clock" mode="dialog" />
         <TouchableOpacity style={styles.bookHall} onPress={() => {
           setPageState('parent-page')
           navigation.navigate('Booking Confirmed')
@@ -215,6 +216,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center",
 
+  },
+  textEvent:{
+    fontFamily: "roboto-regular",
+    fontSize: 24,
+    color: 'rgba(255,255,255,1)',
+    textAlign: "center",
   },
   image2: {
     marginLeft: 15,
