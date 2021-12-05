@@ -84,7 +84,7 @@ const CustomerDrawerNavigator = () => {
         drawerLabel: 'Lodge Complaint/Feedback',
         activeTintColor: '#FF6F00',
       }}
-        component={SearchPage} />
+        component={LodgeComplaintPage} />
 
       <Drawer.Screen name="Personalize Settings" options={{
         drawerLabel: 'Personalize Settings',
@@ -96,10 +96,6 @@ const CustomerDrawerNavigator = () => {
         activeTintColor: '#FF6F00',
       }} component={SearchPage} />
 
-      <Drawer.Screen name="Lodge Camplaint" options={{
-        drawerLabel: 'Lodge Camplaint',
-        activeTintColor: '#FF6F00',
-      }} component={LodgeComplaintPage} />
 
     </Drawer.Navigator>
   );

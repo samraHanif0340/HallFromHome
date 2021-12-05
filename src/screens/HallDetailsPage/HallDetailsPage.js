@@ -1,4 +1,4 @@
-import React, { Component,useState } from "react";
+import React, { Component, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -9,28 +9,19 @@ import {
   Image,
   TextInput
 } from "react-native";
-import MaterialButtonViolet2 from "../../components/MaterialButtonViolet2";
-import MaterialButtonWithShadow from "../../components/MaterialButtonWithShadow";
-import MaterialButtonWithShadow1 from "../../components/MaterialButtonWithShadow1";
-import MaterialButtonViolet4 from "../../components/MaterialButtonViolet4";
-import MaterialButtonWithVioletText1 from "../../components/MaterialButtonWithVioletText1";
 import { HallDetailTabs } from '../../components/navigations/Navigations';
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { TouchableHighlight } from "react-native";
-// import {LocaleConfig} from 'react-native-calendars';
+import { Avatar } from "react-native-elements";
+import moment from 'moment';
+import { DropdownField, SelectField } from '../../components/customComponents/customComponents'
 
-// LocaleConfig.locales['fr'] = {
-//   monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-//   monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
-//   dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-//   dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
-//   today: 'Aujourd\'hui'
-// };
-// LocaleConfig.defaultLocale = 'pak';
 
-const HallDetailPage = ({navigation}) => {
-  const [ pageState, setPageState ] = useState('parent-page');
-  const [data, setData ] = useState({
+const HallDetailPage = ({ navigation }) => {
+  const [pageState, setPageState] = useState('parent-page');
+  const [bookingDetail, setBookingDetail] = useState({ selectedDate: null, selectedTime: null});
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [data, setData] = useState({
     hallName: "Majestic Banquet",
     seatingCapacity: 700,
     price: "150,000 PKR",
@@ -38,35 +29,149 @@ const HallDetailPage = ({navigation}) => {
     imgURL: "../../assets/images/download2.jpg"
   });
 
+  const changeSelectedDetails = (item, key) => {
+    setBookingDetail({
+      ...bookingDetail,
+      [key]: item
+    })
+    console.log(item)
+    console.log(bookingDetail)
 
-  const openCloseCalendar = (pageState) => {
-    console.log('inside calender')
-   setPageState(pageState)
+  };
+
+  const CalendarComponent = (props) => {
+
+    const changeSelection = (day) => {
+      alert('in day',day)
+      // let markedDates = {};
+      // markedDates[date] = { selected: true, color: '#00B0BF', textColor: '#FFFFFF' };
+      let selectedDate = moment(day);
+      selectedDate = selectedDate.format("YYYY-MM-DD");
+      // this.setState({
+      //     selectedDate: serviceDate,
+      //     markedDates: markedDates
+      // });
+      console.log(selectedDate)
+      alert(selectedDate)
+      // props.parentCallback(selectedDate);
+      setPageState('child-page-2')
+
+    }
+  
+    return (
+      <View>
+        <Avatar
+          rounded
+          icon={{ name: 'arrow-left', type: 'font-awesome' }}
+          onPress={() => { setPageState('parent-page') }}
+          activeOpacity={0.7}
+          size={50}
+        // containerStyle={{flex: 2, alignSelf:'flex-end'}}
+
+        />
+        <Calendar
+        hideExtraDays={true}
+          markedDates={{
+            '2022-01-20': { customStyles: styles.stylesReserved, disableTouchEvent: true },
+            '2021-12-22': { startingDay: true, color: 'green', disableTouchEvent: true, customStyles: styles.stylesReserved },
+            '2021-12-23': { selected: true, endingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true },
+            '2021-12-04': { disabled: true, startingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true },
+            '2021-12-06': { disabled: true, startingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true }
+          }}
+          current={new Date()}
+          minDate={new Date()}
+          onDayPress={day => changeSelection(day.dateString)}
+          markingType={'custom'}
+          // dayComponent={({date, state}) => {
+          //   return (
+          //     <View>
+          //       <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : 'black'}}>
+          //         {date.day}
+          //       </Text>
+          //     </View>
+          //   );
+          // }}
+          theme={{
+            backgroundColor: '#ffffff',
+            calendarBackground: '#ffffff',
+            textSectionTitleColor: '#b6c1cd',
+            selectedDayBackgroundColor: '#00adf5',
+            selectedDayTextColor: '#ffffff',
+            todayTextColor: '#00adf5',
+            dayTextColor: '#2d4150',
+            textDisabledColor: '#d9e1e8',
+            dotColor: '#00adf5',
+            selectedDotColor: '#ffffff',
+            arrowColor: 'red',
+            disabledArrowColor: '#d9e1e8',
+            monthTextColor: 'red',
+            indicatorColor: 'blue',
+            textDayFontFamily: 'monospace',
+            textMonthFontFamily: 'monospace',
+            textDayHeaderFontFamily: 'monospace',
+            textDayFontWeight: '300',
+            textMonthFontWeight: 'bold',
+            textDayHeaderFontWeight: '300',
+            textDayFontSize: 16,
+            textMonthFontSize: 16,
+            textDayHeaderFontSize: 16
+          }}
+        />
+      </View>
+
+    )
   }
 
-  const CalendarComponent = () => {
-   return(
-     <View>
-       <TouchableHighlight onPress={()=>setPageState('parent-page')}><Text>Close Calendar</Text></TouchableHighlight>
- <Calendar
-     markedDates={{
-      '2021-11-20': {customStyles:styles.stylesReserved,disableTouchEvent: true},
-      '2021-11-22': {startingDay: true, color: 'green',disableTouchEvent: true,customStyles:styles.stylesReserved},
-      '2021-11-23': {selected: true, endingDay: true, customStyles:styles.stylesReserved,disableTouchEvent: true},
-      '2021-11-04': {disabled: true, startingDay: true, customStyles:styles.stylesReserved,disableTouchEvent: true},
-      '2021-12-06': {disabled: true, startingDay: true, customStyles:styles.stylesReserved,disableTouchEvent: true}
-    }}
-    current={new Date()}
-    minDate={new Date()}
-    onDayPress={(day) => {console.log('selected day', day)}}
-    markingType={'custom'}
-    />
-     </View>
-    
-   )
+  const TimeComponent = (props) => {
+    const [selectedTime, setSelectedTime] = useState(null)
+    const timeList = [
+      { label: '07:00 AM - 10:00 AM', value: 1, enable: true },
+      { label: '12:00 PM - 04:00 PM', value: 2, enable: true },
+      { label: '6:00 PM - 11:00 PM', value: 3, enable: false },
+
+    ];
+    return (
+      <View>
+        <Avatar
+          rounded
+          icon={{ name: 'arrow-left', type: 'font-awesome' }}
+          onPress={() => { setPageState('child-page-1') }}
+          activeOpacity={0.7}
+          size={50}
+        // containerStyle={{flex: 2, alignSelf:'flex-end'}}
+        />
+        {/* <DropdownField
+          dropdownList={timeList}
+          search="true"
+          searchPlaceholder="Search"
+          labelField="label"
+          labelValue="value"
+          labelTitle="Time"
+          dropdownPlaceholder="Select Time"
+          formValue={selectedTime}
+          onChange={(time) => setSelectedTime(time.value)}
+          iconRight={() =>
+            <Avatar
+              rounded
+              icon={{ name: 'close', color: 'red', type: 'font-awesome' }}
+              activeOpacity={0.7}
+              size={50}
+            />
+          }
+        /> */}
+        <SelectField items={timeList} selectedValue={selectedTime} labelName="Select Time" mode="dialog" />
+        <TouchableOpacity style={styles.bookHall} onPress={() => {
+          setPageState('parent-page')
+          navigation.navigate('Booking Confirmed')
+        }
+        }><Text style={styles.bookHall.content}>BOOK</Text></TouchableOpacity>
+
+      </View>
+
+    )
   }
   return (
-    
+
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
       <ImageBackground
@@ -84,10 +189,12 @@ const HallDetailPage = ({navigation}) => {
           style={styles.image2}
         ></Image>
         <HallDetailTabs />
-       
-        <TouchableOpacity style={styles.checkAvailability} onPress={() => setPageState('child-page-1')}><Text style={styles.checkAvailability.Availabilitycontent}>CHECK AVAILABILITY</Text></TouchableOpacity>
-{pageState === 'child-page-1' ? <CalendarComponent/> : null}
-        <TouchableOpacity style={styles.bookHall} onPress={() => navigation.navigate('Booking Confirmed')}><Text style={styles.bookHall.Bookingcontent}>BOOK</Text></TouchableOpacity>
+
+        {pageState === 'parent-page' ? <TouchableOpacity style={styles.checkAvailability} onPress={() => setPageState('child-page-1')}><Text style={styles.checkAvailability.Availabilitycontent}>CHECK AVAILABILITY</Text></TouchableOpacity> : null}
+        {pageState === 'child-page-1' ? <CalendarComponent /> : null}
+        {pageState === 'child-page-2' ? <TimeComponent /> : null}
+
+        {/* <TouchableOpacity style={styles.bookHall} onPress={() => navigation.navigate('Booking Confirmed')}><Text style={styles.bookHall.content}>BOOK</Text></TouchableOpacity> */}
       </ImageBackground>
     </View>
   );
@@ -157,7 +264,7 @@ const styles = StyleSheet.create({
 
     }
   },
-  stylesReserved:{
+  stylesReserved: {
     container: {
       backgroundColor: 'red'
     },
@@ -166,7 +273,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold'
     }
   },
-  
+
   button2: {
     flex: 1,
     top: 557,
@@ -294,20 +401,7 @@ const styles = StyleSheet.create({
     height: 55,
     position: "absolute"
   },
-  materialButtonViolet4Stack: {
-    width: 177,
-    height: 55,
-    marginTop: 34,
-    marginLeft: 92
-  },
-  materialButtonWithVioletText1: {
-    height: 48,
-    width: 177,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,1)",
-    marginTop: 20,
-    marginLeft: 92
-  },
+
   button2Stack: {
     width: 360,
     height: 740

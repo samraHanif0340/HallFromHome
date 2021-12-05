@@ -1,147 +1,128 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground } from "react-native";
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
-import { SearchBar, Rating } from 'react-native-elements';
-import { TouchableOpacity } from "react-native";
-// import SearchBar from "react-native-dynamic-search-bar";
+import React, { Component, useState } from "react";
+import { StyleSheet, View, Text, TouchableOpacity, StatusBar, ImageBackground } from "react-native";
+import { Dropdown } from 'react-native-element-dropdown';
+import { MultiLineTextInput, Toaster } from '../../components/customComponents/customComponents'
 
-const  LodgeComplaintPage = (props) => {
-  const [filteredData, setfilteredData] = React.useState([{
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Modern Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Ayan Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Diamond Palace",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  }]);
-  const [masterData, setmasterData] = React.useState([{
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Modern Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Ayan Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Diamond Palace",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  }]);
-  let [searchText, setSearchText] = React.useState('')
+const LodgeComplaintPage = (props) => {
 
-  const searchFilterFunction = (searchText) => {
-    if (searchText) {
+  const camplaintType = [
+    { label: 'Management Issue', value: 1 },
+    { label: 'Catering Issue', value: 2 },
+    { label: 'Car Service Issue', value: 3 },
+    { label: 'Lightening Issue', value: 4 },
+    { label: 'Other', value: 5 },
+  ];
 
-      const newData = masterData.filter(
-        function (item) {
-          const itemData = item.hallName
-            ? item.hallName.toUpperCase()
-            : ''.toUpperCase();
-          const textData = searchText.toUpperCase();
-          return itemData.indexOf(textData) > -1;
-        });
-      setfilteredData(newData);
-      setSearchText(searchText);
-    } else {
-      setfilteredData(masterData);
-      setSearchText(searchText);
-    }
+  const hallList = [
+    { label: 'Majestic Banquet', value: 1 },
+    { label: 'Modern Palace', value: 2 },
+    { label: 'Ayan Hall', value: 3 },
+
+  ];
+
+  const [camplaintForm, setCamplaintForm] = useState({ camplaintType: null, hallName: null, camplaint: '' });
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+
+  const changeSelection = (item, key) => {
+    setCamplaintForm({
+      ...camplaintForm,
+      [key]: item.value
+    })
+    console.log(item)
+    console.log(camplaintForm)
+
   };
+
+  const submitCamplaint = () => {
+    setIsFormSubmitted(true)
+
+
+  };
+
+  const closeToaster = (visibility) => {
+    setIsFormSubmitted(visibility)
+    setCamplaintForm({ ...camplaintForm, camplaintType: null, hallName: null, camplaint: '' })
+  }
+
   return (
     <View style={styles.container}>
-       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            <ImageBackground
-                style={styles.rect1}
-                imageStyle={styles.rect1_imageStyle}
-                source={require("../../assets/images/Gradient_MI39RPu.png")}
-            >
-      
-      <FlatList
-        data={filteredData}
-        renderItem={({ item }) => (
-          <View style={styles.eachItem}>
-              <View style={styles.leftAlign}>
-              <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
-              </View>
-               <View style={styles.centeredAlign}>
-               <Text style={styles.centeredAlign.content}>{item.hallName}</Text>
-              <Text style={styles.centeredAlign.content}>{item.userName}</Text>
-              <Text style={styles.centeredAlign.content}>{item.status}</Text>
-               </View>
-              
-              <View style={styles.rightAligned}>
-              
-              <Text style={styles.rightAligned.content}>({item.pricePaid})</Text>
-              </View>
+      <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
+      <ImageBackground style={styles.container}
+        source={require("../../assets/images/Gradient_MI39RPu.png")}
+      >
+        <Dropdown
+          style={styles.textFieldWrapper}
+          containerStyle={styles.textField}
+          data={camplaintType}
+          search
+          searchPlaceholder="Search"
+          labelField="label"
+          valueField="value"
+          label="Camplaint Type"
+          placeholder="Select Camplaint Type"
+          value={camplaintForm.camplaintType}
+          onChange={item => {
+            changeSelection(item, 'camplaintType');
+            // console.log('selected', item);
+          }}
+          // renderLeftIcon={() => (
+          //     <Image style={styles.icon} source={require('./assets/account.png')} />
+          // )}
+          // renderItem={item => changeSelection(item)}
+          textError="Error"
+        />
 
-              <View >
-                  <Text style={styles.comments}>{item.comments}</Text>
-              </View>
-    
-          </View>
-        )}
-      />
+        <Dropdown
+          style={styles.textFieldWrapper}
+          containerStyle={styles.shadow}
+          data={hallList}
+          search
+          searchPlaceholder="Search"
+          labelField="label"
+          valueField="value"
+          label="Hall Name"
+          placeholder="Select Hall"
+          value={camplaintForm.hallName}
+          onChange={item => {
+            changeSelection(item, 'hallName');
+            // console.log('selected', item);
+          }}
+          // renderLeftIcon={() => (
+          //     <Image style={styles.icon} source={require('./assets/account.png')} />
+          // )}
+          // renderItem={item => changeSelection(item)}
+          textError="Error"
+        />
 
-</ImageBackground>
+        <MultiLineTextInput
+          placeholder="Description"
+          keyboardType='default'
+          placeholderTextColor="rgba(255,255,255,1)"
+          defaultValue={camplaintForm.camplaint}
+          maxLength={200}
+
+          numberOfLines={5}
+        // onSubmitEditing={() =>
+        //     passwordInputRef.current &&
+        //     passwordInputRef.current.focus()
+        //   }
+        // onChangeText={value => {
+        //     setUserEmail(value.trim()),
+        //     setEmailError(validate('userEmail', userEmail, 'email'))
+        // }}
+        // error={emailError}
+        />
+
+        <TouchableOpacity
+          onPress={submitCamplaint}
+          style={styles.button2}
+        >
+          <Text style={styles.text5}>Submit Camplaint</Text>
+        </TouchableOpacity>
+
+
+        {isFormSubmitted ? <Toaster toasterMessage="Camplaint Lodged Successfully" parentCallback={closeToaster} /> : null}
+      </ImageBackground>
     </View>
   );
 }
@@ -150,336 +131,54 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  eachItem: 
-  {
-    flex:1,
-    // flexDirection:'row',
-    color:'rgba(222,206,206,1)',
-    marginBottom : 10
-    // backgroundColor:'yellow'
+  dropdown: {
+    backgroundColor: 'white',
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+    marginTop: 20,
   },
-  leftAlign:{
-    marginLeft:14,
-    flex:2,
-    icon:{
-      fontSize:45,
-      color:'rgba(255,255,255,1)',
-    }
-  },
-  centeredAlign:{
-    content:{
-      color:'rgba(255,255,255,1)',   
-    },
-    flex:6,
-  },
-  rightAligned:{
-    flex:2,
-    flexDirection:'row',
-    alignItems:'center',
-    content:{
-      color:'rgba(255,255,255,1)',   
-    },   
-    icon:{
-      fontSize:10,
-      color:'yellow',
-    },
-  },
-  comments:{
-      color:'rgba(255,255,255,1)'
-  },
-  searchBar:{
-    backgroundColor:'rgba(142,7,27,1)',
-    opacity:0.7,
-    icon:{
-      color:'black'
-    },
-    inputStyle:{
-      color:'white'
-    }
-  },
-  rect: {
-    width: 360,
-    height: 760,
-    backgroundColor: "rgba(222,206,206,1)"
-  },
-  rect3: {
-    height: 80,
-    position: "absolute",
-    backgroundColor: "rgba(230,230, 230,1)",
-    borderRadius: 12,
-    overflow: "visible",
-    borderWidth: 1,
-    borderColor: "rgba(87,34,34,1)",
-    shadowColor: "rgba(193,166,166,1)",
+  shadow: {
+    shadowColor: '#000',
     shadowOffset: {
-      width: 3,
-      height: 3
+      width: 0,
+      height: 1,
     },
-    elevation: 5,
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: "row"
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
-  rect4: {
-    width: 285,
-    height: 48,
-    backgroundColor: "rgba(249,246,246,1)",
-    borderRadius: 15,
-    flexDirection: "row"
+  button2: {
+    height: 59,
+    backgroundColor: "rgba(31,178,204,1)",
+    borderRadius: 5,
+    justifyContent: "center",
+    marginRight: 20,
+    marginLeft: 20,
+    marginTop: 14,
+    marginBottom: 14
   },
-  icon3: {
-    color: "rgba(116,98,98,1)",
-    fontSize: 23,
-    height: 23,
-    width: 21
-  },
-  loremIpsum: {
-    fontFamily: "roboto-100italic",
-    color: "rgba(76,70,70,1)",
-    marginLeft: 13,
-    marginTop: 8
-  },
-  icon3Row: {
-    height: 24,
-    flexDirection: "row",
-    flex: 1,
-    marginRight: 86,
-    marginLeft: 8,
-    marginTop: 13
-  },
-  icon2: {
-    color: "rgba(182,10,10,1)",
-    fontSize: 32,
-    height: 32,
-    width: 27,
-    marginLeft: 14,
-    marginTop: 8
-  },
-  rect4Row: {
-    height: 48,
-    flexDirection: "row",
-    flex: 1,
-    marginRight: 22,
-    marginLeft: 12,
-    marginTop: 13
-  },
-  rect2: {
-    top: 0,
-    left: 0,
-    width: 360,
-    height: 88,
-    position: "absolute",
-    backgroundColor: "rgba(136,19,19,1)",
-    borderWidth: 1,
-    flexDirection: "row"
-  },
-  ellipse: {
-    top: 0,
-    left: 0,
-    width: 56,
-    height: 56,
-    position: "absolute"
-  },
-  icon: {
-    top: 6,
-    left: 7,
-    position: "absolute",
-    color: "rgba(120,10,10,1)",
-    fontSize: 40,
-    height: 44,
-    width: 40
-  },
-  ellipseStack: {
-    width: 56,
-    height: 56
-  },
-  home: {
-    fontFamily: "roboto-700",
-    color: "rgba(249,242,242,1)",
-    fontSize: 24,
-    marginLeft: 25,
-    marginTop: 10
-  },
-  icon4: {
-    color: "rgba(248,238,238,1)",
-    fontSize: 32,
-    height: 32,
-    width: 32,
-    marginLeft: 100,
-    marginTop: 10
-  },
-  icon5: {
-    color: "rgba(242,235,235,1)",
-    fontSize: 32,
-    height: 35,
-    width: 32,
-    marginLeft: 12,
-    marginTop: 8
-  },
-  ellipseStackRow: {
-    height: 56,
-    flexDirection: "row",
-    flex: 1,
-    marginRight: 14,
-    marginLeft: 21,
-    marginTop: 15
-  },
-  rect3Stack: {
-    height: 161,
-    marginTop: 23
-  },
-  image: {
-    top: 0,
-    left: 0,
-    width: 335,
-    height: 175,
-    position: "absolute",
-    borderRadius: 16
-  },
-  majesticBanquet: {
-    top: 173,
-    left: 11,
-    position: "absolute",
-    fontFamily: "georgia-regular",
-    color: "rgba(66,62,62,1)"
-  },
-  limit700Persons: {
-    top: 191,
-    left: 11,
-    position: "absolute",
-    fontFamily: "roboto-italic",
-    color: "rgba(0,0,0,1)",
-    fontSize: 12
-  },
-  imageStack: {
-    top: 0,
-    left: 0,
-    width: 335,
-    height: 207,
-    position: "absolute"
-  },
-  loremIpsum2: {
-    top: 0,
-    left: 0,
-    position: "absolute",
-    fontFamily: "roboto-700",
-    color: "#121212",
-    height: 14,
-    width: 119,
-    textAlign: "left",
-    fontSize: 11
-  },
-  icon6: {
-    top: 11,
-    left: 66,
-    position: "absolute",
-    color: "rgba(248,179,28,1)",
+  text5: {
+    color: "rgba(255,255,255,1)",
+    textAlign: "center",
     fontSize: 20,
-    height: 20,
-    width: 19
+    alignSelf: "center"
   },
-  loremIpsum2Stack: {
-    top: 178,
-    left: 210,
-    width: 119,
-    height: 31,
-    position: "absolute"
+  textFieldWrapper: {
+    height: 59,
+    backgroundColor: "rgba(251,247,247,0.25)",
+    borderRadius: 5,
+    marginRight: 20,
+    marginLeft: 20,
+    marginTop: 14,
+    marginBottom: 14
   },
-  loremIpsum3: {
-    top: 192,
-    left: 295,
-    position: "absolute",
-    fontFamily: "roboto-700",
-    color: "rgba(0,0,0,1)",
-    fontSize: 12
+  textField: {
+    flex: 8,
+    height: 50,
+    color: "rgba(255,255,255,1)",
+    marginTop: 4,
   },
-  imageStackStack: {
-    width: 335,
-    height: 209,
-    marginTop: 11,
-    marginLeft: 9
-  },
-  image1: {
-    width: 335,
-    height: 175,
-    borderRadius: 16,
-    marginTop: 18,
-    marginLeft: 12
-  },
-  ayanHall: {
-    top: 0,
-    left: 0,
-    position: "absolute",
-    fontFamily: "georgia-regular",
-    color: "rgba(66,62,62,1)"
-  },
-  limit500Persons: {
-    top: 18,
-    left: 1,
-    position: "absolute",
-    fontFamily: "roboto-italic",
-    color: "rgba(0,0,0,1)",
-    fontSize: 12
-  },
-  ayanHallStack: {
-    width: 84,
-    height: 34,
-    marginTop: 5
-  },
-  loremIpsum4: {
-    fontFamily: "roboto-700",
-    color: "#121212",
-    height: 14,
-    width: 119,
-    textAlign: "left",
-    fontSize: 11
-  },
-  icon7: {
-    color: "rgba(248,179,28,1)",
-    fontSize: 20,
-    height: 20,
-    width: 19
-  },
-  loremIpsum5: {
-    fontFamily: "roboto-700",
-    color: "rgba(0,0,0,1)",
-    fontSize: 12,
-    marginTop: 3
-  },
-  icon7Row: {
-    height: 20,
-    flexDirection: "row",
-    marginLeft: 66,
-    marginRight: 8
-  },
-  loremIpsum4Column: {
-    width: 119,
-    marginLeft: 125,
-    marginBottom: 5
-  },
-  ayanHallStackRow: {
-    height: 39,
-    flexDirection: "row",
-    marginTop: 6,
-    marginLeft: 17,
-    marginRight: 15
-  },
-  image2: {
-    width: 335,
-    height: 175,
-    borderRadius: 16,
-    marginLeft: 2138,
-    marginTop: 117
-  },
-  rectRow: {
-    height: 760,
-    flexDirection: "row",
-    flex: 1,
-    marginRight: -2473
-  }
+
 });
 
 export default LodgeComplaintPage;
