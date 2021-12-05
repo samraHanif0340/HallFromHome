@@ -9,7 +9,7 @@ import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
 // import SearchBar from "react-native-dynamic-search-bar";
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
-import { Divider } from "react-native-elements/dist/divider/Divider";
+import { Divider } from "react-native-elements";
 
 function SearchPage(props) {
   const [filteredData, setfilteredData] = React.useState([{
@@ -222,7 +222,7 @@ function SearchPage(props) {
                     source={require("../../assets/images/download2.jpg")}
                     // source={{ uri: item.imgURL }}
 
-                    resizeMode="stretch"
+                    resizeMode="contain"
                     style={styles.image}
                   ></Image>
                 </TouchableOpacity>
@@ -239,6 +239,7 @@ function SearchPage(props) {
               </View>
               <Text style={styles.loremIpsum3}>({item.rating})</Text>
               <Divider style={styles.DividerColor} />
+
             </View>
           )}
         />
@@ -256,7 +257,14 @@ const styles = StyleSheet.create({
   DividerColor: {
     backgroundColor: 'white',
     borderBottomWidth: 1,
-    left: -20,
+    left: -15,
+    right: 5,
+    top:-10,
+    bottom:0
+    // marginTop: 10,
+    // marginBottom: 10,
+
+
   },
   card:{
   backgroundColor: 'white'
@@ -407,15 +415,18 @@ const styles = StyleSheet.create({
     marginTop: 23
   },
   image: {
-    top: 0,
-    left: -10,
-    width: 355,
+    // top: 0,
+    right: 8,
+    // width: 355,
+    // height: 175,
+    // borderRadius: 5
+    width: 335,
     height: 175,
-    borderRadius: 5
+    borderRadius: 10
   },
   majesticBanquet: {
     top: 173,
-    left: -11,
+    // left: -11,
     fontSize: 15,
     fontWeight: 'bold',
     position: "absolute",
@@ -424,7 +435,7 @@ const styles = StyleSheet.create({
   },
   limit700Persons: {
     top: 191,
-    left: -11,
+    // left: -11,
     position: "absolute",
     fontFamily: "roboto-italic",
     color: "rgba(255,255,255,1)",
@@ -432,7 +443,7 @@ const styles = StyleSheet.create({
   },
   imageStack: {
     top: 0,
-    left: 0,
+    // left: 0,
     width: 344,
     height: 207,
     position: "absolute",
@@ -451,7 +462,7 @@ const styles = StyleSheet.create({
   },
   icon6: {
     top: 15,
-    left: 18,
+    // left: 18,
     position: "absolute",
     color: "rgba(248,179,28,1)",
     fontSize: 15,
@@ -477,7 +488,9 @@ const styles = StyleSheet.create({
     width: 499,
     height: 209,
     marginTop: 11,
-    marginLeft: 25,
+    marginLeft: 20,
+    // marginRight: 20,
+
   },
   image1: {
     width: 335,

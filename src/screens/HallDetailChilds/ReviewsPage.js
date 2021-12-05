@@ -3,7 +3,8 @@ import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,I
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
-import { Avatar, Card, Divider } from 'react-native-paper';
+import { Avatar, Card } from 'react-native-paper';
+import {Divider} from 'react-native-elements'
 
 
 const LeftContent = props => <Avatar.Icon {...props} icon="account-circle-outline" />
@@ -135,12 +136,18 @@ function HallReviewsPage(props) {
               <Text style={styles.UserNameStyle.Usernamecontent}>{item.userName}</Text>
               <Text style={styles.centeredAlign.content}>{item.review}</Text>
                </View>
+               
               
               <View style={styles.rightAligned}>
               <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
               <Text style={styles.rightAligned.content}>({item.rating})</Text>
+          
               </View>
+       
+              {/* <Divider  color="white" style={styles.DividerColor} /> */}
+       
        </View>
+
       
     //   <Card style={styles.card}>
     //   <Card.Title titleStyle={styles.cardTitle} title={item.userName} subtitle={item.review} left={LeftContent} />
@@ -158,7 +165,9 @@ function HallReviewsPage(props) {
    
   
         )}
+        
       />
+
 
 </ImageBackground>
     </View>
@@ -226,6 +235,18 @@ backgroundColor: 'white'
       fontSize:10,
       color:'yellow',
     },
+  },
+  DividerColor: {
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    left: -15,
+    right: 5,
+    top:-10,
+    bottom:0
+    // marginTop: 10,
+    // marginBottom: 10,
+
+
   },
   searchBar:{
     backgroundColor:'rgba(142,7,27,1)',
