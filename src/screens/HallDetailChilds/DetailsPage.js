@@ -8,7 +8,8 @@ import { Divider } from 'react-native-paper';
 // import SearchBar from "react-native-dynamic-search-bar";
 
 function DetailOfHallPage(props) {
-  const [filteredData, setfilteredData] = React.useState({
+  console.log(props)
+  const [detail, setDetail] = React.useState({
     hallName: "Ayan Banquet",
     seatingCapacity: 700,
     price: "150,000 PKR",
@@ -17,26 +18,7 @@ function DetailOfHallPage(props) {
     lighteningProvided: 'Yes'
   },);
 
-  let [searchText, setSearchText] = React.useState('')
 
-  const searchFilterFunction = (searchText) => {
-    if (searchText) {
-
-      const newData = masterData.filter(
-        function (item) {
-          const itemData = item.hallName
-            ? item.hallName.toUpperCase()
-            : ''.toUpperCase();
-          const textData = searchText.toUpperCase();
-          return itemData.indexOf(textData) > -1;
-        });
-      setfilteredData(newData);
-      setSearchText(searchText);
-    } else {
-      setfilteredData(masterData);
-      setSearchText(searchText);
-    }
-  };
   return (
     <View style={styles.container}>
        <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
@@ -48,21 +30,22 @@ function DetailOfHallPage(props) {
           <View style={styles.eachItem}>
            
                <View style={styles.centeredAlign}>
-               <Text style={styles.centeredAlign.content}>Hall Name: {filteredData.hallName}</Text>
+                 {/* <Text>{props.hallId}</Text> */}
+               <Text style={styles.centeredAlign.content}>Hall Name: {detail.hallName}</Text>
                <Divider style={styles.DividerColor} />
-              <Text style={styles.centeredAlign.content}>Accomodation: {filteredData.seatingCapacity}</Text>
+              <Text style={styles.centeredAlign.content}>Accomodation: {detail.seatingCapacity}</Text>
               <Divider style={styles.DividerColor} />
-              <Text style={styles.centeredAlign.content}>Price: {filteredData.price}</Text>
+              <Text style={styles.centeredAlign.content}>Price: {detail.price}</Text>
               <Divider style={styles.DividerColor} />
-              <Text style={styles.centeredAlign.content}>Lightening Included: {filteredData.lighteningProvided}</Text>
+              <Text style={styles.centeredAlign.content}>Lightening Included: {detail.lighteningProvided}</Text>
               <Divider style={styles.DividerColor} />
-              <Text style={styles.centeredAlign.content}>Rating : ({filteredData.rating})</Text>
+              <Text style={styles.centeredAlign.content}>Rating : ({detail.rating})</Text>
 
                </View>
               
               {/* <View style={styles.rightAligned}>
               <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
-              <Text style={styles.rightAligned.content}>Rating : ({filteredData.rating})</Text>
+              <Text style={styles.rightAligned.content}>Rating : ({detail.rating})</Text>
               </View> */}
 
     </View>

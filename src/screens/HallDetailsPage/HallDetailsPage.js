@@ -17,7 +17,8 @@ import moment from 'moment';
 import { DropdownField, SelectField } from '../../components/customComponents/customComponents'
 
 
-const HallDetailPage = ({ navigation }) => {
+const HallDetailPage = ({ route,navigation }) => {
+  const [hallId,setHallId] = useState(route.params.hallId)
   const [pageState, setPageState] = useState('parent-page');
   const [bookingDetail, setBookingDetail] = useState({ selectedDate: null, selectedTime: null});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -180,16 +181,18 @@ const HallDetailPage = ({ navigation }) => {
         imageStyle={styles.rect1_imageStyle}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
       >
-        <View style={styles.hallFromHome2Column}>
+        {/* <View style={styles.hallFromHome2Column}>
           <Text style={styles.bookingDetail}>BOOKING DETAILS</Text>
-        </View>
-        <Image
+          <Text>{hallId}</Text>
+        </View> */}
+        {/* <Image
           source={require("../../assets/images/download2.jpg")}
           // source={{ uri: item.imgURL }}
           resizeMode="cover"
           style={styles.image2}
-        ></Image>
-        <HallDetailTabs />
+        ></Image> */}
+        
+        <HallDetailTabs hallId={route.params.hallId}/>
 
         {pageState === 'parent-page' ? <TouchableOpacity style={styles.checkAvailability} onPress={() => setPageState('child-page-1')}><Text style={styles.checkAvailability.Availabilitycontent}>CHECK AVAILABILITY</Text></TouchableOpacity> : null}
         {pageState === 'child-page-1' ? <CalendarComponent /> : null}

@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView, View, Text, StyleSheet,Alert } from 'react-native';
 
 import {
@@ -184,10 +184,30 @@ const CustomSidebar = (props) => {
 // HALL DETAILS TABS //
 const Tab = createMaterialTopTabNavigator();
 
-const HallDetailTabs = () => {
+const HallDetailTabs = (props) => {
+  console.log(props)
+  const [hallId,setHallId] = useState(props.hallId)
   return (
-    <Tab.Navigator>
-    <Tab.Screen name="Details" component={DetailOfHallPage} />
+    <Tab.Navigator
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName;
+
+        if (route.name === 'Home') {
+          iconName = focused
+            ? 'ios-information-circle'
+            : 'ios-information-circle-outline';
+        } else if (route.name === 'Settings') {
+          iconName = focused ? 'ios-list-box' : 'ios-list';
+        }
+        // return <Ionicons name={iconName} size={size} color={color} />;
+      },
+     
+      tabBarActiveTintColor: 'tomato',
+      tabBarInactiveTintColor: 'gray',
+      })}
+    >
+    <Tab.Screen name="Details">{() => <DetailOfHallPage  hallId={hallId} />}</Tab.Screen>
     <Tab.Screen name="Add ons" component={HallReviewsPage} />
     <Tab.Screen name="Reviews" component={HallReviewsPage} />
   </Tab.Navigator>
