@@ -50,6 +50,7 @@ const LodgeComplaintPage = (props) => {
       <ImageBackground style={styles.container}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
       >
+        
         <Dropdown
           style={styles.textFieldWrapper}
           containerStyle={styles.textField}
@@ -58,8 +59,8 @@ const LodgeComplaintPage = (props) => {
           searchPlaceholder="Search"
           labelField="label"
           valueField="value"
-          label="Camplaint Type"
-          placeholder="Select Camplaint Type"
+          label="Complaint Type"
+          placeholder="Select Complaint Type"
           value={camplaintForm.camplaintType}
           onChange={item => {
             changeSelection(item, 'camplaintType');
@@ -117,11 +118,11 @@ const LodgeComplaintPage = (props) => {
           onPress={submitCamplaint}
           style={styles.button2}
         >
-          <Text style={styles.text5}>Submit Camplaint</Text>
+          <Text style={styles.text5}>Submit Complaint</Text>
         </TouchableOpacity>
 
 
-        {isFormSubmitted ? <Toaster toasterMessage="Camplaint Lodged Successfully" parentCallback={closeToaster} /> : null}
+        {isFormSubmitted ? <Toaster toasterMessage="Complaint Lodged Successfully" parentCallback={closeToaster} /> : null}
       </ImageBackground>
     </View>
   );
