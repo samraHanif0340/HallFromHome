@@ -25,9 +25,15 @@ export const fonts = {
 const styles = StyleSheet.create({
     textFieldWrapper: {
         height: 59,
-        backgroundColor: "rgba(251,247,247,0.25)",
+        //backgroundColor: "rgba(251,247,247,0.25)",
+        backgroundColor: "rgba(255,255,255,1)",
+        Opacity: 0.2,
         borderRadius: 5,
+        borderWidth: 2,
+        //borderColor: "rgba(255,255,255,0.3)",
+        borderColor: "rgba(157,24,24,0.8)",
         flexDirection: "row",
+
         // flex:1,
         marginRight: 20,
         marginLeft: 20,
@@ -37,7 +43,9 @@ const styles = StyleSheet.create({
     textField: {
         flex: 8,
         height: 50,
-        color: "rgba(255,255,255,1)",
+        fontSize: 15,
+       // color: "rgba(255,255,255,1)",
+        color: "#800000",
         marginTop: 4,
     },
     selectFieldWrapper:{
@@ -53,7 +61,8 @@ const styles = StyleSheet.create({
     selectField:{
         flex: 8,
         height: 50,
-        color: "rgba(255,255,255,1)",
+        //color: "rgba(255,255,255,1)",
+        color: "#800000",
         marginTop: 4,
     },
     dropdownField: {
@@ -113,19 +122,24 @@ const styles = StyleSheet.create({
       },
     icon2: {
         flex: 2,
-        color: "rgba(255,255,255,1)",
-        fontSize: 30,
+        //color: "rgba(255,255,255,1)",
+        color: "#800000",
+        fontSize: 35,
         marginTop: 15,
         marginLeft: 20,
+        alignContent: 'center',
     },
     label: {
         marginLeft: 20
     },
     errorMsg: {
-        color: 'red',
-        backgroundColor:'rgba(255,255,204,1)',
+        color: 'yellow',
+        // backgroundColor:'rgba(255,255,204,1)',
+        // backgroundColor:'rgba(255,255,255,1)',
         marginRight: 20,
         marginLeft: 20,
+        fontSize: 11,
+        fontStyle:'italic',
     },
 
     footerContainer: {
