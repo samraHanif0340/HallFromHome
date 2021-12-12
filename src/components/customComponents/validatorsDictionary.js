@@ -8,7 +8,7 @@ const validatorsDictionary = {
     },
     length:{
       minimum:4,
-      message: '^ must contains atleast 4 characters',
+      message: '^must contains atleast 4 characters',
     }
   
   },
@@ -36,7 +36,7 @@ const validatorsDictionary = {
   password: {
     length: {
       minimum: 10,
-      message: '^PASSWORD must contains atleast 8 characters',
+      message: '^PASSWORD must contains atleast 10 characters',
     },
     presence:
     {
