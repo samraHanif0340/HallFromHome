@@ -1,10 +1,12 @@
 
 import React , {useState}from "react";
-import { View, Text, StyleSheet, StatusBar, ImageBackground, TextInput } from "react-native";
+import { View, Text, StyleSheet, StatusBar, ImageBackground} from "react-native";
 import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 import {TextField} from '../../../components/customComponents/customComponents'
 import validate from '../../../shared-services/validationFunctions'
 import { styles } from './LoginPage.component.style.js'
+import { Image } from "react-native-elements";
+import { TextInput } from 'react-native-paper';
 
 const LoginPage = ({ navigation }) => {
     const [userEmail, setUserEmail] = useState('');
@@ -88,14 +90,24 @@ const LoginPage = ({ navigation }) => {
                     {/* <View style={styles.endWrapperFiller}></View> */}
                     {/* <View style={styles.hallFromHome2Column}> */}
                         <Text style={styles.hallFromHome2}>Hall From Home</Text>
+                          
                         {/* <View style={styles.rect4}></View> */}
                     {/* </View> */}
                 </View>
+                {/* <Image
+                    source={{ uri: "../../../assets/images/download2.jpg" }}
+                    // source={require("../../assets/hallFromHomeLogo.png")}
+                    style={styles.logo}
+                    resizeMode="stretch"
+                />  */}
+            
                 <View style={styles.body}>
                     <TextField
-                        placeholder="Username/Email"
+                        placeholder="Username/Email" style={styles.labelText}
                         keyboardType='email-address'
-                        placeholderTextColor="rgba(255,255,255,1)"
+                        mode = "outlined"
+                        placeholderTextColor="#800000"
+                        //left={<TextInput.Icon nameOfIcon="user" />}
                         nameOfIcon="user"
                         defaultValue={userEmail}
                         maxLength={50}
@@ -110,8 +122,8 @@ const LoginPage = ({ navigation }) => {
                     error={emailError}
                     />
                     <TextField
-                        placeholder='Password'
-                        placeholderTextColor='rgba(255,255,255,1)'
+                        placeholder='Password'style={styles.labelText}
+                        placeholderTextColor="#800000"
                         secureTextEntry
                         nameOfIcon="lock"
                         defaultValue={userPassword}
@@ -129,7 +141,7 @@ const LoginPage = ({ navigation }) => {
                         onPress={handleSubmitPress}
                         style={styles.button2}
                     >
-                        <Text style={styles.text5}>Login</Text>
+                        <Text style={styles.text5}>LOGIN</Text>
                     </TouchableOpacity>
                     <Text style={styles.linksStyle} onPress={() => navigation.navigate('Customer Registration')} >Forgot Your Login Details?</Text>
 

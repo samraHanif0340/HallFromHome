@@ -6,6 +6,7 @@ import { Button, Snackbar } from 'react-native-paper';
 import {Picker} from '@react-native-picker/picker';
 import { Dropdown, SelectCountry } from 'react-native-element-dropdown';
 import { renderNode } from 'react-native-elements/dist/helpers';
+import { HelperText } from 'react-native-paper';
 
 
 export const Inputs = (type, label, value, onChange) => {
@@ -32,7 +33,8 @@ export const SelectField = props => {
       ))}
     </Picker>
     </View>
-    {props.error ? props.error.map((error) => <Text style={styles.errorMsg}>{error}</Text>) : null}
+    {/* {props.error ? props.error.map((error) => <Text style={styles.errorMsg}>{error}</Text>) : null} */}
+    {props.error ? props.error.map((error) => <HelperText type = "error" style={styles.errorMsg}>{error}</HelperText>) : null}
 
   </View>
   )
@@ -48,7 +50,7 @@ const TextField = props => (
       <TextInput style={styles.textField} keyboardType={props.keyboardType ? props.keyboardType : 'default'} placeholder={props.placeholder} placeholderTextColor={props.placeholderTextColor} defaultValue={props.defaultValue} secureTextEntry={props.secureTextEntry} maxLength={props.maxLength} value={props.value} onChangeText={props.onChangeText} onBlur={props.onBlur} />
     </View>
 
-    {props.error ? props.error.map((error, key) => <Text style={styles.errorMsg} key={key}>{error}</Text>) : null}
+    {props.error ? props.error.map((error, key) => <HelperText  type = "error" style={styles.errorMsg} key={key}>{error}</HelperText>) : null}
   </View>
 )
 

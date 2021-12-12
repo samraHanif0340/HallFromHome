@@ -16,7 +16,7 @@ const validatorsDictionary = {
   email: {
     length: {
       minimum: 8,
-      message: '^EMAIL must contains atleast 8 characters',
+     // message: '^EMAIL must contains atleast 8 characters',
     },
     email: {
       message: '^Enter a valid EMAIL (abc@abc.com)'
