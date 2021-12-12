@@ -1,102 +1,164 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground } from "react-native";
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
-import { SearchBar, Rating } from 'react-native-elements';
-import { TouchableOpacity } from "react-native";
+import React, { Component,useEffect } from "react";
+import { StyleSheet, View, Text,  StatusBar, ImageBackground } from "react-native";
 import { Divider } from 'react-native-paper';
+import axios from 'axios';
+import { BASE_URL } from '../../constants/constatnts'
+
+
 
 // import SearchBar from "react-native-dynamic-search-bar";
 
 function DetailOfHallPage(props) {
   console.log(props)
-  const [detail, setDetail] = React.useState({
-    hallName: "Ayan Banquet",
-    seatingCapacity: 700,
-    price: "150,000 PKR",
-    rating: 4.5,
-    imgURL: "../../assets/images/download2.jpg",
-    lighteningProvided: 'Yes'
-  },);
+  const [detail, setDetail] = React.useState({});
+  const [hasError, setErrorFlag] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
+
+
+  const source = axios.CancelToken.source();
+  const configurationObject = {
+    url: `${BASE_URL}posts`,
+    method: "GET",
+    cancelToken: source.token
+    // data: { fullName, email },
+  };
+
+  const getData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios(
+        configurationObject
+      );
+      if (response.status === 200) {
+        setIsLoading(false);
+        setDetail({
+          hallId: 1,
+          hallName: "Saima Banquet Hall",
+          VenueTypeDesc: 'Banquet Hall',
+          Address:"Level 2, Saima Shopping Mall ,Shaheed Sibghatullah Shah Pagara Rd,  opposite Askari IV  Gulistan-e-Johar ,Karachi City, Sindh",
+          CityDesc: "Karachi",
+          MaxCapacity: 550,
+          Lighting: "Yes",
+          Catering: "No",
+          Stage_Decoration: "Yes",
+          Waitress: "Yes",
+          Music_System: "Yes",
+          Lights: "Yes",
+          Air_Condition: "Yes",
+          Parking: "Yes",
+          Website: "https://saimabanquethall.com",
+          Budget: "100000",
+          Rating: "4.9",
+        }
+        )
+        return;
+      } else {
+        throw new Error("Failed to fetch users");
+      }
+    } catch (error) {
+      // handle error
+      if (axios.isCancel(error)) {
+        console.log('Data fetching cancelled');
+      } else {
+        setErrorFlag(true);
+        setIsLoading(false);
+      }
+      alert(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+
+    return () => source.cancel("Data fetching cancelled");
+  }, []);
 
   return (
     <View style={styles.container}>
-       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            <ImageBackground
-                style={styles.rect1}
-                imageStyle={styles.rect1_imageStyle}
-                source={require("../../assets/images/Gradient_MI39RPu.png")}
-            >
-          <View style={styles.eachItem}>
-           
-               <View style={styles.centeredAlign}>
-                 {/* <Text>{props.hallId}</Text> */}
-               <Text style={styles.centeredAlign.content}>Hall Name: {detail.hallName}</Text>
-               <Divider style={styles.DividerColor} />
-              <Text style={styles.centeredAlign.content}>Accomodation: {detail.seatingCapacity}</Text>
-              <Divider style={styles.DividerColor} />
-              <Text style={styles.centeredAlign.content}>Price: {detail.price}</Text>
-              <Divider style={styles.DividerColor} />
-              <Text style={styles.centeredAlign.content}>Lightening Included: {detail.lighteningProvided}</Text>
-              <Divider style={styles.DividerColor} />
-              <Text style={styles.centeredAlign.content}>Rating : ({detail.rating})</Text>
+      <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
+      <ImageBackground
+        style={styles.rect1}
+        imageStyle={styles.rect1_imageStyle}
+        source={require("../../assets/images/Gradient_MI39RPu.png")}
+      >
+        <View style={styles.eachItem}>
 
-               </View>
-              
-              {/* <View style={styles.rightAligned}>
+          <View style={styles.centeredAlign}>
+            {/* <Text>{props.hallId}</Text> */}
+            <Text style={styles.centeredAlign.content}>Hall Name: {detail.hallName}</Text>
+            <Divider style={styles.DividerColor} />
+            <Text style={styles.centeredAlign.content}>Venue Type: {detail.VenueTypeDesc}</Text>
+            <Divider style={styles.DividerColor} />
+            <Text style={styles.centeredAlign.content}>Address: {detail.Address}</Text>
+            <Divider style={styles.DividerColor} />
+            <Text style={styles.centeredAlign.content}>Accommodation: {detail.MaxCapacity}</Text>
+            <Divider style={styles.DividerColor} />
+            <Text style={styles.centeredAlign.content}>Price : PKR ({detail.Budget})</Text>
+            <Text style={styles.centeredAlign.content}>Rating : ({detail.Rating})</Text>
+
+            <Text style={styles.centeredAlign.content}>Provides Catering : ({detail.Catering})</Text>
+            <Text style={styles.centeredAlign.content}>Provides Lightening : {detail.Lights}</Text>
+            <Text style={styles.centeredAlign.content}>Provides Waiters : {detail.Waitress}</Text>
+            <Text style={styles.centeredAlign.content}>Website: {detail.Website}</Text>
+
+
+          </View>
+
+          {/* <View style={styles.rightAligned}>
               <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
               <Text style={styles.rightAligned.content}>Rating : ({detail.rating})</Text>
               </View> */}
 
-    </View>
-    </ImageBackground>
+        </View>
+      </ImageBackground>
     </View>
   );
-  }
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  rect1:{
-      flex:1
+  rect1: {
+    flex: 1
   },
   DividerColor: {
-    backgroundColor: 'white' ,
+    backgroundColor: 'white',
   },
-  eachItem: 
+  eachItem:
   {
-    flex:1,
+    flex: 1,
 
-    color:'rgba(222,206,206,1)',
-    margin : 15
+    color: 'rgba(222,206,206,1)',
+    margin: 15
     // backgroundColor:'yellow'
   },
-  leftAlign:{
-    marginLeft:14,
-    flex:2,
-    icon:{
-      fontSize:35,
-      color:'rgba(255,255,255,1)',
+  leftAlign: {
+    marginLeft: 14,
+    flex: 2,
+    icon: {
+      fontSize: 35,
+      color: 'rgba(255,255,255,1)',
     }
   },
-  centeredAlign:{
-    content:{
-      color:'rgba(255,255,255,1)',   
-      fontSize:18,
-     margin: 10,
-    },
-    flex:6,
-  },
-  rightAligned:{
-    flex:2,
-    // flexDirection:'row',
-    content:{
-      color:'rgba(255,255,255,1)', 
-      fontSize:24 ,
-     
+  centeredAlign: {
+    content: {
+      color: 'rgba(255,255,255,1)',
+      fontSize: 18,
       margin: 10,
-    },   
+    },
+    flex: 6,
+  },
+  rightAligned: {
+    flex: 2,
+    // flexDirection:'row',
+    content: {
+      color: 'rgba(255,255,255,1)',
+      fontSize: 24,
+
+      margin: 10,
+    },
     // icon:{
     //   fontSize:10,
     //   color:'yellow',
