@@ -10,7 +10,7 @@ import { TouchableOpacity } from "react-native";
 // import SearchBar from "react-native-dynamic-search-bar";
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import { Divider } from "react-native-elements";
-import { BASE_URL } from '../../constants/constatnts'
+import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
 
 function SearchPage(props) {
@@ -22,7 +22,7 @@ function SearchPage(props) {
 
   const source = axios.CancelToken.source();
   const configurationObject = {
-    url: `${BASE_URL}posts`,
+    url: `${BASE_URL}GetVenueList`,
     method: "GET",
     cancelToken: source.token
     // data: { fullName, email },
@@ -34,91 +34,96 @@ function SearchPage(props) {
       const response = await axios(
         configurationObject
       );
-      if (response.status === 200) {
+
+      if (response.data.ResponseCode == "00") {
         setIsLoading(false);
-        setmasterData([{
-          hallId:1,
-          hallName: "Majestic Banquet",
-          seatingCapacity: 700,
-          price: "150,000 PKR",
-          rating: 4.5,
-          imgURL: "../../assets/images/download2.jpg"
-        },
-        {
-          hallId:2,
-          hallName: "Ayan Banquet",
-          seatingCapacity: 700,
-          price: "150,000 PKR",
-          rating: 4.5,
-          imgURL: "../../assets/images/download2.jpg"
-        },
-        {
-          hallId:3,
-          hallName: "Modern Banquet",
-          seatingCapacity: 700,
-          price: "150,000 PKR",
-          rating: 4.5,
-          imgURL: "../../assets/images/download2.jpg"
-        },
-        {
-          hallId:4,
-          hallName: "Magnolia Banquet",
-          seatingCapacity: 700,
-          price: "150,000 PKR",
-          rating: 4.5,
-          imgURL: "../../assets/images/download2.jpg"
-        },
-        {
-          hallId:5,
-          hallName: "Diamond Palace",
-          seatingCapacity: 700,
-          price: "150,000 PKR",
-          rating: 4.5,
-          imgURL: "../../assets/images/download2.jpg"
-        }])
-        setfilteredData([{
-          hallId:1,
-          hallName: "Majestic Banquet",
-          seatingCapacity: 700,
-          price: "150,000 PKR",
-          rating: 4.5,
-          imgURL: "../../assets/images/download2.jpg"
-        },
-        {
-          hallId:2,
-          hallName: "Ayan Banquet",
-          seatingCapacity: 700,
-          price: "150,000 PKR",
-          rating: 4.5,
-          imgURL: "../../assets/images/download2.jpg"
-        },
-        {
-          hallId:3,
-          hallName: "Modern Banquet",
-          seatingCapacity: 700,
-          price: "150,000 PKR",
-          rating: 4.5,
-          imgURL: "../../assets/images/download2.jpg"
-        },
-        {
-          hallId:4,
-          hallName: "Magnolia Banquet",
-          seatingCapacity: 700,
-          price: "150,000 PKR",
-          rating: 4.5,
-          imgURL: "../../assets/images/download2.jpg"
-        },
-        {
-          hallId:5,
-          hallName: "Diamond Palace",
-          seatingCapacity: 700,
-          price: "150,000 PKR",
-          rating: 4.5,
-          imgURL: "../../assets/images/download2.jpg"
-        }])
+        setmasterData(response.data.Result_DTO)
+        setfilteredData(response.data.Result_DTO)
+        
+        // setmasterData([{
+        //   hallId:1,
+        //   hallName: "Majestic Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:2,
+        //   hallName: "Ayan Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:3,
+        //   hallName: "Modern Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:4,
+        //   hallName: "Magnolia Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:5,
+        //   hallName: "Diamond Palace",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // }])
+        // setfilteredData([{
+        //   hallId:1,
+        //   hallName: "Majestic Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:2,
+        //   hallName: "Ayan Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:3,
+        //   hallName: "Modern Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:4,
+        //   hallName: "Magnolia Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:5,
+        //   hallName: "Diamond Palace",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // }])
         return;
       } else {
-        throw new Error("Failed to fetch users");
+        console.log(response)
+        throw new Error("Failed to fetch records");
       }
     } catch (error) {
       // handle error
@@ -161,8 +166,8 @@ const searchFilterFunction = (searchText) => {
 
     const newData = masterData.filter(
       function (item) {
-        const itemData = item.hallName
-          ? item.hallName.toUpperCase()
+        const itemData = item.VenueName
+          ? item.VenueName.toUpperCase()
           : ''.toUpperCase();
         const textData = searchText.toUpperCase();
         return itemData.indexOf(textData) > -1;
@@ -206,7 +211,7 @@ return (
 
           <View style={styles.imageStackStack}>
             <View style={styles.imageStack}>
-              <TouchableOpacity activeOpacity={0.2} onPress={() => props.navigation.navigate('Hall Details',{hallId:item.hallId})}>
+              <TouchableOpacity activeOpacity={0.2} onPress={() => props.navigation.navigate('Hall Details',{VenueID:item.VenueID})}>
                 <Image
                   source={require("../../assets/images/download2.jpg")}
                   // source={{ uri: item.imgURL }}
@@ -216,17 +221,17 @@ return (
                 ></Image>
               </TouchableOpacity>
 
-              <Text style={styles.majesticBanquet}>{item.hallName}</Text>
-              <Text style={styles.limit700Persons}>Limit {item.seatingCapacity} Persons</Text>
+              <Text style={styles.majesticBanquet}>{item.VenueName} ({item.VenueTypeDesc})</Text>
+              <Text style={styles.limit700Persons}>Limit {item.MaxCapacity} Persons</Text>
             </View>
             <View style={styles.loremIpsum2Stack}>
-              <Text style={styles.loremIpsum2}>{item.price}</Text>
+              <Text style={styles.loremIpsum2}>{item.RentPrice}</Text>
               <FontAwesomeIcon
                 name="star"
                 style={styles.icon6}
               ></FontAwesomeIcon>
             </View>
-            <Text style={styles.loremIpsum3}>({item.rating})</Text>
+            <Text style={styles.loremIpsum3}>({item.Rating})</Text>
             <Divider style={styles.DividerColor} />
 
           </View>

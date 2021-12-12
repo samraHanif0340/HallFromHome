@@ -2,7 +2,7 @@ import React, { Component,useEffect } from "react";
 import { StyleSheet, View, Text,  StatusBar, ImageBackground } from "react-native";
 import { Divider } from 'react-native-paper';
 import axios from 'axios';
-import { BASE_URL } from '../../constants/constatnts'
+import { BASE_URL } from '../../constants/constants'
 
 
 
@@ -18,10 +18,10 @@ function DetailOfHallPage(props) {
 
   const source = axios.CancelToken.source();
   const configurationObject = {
-    url: `${BASE_URL}posts`,
-    method: "GET",
-    cancelToken: source.token
-    // data: { fullName, email },
+    url: `${BASE_URL}GetVenueInfo`,
+    method: "POST",
+    cancelToken: source.token,
+    data: { venueID:props.venueID },
   };
 
   const getData = async () => {

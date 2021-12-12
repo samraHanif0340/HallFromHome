@@ -186,7 +186,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const HallDetailTabs = (props) => {
   console.log(props)
-  const [hallId,setHallId] = useState(props.hallId)
+  const [hallId,setHallId] = useState(props.venueID)
   return (
     <Tab.Navigator
     screenOptions={({ route }) => ({
@@ -207,7 +207,7 @@ const HallDetailTabs = (props) => {
       tabBarInactiveTintColor: 'gray',
       })}
     >
-    <Tab.Screen name="Details">{() => <DetailOfHallPage  hallId={hallId} />}</Tab.Screen>
+    <Tab.Screen name="Details">{() => <DetailOfHallPage  venueID={props.venueID} />}</Tab.Screen>
     <Tab.Screen name="Add ons" component={HallReviewsPage} />
     <Tab.Screen name="Reviews" component={HallReviewsPage} />
   </Tab.Navigator>

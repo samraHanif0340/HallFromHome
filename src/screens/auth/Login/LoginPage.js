@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { View, Text, StyleSheet, StatusBar, ImageBackground } from "react-native";
+import { View, Text, StyleSheet, StatusBar, ImageBackground, Alert } from "react-native";
 import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 import { TextField } from '../../../components/customComponents/customComponents'
 import validate from '../../../shared-services/validationFunctions'
@@ -8,7 +8,9 @@ import { styles } from './LoginPage.component.style.js'
 import { Image } from "react-native-elements";
 import { TextInput } from 'react-native-paper';
 import axios from 'axios';
-import { BASE_URL } from '../../../constants/constatnts'
+import { BASE_URL } from '../../../constants/constants'
+import Toaster, { ToastStyles } from 'react-native-toaster'
+import Snackbar from 'react-native-snackbar';
 
 const LoginPage = ({ navigation }) => {
     const [userEmail, setUserEmail] = useState('');
@@ -16,15 +18,15 @@ const LoginPage = ({ navigation }) => {
     const [passwordError, setPasswordError] = useState('');
     const [userPassword, setUserPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [errortext, setErrortext] = useState('');
+    const [errortext, setErrortext] = useState(null);
     const [hasError, setErrorFlag] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false)
     const source = axios.CancelToken.source();
     const configurationObject = {
-        url: `${BASE_URL}posts`,
+        url: `${BASE_URL}Login`,
         method: "POST",
-        cancelToken: source.token
-        // data: { fullName, email },
+        cancelToken: source.token,
+        data: { Username:userEmail, Password:userPassword },
     };
 
     const handleSubmitPress = () => {
@@ -39,17 +41,17 @@ const LoginPage = ({ navigation }) => {
         // }
         // formBody = formBody.join('&');
         console.log(dataToSend)
-        navigation.replace('Home');
+        // navigation.replace('Home');
 
-        if (dataToSend.Username == 'samra.hanif@yahoo.com' && dataToSend.Password == 'admin12345') {
-            alert('LOGIN SUCCESSFUL')
-            saveData(dataToSend)
-        }
-        else {
-            alert('INCORRECT EMAIL OR PASSWORD')
-        }
+        // if (dataToSend.Username == 'samra.hanif@yahoo.com' && dataToSend.Password == 'admin12345') {
+        //     alert('LOGIN SUCCESSFUL')
+        //     saveData(dataToSend)
+        // }
+        // else {
+        //     alert('INCORRECT EMAIL OR PASSWORD')
+        // }
 
-
+saveData(dataToSend)
 
         // fetch('http://localhost:3000/api/user/login', {
         //   method: 'POST',
@@ -79,30 +81,53 @@ const LoginPage = ({ navigation }) => {
     };
 
     const saveData = async (data) => {
+        console.log('in save data')
+        setErrortext(null)
         try {
             setIsLoading(true);
             const response = await axios(
                 configurationObject,
-                data
+          
             );
-            if (response.status === 200) {
+            alert(response.ResponseCode)
+            console.log(response)
+            if (response.data.ResponseCode === "00") {
                 setIsLoading(false);
+                setErrortext({text:'Success',styles:ToastStyles.success})
+                Snackbar.show({
+                    text: 'Success',
+                    duration: Snackbar.LENGTH_LONG,
+                  });
                 //   AsyncStorage.setItem('user_id', response.data.Username);
                 //   console.log(response.data.Username);
                 navigation.replace('Home');
                 return;
             } else {
-                throw new Error("Failed to fetch users");
+                setIsLoading(false);
+                setErrortext({text:response.data.ResponseDesc,styles:ToastStyles.error})
+                Snackbar.show({
+                    text: response.data.ResponseDesc,
+                    duration: Snackbar.LENGTH_INDEFINITE,
+                    action: {
+                      text: 'OK',
+                      textColor: 'white',
+                      onPress: () => { /* Do something. */ },
+                    },
+                  });
+                // throw new Error("Failed to fetch users");
             }
         } catch (error) {
-            // handle error
-            if (axios.isCancel(error)) {
-                console.log('Data fetching cancelled');
-            } else {
-                setErrorFlag(true);
-                setIsLoading(false);
-            }
-            alert(error.message);
+            setIsLoading(false);
+            Snackbar.show({
+                text: 'Something Went Wrong',
+                duration: Snackbar.LENGTH_INDEFINITE,
+                action: {
+                  text: 'OK',
+                  textColor: 'white',
+                  onPress: () => { /* Do something. */ },
+                },
+              });
+
         }
     };
 
@@ -119,20 +144,8 @@ const LoginPage = ({ navigation }) => {
                 source={require("../../../assets/images/Gradient_MI39RPu.png")}
             >
                 <View style={styles.logo1}>
-                    {/* <View style={styles.endWrapperFiller}></View> */}
-                    {/* <View style={styles.hallFromHome2Column}> */}
                     <Text style={styles.hallFromHome2}>Hall From Home</Text>
-
-                    {/* <View style={styles.rect4}></View> */}
-                    {/* </View> */}
                 </View>
-                {/* <Image
-                    source={{ uri: "../../../assets/images/download2.jpg" }}
-                    // source={require("../../assets/hallFromHomeLogo.png")}
-                    style={styles.logo}
-                    resizeMode="stretch"
-                />  */}
-
                 <View style={styles.body}>
                     <TextField
                         placeholder="Username/Email" style={styles.labelText}
@@ -178,6 +191,7 @@ const LoginPage = ({ navigation }) => {
                     <Text style={styles.linksStyle} onPress={() => navigation.navigate('Customer Registration')} >Forgot Your Login Details?</Text>
 
                     <Text style={styles.linksStyle} onPress={() => navigation.navigate('Customer Registration')}>Create an account?</Text>
+                 {/* {errortext != null ?  <Toaster message={errortext}  /> : null} */}
                 </View>
             </ImageBackground>
         </View>

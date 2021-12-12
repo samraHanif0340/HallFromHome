@@ -18,7 +18,7 @@ import { DropdownField, SelectField } from '../../components/customComponents/cu
 
 
 const HallDetailPage = ({ route,navigation }) => {
-  const [hallId,setHallId] = useState(route.params.hallId)
+  const [venueId,setVenueId] = useState(route.params.VenueID)
   const [pageState, setPageState] = useState('parent-page');
   const [bookingDetail, setBookingDetail] = useState({ selectedDate: null, selectedTime: null});
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -192,7 +192,7 @@ const HallDetailPage = ({ route,navigation }) => {
           style={styles.image2}
         ></Image> */}
         
-        <HallDetailTabs hallId={route.params.hallId}/>
+        <HallDetailTabs venueID={route.params.VenueID}/>
 
         {pageState === 'parent-page' ? <TouchableOpacity style={styles.checkAvailability} onPress={() => setPageState('child-page-1')}><Text style={styles.checkAvailability.Availabilitycontent}>CHECK AVAILABILITY</Text></TouchableOpacity> : null}
         {pageState === 'child-page-1' ? <CalendarComponent /> : null}
