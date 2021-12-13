@@ -133,7 +133,7 @@ function SearchPage(props) {
         setErrorFlag(true);
         setIsLoading(false);
       }
-      alert(error.message);
+      // alert(error.message);
     }
   };
 
@@ -213,7 +213,8 @@ return (
             <View style={styles.imageStack}>
               <TouchableOpacity activeOpacity={0.2} onPress={() => props.navigation.navigate('Hall Details',{VenueID:item.VenueID})}>
                 <Image
-                  source={require("../../assets/images/download2.jpg")}
+                  // source={require("../../assets/images/download2.jpg")}
+                  source = {{ uri: item.ImageURL}}
                   // source={{ uri: item.imgURL }}
 
                   resizeMode="contain"
@@ -225,7 +226,7 @@ return (
               <Text style={styles.limit700Persons}>Limit {item.MaxCapacity} Persons</Text>
             </View>
             <View style={styles.loremIpsum2Stack}>
-              <Text style={styles.loremIpsum2}>{item.RentPrice}</Text>
+              <Text style={styles.loremIpsum2}>PKR {item.RentPrice}</Text>
               <FontAwesomeIcon
                 name="star"
                 style={styles.icon6}

@@ -1,15 +1,26 @@
-import React, { Component } from "react";
+import React, { Component,useEffect } from "react";
 import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground } from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
 import { Avatar, Card } from 'react-native-paper';
 import {Divider} from 'react-native-elements'
+import axios from 'axios';
+import { BASE_URL } from '../../constants/constants'
 
 
 const LeftContent = props => <Avatar.Icon {...props} icon="account-circle-outline" />
 
+
+
 function HallReviewsPage(props) {
+  const source = axios.CancelToken.source();
+const configurationObject = {
+  url: `${BASE_URL}GetVenueReviews`,
+  method: "POST",
+  cancelToken: source.token,
+  data: { venueID:props.venueID },
+};
   const [filteredData, setfilteredData] = React.useState([{
     hallName: "Majestic Banquet",
     userName: 'Samra Hanif',
@@ -81,14 +92,16 @@ function HallReviewsPage(props) {
     imgURL: "../../assets/images/download2.jpg"
   }]);
   let [searchText, setSearchText] = React.useState('')
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [hasError, setErrorFlag] = React.useState(false);
 
   const searchFilterFunction = (searchText) => {
     if (searchText) {
 
       const newData = masterData.filter(
         function (item) {
-          const itemData = item.hallName
-            ? item.hallName.toUpperCase()
+          const itemData = item.venueName
+            ? item.venueName.toUpperCase()
             : ''.toUpperCase();
           const textData = searchText.toUpperCase();
           return itemData.indexOf(textData) > -1;
@@ -100,6 +113,124 @@ function HallReviewsPage(props) {
       setSearchText(searchText);
     }
   };
+
+  
+  const getData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios(
+        configurationObject
+      );
+
+      if (response.data.ResponseCode == "00") {
+        setIsLoading(false);
+        setmasterData(response.data.Result_DTO)
+        setfilteredData(response.data.Result_DTO)
+        
+        // setmasterData([{
+        //   hallId:1,
+        //   hallName: "Majestic Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:2,
+        //   hallName: "Ayan Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:3,
+        //   hallName: "Modern Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:4,
+        //   hallName: "Magnolia Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:5,
+        //   hallName: "Diamond Palace",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // }])
+        // setfilteredData([{
+        //   hallId:1,
+        //   hallName: "Majestic Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:2,
+        //   hallName: "Ayan Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:3,
+        //   hallName: "Modern Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:4,
+        //   hallName: "Magnolia Banquet",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // },
+        // {
+        //   hallId:5,
+        //   hallName: "Diamond Palace",
+        //   seatingCapacity: 700,
+        //   price: "150,000 PKR",
+        //   rating: 4.5,
+        //   imgURL: "../../assets/images/download2.jpg"
+        // }])
+        return;
+      } else {
+        console.log(response)
+        throw new Error("Failed to fetch records");
+      }
+    } catch (error) {
+      // handle error
+      if (axios.isCancel(error)) {
+        console.log('Data fetching cancelled');
+      } else {
+        setErrorFlag(true);
+        setIsLoading(false);
+      }
+      // alert(error.message);
+    }
+  };
+
+  
+useEffect(() => {
+  getData();
+
+  return () => source.cancel("Data fetching cancelled");
+}, []);
+
   return (
     <View style={styles.container}>
        <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
@@ -132,17 +263,17 @@ function HallReviewsPage(props) {
               
               </View>
                <View style={styles.centeredAlign}>
-               <Text style={styles.HallNameStyle.Hallnamecontent}>{item.hallName}</Text>
-              <Text style={styles.UserNameStyle.Usernamecontent}>{item.userName}</Text>
-              <Text style={styles.centeredAlign.content}>{item.review}</Text>
+               <Text style={styles.HallNameStyle.Hallnamecontent}>{item.venueName}</Text>
+              <Text style={styles.UserNameStyle.Usernamecontent}>{item.UserName}</Text>
+              <Text style={styles.centeredAlign.content}>{item.ReviewText}</Text>
                </View>
                
               
-              <View style={styles.rightAligned}>
+              {/* <View style={styles.rightAligned}>
               <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
               <Text style={styles.rightAligned.content}>({item.rating})</Text>
           
-              </View>
+              </View> */}
        
               {/* <Divider  color="white" style={styles.DividerColor} /> */}
        

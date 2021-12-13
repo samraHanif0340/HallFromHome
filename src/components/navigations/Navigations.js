@@ -209,7 +209,7 @@ const HallDetailTabs = (props) => {
     >
     <Tab.Screen name="Details">{() => <DetailOfHallPage  venueID={props.venueID} />}</Tab.Screen>
     <Tab.Screen name="Add ons" component={HallReviewsPage} />
-    <Tab.Screen name="Reviews" component={HallReviewsPage} />
+    <Tab.Screen name="Reviews" >{() => <HallReviewsPage  venueID={props.venueID} />}</Tab.Screen>
   </Tab.Navigator>
   );
 }

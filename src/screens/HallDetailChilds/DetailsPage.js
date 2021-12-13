@@ -30,41 +30,43 @@ function DetailOfHallPage(props) {
       const response = await axios(
         configurationObject
       );
-      if (response.status === 200) {
+      if (response.data.ResponseCode === "00") {
         setIsLoading(false);
-        setDetail({
-          hallId: 1,
-          hallName: "Saima Banquet Hall",
-          VenueTypeDesc: 'Banquet Hall',
-          Address:"Level 2, Saima Shopping Mall ,Shaheed Sibghatullah Shah Pagara Rd,  opposite Askari IV  Gulistan-e-Johar ,Karachi City, Sindh",
-          CityDesc: "Karachi",
-          MaxCapacity: 550,
-          Lighting: "Yes",
-          Catering: "No",
-          Stage_Decoration: "Yes",
-          Waitress: "Yes",
-          Music_System: "Yes",
-          Lights: "Yes",
-          Air_Condition: "Yes",
-          Parking: "Yes",
-          Website: "https://saimabanquethall.com",
-          Budget: "100000",
-          Rating: "4.9",
-        }
-        )
+        setDetail(response.data.Result_DTO)
+
+        // setDetail({
+        //   hallId: 1,
+        //   hallName: "Saima Banquet Hall",
+        //   VenueTypeDesc: 'Banquet Hall',
+        //   Address:"Level 2, Saima Shopping Mall ,Shaheed Sibghatullah Shah Pagara Rd,  opposite Askari IV  Gulistan-e-Johar ,Karachi City, Sindh",
+        //   CityDesc: "Karachi",
+        //   MaxCapacity: 550,
+        //   Lighting: "Yes",
+        //   Catering: "No",
+        //   Stage_Decoration: "Yes",
+        //   Waitress: "Yes",
+        //   Music_System: "Yes",
+        //   Lights: "Yes",
+        //   Air_Condition: "Yes",
+        //   Parking: "Yes",
+        //   Website: "https://saimabanquethall.com",
+        //   Budget: "100000",
+        //   Rating: "4.9",
+        // }
+        // )
         return;
       } else {
-        throw new Error("Failed to fetch users");
+        // throw new Error("Failed to fetch users");
       }
     } catch (error) {
       // handle error
       if (axios.isCancel(error)) {
-        console.log('Data fetching cancelled');
+        // console.log('Data fetching cancelled');
       } else {
         setErrorFlag(true);
         setIsLoading(false);
       }
-      alert(error.message);
+      // alert(error.message);
     }
   };
 
@@ -86,7 +88,7 @@ function DetailOfHallPage(props) {
 
           <View style={styles.centeredAlign}>
             {/* <Text>{props.hallId}</Text> */}
-            <Text style={styles.centeredAlign.content}>Hall Name: {detail.hallName}</Text>
+            <Text style={styles.centeredAlign.content}>Hall Name: {detail.VenueName}</Text>
             <Divider style={styles.DividerColor} />
             <Text style={styles.centeredAlign.content}>Venue Type: {detail.VenueTypeDesc}</Text>
             <Divider style={styles.DividerColor} />
