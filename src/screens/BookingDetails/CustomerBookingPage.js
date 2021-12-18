@@ -198,7 +198,7 @@ const CustomerBookingPage = (props) => {
                 style={styles.submitButtonWrapper}
                 
               >
-                <Text style={styles.submitButtonText}>Send Book Request</Text>
+                <Text style={styles.submitButtonText}>SEND BOOK REQUEST</Text>
               </TouchableOpacity>
             </View>
           )}
