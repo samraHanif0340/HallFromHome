@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TextInput, View, StatusBar, ImageBackground, StyleSheet, Text } from "react-native";
+import { Button, TextInput, View, StatusBar, ImageBackground, StyleSheet, Text,ActivityIndicator,ScrollView } from "react-native";
 import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
 
 import { Formik} from "formik";
@@ -110,6 +110,9 @@ const CustomerBookingPage = (props) => {
 
   return (
     <View style={styles.container}>
+     
+        {isLoading ? <ActivityIndicator  size="large"  color="red"/> : null}
+     
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
       <ImageBackground style={styles.container}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
@@ -117,12 +120,13 @@ const CustomerBookingPage = (props) => {
         <View style={styles.titleWrapper}>
           <Text style={styles.title}>Enter Booking Details</Text>
         </View>
+        <ScrollView>
         <Formik
           initialValues={{
-            name: null,
-            email: null,
-            cnic: null,
-            mobileNumber: null,
+            name: '',
+            email: '',
+            cnic: '',
+            mobileNumber: '',
           }}
           validationSchema={validationSchema}
           onSubmit={(values, errors) => submitForm(values)}>
@@ -192,6 +196,7 @@ const CustomerBookingPage = (props) => {
               <TouchableOpacity
                 onPress={handleSubmit}
                 style={styles.submitButtonWrapper}
+                
               >
                 <Text style={styles.submitButtonText}>Send Book Request</Text>
               </TouchableOpacity>
@@ -199,7 +204,7 @@ const CustomerBookingPage = (props) => {
           )}
 
         </Formik>
-
+</ScrollView>
       </ImageBackground>
     </View>
   )
