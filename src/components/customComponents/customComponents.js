@@ -62,7 +62,7 @@ const MultiLineTextInput = (props) => (
       {/* <Text style={styles.label}>{props.labelName}</Text> */}
       <TextInput style={styles.textField} multiline numberOfLines={props.numberOfLines} {...props} keyboardType={props.keyboardType ? props.keyboardType : 'default'} placeholder={props.placeholder} placeholderTextColor={props.placeholderTextColor} defaultValue={props.defaultValue} secureTextEntry={props.secureTextEntry} maxLength={props.maxLength} value={props.value} onChangeText={props.onChangeText} onBlur={props.onBlur} />
     </View>
-
+    
     {props.error ? props.error.map((error, key) => <Text style={styles.errorMsg} key={key}>{error}</Text>) : null}
   </View>
 )
