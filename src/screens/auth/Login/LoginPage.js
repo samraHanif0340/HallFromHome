@@ -190,7 +190,7 @@ saveData(dataToSend)
                     </TouchableOpacity>
                     <Text style={styles.linksStyle} onPress={() => navigation.navigate('ForgotPassword')} >Forgot Your Login Details?</Text>
 
-                    <Text style={styles.linksStyle} onPress={() => navigation.navigate('Customer Registration')}>Create an account?</Text>
+                    <Text style={styles.linksStyle} onPress={() => navigation.navigate('CustomerRegistration')}>Create an account?</Text>
                  {/* {errortext != null ?  <Toaster message={errortext}  /> : null} */}
                 </View>
             </ImageBackground>

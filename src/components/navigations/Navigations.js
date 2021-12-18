@@ -41,7 +41,7 @@ const AuthRoutes = () => {
             options={{ headerShown: false }}
           />
            <Stack.Screen
-            name="Customer Registration"
+            name="CustomerRegistration"
             component={RegistrationPage}
             options={{ headerShown: false }}
           />

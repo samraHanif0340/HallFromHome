@@ -10,11 +10,6 @@ import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
 import Snackbar from 'react-native-snackbar';
 
-
-// .matches(
-//   /^[a-zA-Z0-9]+$/,
-//   'Cannot contain special characters or spaces'
-// ),
 const source = axios.CancelToken.source();
 
 const validationSchema = Yup.object().shape({
