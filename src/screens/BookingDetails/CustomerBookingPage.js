@@ -1,11 +1,21 @@
 import React from "react";
 import { Button, TextInput, View, StatusBar, ImageBackground, StyleSheet, Text } from "react-native";
-import { Formik, Form, Field } from "formik";
+import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
+
+import { Formik} from "formik";
 import * as Yup from "yup";
 
-import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
-// import { TextField } from "react-native-material-textfield";
 import { TextField } from '../../components/customComponents/customComponents'
+import axios from 'axios';
+import { BASE_URL } from '../../constants/constants'
+import Snackbar from 'react-native-snackbar';
+
+
+// .matches(
+//   /^[a-zA-Z0-9]+$/,
+//   'Cannot contain special characters or spaces'
+// ),
+const source = axios.CancelToken.source();
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -21,61 +31,83 @@ const validationSchema = Yup.object().shape({
   mobileNumber: Yup.string()
     .min(11, 'Mobile Number should be in format 03xxxxxxxxx')
     .max(11, 'Mobile Number should be in format 03xxxxxxxxx')
+    .matches(/^[0][3][\d]{9}$/,'Mobile Number should be in format 03xxxxxxxxx')
     .required('Required'),
 });
 
-const saveData = async (data) => {
-  console.log('in save data')
-  setErrortext(null)
-  try {
-      setIsLoading(true);
-      const response = await axios(
-          configurationObject,
-    
-      );
-      alert(response.ResponseCode)
-      console.log(response)
-      if (response.data.ResponseCode === "00") {
-          setIsLoading(false);
-          setErrortext({text:'Success',styles:ToastStyles.success})
-          Snackbar.show({
-              text: response.data.ResponseDesc,
-              duration: Snackbar.LENGTH_LONG,
-            });
-          //   AsyncStorage.setItem('user_id', response.data.Username);
-          //   console.log(response.data.Username);
-          
-          return;
-      } else {
-          setIsLoading(false);
-          setErrortext({text:response.data.ResponseDesc,styles:ToastStyles.error})
-          Snackbar.show({
-              text: response.data.ResponseDesc,
-              duration: Snackbar.LENGTH_INDEFINITE,
-              action: {
-                text: 'OK',
-                textColor: 'white',
-                onPress: () => { /* Do something. */ },
-              },
-            });
-          // throw new Error("Failed to fetch users");
-      }
-  } catch (error) {
-      setIsLoading(false);
-      Snackbar.show({
-          text: 'Something Went Wrong',
-          duration: Snackbar.LENGTH_INDEFINITE,
-          action: {
-            text: 'OK',
-            textColor: 'white',
-            onPress: () => { /* Do something. */ },
-          },
-        });
-
-  }
-};
 
 const CustomerBookingPage = (props) => {
+  const [isLoading, setIsLoading] = React.useState(false)
+
+  const submitForm = (formData) => {
+    console.log(formData)
+    if(formData != null || formData != {}){
+      saveData(formData)
+    }
+  }
+
+  const saveData = async (data) => {
+    let formData = Object.assign({},data)
+    formData.EventDate = '12-14-2021'
+    formData.EventTime = '7PM - 11PM'
+    formData.AdvancePayment = '30,000 PKR'
+  
+    console.log(formData)
+  
+    let configurationObject = {
+      url: `${BASE_URL}VenueBooking`,
+      method: "POST",
+      cancelToken: source.token,
+      data: formData,
+  }
+    console.log('in save data')
+    // setErrortext(null)
+    try {
+        setIsLoading(true);
+        const response = await axios(
+            configurationObject,   
+        );
+        alert(response.ResponseCode)
+        console.log(response)
+        if (response.data.ResponseCode === "00") {
+            setIsLoading(false);
+            // setErrortext({text:'Success',styles:ToastStyles.success})
+            Snackbar.show({
+                text: response.data.ResponseDesc,
+                duration: Snackbar.LENGTH_LONG,
+              });
+            //   AsyncStorage.setItem('user_id', response.data.Username);
+            //   console.log(response.data.Username);
+            
+            return;
+        } else {
+            setIsLoading(false);
+            // setErrortext({text:response.data.ResponseDesc,styles:ToastStyles.error})
+            Snackbar.show({
+                text: response.data.ResponseDesc,
+                duration: Snackbar.LENGTH_INDEFINITE,
+                action: {
+                  text: 'OK',
+                  textColor: 'white',
+                  onPress: () => { /* Do something. */ },
+                },
+              });
+        }
+    } catch (error) {
+        setIsLoading(false);
+        Snackbar.show({
+            text: 'Something Went Wrong',
+            duration: Snackbar.LENGTH_INDEFINITE,
+            action: {
+              text: 'OK',
+              textColor: 'white',
+              onPress: () => { /* Do something. */ },
+            },
+          });
+  
+    }
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
@@ -87,19 +119,13 @@ const CustomerBookingPage = (props) => {
         </View>
         <Formik
           initialValues={{
-            name: '',
-            email: '',
-            cnic: '',
-            mobileNumber: '',
+            name: null,
+            email: null,
+            cnic: null,
+            mobileNumber: null,
           }}
           validationSchema={validationSchema}
-          onSubmit={(values, errors) => {
-            // same shape as initial values
-            console.log(errors)
-            console.log(values);
-          }}
-        >
-
+          onSubmit={(values, errors) => submitForm(values)}>
           {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValidating }) => (
             <View>
               <TextField
