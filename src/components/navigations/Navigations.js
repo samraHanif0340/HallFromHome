@@ -12,7 +12,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 
 import SearchPage from '../../screens/SearchHall/SearchHall';
+import SearchByMaps from '../../screens/SearchHall/SearchByMaps';
 import HallDetailPage from '../../screens/HallDetailsPage/HallDetailsPage';
+import CustomerBookingPage from '../../screens/BookingDetails/CustomerBookingPage';
 import TrackingStatusPage from '../../screens/TrackingStatus/TrackingStatus';
 import LodgeComplaintPage from '../../screens/LodgeComplaint/LodgeComplaint';
 
@@ -26,6 +28,8 @@ import LoginPage from '../../screens/auth/Login/LoginPage';
 import RegistrationPage from '../../screens/auth/Registration/RegistrationPage';
 
 
+
+
 // AUTH ROUTES //
 const Stack = createStackNavigator();
 const AuthRoutes = () => {
@@ -37,13 +41,13 @@ const AuthRoutes = () => {
             options={{ headerShown: false }}
           />
            <Stack.Screen
-            name="Customer Registration"
+            name="CustomerRegistration"
             component={RegistrationPage}
             options={{ headerShown: false }}
           />
              <Stack.Screen
-            name="Forgot Password"
-            component={RegistrationPage}
+            name="ForgotPassword"
+            component={CustomerBookingPage}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

@@ -5,25 +5,25 @@ import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handl
 import { Formik} from "formik";
 import * as Yup from "yup";
 
-import { TextField } from '../../../components/customComponents/customComponents'
+import { TextField } from '../../components/customComponents/customComponents'
 import axios from 'axios';
-import { BASE_URL } from '../../../constants/constants'
+import { BASE_URL } from '../../constants/constants'
 import Snackbar from 'react-native-snackbar';
 
 const source = axios.CancelToken.source();
 
 const validationSchema = Yup.object().shape({
-    Name: Yup.string()
+  name: Yup.string()
     .min(2, 'Name must be atleast 6 characters long')
-    .max(80, 'Name must be atmost 80 characters long')
+    .max(80, 'ame must be atmost 80 characters long')
     .required('Required'),
 
-    EmailAddress: Yup.string().email('Enter a valid EMAIL (abc@abc.com)').required('Required').max(50, 'Email must be atmost 50 characters long'),
-  Password: Yup.string()
-    .min(8, 'Password must be atleast 8 characters long')
-    .max(20, 'Password must be atmost 20 characters long')
+  email: Yup.string().email('Enter a valid EMAIL (abc@abc.com)').required('Required').max(50, 'Email must be atmost 50 characters long'),
+  cnic: Yup.string()
+    .min(13, 'CNIC must be of 13 characters long')
+    .max(13, 'CNIC must be of 13 characters long')
     .required('Required'),
-    PhoneNumber: Yup.string()
+  mobileNumber: Yup.string()
     .min(11, 'Mobile Number should be in format 03xxxxxxxxx')
     .max(11, 'Mobile Number should be in format 03xxxxxxxxx')
     .matches(/^[0][3][\d]{9}$/,'Mobile Number should be in format 03xxxxxxxxx')
@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
 });
 
 
-const RegistrationPage = ({navigation}) => {
+const CustomerBookingPage = (props) => {
   const [isLoading, setIsLoading] = React.useState(false)
 
   const submitForm = (formData) => {
@@ -43,12 +43,14 @@ const RegistrationPage = ({navigation}) => {
 
   const saveData = async (data) => {
     let formData = Object.assign({},data)
-
+    formData.EventDate = '12-14-2021'
+    formData.EventTime = '7PM - 11PM'
+    formData.AdvancePayment = '30,000 PKR'
   
     console.log(formData)
   
     let configurationObject = {
-      url: `${BASE_URL}UserRegistration`,
+      url: `${BASE_URL}VenueBooking`,
       method: "POST",
       cancelToken: source.token,
       data: formData,
@@ -69,7 +71,6 @@ const RegistrationPage = ({navigation}) => {
                 text: response.data.ResponseDesc,
                 duration: Snackbar.LENGTH_LONG,
               });
-            navigation.navigate('Auth')
             //   AsyncStorage.setItem('user_id', response.data.Username);
             //   console.log(response.data.Username);
             
@@ -109,18 +110,18 @@ const RegistrationPage = ({navigation}) => {
      
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
       <ImageBackground style={styles.container}
-        source={require("../../../assets/images/Gradient_MI39RPu.png")}
+        source={require("../../assets/images/Gradient_MI39RPu.png")}
       >
         <View style={styles.titleWrapper}>
-          <Text style={styles.title}>Create Account</Text>
+          <Text style={styles.title}>Enter Booking Details</Text>
         </View>
         <ScrollView>
         <Formik
           initialValues={{
-            Name: '',
-            EmailAddress: '',
-            Password: '',
-            PhoneNumber: '',
+            name: '',
+            email: '',
+            cnic: '',
+            mobileNumber: '',
           }}
           validationSchema={validationSchema}
           onSubmit={(values, errors) => submitForm(values)}>
@@ -133,10 +134,10 @@ const RegistrationPage = ({navigation}) => {
                 placeholderTextColor="#800000"
                 nameOfIcon="user"
                 maxLength={80}
-                onChangeText={handleChange('Name')}
-                onBlur={handleBlur('Name')}
-                value={values.Name}
-                error={[errors.Name]}
+                onChangeText={handleChange('name')}
+                onBlur={handleBlur('name')}
+                value={values.name}
+                error={[errors.name]}
               />
               <TextField
                 placeholder="Email" style={styles.labelText}
@@ -145,10 +146,22 @@ const RegistrationPage = ({navigation}) => {
                 placeholderTextColor="#800000"
                 nameOfIcon="envelope"
                 maxLength={50}
-                onChangeText={handleChange('EmailAddress')}
-                onBlur={handleBlur('EmailAddress')}
-                value={values.EmailAddress}
-                error={[errors.EmailAddress]}
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.email}
+                error={[errors.email]}
+              />
+              <TextField
+                placeholder="CNIC" style={styles.labelText}
+                keyboardType='number'
+                mode="outlined"
+                placeholderTextColor="#800000"
+                nameOfIcon="credit-card"
+                maxLength={13}
+                onChangeText={handleChange('cnic')}
+                onBlur={handleBlur('cnic')}
+                value={values.cnic}
+                error={[errors.cnic]}
               />
               <TextField
                 placeholder="Mobile Number" style={styles.labelText}
@@ -157,31 +170,30 @@ const RegistrationPage = ({navigation}) => {
                 placeholderTextColor="#800000"
                 nameOfIcon="bell"
                 maxLength={11}
-                onChangeText={handleChange('PhoneNumber')}
-                onBlur={handleBlur('PhoneNumber')}
-                value={values.PhoneNumber}
-                error={[errors.PhoneNumber]}
+                onChangeText={handleChange('mobileNumber')}
+                onBlur={handleBlur('mobileNumber')}
+                value={values.mobileNumber}
+                error={[errors.mobileNumber]}
               />
 
-<TextField
-                placeholder="Password" style={styles.labelText}
-                keyboardType='default'
-                mode="outlined"
-                placeholderTextColor="#800000"
-                nameOfIcon="eye"
-                maxLength={20}
-                onChangeText={handleChange('Password')}
-                onBlur={handleBlur('Password')}
-                value={values.Password}
-                error={[errors.Password]}
-              />
-
+              <View style={styles.eventDetails}>
+                <View style={styles.eventChilds}>
+                  <Text style={styles.eventChilds.content.viewTypeLeft}>Event Date:</Text>
+                  <Text style={styles.eventChilds.content.viewTypeLeft}>Event Time:</Text>
+                  <Text style={styles.eventChilds.content.viewTypeLeft}>Advance Payment:</Text>
+                </View>
+                <View style={styles.eventChilds}>
+                <Text style={styles.eventChilds.content.viewTypeRight}>14-12-2021</Text>
+                  <Text style={styles.eventChilds.content.viewTypeRight}>7PM - 11 PM</Text>
+                  <Text style={styles.eventChilds.content.viewTypeRight}>30,000 PKR</Text>
+                </View>
+              </View>
               <TouchableOpacity
                 onPress={handleSubmit}
                 style={styles.submitButtonWrapper}
                 
               >
-                <Text style={styles.submitButtonText}>CONTINUE</Text>
+                <Text style={styles.submitButtonText}>SEND BOOK REQUEST</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -234,9 +246,32 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: "center"
   },
+  eventDetails:{
+    marginRight: 20,
+    marginLeft: 20,
+    marginTop: 14,
+    marginBottom: 14,
+    flexDirection:'row',
+    
+  },
+  eventChilds:{  
+    flex:6,
+    content:{
+      viewTypeLeft:{
+      color:'white',
+        alignSelf:'flex-start',
+        alignContent:'space-around'
+      },
+      viewTypeRight:{
+      color:'white',
+        alignSelf:'flex-end',
+        alignContent:'space-around'
+      }
+    }
+  }
 
 })
 
-export default RegistrationPage;
+export default CustomerBookingPage;
 
 
