@@ -29,7 +29,7 @@ export const SelectField = props => {
   <View style={styles.selectFieldWrapper}>
     {/* <Text style={styles.selectLabel}>{props.labelName}</Text> */}
     {props.nameOfIcon ? <EvilIconsIcon name={props.nameOfIcon} style={styles.icon2}></EvilIconsIcon> : null}
-    <Picker style={styles.selectField}   selectedValue={props.selectedValue} mode={props.mode}  placeholder={props.placeholder} selectedValue={props.value} onValueChange={props.onChangeText}>
+    <Picker style={styles.selectField}  mode={props.mode}  placeholder={props.placeholder} selectedValue={props.value} onValueChange={props.onChangeText}>
       {props.items.map(item => (
         <Picker.Item key={item.value} label={item.label} value={item.value} enabled={item.enable}
         />
@@ -66,7 +66,7 @@ const MultiLineTextInput = (props) => (
       <TextInput style={styles.textField} multiline numberOfLines={props.numberOfLines} {...props} keyboardType={props.keyboardType ? props.keyboardType : 'default'} placeholder={props.placeholder} placeholderTextColor={props.placeholderTextColor} defaultValue={props.defaultValue} secureTextEntry={props.secureTextEntry} maxLength={props.maxLength} value={props.value} onChangeText={props.onChangeText} onBlur={props.onBlur} />
     </View>
     
-    {props.error ? props.error.map((error, key) => <Text style={styles.errorMsg} key={key}>{error}</Text>) : null}
+    {props.error ? props.error.map((error, key) => <HelperText style={styles.errorMsg} key={key}>{error}</HelperText>) : null}
   </View>
 )
 
@@ -112,7 +112,6 @@ return(
   textContent={'Please wait...'}
   textStyle={styles.spinnerTextStyle}
   // overlayColor="white"
-  cancelable="false"
 />
 //   <AnimatedLoader
 //   visible={visible}

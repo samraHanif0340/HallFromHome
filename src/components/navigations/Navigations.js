@@ -14,7 +14,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SearchPage from '../../screens/SearchHall/SearchHall';
 import SearchByMaps from '../../screens/SearchHall/SearchByMaps';
 import HallDetailPage from '../../screens/HallDetailsPage/HallDetailsPage';
-import CustomerBookingPage from '../../screens/BookingDetails/CustomerBookingPage';
 import TrackingStatusPage from '../../screens/TrackingStatus/TrackingStatus';
 import LodgeComplaintPage from '../../screens/LodgeComplaint/LodgeComplaint';
 
@@ -27,7 +26,8 @@ import DetailOfHallPage from '../../screens/HallDetailChilds/DetailsPage';
 import LoginPage from '../../screens/auth/Login/LoginPage';
 import RegistrationPage from '../../screens/auth/Registration/RegistrationPage';
 
-
+import CustomerBookingPage from '../../screens/BookingDetails/CustomerBookingPage';
+import BookingConfirmedPage from '../sharedComponents/BookingConfirmedPage'
 
 
 // AUTH ROUTES //
@@ -48,6 +48,24 @@ const AuthRoutes = () => {
              <Stack.Screen
             name="ForgotPassword"
             component={CustomerBookingPage}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+  )
+}
+
+
+const BookingConfirmStack = () => {
+  return (
+<Stack.Navigator>
+      <Stack.Screen
+            name="CustomerBooking"
+            component={CustomerBookingPage}
+            options={{ headerShown: false }}
+          />
+           <Stack.Screen
+            name="BookingConfirm"
+            component={BookingConfirmedPage}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
@@ -218,7 +236,7 @@ const HallDetailTabs = (props) => {
   );
 }
 
-export { CustomerDrawerNavigator,HallDetailTabs,AuthRoutes};
+export { CustomerDrawerNavigator,HallDetailTabs,AuthRoutes,BookingConfirmStack};
 
 
 const styles = StyleSheet.create({

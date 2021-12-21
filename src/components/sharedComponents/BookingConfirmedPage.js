@@ -19,7 +19,7 @@ function BookingConfirmedPage(props) {
         imageStyle={styles.rect1_imageStyle}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
       >
-        <Text style={styles.bookingConfirmed}>BOOKING CONFIRMED</Text>
+        <Text style={styles.bookingConfirmed}>BOOKING REQUEST SENT SUCCESSFULLY</Text>
         <Icon name="check-circle-o" style={styles.icon}></Icon>
         <TextInput
           placeholder="Venue owner will get back to you soon"

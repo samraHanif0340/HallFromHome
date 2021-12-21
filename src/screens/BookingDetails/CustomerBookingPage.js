@@ -1,21 +1,24 @@
 import React from "react";
-import { Button, TextInput, View, StatusBar, ImageBackground, StyleSheet, Text,ActivityIndicator,ScrollView } from "react-native";
+import { Button, TextInput, View, StatusBar, ImageBackground, StyleSheet, Text,ActivityIndicator,ScrollView,Field } from "react-native";
 import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
 
 import { Formik} from "formik";
 import * as Yup from "yup";
 
-import { TextField } from '../../components/customComponents/customComponents'
+import { TextField,SelectField } from '../../components/customComponents/customComponents'
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
 import Snackbar from 'react-native-snackbar';
+import { Avatar } from "react-native-elements";
+import moment from 'moment';
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 
 const source = axios.CancelToken.source();
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Name must be atleast 6 characters long')
-    .max(80, 'ame must be atmost 80 characters long')
+    .max(80, 'Name must be atmost 80 characters long')
     .required('Required'),
 
   email: Yup.string().email('Enter a valid EMAIL (abc@abc.com)').required('Required').max(50, 'Email must be atmost 50 characters long'),
@@ -28,10 +31,18 @@ const validationSchema = Yup.object().shape({
     .max(11, 'Mobile Number should be in format 03xxxxxxxxx')
     .matches(/^[0][3][\d]{9}$/,'Mobile Number should be in format 03xxxxxxxxx')
     .required('Required'),
+    EventDate: Yup.string()
+    .required('Required'),
+    EventShift: Yup.string()
+    .required('Required'),
 });
 
 
 const CustomerBookingPage = (props) => {
+  const shiftList = [
+    { label: 'Day', value: 1, enable: true },
+    { label: 'Night', value: 2, enable: false },
+  ];
   const [isLoading, setIsLoading] = React.useState(false)
 
   const submitForm = (formData) => {
@@ -103,6 +114,89 @@ const CustomerBookingPage = (props) => {
     }
   };
 
+  const CalendarComponent = (props) => {
+
+    const changeSelection = (day) => {
+      alert('in day',day)
+      // let markedDates = {};
+      // markedDates[date] = { selected: true, color: '#00B0BF', textColor: '#FFFFFF' };
+      let selectedDate = moment(day);
+      selectedDate = selectedDate.format("YYYY-MM-DD");
+      // this.setState({
+      //     selectedDate: serviceDate,
+      //     markedDates: markedDates
+      // });
+      console.log(selectedDate)
+      alert(selectedDate)
+      // props.parentCallback(selectedDate);
+      setPageState('child-page-2')
+
+    }
+  
+    return (
+      <View>
+        <Avatar
+          rounded
+          icon={{ name: 'arrow-left', type: 'font-awesome' }}
+          onPress={() => { setPageState('parent-page') }}
+          activeOpacity={0.7}
+          size={50}
+        // containerStyle={{flex: 2, alignSelf:'flex-end'}}
+
+        />
+        <Calendar
+        hideExtraDays={true}
+          markedDates={{
+            '2022-01-20': { customStyles: styles.stylesReserved, disableTouchEvent: true },
+            '2021-12-22': { startingDay: true, color: 'green', disableTouchEvent: true, customStyles: styles.stylesReserved },
+            '2021-12-23': { selected: true, endingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true },
+            '2021-12-04': { disabled: true, startingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true },
+            '2021-12-06': { disabled: true, startingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true }
+          }}
+          current={new Date()}
+          minDate={new Date()}
+          onDayPress={day => changeSelection(day.dateString)}
+          markingType={'custom'}
+          // dayComponent={({date, state}) => {
+          //   return (
+          //     <View>
+          //       <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : 'black'}}>
+          //         {date.day}
+          //       </Text>
+          //     </View>
+          //   );
+          // }}
+          theme={{
+            backgroundColor: '#ffffff',
+            calendarBackground: '#ffffff',
+            textSectionTitleColor: '#b6c1cd',
+            selectedDayBackgroundColor: '#00adf5',
+            selectedDayTextColor: '#ffffff',
+            todayTextColor: '#00adf5',
+            dayTextColor: '#2d4150',
+            textDisabledColor: '#d9e1e8',
+            dotColor: '#00adf5',
+            selectedDotColor: '#ffffff',
+            arrowColor: 'red',
+            disabledArrowColor: '#d9e1e8',
+            monthTextColor: 'red',
+            indicatorColor: 'blue',
+            textDayFontFamily: 'monospace',
+            textMonthFontFamily: 'monospace',
+            textDayHeaderFontFamily: 'monospace',
+            textDayFontWeight: '300',
+            textMonthFontWeight: 'bold',
+            textDayHeaderFontWeight: '300',
+            textDayFontSize: 16,
+            textMonthFontSize: 16,
+            textDayHeaderFontSize: 16
+          }}
+        />
+      </View>
+
+    )
+  }
+
   return (
     <View style={styles.container}>
      
@@ -122,6 +216,8 @@ const CustomerBookingPage = (props) => {
             email: '',
             cnic: '',
             mobileNumber: '',
+            EventDate:'',
+            EventShift:''
           }}
           validationSchema={validationSchema}
           onSubmit={(values, errors) => submitForm(values)}>
@@ -176,7 +272,23 @@ const CustomerBookingPage = (props) => {
                 error={[errors.mobileNumber]}
               />
 
-              <View style={styles.eventDetails}>
+              <TextField
+                placeholder="Event Date" style={styles.labelText}
+                keyboardType='default'
+                mode="outlined"
+                placeholderTextColor="#800000"
+                nameOfIcon="clock"
+                maxLength={11}
+                onChangeText={handleChange('EventDate')}
+                onBlur={handleBlur('EventDate')}
+                value={values.EventDate}
+                error={[errors.EventDate]}
+              />
+
+              <CalendarComponent/>
+              <SelectField items={shiftList} value={values.EventShift}  onChangeText={handleChange('EventShift')} error={[errors.EventShift]} nameOfIcon="clock" mode="dialog" />
+
+              {/* <View style={styles.eventDetails}>
                 <View style={styles.eventChilds}>
                   <Text style={styles.eventChilds.content.viewTypeLeft}>Event Date:</Text>
                   <Text style={styles.eventChilds.content.viewTypeLeft}>Event Time:</Text>
@@ -187,7 +299,7 @@ const CustomerBookingPage = (props) => {
                   <Text style={styles.eventChilds.content.viewTypeRight}>7PM - 11 PM</Text>
                   <Text style={styles.eventChilds.content.viewTypeRight}>30,000 PKR</Text>
                 </View>
-              </View>
+              </View> */}
               <TouchableOpacity
                 onPress={handleSubmit}
                 style={styles.submitButtonWrapper}

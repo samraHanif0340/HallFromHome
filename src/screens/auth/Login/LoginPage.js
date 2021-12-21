@@ -32,7 +32,7 @@ const LoginPage = ({ navigation }) => {
     const handleSubmitPress = () => {
         setEmailError(validate('userEmail', userEmail, 'email'))
         setPasswordError(validate('userPassword', userPassword, 'password'))
-        let dataToSend = { EmailAddress: userEmail, Password: userPassword };
+        let dataToSend = { Username: userEmail, Password: userPassword };
         // let formBody = [];
         // for (let key in dataToSend) {
         //   let encodedKey = encodeURIComponent(key);
@@ -92,9 +92,12 @@ saveData(dataToSend)
             console.log(response)
             if (response.data.ResponseCode === "00") {
                 setIsLoading(false);
-                setErrortext({text:'Success',styles:ToastStyles.success})
+                // setErrortext({text:'Success',styles:ToastStyles.success})
                 Snackbar.show({
                     text: 'Success',
+                    backgroundColor:'black',
+                textColor:'white',
+
                     duration: Snackbar.LENGTH_LONG,
                   });
                 //   AsyncStorage.setItem('user_id', response.data.Username);
@@ -106,7 +109,9 @@ saveData(dataToSend)
                 setErrortext({text:response.data.ResponseDesc,styles:ToastStyles.error})
                 Snackbar.show({
                     text: response.data.ResponseDesc,
-                    duration: Snackbar.LENGTH_INDEFINITE,
+                    duration: Snackbar.LENGTH_LONG,
+                    backgroundColor:'black',
+                    textColor:'white',
                     action: {
                       text: 'OK',
                       textColor: 'white',
@@ -119,7 +124,9 @@ saveData(dataToSend)
             setIsLoading(false);
             Snackbar.show({
                 text: 'Something Went Wrong',
-                duration: Snackbar.LENGTH_INDEFINITE,
+                duration: Snackbar.LENGTH_LONG,
+                backgroundColor:'black',
+                textColor:'white',
                 action: {
                   text: 'OK',
                   textColor: 'white',

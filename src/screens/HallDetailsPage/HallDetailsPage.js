@@ -193,10 +193,11 @@ const HallDetailPage = ({ route,navigation }) => {
         ></Image> */}
         
         <HallDetailTabs venueID={route.params.VenueID}/>
-
-        {pageState === 'parent-page' ? <TouchableOpacity style={styles.checkAvailability} onPress={() => setPageState('child-page-1')}><Text style={styles.checkAvailability.Availabilitycontent}>CHECK AVAILABILITY</Text></TouchableOpacity> : null}
+{/* 
+        {pageState === 'parent-page' ? <TouchableOpacity style={styles.checkAvailability} onPress={() => setPageState('child-page-1')}><Text style={styles.checkAvailability.Availabilitycontent}>BOOK</Text></TouchableOpacity> : null}
         {pageState === 'child-page-1' ? <CalendarComponent /> : null}
-        {pageState === 'child-page-2' ? <TimeComponent /> : null}
+        {pageState === 'child-page-2' ? <TimeComponent /> : null} */}
+        <TouchableOpacity style={styles.checkAvailability} onPress={()=> navigation.navigate('BookingConfirmStack')}><Text style={styles.checkAvailability.Availabilitycontent}>BOOK</Text></TouchableOpacity>
 
         {/* <TouchableOpacity style={styles.bookHall} onPress={() => navigation.navigate('Booking Confirmed')}><Text style={styles.bookHall.content}>BOOK</Text></TouchableOpacity> */}
       </ImageBackground>
