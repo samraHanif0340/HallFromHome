@@ -1,8 +1,8 @@
 
 import React, { useState } from "react";
-import { View, Text, StyleSheet, StatusBar, ImageBackground, Alert } from "react-native";
+import { View, Text, StyleSheet, StatusBar, ImageBackground, Alert,ActivityIndicator } from "react-native";
 import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
-import { TextField } from '../../../components/customComponents/customComponents'
+import { TextField,Loader } from '../../../components/customComponents/customComponents'
 import validate from '../../../shared-services/validationFunctions'
 import { styles } from './LoginPage.component.style.js'
 import { Image } from "react-native-elements";
@@ -32,7 +32,7 @@ const LoginPage = ({ navigation }) => {
     const handleSubmitPress = () => {
         setEmailError(validate('userEmail', userEmail, 'email'))
         setPasswordError(validate('userPassword', userPassword, 'password'))
-        let dataToSend = { Username: userEmail, Password: userPassword };
+        let dataToSend = { EmailAddress: userEmail, Password: userPassword };
         // let formBody = [];
         // for (let key in dataToSend) {
         //   let encodedKey = encodeURIComponent(key);
@@ -89,7 +89,6 @@ saveData(dataToSend)
                 configurationObject,
           
             );
-            alert(response.ResponseCode)
             console.log(response)
             if (response.data.ResponseCode === "00") {
                 setIsLoading(false);
@@ -136,6 +135,7 @@ saveData(dataToSend)
     return (
 
         <View style={styles.parentContainer}>
+       <Loader isLoading={isLoading} />
 
             <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
             <ImageBackground

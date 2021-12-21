@@ -178,6 +178,16 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'khaki'
     },
+
+    spinnerTextStyle: {
+        color: 'rgba(248,231,28,1)',
+        fontFamily:"cursive",
+        fontWeight:"bold"
+      },
+      lottie: {
+        width: 100,
+        height: 100
+      }
    
 })
 
