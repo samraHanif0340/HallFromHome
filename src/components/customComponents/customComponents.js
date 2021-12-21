@@ -7,6 +7,9 @@ import {Picker} from '@react-native-picker/picker';
 import { Dropdown, SelectCountry } from 'react-native-element-dropdown';
 import { renderNode } from 'react-native-elements/dist/helpers';
 import { HelperText } from 'react-native-paper';
+import Spinner from 'react-native-loading-spinner-overlay';
+// import AnimatedLoader from "react-native-animated-loader";
+
 
 
 export const Inputs = (type, label, value, onChange) => {
@@ -99,6 +102,30 @@ const Toaster = (props) => {
   )
 }
 
+const Loader = (props) => {
+return(
+  <Spinner
+  visible={props.isLoading}
+  color="rgba(248,231,28,1)"
+  animation="slide"
+  size="large"
+  textContent={'Please wait...'}
+  textStyle={styles.spinnerTextStyle}
+  // overlayColor="white"
+  cancelable="false"
+/>
+//   <AnimatedLoader
+//   visible={visible}
+//   overlayColor="rgba(255,255,255,0.75)"
+//   source={require("../../assets/loader-icon.json")}
+//   animationStyle={styles.lottie}
+//   speed={1}
+// >
+//   <Text>Doing something...</Text>
+// </AnimatedLoader>
+)
+}
+
 
 const DropdownField = (props) => {
 
@@ -148,4 +175,4 @@ const DropdownField = (props) => {
 
 
 
-export { TextField, MultiLineTextInput, Toaster, DropdownField };
+export { TextField, MultiLineTextInput, Toaster, DropdownField,Loader };
