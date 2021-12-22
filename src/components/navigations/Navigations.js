@@ -16,6 +16,7 @@ import SearchByMaps from '../../screens/SearchHall/SearchByMaps';
 import HallDetailPage from '../../screens/HallDetailsPage/HallDetailsPage';
 import TrackingStatusPage from '../../screens/TrackingStatus/TrackingStatus';
 import LodgeComplaintPage from '../../screens/LodgeComplaint/LodgeComplaint';
+import LodgeCamplaintListPage from '../../screens/LodgeComplaint/LodgeCamplaintList'
 
 
 
@@ -109,9 +110,9 @@ const CustomerDrawerNavigator = () => {
         drawerLabel: 'Lodge Complaint/Feedback',
         activeTintColor: '#FF6F00',
       }}
-        component={LodgeComplaintPage} />
+        component={LodgeCamplaintListPage} />
 
-      <Drawer.Screen name="Personalize Settings" options={{
+      {/* <Drawer.Screen name="Personalize Settings" options={{
         drawerLabel: 'Personalize Settings',
         activeTintColor: '#FF6F00',
       }} component={SearchPage} />
@@ -119,7 +120,7 @@ const CustomerDrawerNavigator = () => {
       <Drawer.Screen name="Notifications" options={{
         drawerLabel: 'Notifications',
         activeTintColor: '#FF6F00',
-      }} component={SearchPage} />
+      }} component={SearchPage} /> */}
 
 
     </Drawer.Navigator>
