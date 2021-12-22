@@ -26,7 +26,7 @@ const SplashScreen = ({ navigation }) => {
 
     useEffect(() => {
         if (authLoaded) {
-            navigation.replace('Auth');
+            navigation.replace('Home');
         }
     }, [authLoaded, navigation]);
 

@@ -48,9 +48,9 @@ export const SelectField = props => {
 const TextField = props => (
   <View>
     <View style={styles.textFieldWrapper}>
-      {props.nameOfIcon ? <EvilIconsIcon name={props.nameOfIcon} style={styles.icon2}></EvilIconsIcon> : null}
+      {props.nameOfIcon ? <EvilIconsIcon name={props.nameOfIcon} style={styles.icon2} onPress={props.onPress}></EvilIconsIcon> : null}
       {/* <Text style={styles.label}>{props.labelName}</Text> */}
-      <TextInput style={styles.textField} keyboardType={props.keyboardType ? props.keyboardType : 'default'} placeholder={props.placeholder} placeholderTextColor={props.placeholderTextColor} defaultValue={props.defaultValue} secureTextEntry={props.secureTextEntry} maxLength={props.maxLength} value={props.value} onChangeText={props.onChangeText} onBlur={props.onBlur} />
+      <TextInput style={styles.textField} keyboardType={props.keyboardType ? props.keyboardType : 'default'} placeholder={props.placeholder} placeholderTextColor={props.placeholderTextColor} defaultValue={props.defaultValue} secureTextEntry={props.secureTextEntry} maxLength={props.maxLength} value={props.value} onChangeText={props.onChangeText} onBlur={props.onBlur} disabled={props.disabled} />
     </View>
 
     {props.error ? props.error.map((error, key) => <HelperText  type = "error" style={styles.errorMsg} key={key}>{error}</HelperText>) : null}

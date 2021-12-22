@@ -1,5 +1,5 @@
 import React, { Component,useEffect } from "react";
-import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground } from "react-native";
+import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground ,ScrollView} from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
@@ -252,9 +252,10 @@ useEffect(() => {
           // showLoading="true"
           inputStyle={styles.searchBar.inputStyle}
         />
+     
       <FlatList
         data={filteredData}
-       
+       horizontal
         renderItem={({ item }) => (
           
           <View style={styles.eachItem}>
@@ -298,6 +299,7 @@ useEffect(() => {
         )}
         
       />
+ 
 
 
 </ImageBackground>

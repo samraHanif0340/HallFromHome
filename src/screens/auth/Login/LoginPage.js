@@ -26,13 +26,13 @@ const LoginPage = ({ navigation }) => {
         url: `${BASE_URL}Login`,
         method: "POST",
         cancelToken: source.token,
-        data: { Username:userEmail, Password:userPassword },
+        data: { EmailAddress:userEmail, Password:userPassword },
     };
 
     const handleSubmitPress = () => {
         setEmailError(validate('userEmail', userEmail, 'email'))
         setPasswordError(validate('userPassword', userPassword, 'password'))
-        let dataToSend = { Username: userEmail, Password: userPassword };
+        let dataToSend = { EmailAddress: userEmail, Password: userPassword };
         // let formBody = [];
         // for (let key in dataToSend) {
         //   let encodedKey = encodeURIComponent(key);
