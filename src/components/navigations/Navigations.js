@@ -10,7 +10,9 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { createStackNavigator } from '@react-navigation/stack';
 
 
+
 import NavigationHeader from './navComponents/drawerHeader'
+import Header from '../header/Header'
 import CustomerDashboardPage from '../../screens/CustomerDashboard/CustomerDashboard';
 import SearchPage from '../../screens/SearchHall/SearchHall';
 import SearchByMaps from '../../screens/SearchHall/SearchByMaps';
@@ -73,14 +75,32 @@ const BookingConfirmStack = () => {
         </Stack.Navigator>
   )
 }
+// ({ navigation,route,options }) => 
+// headerLeft: (props) => 
+// <Header navigation={navigation} route={route} options={options} {...props}/>,
 
+// })
 
 // DRAWER NAVIGATION // 
 const Drawer = createDrawerNavigator();
 
 const CustomerDrawerNavigator = () => {
   return (
-    <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <CustomSidebar {...props} />}>
+    <Drawer.Navigator initialRouteName="Home" 
+    screenOptions={({ navigation,route,options }) => ({
+      headerStyle: {
+        backgroundColor: '#800000',
+        height:70
+      },
+      headerTintColor: 'white',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+      overlayColor: 'transparent',
+      headerLeft: (props) => 
+<Header navigation={navigation} route={route} options={options} {...props}/>,
+    })}
+     drawerContent={(props) => <CustomSidebar {...props} />}>
       <Drawer.Screen  name="Home" options={{
         drawerLabel: 'Home',
         // groupName: 'Category 1',

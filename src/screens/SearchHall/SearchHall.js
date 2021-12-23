@@ -192,15 +192,15 @@ return (
 
       <SearchBar
         lightTheme
-        searchIcon={{ size: 25, color: 'white' }}
+        searchIcon={{ size: 25}}
         placeholder="Search for halls, banquets..."
         value={searchText}
         onChangeText={text => searchFilterFunction(text)}
-        containerStyle={styles.searchBar}
-        placeholderTextColor="white"
-        leftIconContainerStyle={styles.searchBar.icon}
+        // containerStyle={styles.searchBar}
+        // placeholderTextColor="white"
+        // leftIconContainerStyle={styles.searchBar.icon}
         // showLoading="true"
-        inputStyle={styles.searchBar.inputStyle}
+        // inputStyle={styles.searchBar.inputStyle}
       />
       <FlatList
 

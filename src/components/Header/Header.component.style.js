@@ -4,8 +4,8 @@ var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height; 
 
 export const styles = StyleSheet.create({
-    icon:{    
-
+    headerContainer:{    
+        backgroundColor:'#800000'
     },
  
   
