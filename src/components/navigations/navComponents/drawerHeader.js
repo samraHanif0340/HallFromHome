@@ -24,7 +24,7 @@ class NavigationHeader extends Component{
               size={70}
             />
             <Title style={styles.title}>Samra Hanif</Title>
-            <Caption style={styles.caption}>@samra.hanif@yahoo.com</Caption>
+            <Caption style={styles.caption}>@amra.hanif@yahoo.com</Caption>
             <Caption style={styles.caption}>03402042202</Caption>
             </View>
       
@@ -36,16 +36,22 @@ class NavigationHeader extends Component{
 const styles = StyleSheet.create({
       userInfoSection: {
         marginBottom:10,
-        alignItems:'center'
+        alignItems:'center',
+        backgroundColor:'#800000',
+        opacity:0.9
       },
     
       title: {
         marginTop: 20,
         fontWeight: 'bold',
+        color:'rgba(255,255,255,1)',
+        
       },
       caption: {
         fontSize: 14,
         lineHeight: 14,
+        color:'rgba(255,255,255,1)',
+        fontStyle:'italic',
       },
       row: {
         marginTop: 20,
