@@ -1,8 +1,10 @@
 import React, { Component,useEffect } from "react";
-import { StyleSheet, View, Text,  StatusBar, ImageBackground } from "react-native";
+import { StyleSheet, View, Text,  StatusBar, ImageBackground,Image } from "react-native";
 import { Divider } from 'react-native-paper';
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
+import ParallaxScrollView from 'react-native-parallax-scroll-view';
+
 
 
 
@@ -87,7 +89,6 @@ function DetailOfHallPage(props) {
         <View style={styles.eachItem}>
 
           <View style={styles.centeredAlign}>
-            {/* <Text>{props.hallId}</Text> */}
             <Text style={styles.centeredAlign.content}>Hall Name: {detail.VenueName}</Text>
             <Divider style={styles.DividerColor} />
             <Text style={styles.centeredAlign.content}>Venue Type: {detail.VenueTypeDesc}</Text>
@@ -107,12 +108,27 @@ function DetailOfHallPage(props) {
 
           </View>
 
-          {/* <View style={styles.rightAligned}>
-              <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
-              <Text style={styles.rightAligned.content}>Rating : ({detail.rating})</Text>
-              </View> */}
-
         </View>
+{/*         
+    <ParallaxScrollView
+      backgroundColor="blue"
+      contentBackgroundColor="pink"
+      parallaxHeaderHeight={300}
+      renderForeground={() => (
+       <View style={{ height: 300, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={styles.hallFromHome2Column}>
+          <Text style={styles.bookingDetail}>BOOKING DETAILS</Text>
+        </View>
+        <Image
+          source={require("../../assets/images/download2.jpg")}
+          resizeMode="cover"
+          style={styles.image2}
+        ></Image>
+        </View>
+      )}>
+      <View style={{ height: 500 }}>
+      </View>
+    </ParallaxScrollView> */}
       </ImageBackground>
     </View>
   );

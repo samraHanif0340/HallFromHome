@@ -16,7 +16,6 @@ import { Avatar } from "react-native-elements";
 import moment from 'moment';
 import { DropdownField, SelectField } from '../../components/customComponents/customComponents'
 
-
 const HallDetailPage = ({ route, navigation }) => {
   const [venueId, setVenueId] = useState(route.params.VenueID)
   const [pageState, setPageState] = useState('parent-page');
@@ -181,16 +180,11 @@ const HallDetailPage = ({ route, navigation }) => {
         imageStyle={styles.rect1_imageStyle}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
       >
-        {/* <View style={styles.hallFromHome2Column}>
-          <Text style={styles.bookingDetail}>BOOKING DETAILS</Text>
-          <Text>{hallId}</Text>
-        </View> */}
-        {/* <Image
-          source={require("../../assets/images/download2.jpg")}
-          // source={{ uri: item.imgURL }}
-          resizeMode="cover"
-          style={styles.image2}
-        ></Image> */}
+      
+
+
+
+ 
 
         <HallDetailTabs venueID={route.params.VenueID} />
         {/* 
