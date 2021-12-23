@@ -10,13 +10,14 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { createStackNavigator } from '@react-navigation/stack';
 
 
-
+import NavigationHeader from './navComponents/drawerHeader'
+import CustomerDashboardPage from '../../screens/CustomerDashboard/CustomerDashboard';
 import SearchPage from '../../screens/SearchHall/SearchHall';
 import SearchByMaps from '../../screens/SearchHall/SearchByMaps';
 import HallDetailPage from '../../screens/HallDetailsPage/HallDetailsPage';
 import TrackingStatusPage from '../../screens/TrackingStatus/TrackingStatus';
 import LodgeComplaintPage from '../../screens/LodgeComplaint/LodgeComplaint';
-import LodgeCamplaintListPage from '../../screens/LodgeComplaint/LodgeCamplaintList'
+import LodgeCamplaintListPage from '../../screens/LodgeComplaint/LodgeCamplaintList';
 
 
 
@@ -87,6 +88,13 @@ const CustomerDrawerNavigator = () => {
         activeTintColor: '#8b0000',
       }} component={SearchPage} />
 
+<Drawer.Screen  name="CustomerDashboard" options={{
+        drawerLabel: 'Dashboard',
+        // groupName: 'Category 1',
+        //activeTintColor: '#FF6F00',
+        activeTintColor: '#8b0000',
+      }} component={CustomerDashboardPage} />
+
 
       <Drawer.Screen name="Hall Details" options={{
         drawerLabel: 'Hall Details',
@@ -111,18 +119,6 @@ const CustomerDrawerNavigator = () => {
         activeTintColor: '#FF6F00',
       }}
         component={LodgeCamplaintListPage} />
-
-      {/* <Drawer.Screen name="Personalize Settings" options={{
-        drawerLabel: 'Personalize Settings',
-        activeTintColor: '#FF6F00',
-      }} component={SearchPage} />
-
-      <Drawer.Screen name="Notifications" options={{
-        drawerLabel: 'Notifications',
-        activeTintColor: '#FF6F00',
-      }} component={SearchPage} /> */}
-
-
     </Drawer.Navigator>
   );
 }
@@ -132,6 +128,7 @@ const CustomSidebar = (props) => {
   let newGroup = true;
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <NavigationHeader/>
       <DrawerContentScrollView {...props}>
         {state.routes.map((route) => {
           const {

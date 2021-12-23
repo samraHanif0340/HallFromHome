@@ -106,7 +106,7 @@ saveData(dataToSend)
                 return;
             } else {
                 setIsLoading(false);
-                setErrortext({text:response.data.ResponseDesc,styles:ToastStyles.error})
+                // setErrortext({text:response.data.ResponseDesc,styles:ToastStyles.error})
                 Snackbar.show({
                     text: response.data.ResponseDesc,
                     duration: Snackbar.LENGTH_LONG,

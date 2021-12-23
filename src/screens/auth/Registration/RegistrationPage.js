@@ -5,7 +5,7 @@ import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handl
 import { Formik} from "formik";
 import * as Yup from "yup";
 
-import { TextField } from '../../../components/customComponents/customComponents'
+import { TextField,Loader } from '../../../components/customComponents/customComponents'
 import axios from 'axios';
 import { BASE_URL } from '../../../constants/constants'
 import Snackbar from 'react-native-snackbar';
@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
 
     EmailAddress: Yup.string().email('Enter a valid EMAIL (abc@abc.com)').required('Required').max(50, 'Email must be atmost 50 characters long'),
   Password: Yup.string()
-    .min(8, 'Password must be atleast 8 characters long')
+    .min(10, 'Password must be atleast 10 characters long')
     .max(20, 'Password must be atmost 20 characters long')
     .required('Required'),
     PhoneNumber: Yup.string()
@@ -43,18 +43,12 @@ const RegistrationPage = ({navigation}) => {
 
   const saveData = async (data) => {
     let formData = Object.assign({},data)
-
-  
-    console.log(formData)
-  
     let configurationObject = {
       url: `${BASE_URL}UserRegistration`,
       method: "POST",
       cancelToken: source.token,
       data: formData,
   }
-    console.log('in save data')
-    // setErrortext(null)
     try {
         setIsLoading(true);
         const response = await axios(
@@ -64,48 +58,50 @@ const RegistrationPage = ({navigation}) => {
         console.log(response)
         if (response.data.ResponseCode === "00") {
             setIsLoading(false);
-            // setErrortext({text:'Success',styles:ToastStyles.success})
             Snackbar.show({
-                text: response.data.ResponseDesc,
-                duration: Snackbar.LENGTH_LONG,
-              });
-            navigation.navigate('Auth')
-            //   AsyncStorage.setItem('user_id', response.data.Username);
-            //   console.log(response.data.Username);
+              text: 'Success',
+              backgroundColor:'black',
+          textColor:'white',
+              duration: Snackbar.LENGTH_LONG,
+            });
+            navigation.navigate('Login')
             
             return;
         } else {
             setIsLoading(false);
-            // setErrortext({text:response.data.ResponseDesc,styles:ToastStyles.error})
             Snackbar.show({
-                text: response.data.ResponseDesc,
-                duration: Snackbar.LENGTH_INDEFINITE,
-                action: {
-                  text: 'OK',
-                  textColor: 'white',
-                  onPress: () => { /* Do something. */ },
-                },
-              });
+              text: response.data.ResponseDesc,
+              duration: Snackbar.LENGTH_LONG,
+              backgroundColor:'black',
+              textColor:'white',
+              action: {
+                text: 'OK',
+                textColor: 'white',
+                onPress: () => { /* Do something. */ },
+              },
+            });
         }
     } catch (error) {
         setIsLoading(false);
         Snackbar.show({
-            text: 'Something Went Wrong',
-            duration: Snackbar.LENGTH_INDEFINITE,
-            action: {
-              text: 'OK',
-              textColor: 'white',
-              onPress: () => { /* Do something. */ },
-            },
-          });
-  
+          text: 'Something Went Wrong',
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor:'black',
+          textColor:'white',
+          action: {
+            text: 'OK',
+            textColor: 'white',
+            onPress: () => { /* Do something. */ },
+          },
+        });
+ 
     }
   };
 
   return (
     <View style={styles.container}>
      
-        {isLoading ? <ActivityIndicator  size="large"  color="red"/> : null}
+     <Loader isLoading={isLoading} />
      
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
       <ImageBackground style={styles.container}
