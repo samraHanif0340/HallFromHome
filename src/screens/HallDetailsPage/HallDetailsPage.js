@@ -17,10 +17,10 @@ import moment from 'moment';
 import { DropdownField, SelectField } from '../../components/customComponents/customComponents'
 
 
-const HallDetailPage = ({ route,navigation }) => {
-  const [venueId,setVenueId] = useState(route.params.VenueID)
+const HallDetailPage = ({ route, navigation }) => {
+  const [venueId, setVenueId] = useState(route.params.VenueID)
   const [pageState, setPageState] = useState('parent-page');
-  const [bookingDetail, setBookingDetail] = useState({ selectedDate: null, selectedTime: null});
+  const [bookingDetail, setBookingDetail] = useState({ selectedDate: null, selectedTime: null });
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [data, setData] = useState({
     hallName: "Majestic Banquet",
@@ -43,7 +43,7 @@ const HallDetailPage = ({ route,navigation }) => {
   const CalendarComponent = (props) => {
 
     const changeSelection = (day) => {
-      alert('in day',day)
+      alert('in day', day)
       // let markedDates = {};
       // markedDates[date] = { selected: true, color: '#00B0BF', textColor: '#FFFFFF' };
       let selectedDate = moment(day);
@@ -58,7 +58,7 @@ const HallDetailPage = ({ route,navigation }) => {
       setPageState('child-page-2')
 
     }
-  
+
     return (
       <View>
         <Avatar
@@ -71,7 +71,7 @@ const HallDetailPage = ({ route,navigation }) => {
 
         />
         <Calendar
-        hideExtraDays={true}
+          hideExtraDays={true}
           markedDates={{
             '2022-01-20': { customStyles: styles.stylesReserved, disableTouchEvent: true },
             '2021-12-22': { startingDay: true, color: 'green', disableTouchEvent: true, customStyles: styles.stylesReserved },
@@ -191,12 +191,16 @@ const HallDetailPage = ({ route,navigation }) => {
           resizeMode="cover"
           style={styles.image2}
         ></Image> */}
-        
-        <HallDetailTabs venueID={route.params.VenueID}/>
 
-        {pageState === 'parent-page' ? <TouchableOpacity style={styles.checkAvailability} onPress={() => setPageState('child-page-1')}><Text style={styles.checkAvailability.Availabilitycontent}>CHECK AVAILABILITY</Text></TouchableOpacity> : null}
+        <HallDetailTabs venueID={route.params.VenueID} />
+        {/* 
+        {pageState === 'parent-page' ? <TouchableOpacity style={styles.checkAvailability} onPress={() => setPageState('child-page-1')}><Text style={styles.checkAvailability.Availabilitycontent}>BOOK</Text></TouchableOpacity> : null}
         {pageState === 'child-page-1' ? <CalendarComponent /> : null}
-        {pageState === 'child-page-2' ? <TimeComponent /> : null}
+        {pageState === 'child-page-2' ? <TimeComponent /> : null} */}
+        <TouchableOpacity style={styles.checkAvailability} onPress={() => navigation.navigate('BookingConfirmStack', {
+          screen: 'CustomerBooking',
+          params: { VenueID: route.params.VenueID }
+        })}><Text style={styles.checkAvailability.Availabilitycontent}>BOOK</Text></TouchableOpacity>
 
         {/* <TouchableOpacity style={styles.bookHall} onPress={() => navigation.navigate('Booking Confirmed')}><Text style={styles.bookHall.content}>BOOK</Text></TouchableOpacity> */}
       </ImageBackground>
@@ -220,7 +224,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
 
   },
-  textEvent:{
+  textEvent: {
     fontFamily: "roboto-regular",
     fontSize: 24,
     color: 'rgba(255,255,255,1)',

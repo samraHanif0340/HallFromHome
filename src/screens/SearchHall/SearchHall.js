@@ -5,10 +5,10 @@ import Svg, { Ellipse } from "react-native-svg";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { SearchBar, Rating } from 'react-native-elements';
+import { SearchBar, Rating,Card } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
 // import SearchBar from "react-native-dynamic-search-bar";
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { Avatar, Button, Title, Paragraph } from 'react-native-paper';
 import { Divider } from "react-native-elements";
 import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
@@ -192,12 +192,12 @@ return (
 
       <SearchBar
         lightTheme
-        searchIcon={{ size: 25, color: 'white' }}
+        searchIcon={{ size: 25}}
         placeholder="Search for halls, banquets..."
         value={searchText}
         onChangeText={text => searchFilterFunction(text)}
         containerStyle={styles.searchBar}
-        placeholderTextColor="white"
+        placeholderTextColor="black"
         leftIconContainerStyle={styles.searchBar.icon}
         // showLoading="true"
         inputStyle={styles.searchBar.inputStyle}
@@ -205,19 +205,15 @@ return (
       <FlatList
 
         data={filteredData}
-
+        keyExtractor={item => item.vVenueID}
         renderItem={({ item }) => (
-
-
+          <Card containerStyle={styles.cardStyle}>
           <View style={styles.imageStackStack}>
             <View style={styles.imageStack}>
               <TouchableOpacity activeOpacity={0.2} onPress={() => props.navigation.navigate('Hall Details',{VenueID:item.VenueID})}>
                 <Image
-                  // source={require("../../assets/images/download2.jpg")}
                   source = {{ uri: item.ImageURL}}
-                  // source={{ uri: item.imgURL }}
-
-                  resizeMode="contain"
+                  resizeMode="stretch"
                   style={styles.image}
                 ></Image>
               </TouchableOpacity>
@@ -233,9 +229,9 @@ return (
               ></FontAwesomeIcon>
             </View>
             <Text style={styles.loremIpsum3}>({item.Rating})</Text>
-            <Divider style={styles.DividerColor} />
 
           </View>
+          </Card>
         )}
       />
 
@@ -249,35 +245,30 @@ const styles = StyleSheet.create({
     flex: 1,
 
   },
-  DividerColor: {
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    left: -15,
-    right: 5,
-    top: -10,
-    bottom: 0
-    // marginTop: 10,
-    // marginBottom: 10,
+  cardStyle:{
+    // borderColor:'#800000',
+    // borderWidth:3,
+    borderRadius:10,
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.5,
+    shadowRadius: 4,
+    elevation: 5,
+  },
 
-
-  },
-  card: {
-    backgroundColor: 'white'
-  },
-  cardTitle: {
-    color: 'black'
-  },
   rect: {
     flex: 1,
   },
   searchBar: {
-    backgroundColor: 'rgba(142,7,27,1)',
-    opacity: 0.5,
+    // backgroundColor: '#800000',
+    opacity: 1,
+    borderColor:'#800000',
+    borderWidth:3,
     icon: {
       color: 'black'
     },
     inputStyle: {
-      color: 'white'
+      color: 'black'
     }
   },
   rect3: {
@@ -411,13 +402,15 @@ const styles = StyleSheet.create({
   },
   image: {
     // top: 0,
-    right: 8,
+    right: 9,
     // width: 355,
     // height: 175,
     // borderRadius: 5
+    // marginRigth:8,
+   
     width: 335,
     height: 175,
-    borderRadius: 10
+    borderRadius: 5
   },
   majesticBanquet: {
     top: 173,
@@ -426,14 +419,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     position: "absolute",
     fontFamily: "georgia-regular",
-    color: "rgba(255,255,255,1)"
+    color: "black"
   },
   limit700Persons: {
     top: 191,
     // left: -11,
     position: "absolute",
     fontFamily: "roboto-italic",
-    color: "rgba(255,255,255,1)",
+    color: "black",
     fontSize: 11
   },
   imageStack: {
@@ -449,7 +442,7 @@ const styles = StyleSheet.create({
     left: 0,
     position: "absolute",
     fontFamily: "roboto-700",
-    color: "rgba(255,255,255,1)",
+    color: "black",
     height: 14,
     width: 139,
     textAlign: "left",
@@ -476,7 +469,7 @@ const styles = StyleSheet.create({
     left: 297,
     position: "absolute",
     fontFamily: "roboto-700",
-    color: "rgba(255,255,255,1)",
+    color: "black",
     fontSize: 11
   },
   imageStackStack: {

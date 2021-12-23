@@ -26,7 +26,7 @@ const LoginPage = ({ navigation }) => {
         url: `${BASE_URL}Login`,
         method: "POST",
         cancelToken: source.token,
-        data: { Username:userEmail, Password:userPassword },
+        data: { EmailAddress:userEmail, Password:userPassword },
     };
 
     const handleSubmitPress = () => {
@@ -92,9 +92,12 @@ saveData(dataToSend)
             console.log(response)
             if (response.data.ResponseCode === "00") {
                 setIsLoading(false);
-                setErrortext({text:'Success',styles:ToastStyles.success})
+                // setErrortext({text:'Success',styles:ToastStyles.success})
                 Snackbar.show({
                     text: 'Success',
+                    backgroundColor:'black',
+                textColor:'white',
+
                     duration: Snackbar.LENGTH_LONG,
                   });
                 //   AsyncStorage.setItem('user_id', response.data.Username);
@@ -103,10 +106,12 @@ saveData(dataToSend)
                 return;
             } else {
                 setIsLoading(false);
-                setErrortext({text:response.data.ResponseDesc,styles:ToastStyles.error})
+                // setErrortext({text:response.data.ResponseDesc,styles:ToastStyles.error})
                 Snackbar.show({
                     text: response.data.ResponseDesc,
-                    duration: Snackbar.LENGTH_INDEFINITE,
+                    duration: Snackbar.LENGTH_LONG,
+                    backgroundColor:'black',
+                    textColor:'white',
                     action: {
                       text: 'OK',
                       textColor: 'white',
@@ -119,7 +124,9 @@ saveData(dataToSend)
             setIsLoading(false);
             Snackbar.show({
                 text: 'Something Went Wrong',
-                duration: Snackbar.LENGTH_INDEFINITE,
+                duration: Snackbar.LENGTH_LONG,
+                backgroundColor:'black',
+                textColor:'white',
                 action: {
                   text: 'OK',
                   textColor: 'white',

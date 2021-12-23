@@ -11,12 +11,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 
 
+import NavigationHeader from './navComponents/drawerHeader'
+import Header from '../header/Header'
+import CustomerDashboardPage from '../../screens/CustomerDashboard/CustomerDashboard';
 import SearchPage from '../../screens/SearchHall/SearchHall';
 import SearchByMaps from '../../screens/SearchHall/SearchByMaps';
 import HallDetailPage from '../../screens/HallDetailsPage/HallDetailsPage';
-import CustomerBookingPage from '../../screens/BookingDetails/CustomerBookingPage';
 import TrackingStatusPage from '../../screens/TrackingStatus/TrackingStatus';
 import LodgeComplaintPage from '../../screens/LodgeComplaint/LodgeComplaint';
+import LodgeCamplaintListPage from '../../screens/LodgeComplaint/LodgeCamplaintList';
 
 
 
@@ -27,7 +30,8 @@ import DetailOfHallPage from '../../screens/HallDetailChilds/DetailsPage';
 import LoginPage from '../../screens/auth/Login/LoginPage';
 import RegistrationPage from '../../screens/auth/Registration/RegistrationPage';
 
-
+import CustomerBookingPage from '../../screens/BookingDetails/CustomerBookingPage';
+import BookingConfirmedPage from '../sharedComponents/BookingConfirmedPage'
 
 
 // AUTH ROUTES //
@@ -55,18 +59,61 @@ const AuthRoutes = () => {
 }
 
 
+const BookingConfirmStack = () => {
+  return (
+<Stack.Navigator>
+      <Stack.Screen
+            name="CustomerBooking"
+            component={CustomerBookingPage}
+            options={{ headerShown: false }}
+          />
+           <Stack.Screen
+            name="BookingConfirm"
+            component={BookingConfirmedPage}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+  )
+}
+// ({ navigation,route,options }) => 
+// headerLeft: (props) => 
+// <Header navigation={navigation} route={route} options={options} {...props}/>,
+
+// })
+
 // DRAWER NAVIGATION // 
 const Drawer = createDrawerNavigator();
 
 const CustomerDrawerNavigator = () => {
   return (
-    <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <CustomSidebar {...props} />}>
+    <Drawer.Navigator initialRouteName="Home" 
+    screenOptions={({ navigation,route,options }) => ({
+      headerStyle: {
+        backgroundColor: '#800000',
+        height:70
+      },
+      headerTintColor: 'white',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+      overlayColor: 'transparent',
+      headerLeft: (props) => 
+<Header navigation={navigation} route={route} options={options} {...props}/>,
+    })}
+     drawerContent={(props) => <CustomSidebar {...props} />}>
       <Drawer.Screen  name="Home" options={{
         drawerLabel: 'Home',
         // groupName: 'Category 1',
         //activeTintColor: '#FF6F00',
         activeTintColor: '#8b0000',
       }} component={SearchPage} />
+
+<Drawer.Screen  name="CustomerDashboard" options={{
+        drawerLabel: 'Dashboard',
+        // groupName: 'Category 1',
+        //activeTintColor: '#FF6F00',
+        activeTintColor: '#8b0000',
+      }} component={CustomerDashboardPage} />
 
 
       <Drawer.Screen name="Hall Details" options={{
@@ -91,19 +138,7 @@ const CustomerDrawerNavigator = () => {
         drawerLabel: 'Lodge Complaint/Feedback',
         activeTintColor: '#FF6F00',
       }}
-        component={LodgeComplaintPage} />
-
-      <Drawer.Screen name="Personalize Settings" options={{
-        drawerLabel: 'Personalize Settings',
-        activeTintColor: '#FF6F00',
-      }} component={SearchPage} />
-
-      <Drawer.Screen name="Notifications" options={{
-        drawerLabel: 'Notifications',
-        activeTintColor: '#FF6F00',
-      }} component={SearchPage} />
-
-
+        component={LodgeCamplaintListPage} />
     </Drawer.Navigator>
   );
 }
@@ -113,6 +148,7 @@ const CustomSidebar = (props) => {
   let newGroup = true;
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <NavigationHeader/>
       <DrawerContentScrollView {...props}>
         {state.routes.map((route) => {
           const {
@@ -218,7 +254,7 @@ const HallDetailTabs = (props) => {
   );
 }
 
-export { CustomerDrawerNavigator,HallDetailTabs,AuthRoutes};
+export { CustomerDrawerNavigator,HallDetailTabs,AuthRoutes,BookingConfirmStack};
 
 
 const styles = StyleSheet.create({

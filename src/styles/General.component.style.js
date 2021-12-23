@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
         // flex:1,
         marginRight: 20,
         marginLeft: 20,
-        marginTop: 14,
-        marginBottom: 14
+        marginTop: 10,
+        marginBottom: 10
     },
     textField: {
         flex: 8,
@@ -50,18 +50,26 @@ const styles = StyleSheet.create({
     },
     selectFieldWrapper:{
         height: 59,
-        backgroundColor: "rgba(251,247,247,0.25)",
+        //backgroundColor: "rgba(251,247,247,0.25)",
+        backgroundColor: "rgba(255,255,255,1)",
+        Opacity: 0.2,
         borderRadius: 5,
-        flexDirection: "row", 
+        borderWidth: 2,
+        //borderColor: "rgba(255,255,255,0.3)",
+        borderColor: "rgba(157,24,24,0.8)",
+        flexDirection: "row",
+
+        // flex:1,
         marginRight: 20,
         marginLeft: 20,
-        marginTop: 14,
-        marginBottom: 14
+        marginTop: 10,
+        marginBottom: 10
     },
     selectField:{
         flex: 8,
         height: 50,
-        //color: "rgba(255,255,255,1)",
+        fontSize: 15,
+       // color: "rgba(255,255,255,1)",
         color: "#800000",
         marginTop: 4,
     },
