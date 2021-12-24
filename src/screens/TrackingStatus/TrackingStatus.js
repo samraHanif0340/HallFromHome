@@ -3,9 +3,12 @@ import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,I
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
-import {  Button, Card, Title, Paragraph,Divider } from 'react-native-paper';
+import {  Button, Title, Paragraph} from 'react-native-paper';
+import { Divider, Card } from "react-native-elements";
 // import SearchBar from "react-native-dynamic-search-bar";
 import {ListItem, Icon } from 'react-native-elements'
+import { BASE_URL } from '../../constants/constants'
+import axios from 'axios';
 
 const  TrackingStatusPage = (props) => {
   const [filteredData, setfilteredData] = React.useState([{
@@ -22,7 +25,7 @@ const  TrackingStatusPage = (props) => {
     pricePaid: "PKR 150000",
     status: 'Approved',
     setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
+    comments: 'Your venue has been booked under name\n Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
   },
   {
     hallName: "Ayan Banquet",
@@ -62,7 +65,7 @@ const  TrackingStatusPage = (props) => {
     pricePaid: "PKR 150000",
     status: 'Approved',
     setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
+    comments: 'Your venue has been booked under name\n Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
   },
   {
     hallName: "Ayan Banquet",
@@ -120,6 +123,40 @@ const  TrackingStatusPage = (props) => {
       <FlatList
         data={filteredData}
         renderItem={({ item }) => (
+          <Card containerStyle={styles.cardStyle}>
+            <View style={styles.imageStackStack}>
+            <View style={styles.imageStack}>
+            <Image
+                  source={require("../../assets/images/download2.jpg")}
+                  style={styles.image}
+                ></Image>
+            <Card.Title style = {styles.cardTitle}> {item.hallName}</Card.Title>
+            </View>
+            <View>
+            <Text style={styles.statusStyle} h4>{item.status}</Text>
+            </View>
+            <View style={styles.loremIpsum2Stack}>
+              <Text style={styles.cardPricePaid} h4>{item.pricePaid}</Text>
+            </View>
+            <View>
+              <Text style={styles.commentStyle} h4>{item.comments}</Text>
+            </View>
+           
+          </View>
+          
+        </Card>
+        // {/* <Card.Title titleStyle={styles.cardTitle} title={item.hallName} subtitleStyle={styles.cardTitle} subtitle={item.status}/> */}
+        //     {/* <Image
+        //           source={require("../../assets/images/download2.jpg")}
+        //           resizeMode="center"
+        //           style={styles.image}
+        //         ></Image> */}
+        //   {/* <Card.Content >
+        //     <Title style={styles.cardPricePaid}>{item.pricePaid} </Title>
+        //     <Paragraph style={styles.commentStyle}>{item.comments}</Paragraph>
+        //   </Card.Content>
+        //   <Divider style={styles.DividerColor} /> */}
+       
           // <View style={styles.eachItem}>
           //     <View style={styles.leftAlign}>
           //     <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
@@ -140,27 +177,66 @@ const  TrackingStatusPage = (props) => {
           //     </View>
     
           // </View>
-          <Card>
-    <Card.Title titleStyle={styles.cardTitle} title={item.hallName} subtitle={item.status}/>
-    <Card.Content >
-      <Title style={styles.cardPricePaid}>{item.pricePaid} </Title>
-      <Paragraph style={styles.commentStyle}>{item.comments}</Paragraph>
-    </Card.Content>
-    <Divider style={styles.DividerColor} />
-  </Card>
   
         )}
       />
 
 </ImageBackground>
     </View>
-  );
+);
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: "column",
   },
+  image: {
+    // top: 0,
+    right: 9,
+    left: -2,
+    flex: 1,
+     width: 100,
+    flexDirection: "column",
+    height: 140,
+    marginTop:-65,
+    marginBottom: 3,
+    borderRadius: 5,
+    // marginRigth:8, 
+  },
+  loremIpsum2Stack: {
+    top: -205,
+    position: "absolute"
+  },
+  imageStack: {
+    top: 0,
+    left: -20,
+    width: 310,
+    height: 90,
+    position: "absolute",
+
+  },
+  imageStackStack: {
+    width: 199,
+    height: 9,
+    marginTop: 60,
+    marginLeft: 20,
+    // marginRight: 20,
+
+  },
+  cardStyle:{
+    // borderColor:'#800000',
+    // borderWidth:3,
+    borderRadius:10,
+    flexDirection: "row",
+    shadowColor: '#000',
+    height:160,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
   eachItem: 
   {
     flex:1,
@@ -170,22 +246,52 @@ const styles = StyleSheet.create({
     // backgroundColor:'yellow'
   },
   cardTitle : {
-    color: 'black'
+    color: 'black',
+    marginLeft: 10,
+    flexDirection: 'row',
+    bottom: 135,
+    marginBottom: -2,
+    marginRight:8,
+  },
+  statusStyle : {
+    color: 'black',
+    textAlign:"left",
+    marginLeft: 90,
+    bottom: 45,
+    width: 70,
+    height:20,
   },
   DividerColor: {
     backgroundColor: 'black' ,
-    borderBottomWidth: 1,
+    borderBottomWidth: 3,
+    borderRadius:10,
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.5,
+    shadowRadius: 4,
+    elevation: 5,
   },
   commentStyle : {
     color: 'black',
-    fontSize: 14,
-    top: -5,
+    fontSize: 11,
+    bottom:15,
+    right: -90,
+    height:190,
+    width:195,
+    letterSpacing: 1,
+    textAlign: "left",
   },
   cardPricePaid : {
+    left: 220,
     color: 'black',
-    fontSize: 13,
-    left: 260,
     fontStyle: 'italic',
+    position: "absolute",
+    fontFamily: "roboto-700",
+    color: "black",
+    height: 14,
+    width: 139,
+    textAlign: "left",
+    fontSize: 11
   },
   leftAlign:{
     marginLeft:14,
