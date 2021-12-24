@@ -210,7 +210,7 @@ return (
           <Card containerStyle={styles.cardStyle}>
           <View style={styles.imageStackStack}>
             <View style={styles.imageStack}>
-              <TouchableOpacity activeOpacity={0.2} onPress={() => props.navigation.navigate('Hall Details',{VenueID:item.VenueID})}>
+              <TouchableOpacity activeOpacity={0.2} onPress={() => props.navigation.navigate('HallDetails',{VenueID:item.VenueID})}>
                 <Image
                   source = {{ uri: item.ImageURL}}
                   resizeMode="stretch"
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
   },
   image: {
     // top: 0,
-    right: 9,
+    
     // width: 355,
     // height: 175,
     // borderRadius: 5
@@ -475,8 +475,8 @@ const styles = StyleSheet.create({
   imageStackStack: {
     width: 499,
     height: 209,
-    marginTop: 11,
-    marginLeft: 20,
+    // marginTop: 11,
+    // marginLeft: 20,
     // marginRight: 20,
 
   },

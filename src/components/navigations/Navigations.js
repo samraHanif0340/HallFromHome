@@ -58,6 +58,23 @@ const AuthRoutes = () => {
   )
 }
 
+const SearchHallStack = () => {
+  return (
+<Stack.Navigator>
+      <Stack.Screen
+            name="Home"
+            component={SearchPage}
+            options={{title: 'Home', headerShown: false }}
+          />
+           <Stack.Screen
+            name="HallDetails"
+            component={HallDetailPage}
+            options={{ title: 'Venue Details'  }}
+          />
+        </Stack.Navigator>
+  )
+}
+
 
 const BookingConfirmStack = () => {
   return (
@@ -65,7 +82,7 @@ const BookingConfirmStack = () => {
       <Stack.Screen
             name="CustomerBooking"
             component={CustomerBookingPage}
-            options={{ headerShown: false }}
+            options={{ title: 'Add Booking Details', headerShown: false }}
           />
            <Stack.Screen
             name="BookingConfirm"
@@ -75,11 +92,7 @@ const BookingConfirmStack = () => {
         </Stack.Navigator>
   )
 }
-// ({ navigation,route,options }) => 
-// headerLeft: (props) => 
-// <Header navigation={navigation} route={route} options={options} {...props}/>,
 
-// })
 
 // DRAWER NAVIGATION // 
 const Drawer = createDrawerNavigator();
@@ -97,6 +110,7 @@ const CustomerDrawerNavigator = () => {
         fontWeight: 'bold',
       },
       overlayColor: 'transparent',
+      
       headerLeft: (props) => 
 <Header navigation={navigation} route={route} options={options} {...props}/>,
     })}
@@ -106,7 +120,7 @@ const CustomerDrawerNavigator = () => {
         // groupName: 'Category 1',
         //activeTintColor: '#FF6F00',
         activeTintColor: '#8b0000',
-      }} component={SearchPage} />
+      }} component={SearchHallStack} />
 
 <Drawer.Screen  name="CustomerDashboard" options={{
         drawerLabel: 'Dashboard',
@@ -114,16 +128,6 @@ const CustomerDrawerNavigator = () => {
         //activeTintColor: '#FF6F00',
         activeTintColor: '#8b0000',
       }} component={CustomerDashboardPage} />
-
-
-      <Drawer.Screen name="Hall Details" options={{
-        drawerLabel: 'Hall Details',
-        // groupName: 'Category 1',
-        //activeTintColor: '#FF6F00',
-        activeTintColor: '#8b0000',
-      }}
-        component={HallDetailPage} />
-
 
      <Drawer.Screen name="Tracking/Status"  options={{
         drawerLabel: 'Tracking/Status',
@@ -254,7 +258,7 @@ const HallDetailTabs = (props) => {
   );
 }
 
-export { CustomerDrawerNavigator,HallDetailTabs,AuthRoutes,BookingConfirmStack};
+export { CustomerDrawerNavigator,HallDetailTabs,AuthRoutes,BookingConfirmStack,SearchHallStack};
 
 
 const styles = StyleSheet.create({
