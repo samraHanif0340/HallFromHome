@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import { SafeAreaView, View, Text, StyleSheet,Alert } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {
   createDrawerNavigator, DrawerContentScrollView,
@@ -250,13 +251,13 @@ const HallDetailTabs = (props) => {
         // return <Ionicons name={iconName} size={size} color={color} />;
       },
      
-      tabBarActiveTintColor: 'tomato',
-      tabBarInactiveTintColor: 'gray',
+      tabBarActiveTintColor: 'rgba(248,231,28,1)',
+      tabBarInactiveTintColor: 'rgba(157,24,24,0.8)',
       })}
     >
-    <Tab.Screen name="Details">{() => <DetailOfHallPage  venueID={props.venueID} />}</Tab.Screen>
-    <Tab.Screen name="Add ons">{() => <AddonsPage  venueID={props.venueID} />}</Tab.Screen>
-    <Tab.Screen name="Reviews" >{() => <HallReviewsPage  venueID={props.venueID} />}</Tab.Screen>
+    <Tab.Screen name="Details"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <DetailOfHallPage  venueID={props.venueID} />}</Tab.Screen>
+    <Tab.Screen name="Add ons" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="plus-circle" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <AddonsPage  venueID={props.venueID} />}</Tab.Screen>
+    <Tab.Screen name="Reviews" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="thumbs-up" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <HallReviewsPage  venueID={props.venueID} />}</Tab.Screen>
   </Tab.Navigator>
   );
 }

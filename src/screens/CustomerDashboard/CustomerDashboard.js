@@ -38,40 +38,49 @@ const CustomerDashboardPage = (props) => {
     },
     ])
 
-    
+
     const [YourBookings, setYourBookings] = useState([{
         venueName: "Majestic Banquet",
-        Status: 'Venue Booked',
+        Status: 'BOOKED',
         EventDate: "21 Dec 2021",
-        EventTime:'Night',
-        comments:'',
-        BookingStatus: 'success'
+        EventTime: 'Night',
+        comments: '',
+        statusColor: 'green'
     },
     {
         venueName: "Modern Palace",
-        Status:'Rejected',
+        Status: 'REJECTED',
         EventDate: "21 Dec 2021",
-        EventTime:'Night',
-        comments:'Venue request rejected because the customer was unresponsive for three days',
-        BookingStatus: 'error'
+        EventTime: 'Night',
+        comments: 'Venue request rejected because the customer was unresponsive for three days',
+        statusColor: 'red'
     },
     {
         venueName: "Diamond Palace",
-        Status: 'Rejected',
+        Status: 'REJECTED',
         EventDate: "21 Dec 2021",
-        EventTime:'Night',
-        comments:'Venue request rejected because the customer was unresponsive for three days',
-        BookingStatus: 'error'
+        EventTime: 'Night',
+        comments: 'Venue request rejected because the customer was unresponsive for three days',
+        statusColor: 'red'
     },
     {
         venueName: "Ayan Banquet",
-        Status: 'On Hold',
+        Status: 'ON HOLD',
         EventDate: "25 Dec 2021",
-        EventTime:'Night',
-        comments:'Venue request holded because the customer was not paying for advance requested amount days',
-        BookingStatus: 'primary'
+        EventTime: 'Night',
+        comments: 'Venue request holded because the customer was not paying for advance requested amount days',
+        statusColor: 'blue'
     }
     ])
+
+    const badgeDesign = function (color) {
+        return {
+            borderRadius: 10,
+            backgroundColor: color,
+            height: 50,
+            width: '100%'
+        }
+    }
 
     const _renderItemCamplaint = ({ item, index }) => {
         return (
@@ -87,12 +96,18 @@ const CustomerDashboardPage = (props) => {
     const _renderItemBookings = ({ item, index }) => {
         return (
             <View style={styles.eachCarousalItem}>
-                <Text style={styles.title}>{item.venueName}</Text>
-                <Text style={styles.subTitle}>({item.EventDate})</Text>
-                <Text style={styles.content}>{item.EventTime}
-                </Text>
-                <Badge containerStyle={styles.badgeTitle} value = {item.Status} status ={item.BookingStatus}/>
-              {item.comments ?  <Text style={styles.content}>{item.comments}</Text> : null}
+                <View style={[badgeDesign(item.statusColor), styles.badgeCover]}>
+                    {/* <Badge containerStyle={styles.badgeTitle} value = {item.Status} /> */}
+
+                    <Text style={styles.badgeTitle}>{item.Status}</Text>
+                </View>
+                <View style={{ padding: 20 }}>
+                    <Text style={styles.title}>{item.venueName}</Text>
+                    <Text style={styles.subTitle}>({item.EventDate}) | {item.EventTime}</Text>
+
+                    {item.comments ? <Text style={styles.content}>{item.comments}</Text> : null}
+                </View>
+
 
 
             </View>
@@ -109,15 +124,14 @@ const CustomerDashboardPage = (props) => {
                 <View style={styles.headingWrapper}>
                     <Text style={styles.heading}>Your Bookings</Text>
                 </View>
-                <SafeAreaView style={{ flex: 1, paddingTop:-70, bottom: 10, height: 110, width: 430,}}>
+                <SafeAreaView style={{ flex: 1, paddingTop: -70, bottom: 10, height: 110, width: 430, }}>
                     <View style={styles.carouselView}>
                         <Carousel
                             layout={"default"}
-                            //   ref={ref => carousel = ref}
-                            useScrollView={true}  
+                            useScrollView={true}
                             data={YourBookings}
-                            sliderWidth={300}
-                            itemWidth={300}
+                            sliderWidth={250}
+                            itemWidth={250}
                             renderItem={_renderItemBookings}
                             onSnapToItem={(index) => console.log('carousel index', index)} />
                     </View>
@@ -127,20 +141,20 @@ const CustomerDashboardPage = (props) => {
                     <Text style={styles.heading}>Complaints/Feedbacks</Text>
                 </View>
 
-                <SafeAreaView style={{ flex: 1, paddingTop: -10, bottom: 10, height: 110, width: 430,}}>
+                <SafeAreaView style={{ flex: 1, paddingTop: -10, bottom: 10, height: 110, width: 430, }}>
                     <View style={styles.carouselView}>
                         <Carousel
                             layout={"default"}
                             //   ref={ref => carousel = ref}
                             data={Camplaints}
-                            sliderWidth={300}
-                            itemWidth={300}
+                            sliderWidth={250}
+                            itemWidth={250}
                             renderItem={_renderItemCamplaint}
                             onSnapToItem={(index) => console.log('carousel index', index)} />
                     </View>
                 </SafeAreaView>
 
-               
+
             </ImageBackground>
         </View>
     );
@@ -150,53 +164,68 @@ const CustomerDashboardPage = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-       // backgroundColor: 'snow',
+        // backgroundColor: 'snow',
     },
     carouselView: {
-        flex: 1, flexDirection: 'row', justifyContent: 'center',
+        flex: 1, flexDirection: 'row'
     },
     eachCarousalItem: {
         backgroundColor: 'floralwhite',
+        flex: 1,
+        flexDirection: 'column',
         borderRadius: 10,
         height: 225,
-        padding: 25,
+        // padding: 2,
         marginLeft: 10,
         marginRight: 10,
+        shadowColor: 'floralwhite',
+        shadowOffset: { width: 1, height: 1 },
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
+        elevation: 5,
     },
+
     title: {
         fontSize: 24,
         fontFamily: 'cursive',
         color: 'rgba(157,24,24,0.8)'
     },
+    badgeCover: {
+        // borderRadius:10,
+        shadowColor: '#000',
+        shadowOffset: { width: 1, height: 1 },
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
+        elevation: 5,
+    },
     badgeTitle: {
-        paddingVertical : 5,
-        height:10,
-        width:100,
-        left:140,
-        top: -20,
-      },
+        fontSize: 24,
+        color: 'white',
+        alignSelf: 'center'
+    },
     subTitle: {
         fontSize: 15,
-        fontStyle:'italic',
+        fontStyle: 'italic',
         color: 'rgba(157,24,24,0.8)'
     },
     content: {
         fontSize: 16,
         fontFamily: 'dancing-script',
+        justifyContent: 'space-between'
     },
-ComplaintStyling: 
-{
-    fontSize: 16,
-    fontFamily: 'dancing-script',
-    top:20,
-},
-    headingWrapper:{
-        fontSize:20,
-        marginTop:5,
+    ComplaintStyling:
+    {
+        fontSize: 16,
+        fontFamily: 'dancing-script',
+        top: 20,
+    },
+    headingWrapper: {
+        fontSize: 20,
+        marginTop: 5,
         padding: 25,
     },
-    heading:{
-        fontSize:20,
+    heading: {
+        fontSize: 20,
         bottom: 10,
         color: 'white',
         fontWeight: 'bold',
