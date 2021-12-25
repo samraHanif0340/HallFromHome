@@ -205,7 +205,7 @@ return (
       <FlatList
 
         data={filteredData}
-        keyExtractor={item => item.vVenueID}
+        keyExtractor={item => item.VenueID}
         renderItem={({ item }) => (
           <Card containerStyle={styles.cardStyle}>
           <View style={styles.imageStackStack}>

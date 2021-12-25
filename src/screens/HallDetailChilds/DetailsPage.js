@@ -81,54 +81,58 @@ function DetailOfHallPage(props) {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-      <ImageBackground
+       <ImageBackground
         style={styles.rect1}
         imageStyle={styles.rect1_imageStyle}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
-      >
-        <View style={styles.eachItem}>
-
-          <View style={styles.centeredAlign}>
-            <Text style={styles.centeredAlign.content}>Hall Name: {detail.VenueName}</Text>
-            <Divider style={styles.DividerColor} />
-            <Text style={styles.centeredAlign.content}>Venue Type: {detail.VenueTypeDesc}</Text>
-            <Divider style={styles.DividerColor} />
-            <Text style={styles.centeredAlign.content}>Address: {detail.Address}</Text>
-            <Divider style={styles.DividerColor} />
-            <Text style={styles.centeredAlign.content}>Accommodation: {detail.MaxCapacity}</Text>
-            <Divider style={styles.DividerColor} />
-            <Text style={styles.centeredAlign.content}>Price : PKR ({detail.Budget})</Text>
-            <Text style={styles.centeredAlign.content}>Rating : ({detail.Rating})</Text>
-
-            <Text style={styles.centeredAlign.content}>Provides Catering : ({detail.Catering})</Text>
-            <Text style={styles.centeredAlign.content}>Provides Lightening : {detail.Lights}</Text>
-            <Text style={styles.centeredAlign.content}>Provides Waiters : {detail.Waitress}</Text>
-            <Text style={styles.centeredAlign.content}>Website: {detail.Website}</Text>
-
-
-          </View>
-
-        </View>
-{/*         
+      > 
+        
     <ParallaxScrollView
-      backgroundColor="blue"
-      contentBackgroundColor="pink"
-      parallaxHeaderHeight={300}
+      backgroundColor="orange"
+      contentBackgroundColor="red"
+      parallaxHeaderHeight={200}
+      backgroundScrollSpeed={8}
+      fadeOutForeground={true}
+      contentContainerStyle={styles.parallaxStyle}
       renderForeground={() => (
-       <View style={{ height: 300, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+       <View style={{ height: 200, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <View style={styles.hallFromHome2Column}>
-          <Text style={styles.bookingDetail}>BOOKING DETAILS</Text>
+          <Text style={styles.title}>BOOKING DETAILS</Text>
         </View>
         <Image
-          source={require("../../assets/images/download2.jpg")}
+          source={{ uri: '../../assets/images/background-image.jpg'}}
           resizeMode="cover"
           style={styles.image2}
-        ></Image>
+        >
+        </Image>
         </View>
-      )}>
-      <View style={{ height: 500 }}>
-      </View>
-    </ParallaxScrollView> */}
+      )}
+      renderContentBackground={() => (
+        <View style={styles.eachItem}>
+  
+  <View style={styles.centeredAlign}>
+    <Text style={styles.centeredAlign.content}>Hall Name: {detail.VenueName}</Text>
+    <Divider style={styles.DividerColor} />
+    <Text style={styles.centeredAlign.content}>Venue Type: {detail.VenueTypeDesc}</Text>
+    <Divider style={styles.DividerColor} />
+    <Text style={styles.centeredAlign.content}>Address: {detail.Address}</Text>
+    <Divider style={styles.DividerColor} />
+    <Text style={styles.centeredAlign.content}>Accommodation: {detail.MaxCapacity}</Text>
+    <Divider style={styles.DividerColor} />
+    <Text style={styles.centeredAlign.content}>Price : PKR ({detail.Budget})</Text>
+    <Text style={styles.centeredAlign.content}>Rating : ({detail.Rating})</Text>
+  
+    <Text style={styles.centeredAlign.content}>Provides Catering : ({detail.Catering})</Text>
+    <Text style={styles.centeredAlign.content}>Provides Lightening : {detail.Lights}</Text>
+    <Text style={styles.centeredAlign.content}>Provides Waiters : {detail.Waitress}</Text>
+    <Text style={styles.centeredAlign.content}>Website: {detail.Website}</Text>
+  
+  
+  </View>
+  
+  </View>)}
+      >     
+    </ParallaxScrollView>
       </ImageBackground>
     </View>
   );
@@ -144,11 +148,18 @@ const styles = StyleSheet.create({
   DividerColor: {
     backgroundColor: 'white',
   },
+  title:{
+    color:'black',
+    fontFamily:'cursive'
+  },
+  parallaxStyle:{
+    color:"#800000",
+  },
   eachItem:
   {
     flex: 1,
-
-    color: 'rgba(222,206,206,1)',
+    height:500,
+    color: 'black',
     margin: 15
     // backgroundColor:'yellow'
   },
@@ -157,12 +168,12 @@ const styles = StyleSheet.create({
     flex: 2,
     icon: {
       fontSize: 35,
-      color: 'rgba(255,255,255,1)',
+      color: 'black',
     }
   },
   centeredAlign: {
     content: {
-      color: 'rgba(255,255,255,1)',
+      color: 'black',
       fontSize: 18,
       margin: 10,
     },
@@ -172,7 +183,7 @@ const styles = StyleSheet.create({
     flex: 2,
     // flexDirection:'row',
     content: {
-      color: 'rgba(255,255,255,1)',
+      color: 'black',
       fontSize: 24,
 
       margin: 10,
@@ -453,11 +464,11 @@ const styles = StyleSheet.create({
     marginRight: 15
   },
   image2: {
-    width: 335,
-    height: 175,
-    borderRadius: 16,
-    marginLeft: 2138,
-    marginTop: 117
+    // width: 335,
+    // height: 175,
+    // borderRadius: 16,
+    // marginLeft: 2138,
+    // marginTop: 117
   },
   rectRow: {
     height: 760,

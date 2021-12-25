@@ -5,7 +5,7 @@ import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
 import { Button, Snackbar } from 'react-native-paper';
 import {Picker} from '@react-native-picker/picker';
 import { Dropdown, SelectCountry } from 'react-native-element-dropdown';
-import { renderNode } from 'react-native-elements/dist/helpers';
+import {CheckBox} from 'react-native-elements'
 import { HelperText } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 // import AnimatedLoader from "react-native-animated-loader";
@@ -67,6 +67,17 @@ const MultiLineTextInput = (props) => (
     </View>
     
     {props.error ? props.error.map((error, key) => <HelperText style={styles.errorMsg} key={key}>{error}</HelperText>) : null}
+  </View>
+)
+
+const CheckboxField = (props) => (
+  <View>
+   <CheckBox
+        center={props.center}
+        title={props.label}
+        checked={props.checked}
+        onPress={props.onChangeText}
+      />
   </View>
 )
 
@@ -174,4 +185,4 @@ const DropdownField = (props) => {
 
 
 
-export { TextField, MultiLineTextInput, Toaster, DropdownField,Loader };
+export { TextField, MultiLineTextInput, Toaster, DropdownField,Loader ,CheckboxField};

@@ -25,6 +25,8 @@ import LodgeCamplaintListPage from '../../screens/LodgeComplaint/LodgeCamplaintL
 
 import HallReviewsPage from '../../screens/HallDetailChilds/ReviewsPage';
 import DetailOfHallPage from '../../screens/HallDetailChilds/DetailsPage';
+import AddonsPage from '../../screens/HallDetailChilds/AddonsPage';
+
 
 
 import LoginPage from '../../screens/auth/Login/LoginPage';
@@ -252,7 +254,7 @@ const HallDetailTabs = (props) => {
       })}
     >
     <Tab.Screen name="Details">{() => <DetailOfHallPage  venueID={props.venueID} />}</Tab.Screen>
-    <Tab.Screen name="Add ons" component={HallReviewsPage} />
+    <Tab.Screen name="Add ons">{() => <AddonsPage  venueID={props.venueID} />}</Tab.Screen>
     <Tab.Screen name="Reviews" >{() => <HallReviewsPage  venueID={props.venueID} />}</Tab.Screen>
   </Tab.Navigator>
   );
