@@ -1,4 +1,5 @@
 import React, { Component, useState } from "react";
+import { Avatar, Badge, Icon, withBadge } from 'react-native-elements';
 import {
     Text,
     View,
@@ -40,31 +41,35 @@ const CustomerDashboardPage = (props) => {
     
     const [YourBookings, setYourBookings] = useState([{
         venueName: "Majestic Banquet",
-        Status: "Venue Booked",
+        Status: 'Venue Booked',
         EventDate: "21 Dec 2021",
         EventTime:'Night',
-        comments:''
+        comments:'',
+        BookingStatus: 'success'
     },
     {
         venueName: "Modern Palace",
-        Status: "Rejected",
+        Status:'Rejected',
         EventDate: "21 Dec 2021",
         EventTime:'Night',
-        comments:'Venue request rejected because the custome was unresponsive for three days'
+        comments:'Venue request rejected because the customer was unresponsive for three days',
+        BookingStatus: 'error'
     },
     {
         venueName: "Diamond Palace",
-        Status: "Rejected",
+        Status: 'Rejected',
         EventDate: "21 Dec 2021",
         EventTime:'Night',
-        comments:'Venue request rejected because the custome was unresponsive for three days'
+        comments:'Venue request rejected because the customer was unresponsive for three days',
+        BookingStatus: 'error'
     },
     {
         venueName: "Ayan Banquet",
-        Status: "On Hold",
+        Status: 'On Hold',
         EventDate: "25 Dec 2021",
         EventTime:'Night',
-        comments:'Venue request holded because the customer was not paying for advance requested amount days'
+        comments:'Venue request holded because the customer was not paying for advance requested amount days',
+        BookingStatus: 'primary'
     }
     ])
 
@@ -73,7 +78,7 @@ const CustomerDashboardPage = (props) => {
             <View style={styles.eachCarousalItem}>
                 <Text style={styles.title}>{item.venueName}</Text>
                 <Text style={styles.subTitle}>({item.camplaintType})</Text>
-                <Text style={styles.content}>{item.camplaint}</Text>
+                <Text style={styles.ComplaintStyling}>{item.camplaint}</Text>
 
             </View>
         );
@@ -84,9 +89,9 @@ const CustomerDashboardPage = (props) => {
             <View style={styles.eachCarousalItem}>
                 <Text style={styles.title}>{item.venueName}</Text>
                 <Text style={styles.subTitle}>({item.EventDate})</Text>
-                <Text style={styles.content}>{item.EventTime}</Text>
-                <Text style={styles.content}>{item.Status}</Text>
-
+                <Text style={styles.content}>{item.EventTime}
+                </Text>
+                <Badge containerStyle={styles.badgeTitle} value = {item.Status} status ={item.BookingStatus}/>
               {item.comments ?  <Text style={styles.content}>{item.comments}</Text> : null}
 
 
@@ -104,7 +109,7 @@ const CustomerDashboardPage = (props) => {
                 <View style={styles.headingWrapper}>
                     <Text style={styles.heading}>Your Bookings</Text>
                 </View>
-                <SafeAreaView style={{ flex: 1, paddingTop: 50, }}>
+                <SafeAreaView style={{ flex: 1, paddingTop:-70, bottom: 10, height: 110, width: 430,}}>
                     <View style={styles.carouselView}>
                         <Carousel
                             layout={"default"}
@@ -119,10 +124,10 @@ const CustomerDashboardPage = (props) => {
                 </SafeAreaView>
 
                 <View style={styles.headingWrapper}>
-                    <Text style={styles.heading}>Camplaints/Feedbacks</Text>
+                    <Text style={styles.heading}>Complaints/Feedbacks</Text>
                 </View>
 
-                <SafeAreaView style={{ flex: 1, paddingTop: 50, }}>
+                <SafeAreaView style={{ flex: 1, paddingTop: -10, bottom: 10, height: 110, width: 430,}}>
                     <View style={styles.carouselView}>
                         <Carousel
                             layout={"default"}
@@ -145,13 +150,14 @@ const CustomerDashboardPage = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+       // backgroundColor: 'snow',
     },
     carouselView: {
         flex: 1, flexDirection: 'row', justifyContent: 'center',
     },
     eachCarousalItem: {
         backgroundColor: 'floralwhite',
-        borderRadius: 5,
+        borderRadius: 10,
         height: 225,
         padding: 25,
         marginLeft: 10,
@@ -162,8 +168,15 @@ const styles = StyleSheet.create({
         fontFamily: 'cursive',
         color: 'rgba(157,24,24,0.8)'
     },
+    badgeTitle: {
+        paddingVertical : 5,
+        height:10,
+        width:100,
+        left:140,
+        top: -20,
+      },
     subTitle: {
-        fontSize: 20,
+        fontSize: 15,
         fontStyle:'italic',
         color: 'rgba(157,24,24,0.8)'
     },
@@ -171,13 +184,22 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'dancing-script',
     },
+ComplaintStyling: 
+{
+    fontSize: 16,
+    fontFamily: 'dancing-script',
+    top:20,
+},
     headingWrapper:{
         fontSize:20,
         marginTop:5,
         padding: 25,
     },
     heading:{
-        fontSize:20
+        fontSize:20,
+        bottom: 10,
+        color: 'white',
+        fontWeight: 'bold',
     }
 
 });

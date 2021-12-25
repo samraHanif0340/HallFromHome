@@ -5,6 +5,7 @@ import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
 import {  Button, Title, Paragraph} from 'react-native-paper';
 import { Divider, Card } from "react-native-elements";
+import { Avatar, Badge, withBadge } from 'react-native-elements';
 // import SearchBar from "react-native-dynamic-search-bar";
 import {ListItem, Icon } from 'react-native-elements'
 import { BASE_URL } from '../../constants/constants'
@@ -16,6 +17,7 @@ const  TrackingStatusPage = (props) => {
     userName: 'Samra Hanif',
     pricePaid: "PKR 150000",
     status: 'Approved',
+    TrackingStatus: 'success',
     setReservation: "Reserved",
     comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
   },
@@ -24,6 +26,7 @@ const  TrackingStatusPage = (props) => {
     userName: 'Samra Hanif',
     pricePaid: "PKR 150000",
     status: 'Approved',
+    TrackingStatus: 'success',
     setReservation: "Reserved",
     comments: 'Your venue has been booked under name\n Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
   },
@@ -31,6 +34,7 @@ const  TrackingStatusPage = (props) => {
     hallName: "Ayan Banquet",
     userName: 'Samra Hanif',
     pricePaid: "PKR 150000",
+    TrackingStatus: 'success',
     status: 'Approved',
     setReservation: "Reserved",
     comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
@@ -39,6 +43,7 @@ const  TrackingStatusPage = (props) => {
     hallName: "Diamond Palace",
     userName: 'Samra Hanif',
     pricePaid: "PKR 150000",
+    TrackingStatus: 'success',
     status: 'Approved',
     setReservation: "Reserved",
     comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
@@ -48,6 +53,7 @@ const  TrackingStatusPage = (props) => {
     userName: 'Samra Hanif',
     pricePaid: "PKR 150000",
     status: 'Approved',
+    TrackingStatus: 'success',
     setReservation: "Reserved",
     comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
   }]);
@@ -56,6 +62,7 @@ const  TrackingStatusPage = (props) => {
     userName: 'Samra Hanif',
     pricePaid: "PKR 150000",
     status: 'Approved',
+    TrackingStatus: 'success',
     setReservation: "Reserved",
     comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
   },
@@ -64,6 +71,7 @@ const  TrackingStatusPage = (props) => {
     userName: 'Samra Hanif',
     pricePaid: "PKR 150000",
     status: 'Approved',
+    TrackingStatus: 'success',
     setReservation: "Reserved",
     comments: 'Your venue has been booked under name\n Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
   },
@@ -72,6 +80,7 @@ const  TrackingStatusPage = (props) => {
     userName: 'Samra Hanif',
     pricePaid: "PKR 150000",
     status: 'Approved',
+    TrackingStatus: 'success',
     setReservation: "Reserved",
     comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
   },
@@ -79,6 +88,7 @@ const  TrackingStatusPage = (props) => {
     hallName: "Diamond Palace",
     userName: 'Samra Hanif',
     pricePaid: "PKR 150000",
+    TrackingStatus: 'success',
     status: 'Approved',
     setReservation: "Reserved",
     comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
@@ -87,6 +97,7 @@ const  TrackingStatusPage = (props) => {
     hallName: "Majestic Banquet",
     userName: 'Samra Hanif',
     pricePaid: "PKR 150000",
+    TrackingStatus: 'success',
     status: 'Approved',
     setReservation: "Reserved",
     comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
@@ -133,7 +144,8 @@ const  TrackingStatusPage = (props) => {
             <Card.Title style = {styles.cardTitle}> {item.hallName}</Card.Title>
             </View>
             <View>
-            <Text style={styles.statusStyle} h4>{item.status}</Text>
+            <Badge containerStyle={styles.badgeTitle} value ={item.status} status ={item.TrackingStatus}/>
+            {/* <Text style={styles.statusStyle} h4>{item.status}</Text> */}
             </View>
             <View style={styles.loremIpsum2Stack}>
               <Text style={styles.cardPricePaid} h4>{item.pricePaid}</Text>
@@ -215,6 +227,13 @@ const styles = StyleSheet.create({
     height: 90,
     position: "absolute",
 
+  },
+  badgeTitle: {
+    paddingVertical : 5,
+    height:10,
+    width:100,
+    right:-70,
+    top: -45,
   },
   imageStackStack: {
     width: 199,
