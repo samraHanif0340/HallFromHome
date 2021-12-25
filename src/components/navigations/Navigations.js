@@ -142,7 +142,7 @@ const CustomerDrawerNavigator = () => {
         
       <Drawer.Screen name="Lodge Complaint/Feedback" options={{
         drawerLabel: 'Lodge Complaint/Feedback',
-        activeTintColor: '#FF6F00',
+        activeTintColor: '#8b0000',
       }}
         component={LodgeCamplaintListPage} />
     </Drawer.Navigator>
@@ -197,7 +197,8 @@ const CustomSidebar = (props) => {
           );
         })}
          <DrawerItem
-        label="Logout"              
+        label="Logout"
+
         onPress={() => {
           navigation.toggleDrawer();
           Alert.alert(

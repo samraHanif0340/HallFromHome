@@ -24,7 +24,7 @@ class NavigationHeader extends Component{
               size={70}
             />
             <Title style={styles.title}>Samra Hanif</Title>
-            <Caption style={styles.caption}>@amra.hanif@yahoo.com</Caption>
+            <Caption style={styles.caption}>@samra.hanif@yahoo.com</Caption>
             <Caption style={styles.caption}>03402042202</Caption>
             </View>
       
