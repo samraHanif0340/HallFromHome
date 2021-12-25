@@ -145,7 +145,7 @@ const CustomerDrawerNavigator = () => {
         drawerLabel: 'Lodge Complaint/Feedback',
         activeTintColor: '#8b0000',
       }}
-        component={LodgeCamplaintListPage} />
+        component={LodgeComplaintPage} />
     </Drawer.Navigator>
   );
 }
