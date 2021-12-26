@@ -1,16 +1,21 @@
 import React, { Component, useState } from "react";
-import { Avatar, Badge, Icon, withBadge } from 'react-native-elements';
+import { Avatar, Badge, Icon, withBadge, } from 'react-native-elements';
+
 import {
     Text,
     View,
     SafeAreaView,
     StyleSheet,
-    StatusBar, ImageBackground
+    StatusBar, ImageBackground, Dimensions
 } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+
+
+const SCREEN_WIDTH = Dimensions.get('window').width
 
 const CustomerDashboardPage = (props) => {
 
+    const [activeTab, setActiveTab] = useState(0)
     const [Camplaints, setCamplaint] = useState([{
         venueName: "Majestic Banquet",
         camplaintType: "Management Issue",
@@ -133,8 +138,26 @@ const CustomerDashboardPage = (props) => {
                             sliderWidth={250}
                             itemWidth={250}
                             renderItem={_renderItemBookings}
-                            onSnapToItem={(index) => console.log('carousel index', index)} />
+                            onSnapToItem={i => setActiveTab({ activeTab: i })}
+                            // slideStyle={{ width: SCREEN_WIDTH }}
+                            // inactiveSlideOpacity={1}
+                            // inactiveSlideScale={1}
+                        />
+                        {/* <View
+                            style={styles.tabBar}
+                        >
+                            <Pagination
+                                containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+                                dotStyle={styles.ww}
+                                inactiveDotOpacity={0.4}
+                                inactiveDotScale={0.6}
+                                activeDotIndex={activeTab}
+
+
+                            />
+                        </View> */}
                     </View>
+
                 </SafeAreaView>
 
                 <View style={styles.headingWrapper}>
@@ -229,7 +252,22 @@ const styles = StyleSheet.create({
         bottom: 10,
         color: 'white',
         fontWeight: 'bold',
-    }
+    },
+    tabBar: {
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
+        left: 0,
+        borderTopWidth: 1,
+        borderColor: '#ddd',
+        backgroundColor: '#fff'
+    },
+    ww: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        marginHorizontal: 8, backgroundColor: 'rgba(255, 255, 255, 0.92)'
+    },
 
 });
 
