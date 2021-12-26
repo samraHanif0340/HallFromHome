@@ -3,6 +3,8 @@ import { StyleSheet, View, Text, StatusBar, ImageBackground, Image,Dimensions, S
 import { Divider } from 'react-native-paper';
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import Carousel, { Pagination,ParallaxImage } from 'react-native-snap-carousel';
 
@@ -181,18 +183,18 @@ title:'Tables View'
        <View style={styles.eachItem}>
  <ScrollView>
           <View style={styles.centeredAlign}>
-            <Text style={styles.centeredAlign.content}>Hall Name: {detail.VenueName}</Text>
+            <Text style={styles.centeredAlign.content}><Icon name="home" size={20}>{detail.VenueName}</Icon></Text>
             <Divider style={styles.DividerColor} />
-            <Text style={styles.centeredAlign.content}>Venue Type: {detail.VenueTypeDesc}</Text>
+            <Text style={styles.centeredAlign.content}>{detail.VenueTypeDesc}</Text>
             <Divider style={styles.DividerColor} />
-            <Text style={styles.centeredAlign.content}>Address: {detail.Address}</Text>
+            <Text style={styles.centeredAlign.content}><Icon name="map-marker-atl" size={20}>{detail.Address}</Icon></Text>
             <Divider style={styles.DividerColor} />
-            <Text style={styles.centeredAlign.content}>Accommodation: {detail.MaxCapacity}</Text>
+            <Text style={styles.centeredAlign.content}><Icon name="walking" size={20}>{detail.MaxCapacity}</Icon> </Text>
             <Divider style={styles.DividerColor} />
             <Text style={styles.centeredAlign.content}>Price : PKR ({detail.RentPrice})</Text>
             <Text style={styles.centeredAlign.content}>Rating : ({detail.Rating})</Text>
 
-            <Text style={styles.centeredAlign.content}>Provides Catering : ({detail.Catering})</Text>
+            <Text style={styles.centeredAlign.content}>Provides  Catering : {detail.Catering}</Text>
             <Text style={styles.centeredAlign.content}>Provides Lightening : {detail.Lights}</Text>
             <Text style={styles.centeredAlign.content}>Provides Waiters : {detail.Waitress}</Text>
             <Text style={styles.centeredAlign.content}>Website: {detail.Website}</Text>
