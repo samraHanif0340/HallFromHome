@@ -29,7 +29,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { DefaultTheme,Provider as PaperProvider } from 'react-native-paper';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -39,19 +39,21 @@ import { createStackNavigator } from '@react-navigation/stack';
 // import SearchPage from './src/screens/Search-Hall/SearchHall';
 // import HallDetailPage from './src/screens/Hall-Details-Page/HallDetailsPage';
 
-import {CustomerDrawerNavigator} from './src/components/navigations/Navigations';
-import {AuthRoutes} from './src/components/navigations/Navigations';
-import {BookingConfirmStack} from './src/components/navigations/Navigations';
+import { CustomerDrawerNavigator } from './src/components/navigations/Navigations';
+import { AuthRoutes } from './src/components/navigations/Navigations';
+import { BookingConfirmStack } from './src/components/navigations/Navigations';
 
 
 import SplashScreen from './src/screens/SplashScreen/SplashScreen';
 
+import { action, createStore, StoreProvider } from 'easy-peasy';
+
 // To see all the requests in the chrome Dev tools in the network tab.
 XMLHttpRequest = GLOBAL.originalXMLHttpRequest ?
-    GLOBAL.originalXMLHttpRequest :
-    GLOBAL.XMLHttpRequest;
+  GLOBAL.originalXMLHttpRequest :
+  GLOBAL.XMLHttpRequest;
 
-  // fetch logger
+// fetch logger
 global._fetch = fetch;
 global.fetch = function (uri, options, ...args) {
   return global._fetch(uri, options, ...args).then((response) => {
@@ -63,7 +65,7 @@ global.fetch = function (uri, options, ...args) {
 
 // const Drawer = createDrawerNavigator();
 
-  
+
 const Stack = createStackNavigator();
 const Section = ({ children, title }): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -109,39 +111,51 @@ const App: () => Node = () => {
   //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   // };
 
+  const store = createStore({
+    payload: {},
+    setPayload: action((state, payload) => {
+      state.payload = payload
+    }),
+    appendPayload: action((state, payload) => {
+      state.payload = { ...state.payload, ...payload };
+    })
+  });
+
   return (
     <PaperProvider theme={theme}>
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="SplashScreen">
-      <Stack.Screen
-            name="SplashScreen"
-            component={SplashScreen}
-            options={{ headerShown: false }}
-          />
-      <Stack.Screen
-            name="Auth"
-            component={AuthRoutes}
-            options={{ headerShown: false }}
-          />
+      <StoreProvider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="SplashScreen">
+            <Stack.Screen
+              name="SplashScreen"
+              component={SplashScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Auth"
+              component={AuthRoutes}
+              options={{ headerShown: false }}
+            />
 
-             <Stack.Screen
-            name="BookingConfirmStack"
-            component={BookingConfirmStack}
-            options={{ headerShown: false }}
-          />
-           {/* <Stack.Screen
+            <Stack.Screen
+              name="BookingConfirmStack"
+              component={BookingConfirmStack}
+              options={{ headerShown: false }}
+            />
+            {/* <Stack.Screen
             name="CustomerBooking"
             component={CustomerDrawerNavigator}
             options={{ headerShown: false }}
           /> */}
-          <Stack.Screen
-            name="Home"
-            component={CustomerDrawerNavigator}
-            options={{ headerShown: false }}
-          />
-          
-        </Stack.Navigator>
-    </NavigationContainer>
+            <Stack.Screen
+              name="Home"
+              component={CustomerDrawerNavigator}
+              options={{ headerShown: false }}
+            />
+
+          </Stack.Navigator>
+        </NavigationContainer>
+      </StoreProvider>
     </PaperProvider>
     // <SearchHall/>
   );

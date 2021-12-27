@@ -1,8 +1,8 @@
 
 import React, { useState } from "react";
-import { View, Text, StyleSheet, StatusBar, ImageBackground, Alert,ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, StatusBar, ImageBackground, Alert, ActivityIndicator } from "react-native";
 import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
-import { TextField,Loader } from '../../../components/customComponents/customComponents'
+import { TextField, Loader } from '../../../components/customComponents/customComponents'
 import validate from '../../../shared-services/validationFunctions'
 import { styles } from './LoginPage.component.style.js'
 import { Image } from "react-native-elements";
@@ -11,6 +11,8 @@ import axios from 'axios';
 import { BASE_URL } from '../../../constants/constants'
 import Toaster, { ToastStyles } from 'react-native-toaster'
 import Snackbar from 'react-native-snackbar';
+import { useStoreActions } from 'easy-peasy';
+
 
 const LoginPage = ({ navigation }) => {
     const [userEmail, setUserEmail] = useState('');
@@ -20,13 +22,15 @@ const LoginPage = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [errortext, setErrortext] = useState(null);
     const [hasError, setErrorFlag] = React.useState(false);
-    const [isLoading, setIsLoading] = React.useState(false)
+    const [isLoading, setIsLoading] = React.useState(false);
+    const appendPayload = useStoreActions((actions) => actions.appendPayload);
+
     const source = axios.CancelToken.source();
     const configurationObject = {
         url: `${BASE_URL}Login`,
         method: "POST",
         cancelToken: source.token,
-        data: { EmailAddress:userEmail, Password:userPassword },
+        data: { EmailAddress: userEmail, Password: userPassword },
     };
 
     const handleSubmitPress = () => {
@@ -51,7 +55,7 @@ const LoginPage = ({ navigation }) => {
         //     alert('INCORRECT EMAIL OR PASSWORD')
         // }
 
-saveData(dataToSend)
+        saveData(dataToSend)
 
         // fetch('http://localhost:3000/api/user/login', {
         //   method: 'POST',
@@ -87,19 +91,20 @@ saveData(dataToSend)
             setIsLoading(true);
             const response = await axios(
                 configurationObject,
-          
+
             );
             console.log(response)
             if (response.data.ResponseCode === "00") {
+                appendPayload({ userId: response.data.Result_DTO.ID });
                 setIsLoading(false);
                 // setErrortext({text:'Success',styles:ToastStyles.success})
                 Snackbar.show({
                     text: 'Success',
-                    backgroundColor:'black',
-                textColor:'white',
+                    backgroundColor: 'black',
+                    textColor: 'white',
 
                     duration: Snackbar.LENGTH_LONG,
-                  });
+                });
                 //   AsyncStorage.setItem('user_id', response.data.Username);
                 //   console.log(response.data.Username);
                 navigation.replace('Home');
@@ -110,14 +115,14 @@ saveData(dataToSend)
                 Snackbar.show({
                     text: response.data.ResponseDesc,
                     duration: Snackbar.LENGTH_LONG,
-                    backgroundColor:'black',
-                    textColor:'white',
+                    backgroundColor: 'black',
+                    textColor: 'white',
                     action: {
-                      text: 'OK',
-                      textColor: 'white',
-                      onPress: () => { /* Do something. */ },
+                        text: 'OK',
+                        textColor: 'white',
+                        onPress: () => { /* Do something. */ },
                     },
-                  });
+                });
                 // throw new Error("Failed to fetch users");
             }
         } catch (error) {
@@ -125,14 +130,14 @@ saveData(dataToSend)
             Snackbar.show({
                 text: 'Something Went Wrong',
                 duration: Snackbar.LENGTH_LONG,
-                backgroundColor:'black',
-                textColor:'white',
+                backgroundColor: 'black',
+                textColor: 'white',
                 action: {
-                  text: 'OK',
-                  textColor: 'white',
-                  onPress: () => { /* Do something. */ },
+                    text: 'OK',
+                    textColor: 'white',
+                    onPress: () => { /* Do something. */ },
                 },
-              });
+            });
 
         }
     };
@@ -142,7 +147,7 @@ saveData(dataToSend)
     return (
 
         <View style={styles.parentContainer}>
-       <Loader isLoading={isLoading} />
+            <Loader isLoading={isLoading} />
 
             <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
             <ImageBackground
@@ -198,7 +203,7 @@ saveData(dataToSend)
                     <Text style={styles.linksStyle} onPress={() => navigation.navigate('ForgotPassword')} >Forgot Your Login Details?</Text>
 
                     <Text style={styles.linksStyle} onPress={() => navigation.navigate('CustomerRegistration')}>Create an account?</Text>
-                 {/* {errortext != null ?  <Toaster message={errortext}  /> : null} */}
+                    {/* {errortext != null ?  <Toaster message={errortext}  /> : null} */}
                 </View>
             </ImageBackground>
         </View>

@@ -1,17 +1,18 @@
-import React, { Component , useEffect} from "react";
+import React, { Component, useEffect } from "react";
 import { StyleSheet, View, Text, Image, FlatList, ImageBackground, StatusBar, TouchableHighlight } from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import Svg, { Ellipse } from "react-native-svg";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { SearchBar, Rating,Card } from 'react-native-elements';
+import { SearchBar, Rating, Card } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
 // import SearchBar from "react-native-dynamic-search-bar";
 import { Avatar, Button, Title, Paragraph } from 'react-native-paper';
 import { Divider } from "react-native-elements";
 import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
+import { useStoreActions } from 'easy-peasy';
 
 function SearchPage(props) {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -19,6 +20,7 @@ function SearchPage(props) {
   let [searchText, setSearchText] = React.useState('')
   const [filteredData, setfilteredData] = React.useState([]);
   const [masterData, setmasterData] = React.useState([]);
+  const appendPayload = useStoreActions((actions) => actions.appendPayload);
 
   const source = axios.CancelToken.source();
   const configurationObject = {
@@ -39,7 +41,7 @@ function SearchPage(props) {
         setIsLoading(false);
         setmasterData(response.data.Result_DTO)
         setfilteredData(response.data.Result_DTO)
-        
+
         // setmasterData([{
         //   hallId:1,
         //   hallName: "Majestic Banquet",
@@ -149,95 +151,98 @@ function SearchPage(props) {
   //       </Text>
   //     </View>
   //   );
-// }
+  // }
 
 
 
-useEffect(() => {
-  getData();
+  useEffect(() => {
+    getData();
 
-  return () => source.cancel("Data fetching cancelled");
-}, []);
-
-
-
-const searchFilterFunction = (searchText) => {
-  if (searchText) {
-
-    const newData = masterData.filter(
-      function (item) {
-        const itemData = item.VenueName
-          ? item.VenueName.toUpperCase()
-          : ''.toUpperCase();
-        const textData = searchText.toUpperCase();
-        return itemData.indexOf(textData) > -1;
-      });
-    setfilteredData(newData);
-    setSearchText(searchText);
-  } else {
-    setfilteredData(masterData);
-    setSearchText(searchText);
-  }
-};
-
-return (
-  <View style={styles.container}>
-    <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-    <ImageBackground
-      style={styles.rect1}
-      imageStyle={styles.rect1_imageStyle}
-      source={require("../../assets/images/Gradient_MI39RPu.png")}
-    >
+    return () => source.cancel("Data fetching cancelled");
+  }, []);
 
 
-      <SearchBar
-        lightTheme
-        searchIcon={{ size: 25}}
-        placeholder="Search for halls, banquets..."
-        value={searchText}
-        onChangeText={text => searchFilterFunction(text)}
-        containerStyle={styles.searchBar}
-        placeholderTextColor="black"
-        leftIconContainerStyle={styles.searchBar.icon}
-        // showLoading="true"
-        inputStyle={styles.searchBar.inputStyle}
-      />
-      <FlatList
 
-        data={filteredData}
-        keyExtractor={item => item.VenueID}
-        renderItem={({ item }) => (
-          <Card containerStyle={styles.cardStyle}>
-          <View style={styles.imageStackStack}>
-            <View style={styles.imageStack}>
-              <TouchableOpacity activeOpacity={0.2} onPress={() => props.navigation.navigate('HallDetails',{VenueID:item.VenueID})}>
-                <Image
-                  source = {{ uri: item.ImageURL}}
-                  resizeMode="stretch"
-                  style={styles.image}
-                ></Image>
-              </TouchableOpacity>
+  const searchFilterFunction = (searchText) => {
+    if (searchText) {
 
-              <Text style={styles.majesticBanquet}>{item.VenueName} ({item.VenueTypeDesc})</Text>
-              <Text style={styles.limit700Persons}>Limit {item.MaxCapacity} Persons</Text>
-            </View>
-            <View style={styles.loremIpsum2Stack}>
-              <Text style={styles.loremIpsum2}>PKR {item.RentPrice}</Text>
-              <FontAwesomeIcon
-                name="star"
-                style={styles.icon6}
-              ></FontAwesomeIcon>
-            </View>
-            <Text style={styles.loremIpsum3}>({item.Rating})</Text>
+      const newData = masterData.filter(
+        function (item) {
+          const itemData = item.VenueName
+            ? item.VenueName.toUpperCase()
+            : ''.toUpperCase();
+          const textData = searchText.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+        });
+      setfilteredData(newData);
+      setSearchText(searchText);
+    } else {
+      setfilteredData(masterData);
+      setSearchText(searchText);
+    }
+  };
 
-          </View>
-          </Card>
-        )}
-      />
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
+      <ImageBackground
+        style={styles.rect1}
+        imageStyle={styles.rect1_imageStyle}
+        source={require("../../assets/images/Gradient_MI39RPu.png")}
+      >
 
-    </ImageBackground>
-  </View>
-);
+
+        <SearchBar
+          lightTheme
+          searchIcon={{ size: 25 }}
+          placeholder="Search for halls, banquets..."
+          value={searchText}
+          onChangeText={text => searchFilterFunction(text)}
+          containerStyle={styles.searchBar}
+          placeholderTextColor="black"
+          leftIconContainerStyle={styles.searchBar.icon}
+          // showLoading="true"
+          inputStyle={styles.searchBar.inputStyle}
+        />
+        <FlatList
+
+          data={filteredData}
+          keyExtractor={item => item.VenueID}
+          renderItem={({ item }) => (
+            <Card containerStyle={styles.cardStyle}>
+              <View style={styles.imageStackStack}>
+                <View style={styles.imageStack}>
+                  <TouchableOpacity activeOpacity={0.2} onPress={() => {
+                    appendPayload({ venueId: item.VenueID });
+                    props.navigation.navigate('HallDetails', { VenueID: item.VenueID })
+                  }}>
+                    <Image
+                      source={{ uri: item.ImageURL }}
+                      resizeMode="stretch"
+                      style={styles.image}
+                    ></Image>
+                  </TouchableOpacity>
+
+                  <Text style={styles.majesticBanquet}>{item.VenueName} ({item.VenueTypeDesc})</Text>
+                  <Text style={styles.limit700Persons}>Limit {item.MaxCapacity} Persons</Text>
+                </View>
+                <View style={styles.loremIpsum2Stack}>
+                  <Text style={styles.loremIpsum2}>PKR {item.RentPrice}</Text>
+                  <FontAwesomeIcon
+                    name="star"
+                    style={styles.icon6}
+                  ></FontAwesomeIcon>
+                </View>
+                <Text style={styles.loremIpsum3}>({item.Rating})</Text>
+
+              </View>
+            </Card>
+          )}
+        />
+
+      </ImageBackground>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -245,13 +250,13 @@ const styles = StyleSheet.create({
     flex: 1,
 
   },
-  cardStyle:{
+  cardStyle: {
     // borderColor:'#800000',
     // borderWidth:3,
-    borderRadius:10,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 1, height: 1 },
-    shadowOpacity:  0.5,
+    shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5,
   },
@@ -262,8 +267,8 @@ const styles = StyleSheet.create({
   searchBar: {
     // backgroundColor: '#800000',
     opacity: 1,
-    borderColor:'#800000',
-    borderWidth:3,
+    borderColor: '#800000',
+    borderWidth: 3,
     icon: {
       color: 'black'
     },
@@ -402,12 +407,12 @@ const styles = StyleSheet.create({
   },
   image: {
     // top: 0,
-    
+
     // width: 355,
     // height: 175,
     // borderRadius: 5
     // marginRigth:8,
-   
+
     width: 335,
     height: 175,
     borderRadius: 5
