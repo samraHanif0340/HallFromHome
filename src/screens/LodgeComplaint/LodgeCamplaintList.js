@@ -7,6 +7,10 @@ import { Avatar, Card } from 'react-native-paper';
 import {Divider} from 'react-native-elements'
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
+import {
+  SafeAreaView
+} from 'react-native';
+import Carousel from 'react-native-snap-carousel';
 
 
 const LeftContent = props => <Avatar.Icon {...props} icon="account-circle-outline" />
@@ -214,19 +218,20 @@ useEffect(() => {
   return (
     <View style={styles.container}>
        <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            <ImageBackground
+            <ImageBackground style={styles.container}
                 source={require("../../assets/images/Gradient_MI39RPu.png")}
             >
-
+                
      
       <FlatList
         data={filteredData}
        horizontal
         renderItem={({ item }) => (
 
+
       
-      <Card style={styles.card}>
-      <Card.Title titleStyle={styles.cardTitle} title={item.userName} subtitle={item.review} left={LeftContent} />
+      <Card style={styles.eachCarousalItem}>
+      <Card.Title titleStyle={styles.cardTitle} title={item.userName} subtitleStyle={styles.subTitle} subtitle={item.review} left={LeftContent} />
       {/* <Card.Content>
         <Title>{item.hallName}</Title>
         <Paragraph>{item.review}</Paragraph>
@@ -236,7 +241,7 @@ useEffect(() => {
         <Button>Cancel</Button>
         <Button>Ok</Button>
       </Card.Actions> */}
-       <Divider />
+       {/* <Divider /> */}
     </Card>
    
   
@@ -255,8 +260,70 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
     },
-})
 
+    carouselView: {
+      flex: 1, flexDirection: 'row', justifyContent: 'center',
+  },
+  eachCarousalItem: {
+      backgroundColor: 'floralwhite',
+      borderRadius: 10,
+      height: 205,
+      padding: 25,
+      marginLeft: 10,
+      marginRight: 10,
+      marginTop: 120,
+  },
+  subTitle: {
+    fontSize: 15,
+    fontStyle:'italic',
+    color: 'rgba(157,24,24,0.8)'
+},
+  cardTitle : {
+    color: 'black',
+    marginLeft: -10,
+    flexDirection: 'row',
+    bottom:-4,
+  },
+  title: {
+      fontSize: 12,
+      fontFamily: 'cursive',
+      color: 'rgba(157,24,24,0.8)'
+  },
+  badgeTitle: {
+      paddingVertical : 5,
+      height:10,
+      width:100,
+      left:140,
+      top: -20,
+    },
+  subTitle: {
+      fontSize: 15,
+      fontStyle:'italic',
+      color: 'rgba(157,24,24,0.8)'
+  },
+  content: {
+      fontSize: 16,
+      fontFamily: 'dancing-script',
+  },
+ComplaintStyling: 
+{
+  fontSize: 16,
+  fontFamily: 'dancing-script',
+  top:20,
+},
+  headingWrapper:{
+      fontSize:20,
+      marginTop:5,
+      padding: 25,
+  },
+  heading:{
+      fontSize:20,
+      bottom: 10,
+      color: 'white',
+      fontWeight: 'bold',
+  }
+
+});
 export default LodgeCamplaintListPage;
 
 

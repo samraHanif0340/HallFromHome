@@ -28,7 +28,7 @@ const  TrackingStatusPage = (props) => {
     status: 'Approved',
     TrackingStatus: 'success',
     setReservation: "Reserved",
-    comments: 'Your venue has been booked under name\n Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
+    comments: 'Your venue has been booked under name Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
   },
   {
     hallName: "Ayan Banquet",
