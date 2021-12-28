@@ -21,21 +21,23 @@ function BookingConfirmedPage(props) {
       >
         <Text style={styles.bookingConfirmed}>BOOKING REQUEST SENT SUCCESSFULLY</Text>
         <Icon name="check-circle-o" style={styles.icon}></Icon>
-        <TextInput
-          placeholder="Venue owner will get back to you soon"
-          placeholderTextColor="rgba(255,255,255,1)"
-          selectionColor="rgba(255,255,255,1)"
-          style={styles.textInput2}
-        ></TextInput>
-      </ImageBackground>
+     
+
       <TextInput
         placeholder="Your booking has been confirmed successfully"
         placeholderTextColor="rgba(255,255,255,1)"
         selectionColor="rgba(255,255,255,1)"
         style={styles.textInput}
       ></TextInput>
-      <TouchableOpacity style={styles.okHall} onPress={() => props.navigation.navigate('Home')}><Text style={styles.okHall.content}>OK</Text></TouchableOpacity>
 
+<TextInput
+          placeholder="Venue owner will get back to you soon"
+          placeholderTextColor="rgba(255,255,255,1)"
+          selectionColor="rgba(255,255,255,1)"
+          style={styles.textInput2}
+        ></TextInput>
+      <TouchableOpacity style={styles.submitButtonWrapper} onPress={() => props.navigation.navigate('Home')}><Text style={styles.submitButtonText}>OK</Text></TouchableOpacity>
+      </ImageBackground>
     </View>
 
   );
@@ -66,10 +68,10 @@ const styles = StyleSheet.create({
   bookingConfirmed: {
     fontFamily: "roboto-regular",
     color: "rgba(255,255,255,1)",
-    fontSize: 25,
-    textAlign: "left",
+    fontSize: 20,
+    textAlign: "center",
     width: 283,
-    height: 34,
+    height: 100,
     marginTop: 60,
     marginLeft: 39
   },
@@ -104,6 +106,24 @@ const styles = StyleSheet.create({
     width: 363,
     height: 740
   }
+  ,
+  submitButtonWrapper: {
+    height: 59,
+    //backgroundColor: "rgba(31,178,204,1)",
+    backgroundColor: "rgba(142,7,27,1)",
+    borderRadius: 5,
+    justifyContent: "center",
+    marginRight: 20,
+    marginLeft: 20,
+    marginTop: 14,
+    marginBottom: 14
+  },
+  submitButtonText: {
+    color: "rgba(255,255,255,1)",
+    textAlign: "center",
+    fontSize: 20,
+    alignSelf: "center"
+  },
 });
 
 export default BookingConfirmedPage;

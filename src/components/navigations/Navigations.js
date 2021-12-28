@@ -54,7 +54,7 @@ const AuthRoutes = () => {
           />
              <Stack.Screen
             name="ForgotPassword"
-            component={CustomerBookingPage}
+            component={RegistrationPage}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

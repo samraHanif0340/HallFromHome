@@ -50,7 +50,8 @@ const CustomerDashboardPage = (props) => {
         EventDate: "21 Dec 2021",
         EventTime: 'Night',
         comments: '',
-        statusColor: 'green'
+        statusColor: 'green',
+        color:'success'
     },
     {
         venueName: "Modern Palace",
@@ -58,7 +59,8 @@ const CustomerDashboardPage = (props) => {
         EventDate: "21 Dec 2021",
         EventTime: 'Night',
         comments: 'Venue request rejected because the customer was unresponsive for three days',
-        statusColor: 'red'
+        statusColor: 'red',
+        color:'error'
     },
     {
         venueName: "Diamond Palace",
@@ -66,7 +68,8 @@ const CustomerDashboardPage = (props) => {
         EventDate: "21 Dec 2021",
         EventTime: 'Night',
         comments: 'Venue request rejected because the customer was unresponsive for three days',
-        statusColor: 'red'
+        statusColor: 'red',
+        color:'error'
     },
     {
         venueName: "Ayan Banquet",
@@ -74,7 +77,8 @@ const CustomerDashboardPage = (props) => {
         EventDate: "25 Dec 2021",
         EventTime: 'Night',
         comments: 'Venue request holded because the customer was not paying for advance requested amount days',
-        statusColor: 'blue'
+        statusColor: 'blue',
+        color:'primary'
     }
     ])
 
@@ -101,11 +105,12 @@ const CustomerDashboardPage = (props) => {
     const _renderItemBookings = ({ item, index }) => {
         return (
             <View style={styles.eachCarousalItem}>
-                <View style={[badgeDesign(item.statusColor), styles.badgeCover]}>
-                    {/* <Badge containerStyle={styles.badgeTitle} value = {item.Status} /> */}
+        
+        
+                    <Badge containerStyle={styles.badgeTitle} value = {item.Status} status={item.color}/>
 
-                    <Text style={styles.badgeTitle}>{item.Status}</Text>
-                </View>
+                    {/* <Text style={styles.badgeTitle}>{item.Status}</Text> */}
+              
                 <View style={{ padding: 20 }}>
                     <Text style={styles.title}>{item.venueName}</Text>
                     <Text style={styles.subTitle}>({item.EventDate}) | {item.EventTime}</Text>
@@ -161,7 +166,7 @@ const CustomerDashboardPage = (props) => {
                 </SafeAreaView>
 
                 <View style={styles.headingWrapper}>
-                    <Text style={styles.heading}>Complaints/Feedbacks</Text>
+                    <Text style={styles.heading}>Reviews/Feedbacks</Text>
                 </View>
 
                 <SafeAreaView style={{ flex: 1, paddingTop: -10, bottom: 10, height: 110, width: 430, }}>

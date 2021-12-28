@@ -40,7 +40,7 @@ const validationSchema = Yup.object().shape({
 });
 
 
-const CustomerBookingPage = ({ route }) => {
+const CustomerBookingPage = ({ route,navigation }) => {
   console.log('customer booking page params', route)
   const [isLoading, setIsLoading] = React.useState(false)
   const [showCalendar, setShowCalendar] = React.useState(false)
@@ -137,6 +137,8 @@ const CustomerBookingPage = ({ route }) => {
       cancelToken: source.token,
       data: { ...formData, ...globalPayload },
     }
+    navigation.navigate('BookingConfirm')
+
     console.log('in save data')
     try {
       setIsLoading(true);
@@ -149,6 +151,7 @@ const CustomerBookingPage = ({ route }) => {
           text: response.data.ResponseDesc,
           duration: Snackbar.LENGTH_LONG,
         });
+        navigation.navigate('BookingConfirm')
         return;
       } else {
         setIsLoading(false);
@@ -337,7 +340,7 @@ const CustomerBookingPage = ({ route }) => {
                     disabled={true}
                     error={[errors.EventDate]}
                   />
-                  {initialFormValues.EventDate ? <SelectField items={shiftList} value={values.EventShift} onChangeText={handleChange('EventShift')} error={[errors.EventShift]} nameOfIcon="clock" mode="dialog" /> : null}
+                  {initialFormValues.EventDate ? <SelectField items={shiftList} value={values.EventShift} onChange={handleChange('EventShift')} error={[errors.EventShift]} nameOfIcon="clock" mode="dialog" /> : null}
 
                   {/* <View style={styles.eventDetails}>
                 <View style={styles.eventChilds}>

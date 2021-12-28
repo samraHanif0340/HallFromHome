@@ -1,5 +1,5 @@
 import React, { Component, useEffect } from "react";
-import { StyleSheet, View, Text, Image, FlatList, ImageBackground, StatusBar, TouchableHighlight } from "react-native";
+import { StyleSheet, View, Text, Image, FlatList, ImageBackground, StatusBar, TouchableHighlight, ScrollView } from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import Svg, { Ellipse } from "react-native-svg";
 import EntypoIcon from "react-native-vector-icons/Entypo";
@@ -165,14 +165,28 @@ function SearchPage(props) {
 
   const searchFilterFunction = (searchText) => {
     if (searchText) {
-
+      let hasNumber = /\d/;
       const newData = masterData.filter(
         function (item) {
-          const itemData = item.VenueName
+          const vName = item.VenueName
             ? item.VenueName.toUpperCase()
             : ''.toUpperCase();
-          const textData = searchText.toUpperCase();
-          return itemData.indexOf(textData) > -1;
+            const vType = item.VenueTypeDesc
+            ? item.VenueTypeDesc.toUpperCase()
+            : ''.toUpperCase();
+            const vRent = item.RentPrice
+            ? item.RentPrice
+            : 0
+            // const vMaxCap = item.MaxCapacity
+            // ? item.MaxCapacity.toString() : "0"
+            const vRating = item.Rating
+            ? item.Rating
+            : 0
+          const textData =  hasNumber.test(searchText) ? searchText :  searchText.toUpperCase();
+          return (vName.indexOf(textData) > -1 
+          || vType.indexOf(textData) > -1 || 
+          vRent.indexOf(textData) > -1  || 
+          vRating.indexOf(textData) > -1 )
         });
       setfilteredData(newData);
       setSearchText(searchText);
@@ -195,7 +209,7 @@ function SearchPage(props) {
         <SearchBar
           lightTheme
           searchIcon={{ size: 25 }}
-          placeholder="Search for halls, banquets..."
+          placeholder="Search by venue, capacity, price..."
           value={searchText}
           onChangeText={text => searchFilterFunction(text)}
           containerStyle={styles.searchBar}
@@ -204,6 +218,7 @@ function SearchPage(props) {
           // showLoading="true"
           inputStyle={styles.searchBar.inputStyle}
         />
+        <ScrollView>
         <FlatList
 
           data={filteredData}
@@ -239,7 +254,7 @@ function SearchPage(props) {
             </Card>
           )}
         />
-
+</ScrollView>
       </ImageBackground>
     </View>
   );
