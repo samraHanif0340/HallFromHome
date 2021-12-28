@@ -53,28 +53,39 @@ const AddonsPage = (props) => {
             'Salad'
         ]
     }])
-
+ 
     const _renderItemFoodService = ({ item, index }) => {
         return (
 
-            <Card>
-            <View styles={styles.eachCarousalItem}>
-                <TouchableOpacity onPress={() => {
-                    const addonObject = { ...additionalServices, foodServiceId: item.foodServiceId };
-                    setAdditionalServices(addonObject);
-                    appendPayload({ addons: addonObject });
-                }}>
-                    <Text style={styles.title}>{item.dealType}</Text>
-                    <FlatList
-                        keyExtractor={item => item}
-                        data={item.menuItems} numColumns={2}
-                        renderItem={({ item }) => <Text styles={styles.content}>{item}</Text>} />
-                    <Image source={{ uri: item.url }} />
-                    <Text style={styles.content}>{item.totalCost}</Text>
+            <Card containerStyle={[styles.eachCarousalItem]}>
+            <TouchableOpacity  onPress={() => {
+               const addonObject = { ...additionalServices, foodServiceId: item.foodServiceId };
+               setAdditionalServices(addonObject);
+               appendPayload({ addons: addonObject });
+           }}> 
+            <View style={styles.mainView}>
+            <Image styles={styles.image} resizeMode="cover" style={{ width: 80, height: 80 }} source={require('../../assets/images/download21.jpg')} />
+                  
+                  <View style={styles.middleView}>
+                  <Text style={styles.dealType}>{item.dealType}</Text>        
+                  <FlatList
+                            keyExtractor={item => item}
+                            data={item.menuItems} numColumns={2}
+                            renderItem={({ item }) => <Text styles={styles.content}>{item} | </Text>} />
+                  </View>
 
-                </TouchableOpacity>
-            </View>
-            </Card>
+                  <Text style={styles.name}>{item.totalCost}</Text>
+
+                </View>
+                
+      
+           </TouchableOpacity> 
+        </Card> 
+
+           
+
+
+
         );
     }
     return (
@@ -92,10 +103,10 @@ const AddonsPage = (props) => {
                     label="We have tremendous catering services available, Do you want additional food services?" />
 
                 {additionalServices.foodService ?
-                    <View style={styles.headingWrapper}><Text style={styles.heading}>Please select atleast one</Text></View> : null}
+                    <View style={styles.headingWrapper}><Text style={styles.heading}>Please select one from the below deals</Text></View> : null}
                 {additionalServices.foodService ?
-                    <SafeAreaView >
-                        <ScrollView>
+                  
+                        <ScrollView >
                             <FlatList
 
                                 data={foodDeals}
@@ -104,7 +115,7 @@ const AddonsPage = (props) => {
 
                             />
                         </ScrollView>
-                    </SafeAreaView> : null}
+                    : null}
                 {/* <TouchableOpacity style={styles.checkAvailability} onPress={submitAddonDetails()}><Text style={styles.checkAvailability.Availabilitycontent}>Save Add ons</Text></TouchableOpacity> */}
 
             </ImageBackground>
@@ -117,16 +128,34 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    carouselView: {
-        flex: 1, flexDirection: 'row', justifyContent: 'center',
-    },
+    mainView: {
+        flexDirection: 'row',
+        marginBottom: 6,
+        justifyContent:'space-between',
+        
+      },
+      image: {
+        width: 30,
+        height: 30,
+        marginRight: 10,
+      },
+      dealType: {
+        fontSize: 16,
+        marginTop: 5,
+        color:'#800000',
+        fontFamily:'cursive'
+
+      },
+      middleView:{
+          flexDirection:'column'
+      },
     eachCarousalItem: {
         backgroundColor: 'floralwhite',
-        borderRadius: 10,
-        height: 225,
-        padding: 25,
-        marginLeft: 3,
-        marginRight: 3,
+        borderRadius: 5,
+        // height: 225,
+        padding: 10,
+        marginLeft: 10,
+        marginRight: 10,
         shadowColor: 'black',
         shadowOffset: { width: 1, height: 1 },
         shadowOpacity: 0.8,
@@ -136,6 +165,23 @@ const styles = StyleSheet.create({
             fontSize: 20,
             color: 'rgba(157,24,24,0.8)'
         }
+       
+    },
+  
+    leftAlign: {
+       
+        backgroundColor:'purple',
+        borderRadius: 7,
+            shadowColor: 'black',
+            shadowOffset: { width: 1, height: 1 },
+            shadowOpacity: 0.8,
+            shadowRadius: 4,
+            elevation: 10,
+           
+    },
+    rightAlign: {
+      
+      backgroundColor:'green'
     },
     title: {
         fontSize: 24,
@@ -152,12 +198,13 @@ const styles = StyleSheet.create({
         fontFamily: 'dancing-script',
     },
     headingWrapper: {
-        fontSize: 20,
+        fontSize: 16,
         marginTop: 5,
-        padding: 25,
+        padding: 10,
     },
     heading: {
-        fontSize: 20
+        color:'floralwhite',
+        fontSize: 16
     },
     checkAvailability: {
         backgroundColor: "rgba(142,7,27,1)",
