@@ -3,8 +3,8 @@ import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,I
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
-import { Avatar, Card } from 'react-native-paper';
-import {Divider} from 'react-native-elements'
+import { Avatar } from 'react-native-paper';
+import {Divider,Card} from 'react-native-elements'
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
 
@@ -255,19 +255,33 @@ useEffect(() => {
      
       <FlatList
         data={filteredData}
-       horizontal
+       //horizontal
         renderItem={({ item }) => (
-          
-          <View style={styles.eachItem}>
+           <View>
+             <Card containerStyle={styles.cardStyle}>
               <View style={styles.leftAlign}>
               <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
               
               </View>
                <View style={styles.centeredAlign}>
-               <Text style={styles.HallNameStyle.Hallnamecontent}>{item.venueName}</Text>
+             <Card.Title style = {styles.HallNameStyle.Hallnamecontent}> {item.VenueName}</Card.Title>
+             <Text style={styles.UserNameStyle.Usernamecontent}>{item.UserName}</Text>
+             <Text style={styles.ReviewStyle.Reviewcontent}>{item.ReviewText}</Text>
+             </View>
+            
+
+              {/* <View style={styles.leftAlign}>
+              <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
+              
+              </View>
+               <View style={styles.centeredAlign}>
+               <Text style={styles.HallNameStyle.Hallnamecontent}>{item.VenueName} </Text>
               <Text style={styles.UserNameStyle.Usernamecontent}>{item.UserName}</Text>
               <Text style={styles.centeredAlign.content}>{item.ReviewText}</Text>
-               </View>
+              
+              <Divider  color="white" style={styles.DividerColor} />
+               </View> */}
+               
                
               
               {/* <View style={styles.rightAligned}>
@@ -277,23 +291,26 @@ useEffect(() => {
               </View> */}
        
               {/* <Divider  color="white" style={styles.DividerColor} /> */}
-       
+              
+              </Card>
        </View>
+      
 
       
-    //   <Card style={styles.card}>
-    //   <Card.Title titleStyle={styles.cardTitle} title={item.userName} subtitle={item.review} left={LeftContent} />
-    //   {/* <Card.Content>
-    //     <Title>{item.hallName}</Title>
-    //     <Paragraph>{item.review}</Paragraph>
-    //   </Card.Content> */}
-    //   {/* <Card.Cover source={{ uri: 'https://picsum.photos/700' }} /> */}
-    //   {/* <Card.Actions>
-    //     <Button>Cancel</Button>
-    //     <Button>Ok</Button>
-    //   </Card.Actions> */}
-    //    <Divider />
-    // </Card>
+    // {/* //   <Card style={styles.card}>
+    // //   <Card.Title titleStyle={styles.cardTitle} title={item.userName} subtitle={item.review} left={LeftContent} />
+    // //   {/* <Card.Content>
+    // //     <Title>{item.hallName}</Title>
+    // //     <Paragraph>{item.review}</Paragraph>
+    // //   </Card.Content> */}
+    // //   {/* <Card.Cover source={{ uri: 'https://picsum.photos/700' }} /> */}
+    // //   {/* <Card.Actions>
+    // //     <Button>Cancel</Button>
+    // //     <Button>Ok</Button>
+    // //   </Card.Actions> */}
+    // //    <Divider /> */}
+
+    
    
   
         )}
@@ -315,7 +332,21 @@ const styles = StyleSheet.create({
 backgroundColor: 'white'
   },
   cardTitle : {
-    color: 'black'
+    color: 'black',
+    fontSize:20,
+  },
+  cardStyle:{
+    // borderColor:'#800000',
+    // borderWidth:3,
+    borderRadius:10,
+    backgroundColor:'rgba(222,206,206,1)',
+    flexDirection: "row",
+    shadowColor: '#000',
+    height:150,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   eachItem: 
   {
@@ -323,26 +354,51 @@ backgroundColor: 'white'
     flexDirection:'row',
     color:'rgba(222,206,206,1)',
     marginBottom : 10,
+    marginTop:10,
+    width:320,
+    height:140,
     // backgroundColor:'yellow'
   },
   leftAlign:{
-    marginLeft:14,
+    marginLeft:-2,
     flex:2,
     icon:{
       fontSize:30,
-      color:'rgba(255,255,255,1)',
+      //color:'rgba(255,255,255,1)',
+      color:'maroon',
+      bottom:5,
     }
   },
   centeredAlign:{
-    marginLeft:-25,
+    marginLeft:10,
+    //marginRight:40,
+    bottom:10,
     content:{
       color:'rgba(255,255,255,1)', 
     },
     flex:6,
   },
+  ReviewStyle:{
+    Reviewcontent:{
+      //color:'rgba(255,255,255,1)', 
+      color:'black',
+      bottom:40,
+      textAlign:'left',
+      left:40,
+      width:200,
+      fontWeight: 'normal', 
+      fontStyle: 'italic',
+      fontSize: 14,
+    },
+    flex:6,
+  },
   UserNameStyle:{
     Usernamecontent:{
-      color:'rgba(255,255,255,1)', 
+      //color:'rgba(255,255,255,1)', 
+      color:'black',
+      bottom:40,
+      textAlign:'left',
+      left:40,
       fontWeight: 'normal', 
       fontStyle: 'italic',
       fontSize: 14,
@@ -351,9 +407,12 @@ backgroundColor: 'white'
   },
   HallNameStyle:{
     Hallnamecontent:{
-      color:'rgba(255,255,255,1)', 
+      // color:'rgba(255,255,255,1)', 
+      color:'black',
       fontWeight: 'bold', 
       fontSize: 17,
+      left:5,
+      bottom:25,
     },
     flex:6,
   },
@@ -370,12 +429,14 @@ backgroundColor: 'white'
     },
   },
   DividerColor: {
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    left: -15,
+    color: "white",
+    borderBottomWidth: 2,
+    left: -95,
+    alignItems: "center",
     right: 5,
-    top:-10,
-    bottom:0
+    width:390,
+    bottom:20,
+    top:20,
     // marginTop: 10,
     // marginBottom: 10,
 

@@ -4,6 +4,7 @@ import { Divider } from 'react-native-paper';
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import Carousel, { Pagination,ParallaxImage } from 'react-native-snap-carousel';
@@ -162,7 +163,7 @@ title:'Tables View'
                   height: 10,
                   borderRadius: 5,
                   marginHorizontal: 8,
-                  backgroundColor: 'black'
+                  backgroundColor: 'black',
               }}
               inactiveDotStyle={
                 {
@@ -183,22 +184,34 @@ title:'Tables View'
        <View style={styles.eachItem}>
  <ScrollView>
           <View style={styles.centeredAlign}>
-            <Text style={styles.centeredAlign.content}><Icon name="home" size={20}>{detail.VenueName}</Icon></Text>
+            <Icon style= {styles.icon} name="home" size={20}></Icon>
+            <Text style={styles.centeredAlign.content}>{detail.VenueName}</Text>
             <Divider style={styles.DividerColor} />
+            <Icon style= {styles.Hallicon} name="home" size={20}></Icon>
             <Text style={styles.centeredAlign.content}>{detail.VenueTypeDesc}</Text>
             <Divider style={styles.DividerColor} />
-            <Text style={styles.centeredAlign.content}><Icon name="map-marker-atl" size={20}>{detail.Address}</Icon></Text>
+            <Icon name="map-marker-atl" size={20} color={"white"} style= {styles.mapicon}></Icon>
+            <Text style={styles.centeredAlign.content}>{detail.Address}</Text>
             <Divider style={styles.DividerColor} />
-            <Text style={styles.centeredAlign.content}><Icon name="walking" size={20}>{detail.MaxCapacity}</Icon> </Text>
+            <Icon name="walking" size={20}color={"white"} style= {styles.capacityicon}></Icon> 
+            <Text style={styles.centeredAlign.content}>{detail.MaxCapacity}</Text>
             <Divider style={styles.DividerColor} />
             <Text style={styles.centeredAlign.content}>Price : PKR ({detail.RentPrice})</Text>
+            <Divider style={styles.DividerColor} />
             <Text style={styles.centeredAlign.content}>Rating : ({detail.Rating})</Text>
-
+            <FontAwesomeIcon
+                name="star"
+                style={styles.icon6}
+              ></FontAwesomeIcon>
+            <Divider style={styles.DividerColor} />
             <Text style={styles.centeredAlign.content}>Provides  Catering : {detail.Catering}</Text>
+            <Divider style={styles.DividerColor} />
             <Text style={styles.centeredAlign.content}>Provides Lightening : {detail.Lights}</Text>
+            <Divider style={styles.DividerColor} />
             <Text style={styles.centeredAlign.content}>Provides Waiters : {detail.Waitress}</Text>
+            <Divider style={styles.DividerColor} />
             <Text style={styles.centeredAlign.content}>Website: {detail.Website}</Text>
-
+            <Divider style={styles.DividerColor} />
 
           </View>
           </ScrollView> 
@@ -255,7 +268,7 @@ const styles = StyleSheet.create({
   {
     flex: 1,
     height: 500,
-    color: 'black',
+    color: 'white',
     margin: 15
     // backgroundColor:'yellow'
   },
@@ -269,9 +282,14 @@ const styles = StyleSheet.create({
   },
   centeredAlign: {
     content: {
-      color: 'black',
+      color: 'white',
       fontSize: 18,
       margin: 10,
+      right:-30,
+      top:-5,
+      fontFamily: 'sans-serif-light',
+      fontWeight: 'normal',
+      alignSelf:'auto',
     },
     flex: 6,
   },
@@ -284,10 +302,15 @@ const styles = StyleSheet.create({
 
       margin: 10,
     },
-    // icon:{
-    //   fontSize:10,
-    //   color:'yellow',
-    // },
+  },
+  icon6: {
+    top: 275,
+    left: 128,
+    position: "absolute",
+    color: "yellow",
+    fontSize: 15,
+    height: 20,
+    width: 19
   },
   rect: {
     width: 360,
@@ -315,14 +338,39 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: "row"
   },
-
-
+  capacityicon: {
+    top: 185,
+    left: 12,
+    position: "absolute",
+    color: "white",
+    //fontSize: 40,
+    height: 44,
+    width: 40
+  },
+  mapicon: {
+    top: 98,
+    left: 12,
+    position: "absolute",
+    color: "white",
+    //fontSize: 40,
+    height: 44,
+    width: 40
+  },
+  Hallicon: {
+    top: 52,
+    left: 7,
+    position: "absolute",
+    color: "white",
+    //fontSize: 40,
+    height: 44,
+    width: 40
+  },
   icon: {
     top: 6,
     left: 7,
     position: "absolute",
-    color: "rgba(120,10,10,1)",
-    fontSize: 40,
+    color: "white",
+    //fontSize: 40,
     height: 44,
     width: 40
   },
@@ -412,7 +460,7 @@ const styles = StyleSheet.create({
     borderRadius:5,
     justifyContent:'space-around',
     alignSelf:'flex-end',
-    shadowColor: 'black',
+    shadowColor: 'white',
     marginRight:20,
     marginTop: 10,
     shadowOffset: { width: 1, height: 1 },
@@ -420,7 +468,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 6,
     content:{
-      fontSize:20,
+      fontSize:15,
       color: 'rgba(157,24,24,0.8)'
     }
   }

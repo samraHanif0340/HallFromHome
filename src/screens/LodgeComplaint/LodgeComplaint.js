@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     flex: 8,
     height: 50,
     color: "rgba(255,255,255,1)",
-    marginTop: 4,
+    marginTop: 14,
   },
 
 });
