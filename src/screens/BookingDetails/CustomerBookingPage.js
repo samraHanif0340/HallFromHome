@@ -2,16 +2,18 @@ import React, { useEffect } from "react";
 import { Button, TextInput, View, StatusBar, ImageBackground, StyleSheet, Text, ActivityIndicator, ScrollView, Field } from "react-native";
 import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
 
-import { Formik,useFormikContext,useFormik } from "formik";
+import { Formik, useFormikContext, useFormik } from "formik";
 import * as Yup from "yup";
 
-import { TextField, SelectField,Loader } from '../../components/customComponents/customComponents'
+import { TextField, SelectField, Loader } from '../../components/customComponents/customComponents'
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
 import Snackbar from 'react-native-snackbar';
 import { Avatar } from "react-native-elements";
 import moment from 'moment';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { useStoreState } from 'easy-peasy';
+
 
 const source = axios.CancelToken.source();
 
@@ -38,8 +40,8 @@ const validationSchema = Yup.object().shape({
 });
 
 
-const CustomerBookingPage = ({route}) => {
-console.log('customer booking page params',route)
+const CustomerBookingPage = ({ route }) => {
+  console.log('customer booking page params', route)
   const [isLoading, setIsLoading] = React.useState(false)
   const [showCalendar, setShowCalendar] = React.useState(false)
   const [shiftList, setShiftList] = React.useState([
@@ -47,19 +49,28 @@ console.log('customer booking page params',route)
     { label: 'Day', value: 'Day', enable: true },
     { label: 'Night', value: 'Night', enable: true },
   ])
-  const [EventDate, setEventDate] = React.useState('')
-  const[venueID,setVenueID]= React.useState(route.params.venueID)
-  
+  const [initialFormValues, setInitialFormValues] = React.useState({
+    name: '',
+    email: '',
+    cnic: '',
+    mobileNumber: '',
+    EventDate: '',
+    EventShift: ''
+  })
+  // const [EventDate, setEventDate] = React.useState('')
+  const [venueID, setVenueID] = React.useState(route.params.venueID)
+  const globalPayload = useStoreState((state) => state.payload);
 
-   useEffect(()=>{
+
+  useEffect(() => {
     getReservedDates(route.params.venueID)
-  },[route.params.venueID])
+  }, [route.params.venueID])
 
 
 
   const getReservedDates = async (venueID) => {
     let payload = {
-      venueID : venueID
+      venueID: venueID
     }
 
     let configurationObject = {
@@ -73,7 +84,7 @@ console.log('customer booking page params',route)
         configurationObject,
       );
       if (response.data.ResponseCode === "00") {
-      //  setShiftList(response.data.Result_DTO)
+        //  setShiftList(response.data.Result_DTO)
         return;
       } else {
       }
@@ -98,7 +109,7 @@ console.log('customer booking page params',route)
         configurationObject,
       );
       if (response.data.ResponseCode === "00") {
-      //  setShiftList(response.data.Result_DTO)
+        //  setShiftList(response.data.Result_DTO)
         return;
       } else {
       }
@@ -117,13 +128,14 @@ console.log('customer booking page params',route)
     let formData = Object.assign({}, data)
     formData.venueID = route.params.venueID
 
+    console.log(globalPayload)
     console.log(formData)
 
     let configurationObject = {
       url: `${BASE_URL}VenueBooking`,
       method: "POST",
       cancelToken: source.token,
-      data: formData,
+      data: { ...formData, ...globalPayload },
     }
     console.log('in save data')
     try {
@@ -167,7 +179,8 @@ console.log('customer booking page params',route)
 
   const setEventDateMethod = (formValues) => {
     console.log(formValues)
-    setEventDate(formValues.EventDate)
+    // setEventDate(formValues.EventDate)
+    setInitialFormValues({ ...initialFormValues, EventDate: formValues.EventDate });
     setShowCalendar(false)
   }
 
@@ -176,10 +189,10 @@ console.log('customer booking page params',route)
       let selectedDate = moment(day);
       selectedDate = selectedDate.format("YYYY-MM-DD");
       let obj = {
-        EventDate:selectedDate
+        EventDate: selectedDate
       }
       props.parentCallback(obj);
-     
+
       getTimesDropdown(obj)
     }
 
@@ -233,7 +246,7 @@ console.log('customer booking page params',route)
   return (
     <View style={styles.container}>
 
-<Loader isLoading={isLoading} />
+      <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
       <ImageBackground style={styles.container}
@@ -244,71 +257,72 @@ console.log('customer booking page params',route)
         </View>
         <ScrollView>
           <Formik
-            initialValues={{
-              name: '',
-              email: '',
-              cnic: '',
-              mobileNumber: '',
-              EventDate: '',
-              EventShift: ''
-            }}
+            initialValues={initialFormValues}
             validationSchema={validationSchema}
+            enableReinitialize={true}
             onSubmit={(values, errors) => submitForm(values)}>
-            {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValidating }) => (
-              <View>
-                <TextField
-                  placeholder="Name" style={styles.labelText}
-                  keyboardType='default'
-                  mode="outlined"
-                  placeholderTextColor="#800000"
-                  nameOfIcon="user"
-                  maxLength={80}
-                  onChangeText={handleChange('name')}
-                  onBlur={handleBlur('name')}
-                  value={values.name}
-                  error={[errors.name]}
-                />
-                <TextField
-                  placeholder="Email" style={styles.labelText}
-                  keyboardType='email-address'
-                  mode="outlined"
-                  placeholderTextColor="#800000"
-                  nameOfIcon="envelope"
-                  maxLength={50}
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  value={values.email}
-                  error={[errors.email]}
-                />
-                <TextField
-                  placeholder="CNIC" style={styles.labelText}
-                  keyboardType='number'
-                  mode="outlined"
-                  placeholderTextColor="#800000"
-                  nameOfIcon="credit-card"
-                  maxLength={13}
-                  onChangeText={handleChange('cnic')}
-                  onBlur={handleBlur('cnic')}
-                  value={values.cnic}
-                  error={[errors.cnic]}
-                />
-                <TextField
-                  placeholder="Mobile Number" style={styles.labelText}
-                  keyboardType='phone-pad'
-                  mode="outlined"
-                  placeholderTextColor="#800000"
-                  nameOfIcon="bell"
-                  maxLength={11}
-                  onChangeText={handleChange('mobileNumber')}
-                  onBlur={handleBlur('mobileNumber')}
-                  value={values.mobileNumber}
-                  error={[errors.mobileNumber]}
-                />
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValidating }) => {
 
-{showCalendar ? <CalendarComponent parentCallback={setEventDateMethod} /> : null}
+              const myChangeFunc = (key, val) => {
+                setInitialFormValues({ ...initialFormValues, [key]: val });
+                return handleChange(val)
+              }
+
+              return (
+                <View>
+                  <TextField
+                    placeholder="Name" style={styles.labelText}
+                    keyboardType='default'
+                    mode="outlined"
+                    placeholderTextColor="#800000"
+                    nameOfIcon="user"
+                    maxLength={80}
+                    onChangeText={(e) => { myChangeFunc('name', e) }}
+                    onBlur={handleBlur('name')}
+                    value={values.name}
+                    error={[errors.name]}
+                  />
+                  <TextField
+                    placeholder="Email" style={styles.labelText}
+                    keyboardType='email-address'
+                    mode="outlined"
+                    placeholderTextColor="#800000"
+                    nameOfIcon="envelope"
+                    maxLength={50}
+                    onChangeText={(e) => { myChangeFunc('email', e) }}
+                    onBlur={handleBlur('email')}
+                    value={values.email}
+                    error={[errors.email]}
+                  />
+                  <TextField
+                    placeholder="CNIC" style={styles.labelText}
+                    keyboardType='number'
+                    mode="outlined"
+                    placeholderTextColor="#800000"
+                    nameOfIcon="credit-card"
+                    maxLength={13}
+                    onChangeText={(e) => { myChangeFunc('cnic', e) }}
+                    onBlur={handleBlur('cnic')}
+                    value={values.cnic}
+                    error={[errors.cnic]}
+                  />
+                  <TextField
+                    placeholder="Mobile Number" style={styles.labelText}
+                    keyboardType='phone-pad'
+                    mode="outlined"
+                    placeholderTextColor="#800000"
+                    nameOfIcon="bell"
+                    maxLength={11}
+                    onChangeText={(e) => { myChangeFunc('mobileNumber', e) }}
+                    onBlur={handleBlur('mobileNumber')}
+                    value={values.mobileNumber}
+                    error={[errors.mobileNumber]}
+                  />
+
+                  {showCalendar ? <CalendarComponent parentCallback={setEventDateMethod} /> : null}
 
 
-                
+
                   <TextField
                     placeholder="Event Date" style={styles.labelText}
                     keyboardType='default'
@@ -317,27 +331,15 @@ console.log('customer booking page params',route)
                     nameOfIcon="calendar"
                     maxLength={11}
                     onPress={() => setShowCalendar(!showCalendar)}
-                    onChangeText={handleChange('EventDate')}
+                    // onChangeText={handleChange('EventDate')}
                     onBlur={handleBlur('EventDate')}
-                    value={EventDate}
+                    value={values.EventDate}
                     disabled={true}
                     error={[errors.EventDate]}
                   />
-{/* 
-                  <Avatar
-                    size={50}
-                    icon={{ name: 'calendar-today', type: 'material', color: '#800000' }}
-                    onPress={() => setShowCalendar(!showCalendar)}
-                    containerStyle={{ backgroundColor: 'white' }}
-                  >
+                  {initialFormValues.EventDate ? <SelectField items={shiftList} value={values.EventShift} onChangeText={handleChange('EventShift')} error={[errors.EventShift]} nameOfIcon="clock" mode="dialog" /> : null}
 
-                  </Avatar> */}
-                
-
-
-                {EventDate ? <SelectField items={shiftList} value={values.EventShift} onChangeText={handleChange('EventShift')} error={[errors.EventShift]} nameOfIcon="clock" mode="dialog" /> : null}
-
-                {/* <View style={styles.eventDetails}>
+                  {/* <View style={styles.eventDetails}>
                 <View style={styles.eventChilds}>
                   <Text style={styles.eventChilds.content.viewTypeLeft}>Event Date:</Text>
                   <Text style={styles.eventChilds.content.viewTypeLeft}>Event Time:</Text>
@@ -350,15 +352,16 @@ console.log('customer booking page params',route)
                 </View>
               </View> */}
 
-                <TouchableOpacity
-                  onPress={handleSubmit}
-                  style={styles.submitButtonWrapper}
+                  <TouchableOpacity
+                    onPress={handleSubmit}
+                    style={styles.submitButtonWrapper}
 
-                >
-                  <Text style={styles.submitButtonText}>SEND BOOK REQUEST</Text>
-                </TouchableOpacity>
-              </View>
-            )}
+                  >
+                    <Text style={styles.submitButtonText}>SEND BOOK REQUEST</Text>
+                  </TouchableOpacity>
+                </View>
+              )
+            }}
 
           </Formik>
         </ScrollView>

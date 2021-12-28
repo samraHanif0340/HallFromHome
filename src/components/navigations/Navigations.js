@@ -19,7 +19,7 @@ import SearchPage from '../../screens/SearchHall/SearchHall';
 import SearchByMaps from '../../screens/SearchHall/SearchByMaps';
 import HallDetailPage from '../../screens/HallDetailsPage/HallDetailsPage';
 import TrackingStatusPage from '../../screens/TrackingStatus/TrackingStatus';
-import LodgeComplaintPage from '../../screens/LodgeComplaint/LodgeComplaint';
+import LodgeReviewPage from '../../screens/LodgeComplaint/LodgeComplaint';
 import LodgeCamplaintListPage from '../../screens/LodgeComplaint/LodgeCamplaintList';
 
 
@@ -141,11 +141,11 @@ const CustomerDrawerNavigator = () => {
 
 
         
-      <Drawer.Screen name="Lodge Complaint/Feedback" options={{
-        drawerLabel: 'Lodge Complaint/Feedback',
+      <Drawer.Screen name="Review/Feedback" options={{
+        drawerLabel: 'Review/Feedback',
         activeTintColor: '#8b0000',
       }}
-        component={LodgeComplaintPage} />
+        component={LodgeReviewPage} />
     </Drawer.Navigator>
   );
 }
