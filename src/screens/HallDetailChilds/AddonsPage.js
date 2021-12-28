@@ -1,11 +1,12 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, StatusBar, ImageBackground, SafeAreaView, Image } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, StatusBar, ImageBackground, SafeAreaView, ScrollView, Image, FlatList } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import { MultiLineTextInput, CheckboxField, Toaster } from '../../components/customComponents/customComponents'
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { FlatList, TouchableHighlight } from "react-native-gesture-handler";
+import { TouchableHighlight } from "react-native-gesture-handler";
 import Carousel from 'react-native-snap-carousel';
+import { Card } from 'react-native-elements'
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
 
@@ -15,13 +16,13 @@ const AddonsPage = (props) => {
     const appendPayload = useStoreActions((actions) => actions.appendPayload);
     const globalPayload = useStoreState((state) => state.payload);
 
-    console.log('Global payload was ',globalPayload);
+    console.log('Global payload was ', globalPayload);
 
     const [foodDeals, setFoodDeals] = React.useState([{
         foodServiceId: 1,
         dealType: 'Wedding Food Service',
         totalCost: 'PKR 75,000',
-        uri: '../../assets/images/download2.jpg',
+        url: 'https://image.freepik.com/free-photo/top-view-vegetable-soup-with-meat-inside-plate-grey_140725-36040.jpg',
         menuItems: [
             'Chicken Biryani',
             'Beef Karahi',
@@ -56,21 +57,24 @@ const AddonsPage = (props) => {
     const _renderItemFoodService = ({ item, index }) => {
         return (
 
-            <TouchableOpacity styles={styles.eachCarousalItem} onPress={() => {
-                const addonObject = { ...additionalServices, foodServiceId: item.foodServiceId };
-                setAdditionalServices(addonObject);
-                appendPayload({ addons: addonObject });
-            }}>
-                <Text style={styles.title}>{item.dealType}</Text>
-                <FlatList
-                    data={item.menuItems}
-                    renderItem={({ item }) => <Text styles={styles.content}>{item}</Text>} />
-                <Image source={{ uri: item.uri }} />
-                <Text style={styles.content}>{item.totalCost}</Text>
+            <Card>
+            <View styles={styles.eachCarousalItem}>
+                <TouchableOpacity onPress={() => {
+                    const addonObject = { ...additionalServices, foodServiceId: item.foodServiceId };
+                    setAdditionalServices(addonObject);
+                    appendPayload({ addons: addonObject });
+                }}>
+                    <Text style={styles.title}>{item.dealType}</Text>
+                    <FlatList
+                        keyExtractor={item => item}
+                        data={item.menuItems} numColumns={2}
+                        renderItem={({ item }) => <Text styles={styles.content}>{item}</Text>} />
+                    <Image source={{ uri: item.url }} />
+                    <Text style={styles.content}>{item.totalCost}</Text>
 
-            </TouchableOpacity>
-
-
+                </TouchableOpacity>
+            </View>
+            </Card>
         );
     }
     return (
@@ -90,17 +94,16 @@ const AddonsPage = (props) => {
                 {additionalServices.foodService ?
                     <View style={styles.headingWrapper}><Text style={styles.heading}>Please select atleast one</Text></View> : null}
                 {additionalServices.foodService ?
-                    <SafeAreaView style={{ flex: 1, paddingTop: 10, }}>
-                        <View style={styles.carouselView}>
-                            <Carousel
-                                layout={'stack'} layoutCardOffset={`18`}
-                                //   ref={ref => carousel = ref}
-                                useScrollView={true}
+                    <SafeAreaView >
+                        <ScrollView>
+                            <FlatList
+
                                 data={foodDeals}
-                                sliderWidth={300}
-                                itemWidth={300}
-                                renderItem={_renderItemFoodService} />
-                        </View>
+                                keyExtractor={item => item.foodServiceId}
+                                renderItem={_renderItemFoodService}
+
+                            />
+                        </ScrollView>
                     </SafeAreaView> : null}
                 {/* <TouchableOpacity style={styles.checkAvailability} onPress={submitAddonDetails()}><Text style={styles.checkAvailability.Availabilitycontent}>Save Add ons</Text></TouchableOpacity> */}
 
@@ -118,12 +121,21 @@ const styles = StyleSheet.create({
         flex: 1, flexDirection: 'row', justifyContent: 'center',
     },
     eachCarousalItem: {
-        backgroundColor: 'orange',
-        borderRadius: 5,
+        backgroundColor: 'floralwhite',
+        borderRadius: 10,
         height: 225,
         padding: 25,
-        marginLeft: 10,
-        marginRight: 10,
+        marginLeft: 3,
+        marginRight: 3,
+        shadowColor: 'black',
+        shadowOffset: { width: 1, height: 1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 4,
+        elevation: 10,
+        content: {
+            fontSize: 20,
+            color: 'rgba(157,24,24,0.8)'
+        }
     },
     title: {
         fontSize: 24,

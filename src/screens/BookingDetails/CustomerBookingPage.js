@@ -337,18 +337,6 @@ const CustomerBookingPage = ({ route }) => {
                     disabled={true}
                     error={[errors.EventDate]}
                   />
-                  {/* 
-                  <Avatar
-                    size={50}
-                    icon={{ name: 'calendar-today', type: 'material', color: '#800000' }}
-                    onPress={() => setShowCalendar(!showCalendar)}
-                    containerStyle={{ backgroundColor: 'white' }}
-                  >
-
-                  </Avatar> */}
-
-
-
                   {initialFormValues.EventDate ? <SelectField items={shiftList} value={values.EventShift} onChangeText={handleChange('EventShift')} error={[errors.EventShift]} nameOfIcon="clock" mode="dialog" /> : null}
 
                   {/* <View style={styles.eventDetails}>

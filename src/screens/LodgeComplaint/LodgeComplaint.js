@@ -1,156 +1,250 @@
-import React, { Component, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, StatusBar, ImageBackground } from "react-native";
+import React, { Component, useState, useEffect } from "react";
+import { StyleSheet, View, Text, TouchableOpacity, StatusBar, ImageBackground, ScrollView } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
-import { MultiLineTextInput, Toaster } from '../../components/customComponents/customComponents'
+import { MultiLineTextInput, SelectField, Loader, TextField } from '../../components/customComponents/customComponents'
+import axios from 'axios';
+import { BASE_URL } from '../../constants/constants'
+import Snackbar from 'react-native-snackbar';
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { useStoreState } from 'easy-peasy';
 
-const LodgeComplaintPage = (props) => {
+const source = axios.CancelToken.source();
 
-  const camplaintType = [
-    { label: 'Management Issue', value: 1 },
-    { label: 'Catering Issue', value: 2 },
-    { label: 'Car Service Issue', value: 3 },
-    { label: 'Lightening Issue', value: 4 },
-    { label: 'Other', value: 5 },
-  ];
+const validationSchema = Yup.object().shape({
+  VenueID: Yup.string()
+    .required('Required'),
+  Rating: Yup.string()
+    .min(1, 'Rating must be between 1 to 5')
+    .max(1, 'Rating must be between 1 to 5')
+    .required('Required'),
 
-  const hallList = [
-    { label: 'Majestic Banquet', value: 1 },
-    { label: 'Modern Palace', value: 2 },
-    { label: 'Ayan Hall', value: 3 },
+  ReviewText: Yup.string()
+    .min(3, 'Review must be of atleast 3 charaters long')
+    .max(500, 'Review must be of atmost 500 charaters long')
+    .required('Required'),
+});
 
-  ];
+const LodgeReviewPage = (props) => {
 
-  const [camplaintForm, setCamplaintForm] = useState({ camplaintType: null, hallName: null, camplaint: '' });
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-
-  const changeSelection = (item, key) => {
-    setCamplaintForm({
-      ...camplaintForm,
-      [key]: item.value
-    })
-    console.log(item)
-    console.log(camplaintForm)
-
-  };
-
-  const submitCamplaint = () => {
-    setIsFormSubmitted(true)
+  const [isLoading, setIsLoading] = React.useState(false)
+  const [initialFormValues, setInitialFormValues] = React.useState({
+    VenueID: null,
+    Rating: '',
+    ReviewText: '',
+  })
+  const [venueList, setVenueList] = React.useState([])
+  const globalPayload = useStoreState((state) => state.payload);
 
 
-  };
+  useEffect(() => {
+    getVenueDropdown();
+    return () => source.cancel("Data fetching cancelled");
+  }, []);
 
-  const closeToaster = (visibility) => {
-    setIsFormSubmitted(visibility)
-    setCamplaintForm({ ...camplaintForm, camplaintType: null, hallName: null, camplaint: '' })
+  const submitForm = (formData) => {
+    console.log(formData)
+    if (formData != null || formData != {}) {
+      saveData(formData)
+    }
   }
 
+  const saveData = async (data) => {
+    console.log('in save dtaa')
+    let formData = Object.assign({}, data)
+    // formData.venueID = route.params.venueID
+
+    console.log(globalPayload)
+    console.log(formData)
+
+    let configurationObject = {
+      url: `${BASE_URL}InsertVenueReview`,
+      method: "POST",
+      cancelToken: source.token,
+      data: { ...formData, UserID: globalPayload.userId },
+    }
+    console.log('in save data')
+    try {
+      setIsLoading(true);
+      const response = await axios(
+        configurationObject,
+      );
+      if (response.data.ResponseCode === "00") {
+        setIsLoading(false);
+        Snackbar.show({
+          text: response.data.ResponseDesc,
+          duration: Snackbar.LENGTH_LONG,
+        });
+        return;
+      } else {
+        setIsLoading(false);
+        Snackbar.show({
+          text: response.data.ResponseDesc,
+          duration: Snackbar.LENGTH_LONG,
+          action: {
+            text: 'OK',
+            textColor: 'white',
+            onPress: () => { /* Do something. */ },
+          },
+        });
+      }
+    } catch (error) {
+      setIsLoading(false);
+      Snackbar.show({
+        text: 'Something Went Wrong',
+        duration: Snackbar.LENGTH_LONG,
+        action: {
+          text: 'OK',
+          textColor: 'white',
+          onPress: () => { /* Do something. */ },
+        },
+      });
+
+    }
+  };
+
+  const getVenueDropdown = async () => {
+    let configurationObject = {
+      url: `${BASE_URL}GetVenueList`,
+      method: "GET",
+    }
+    try {
+      setIsLoading(true);
+      const response = await axios(
+        configurationObject
+      );
+
+      if (response.data.ResponseCode == "00") {
+        setIsLoading(false);
+        setVenueList(response.data.Result_DTO)
+        return;
+      } else {
+        console.log(response)
+        throw new Error("Failed to fetch records");
+      }
+    } catch (error) {
+      // handle error
+      if (axios.isCancel(error)) {
+        console.log('Data fetching cancelled');
+      } else {
+        setIsLoading(false);
+      }
+      // alert(error.message);
+    }
+  };
+
+
   return (
+
     <View style={styles.container}>
+
+      <Loader isLoading={isLoading} />
+
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
       <ImageBackground style={styles.container}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
       >
-        
-        <Dropdown
-          style={styles.textFieldWrapper}
-          containerStyle={styles.textField}
-          data={camplaintType}
-          search
-          searchPlaceholder="Search"
-          labelField="label"
-          valueField="value"
-          label="Complaint Type"
-          placeholder="Select Complaint Type"
-          value={camplaintForm.camplaintType}
-          onChange={item => {
-            changeSelection(item, 'camplaintType');
-            // console.log('selected', item);
-          }}
-          // renderLeftIcon={() => (
-          //     <Image style={styles.icon} source={require('./assets/account.png')} />
-          // )}
-          // renderItem={item => changeSelection(item)}
-          textError="Error"
-        />
+        <View style={styles.titleWrapper}>
+          <Text style={styles.title}>Feedback/Review</Text>
+        </View>
+        <ScrollView>
+          <Formik
+            initialValues={initialFormValues}
+            validationSchema={validationSchema}
+            enableReinitialize={true}
+            onSubmit={(values, errors) => submitForm(values)}>
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValidating }) => {
 
-        <Dropdown
-          style={styles.textFieldWrapper}
-          containerStyle={styles.shadow}
-          data={hallList}
-          search
-          searchPlaceholder="Search"
-          labelField="label"
-          valueField="value"
-          label="Hall Name"
-          placeholder="Select Hall"
-          value={camplaintForm.hallName}
-          onChange={item => {
-            changeSelection(item, 'hallName');
-            // console.log('selected', item);
-          }}
-          // renderLeftIcon={() => (
-          //     <Image style={styles.icon} source={require('./assets/account.png')} />
-          // )}
-          // renderItem={item => changeSelection(item)}
-          textError="Error"
-        />
+              const myChangeFunc = (key, val) => {
+                console.log(key, val)
+                setInitialFormValues({ ...initialFormValues, [key]: val });
+                return handleChange(val)
+              }
 
-        <MultiLineTextInput
-          placeholder="Description"
-          keyboardType='default'
-          placeholderTextColor="rgba(255,255,255,1)"
-          defaultValue={camplaintForm.camplaint}
-          maxLength={200}
+              const mySelectFunc = (key, val) => {
+                console.log(key, val)
+                setInitialFormValues({ ...initialFormValues, [key]: val });
+                // return handleChange(val)
+              }
 
-          numberOfLines={5}
-        // onSubmitEditing={() =>
-        //     passwordInputRef.current &&
-        //     passwordInputRef.current.focus()
-        //   }
-        // onChangeText={value => {
-        //     setUserEmail(value.trim()),
-        //     setEmailError(validate('userEmail', userEmail, 'email'))
-        // }}
-        // error={emailError}
-        />
+              return (
+                <View>
+                  <SelectField items={venueList} value={values.VenueID} 
+                  onChange={(e) => { mySelectFunc('VenueID', e) }} 
+                  error={[errors.VenueID]} 
+                  nameOfIcon="envelope" mode="dialog" />
 
-        <TouchableOpacity
-          onPress={submitCamplaint}
-          style={styles.button2}
-        >
-          <Text style={styles.text5}>Submit Complaint</Text>
-        </TouchableOpacity>
+                  <TextField
+                    placeholder="Rating" style={styles.labelText}
+                    keyboardType='number'
+                    mode="outlined"
+                    placeholderTextColor="#800000"
+                    nameOfIcon="envelope"
+                    maxLength={1}
+                    onChangeText={(e) => { myChangeFunc('Rating', e) }}
+                    onBlur={handleBlur('Rating')}
+                    value={values.Rating}
+                    error={[errors.Rating]}
+                  />
+                  <MultiLineTextInput
+                    placeholder="Review" style={styles.labelText}
+                    keyboardType='default'
+                    mode="outlined"
+                    placeholderTextColor="#800000"
+                    nameOfIcon="comment"
+                    maxLength={500}
+                    onChangeText={(e) => { myChangeFunc('ReviewText', e) }}
+                    onBlur={handleBlur('ReviewText')}
+                    value={values.ReviewText}
+                    error={[errors.ReviewText]}
+                    numberOfLines={3}
+                  />
 
+                  <TouchableOpacity
+                    onPress={handleSubmit}
+                    style={styles.submitButtonWrapper}
 
-        {isFormSubmitted ? <Toaster toasterMessage="Complaint Lodged Successfully" parentCallback={closeToaster} /> : null}
+                  >
+                    <Text style={styles.submitButtonText}>SUBMIT FEEDBACK</Text>
+                  </TouchableOpacity>
+                </View>
+              )
+            }}
+
+          </Formik>
+        </ScrollView>
       </ImageBackground>
     </View>
-  );
+  )
+
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  dropdown: {
-    backgroundColor: 'white',
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.5,
-    marginTop: 20,
+  titleWrapper: {
+    width: 278,
+    height: 111
   },
-  shadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
+  title: {
+    color: "rgba(248,231,28,1)",
+    fontSize: 40,
+    width: 335,
+    height: 70,
+    flex: 1,
+    fontFamily: "cursive",
+    marginLeft: 10,
+    marginTop: 30,
+    alignContent: "center",
+    textAlign: "center",
+    //fontFamily: "dancing-script-regular",
+    marginBottom: 28
   },
-  button2: {
+  submitButtonWrapper: {
     height: 59,
-    backgroundColor: "rgba(31,178,204,1)",
+    //backgroundColor: "rgba(31,178,204,1)",
+    backgroundColor: "rgba(142,7,27,1)",
     borderRadius: 5,
     justifyContent: "center",
     marginRight: 20,
@@ -158,30 +252,38 @@ const styles = StyleSheet.create({
     marginTop: 14,
     marginBottom: 14
   },
-  text5: {
+  submitButtonText: {
     color: "rgba(255,255,255,1)",
     textAlign: "center",
     fontSize: 20,
     alignSelf: "center"
   },
-  textFieldWrapper: {
-    height: 59,
-    backgroundColor: "rgba(251,247,247,0.25)",
-    borderRadius: 5,
+  eventDetails: {
     marginRight: 20,
     marginLeft: 20,
     marginTop: 14,
-    marginBottom: 14
+    marginBottom: 14,
+    flexDirection: 'row',
+
   },
-  textField: {
-    flex: 8,
-    height: 50,
-    color: "rgba(255,255,255,1)",
-    marginTop: 4,
-  },
+  eventChilds: {
+    flex: 6,
+    content: {
+      viewTypeLeft: {
+        color: 'white',
+        alignSelf: 'flex-start',
+        alignContent: 'space-around'
+      },
+      viewTypeRight: {
+        color: 'white',
+        alignSelf: 'flex-end',
+        alignContent: 'space-around'
+      }
+    }
+  }
 
 });
 
-export default LodgeComplaintPage;
+export default LodgeReviewPage;
 
 
