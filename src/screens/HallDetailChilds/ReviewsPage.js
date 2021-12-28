@@ -1,11 +1,12 @@
 import React, { Component,useEffect } from "react";
 import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground ,ScrollView} from "react-native";
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
 import { Avatar } from 'react-native-paper';
 import {Divider,Card} from 'react-native-elements'
 import axios from 'axios';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { BASE_URL } from '../../constants/constants'
 
 
@@ -263,12 +264,20 @@ useEffect(() => {
               <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
               
               </View>
-               <View style={styles.centeredAlign}>
+              <View style={styles.centeredAlign}>
              <Card.Title style = {styles.HallNameStyle.Hallnamecontent}> {item.VenueName}</Card.Title>
              <Text style={styles.UserNameStyle.Usernamecontent}>{item.UserName}</Text>
              <Text style={styles.ReviewStyle.Reviewcontent}>{item.ReviewText}</Text>
              </View>
-            
+             <View>
+             <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
+             <FontAwesomeIcon style={styles.rightAligned.icon2} name="star" ></FontAwesomeIcon>
+             <FontAwesomeIcon style={styles.rightAligned.icon3} name="star" ></FontAwesomeIcon>
+             </View>
+             {/* <FontAwesomeIcon
+                name="star"
+                style={styles.icon6}
+              ></FontAwesomeIcon> */}
 
               {/* <View style={styles.leftAlign}>
               <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
@@ -328,6 +337,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  icon6: {
+    bottom:90,
+    right:30,
+    position: "absolute",
+    color: "yellow",
+    fontSize: 15,
+    height: 20,
+    width: 19
+  },
   card:{
 backgroundColor: 'white'
   },
@@ -364,6 +382,7 @@ backgroundColor: 'white'
     flex:2,
     icon:{
       fontSize:30,
+      height:100,
       //color:'rgba(255,255,255,1)',
       color:'maroon',
       bottom:5,
@@ -373,6 +392,7 @@ backgroundColor: 'white'
     marginLeft:10,
     //marginRight:40,
     bottom:10,
+    height:100,
     content:{
       color:'rgba(255,255,255,1)', 
     },
@@ -382,10 +402,10 @@ backgroundColor: 'white'
     Reviewcontent:{
       //color:'rgba(255,255,255,1)', 
       color:'black',
-      bottom:40,
+      bottom:35,
       textAlign:'left',
       left:40,
-      width:200,
+      width:220,
       fontWeight: 'normal', 
       fontStyle: 'italic',
       fontSize: 14,
@@ -411,7 +431,7 @@ backgroundColor: 'white'
       color:'black',
       fontWeight: 'bold', 
       fontSize: 17,
-      left:5,
+      right:5,
       bottom:25,
     },
     flex:6,
@@ -424,8 +444,22 @@ backgroundColor: 'white'
       color:'rgba(255,255,255,1)',   
     },   
     icon:{
-      fontSize:10,
+      fontSize:15,
       color:'yellow',
+      bottom:79,
+      left:240,
+    },
+    icon2:{
+      fontSize:15,
+      color:'yellow',
+      bottom:94,
+      left:220,
+    },
+    icon3:{
+      fontSize:15,
+      color:'yellow',
+      bottom:109,
+      left:200,
     },
   },
   DividerColor: {

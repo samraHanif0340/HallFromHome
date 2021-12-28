@@ -262,19 +262,13 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginLeft: 20,
     marginTop: 14,
-<<<<<<< HEAD
-    marginBottom: 14
+    marginBottom: 14,
   },
   textField: {
     flex: 8,
     height: 50,
     color: "rgba(255,255,255,1)",
     marginTop: 14,
-=======
-    marginBottom: 14,
-    flexDirection: 'row',
-
->>>>>>> c765874ede4ae71e743af26de2c6dff3d145757a
   },
   eventChilds: {
     flex: 6,
