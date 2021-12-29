@@ -54,8 +54,7 @@ const RegistrationPage = ({navigation}) => {
         const response = await axios(
             configurationObject,   
         );
-        alert(response.ResponseCode)
-        console.log(response)
+       
         if (response.data.ResponseCode === "00") {
             setIsLoading(false);
             Snackbar.show({

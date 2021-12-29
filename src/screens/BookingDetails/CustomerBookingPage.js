@@ -67,7 +67,7 @@ const CustomerBookingPage = ({ route,navigation }) => {
   useEffect(() => {
     getReservedDates(globalPayload.venueId)
 
-    return () => source.cancel("Data fetching cancelled");
+
   }, [globalPayload.venueId])
 
 
@@ -166,7 +166,7 @@ const CustomerBookingPage = ({ route,navigation }) => {
       url: `${BASE_URL}VenueBooking`,
       method: "POST",
       cancelToken: source.token,
-      data: { ...formData, CateringID : globalPayload.addons.CateringID, VenueID: globalPayload.venueId, UserID: globalPayload.userId },
+      data: { ...formData, CateringID : globalPayload.addons.CateringID, VenueID: globalPayload.venueId, userId: globalPayload.userId },
     }
     // navigation.navigate('BookingConfirm')
 
@@ -176,7 +176,7 @@ const CustomerBookingPage = ({ route,navigation }) => {
       const response = await axios(
         configurationObject,
       );
-      if (response.data.ResponseCode === "14") {
+      if (response.data.ResponseCode === "00") {
         setIsLoading(false);
         Snackbar.show({
           text: response.data.ResponseDesc,

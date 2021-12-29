@@ -134,23 +134,23 @@ useEffect(() => {
         <Avatar
                 size={64}
                 rounded
-                title={item.UserName.substr(0,1)}
+                title={item.UserName.substr(0,1).toUpperCase()}
                 containerStyle={{ backgroundColor: 'coral' }} />
                   
                   <View styles={styles.middleView}>
-                  <Text styles={styles.middleView.title}>{item.UserName}</Text>
-                <Text styles={styles.reviewText}>{item.ReviewText}</Text>    
-        
-                  </View>
-
+                  <Text styles={[styles.title, { flexShrink:1}]}>{item.UserName}</Text>
+                <Text styles={[styles.review, { flexShrink:1}]}>{item.ReviewText}</Text>    
                 <Rating 
             type="star"
             fractions={1}
             startingValue={item.Rating}         
             imageSize={12}   
-            styles={styles.avatarImage}     
+            styles={styles.rating}     
           />
 
+                  </View>
+
+              
                 </View>
       </Card>
   
@@ -183,24 +183,36 @@ const styles = StyleSheet.create({
   },
   mainView: {
     flexDirection: 'row',
-    justifyContent:'space-between',
+    justifyContent:'flex-start',
+    flexShrink:1
     
   },
-  avatarImage:{
+  middleView:{
+   
+    flexDirection:'column',
+    flexShrink:1
+
+},
+  rating:{
     flex:2,
     backgroundColor:'rgba(222,206,206,1)', 
     // alignSelf:'flex-end'
   },
-  middleView:{
-    flex:6,
-    flexDirection:'column',
-    justifyContent:'space-between',
-    title: {
-      fontSize: 16,
-      color:'red',
-      fontFamily:'cursive',
-    },
-},
+  title: {
+    fontSize: 16,
+    color:'red',
+    fontFamily:'cursive',
+  },
+  review: {
+    fontSize: 10,
+    color:'red',
+    fontFamily:'cursive',
+   
+  },
+  rating:{
+    // alignSelf:'flex-end',
+  },
+
 
  
  
