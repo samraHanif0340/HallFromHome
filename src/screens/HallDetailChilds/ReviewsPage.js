@@ -1,16 +1,18 @@
 import React, { Component,useEffect } from "react";
 import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground ,ScrollView} from "react-native";
 import { SearchBar, Rating } from 'react-native-elements';
+import {  Loader } from '../../components/customComponents/customComponents'
+
 import { TouchableOpacity } from "react-native";
-import { Avatar } from 'react-native-paper';
-import {Divider,Card} from 'react-native-elements'
+// import { Avatar } from 'react-native-paper';
+import {Divider,Card,Avatar} from 'react-native-elements'
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { BASE_URL } from '../../constants/constants'
 
 
-const LeftContent = props => <Avatar.Icon {...props} icon="account-circle-outline" />
+// const LeftContent = props => <Avatar.Icon {...props} icon="account-circle-outline" />
 
 
 
@@ -22,76 +24,8 @@ const configurationObject = {
   cancelToken: source.token,
   data: { venueID:props.venueID },
 };
-  const [filteredData, setfilteredData] = React.useState([{
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    review: "Nice serving as well as in budget",
-    rating: 4.5,
-    imgURL: "../../assets/images/download2.jpg"
-  },
-  {
-    hallName: "Ayan Hall",
-    userName: 'Muzna Akhter',
-    review: "Nice serving as well as in budget, have great lightening",
-    rating: 4.8,
-    imgURL: "../../assets/images/download2.jpg"
-  },
-  {
-    hallName: "Modern Banquet",
-    userName: 'Muzna Akhter',
-    review: "Nice serving as well as in budget, have great lightening",
-    rating: 4.8,
-    imgURL: "../../assets/images/download2.jpg"
-  },
-  {
-    hallName: "Magnolia Banquet",
-    userName: 'Ali Khan',
-    review: "Nice serving as well as in budget, have great lightening",
-    rating: 4.8,
-    imgURL: "../../assets/images/download2.jpg"
-  },
-  {
-    hallName: "Diamond Palace",
-    userName: 'Humayun Mukhtar',
-    review: "Nice serving as well as in budget, have great lightening",
-    rating: 3.6,
-    imgURL: "../../assets/images/download2.jpg"
-  }]);
-  const [masterData, setmasterData] = React.useState([{
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    review: "Nice serving as well as in budget",
-    rating: 4.5,
-    imgURL: "../../assets/images/download2.jpg"
-  },
-  {
-    hallName: "Ayan Hall",
-    userName: 'Muzna Akhter',
-    review: "Nice serving as well as in budget, have great lightening",
-    rating: 4.8,
-    imgURL: "../../assets/images/download2.jpg"
-  },
-  {
-    hallName: "Modern Banquet",
-    userName: 'Muzna Akhter',
-    review: "Nice serving as well as in budget, have great lightening",
-    rating: 4.8,
-    imgURL: "../../assets/images/download2.jpg"
-  },
-  {
-    hallName: "Magnolia Banquet",
-    userName: 'Ali Khan',
-    review: "Nice serving as well as in budget, have great lightening",
-    rating: 4.8,
-    imgURL: "../../assets/images/download2.jpg"
-  },
-  {
-    hallName: "Diamond Palace",
-    userName: 'Humayun Mukhtar',
-    review: "Nice serving as well as in budget, have great lightening",
-    rating: 3.6,
-    imgURL: "../../assets/images/download2.jpg"
-  }]);
+  // const [filteredData, setfilteredData] = React.useState([]);
+  const [masterData, setmasterData] = React.useState([]);
   let [searchText, setSearchText] = React.useState('')
   const [isLoading, setIsLoading] = React.useState(false);
   const [hasError, setErrorFlag] = React.useState(false);
@@ -125,103 +59,41 @@ const configurationObject = {
 
       if (response.data.ResponseCode == "00") {
         setIsLoading(false);
-        setmasterData(response.data.Result_DTO)
-        setfilteredData(response.data.Result_DTO)
-        
-        // setmasterData([{
-        //   hallId:1,
-        //   hallName: "Majestic Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:2,
-        //   hallName: "Ayan Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:3,
-        //   hallName: "Modern Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:4,
-        //   hallName: "Magnolia Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:5,
-        //   hallName: "Diamond Palace",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // }])
-        // setfilteredData([{
-        //   hallId:1,
-        //   hallName: "Majestic Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:2,
-        //   hallName: "Ayan Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:3,
-        //   hallName: "Modern Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:4,
-        //   hallName: "Magnolia Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:5,
-        //   hallName: "Diamond Palace",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // }])
+        if(response.data.Result_DTO){
+          setmasterData(response.data.Result_DTO)
+
+        }
+   
         return;
       } else {
-        console.log(response)
-        throw new Error("Failed to fetch records");
+        setmasterData([])
+        Snackbar.show({
+          text: response.data.ResponseDesc,
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: 'black',
+          textColor: 'white',
+          action: {
+              text: 'OK',
+              textColor: 'white',
+              onPress: () => { /* Do something. */ },
+          },
+      });
       }
     } catch (error) {
-      // handle error
-      if (axios.isCancel(error)) {
-        console.log('Data fetching cancelled');
-      } else {
-        setErrorFlag(true);
+      setmasterData([])
         setIsLoading(false);
-      }
-      // alert(error.message);
+        Snackbar.show({
+          text: 'Something Went Wrong',
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: 'black',
+          textColor: 'white',
+          action: {
+              text: 'OK',
+              textColor: 'white',
+              onPress: () => { /* Do something. */ },
+          },
+      });
+
     }
   };
 
@@ -234,14 +106,14 @@ useEffect(() => {
 
   return (
     <View style={styles.container}>
+     <Loader isLoading={isLoading} />
+
        <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            <ImageBackground
-                style={styles.rect1}
-                imageStyle={styles.rect1_imageStyle}
+            <ImageBackground style={styles.container}
                 source={require("../../assets/images/Gradient_MI39RPu.png")}
             >
         
-        <SearchBar
+        {/* <SearchBar
           lightTheme
           searchIcon={{ size: 25, color: 'white'}}
           placeholder="Search for halls reviews..."
@@ -250,82 +122,42 @@ useEffect(() => {
           containerStyle={styles.searchBar}
           placeholderTextColor="white"
           leftIconContainerStyle={styles.searchBar.icon}
-          // showLoading="true"
           inputStyle={styles.searchBar.inputStyle}
-        />
+        /> */}
      
-      <FlatList
-        data={filteredData}
-       //horizontal
+     <ScrollView >
+      <FlatList style={styles.container}
+        data={masterData}
         renderItem={({ item }) => (
-           <View>
-             <Card containerStyle={styles.cardStyle}>
-              <View style={styles.leftAlign}>
-              <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
-              
-              </View>
-              <View style={styles.centeredAlign}>
-             <Card.Title style = {styles.HallNameStyle.Hallnamecontent}> {item.VenueName}</Card.Title>
-             <Text style={styles.UserNameStyle.Usernamecontent}>{item.UserName}</Text>
-             <Text style={styles.ReviewStyle.Reviewcontent}>{item.ReviewText}</Text>
-             </View>
-             <View>
-             <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
-             <FontAwesomeIcon style={styles.rightAligned.icon2} name="star" ></FontAwesomeIcon>
-             <FontAwesomeIcon style={styles.rightAligned.icon3} name="star" ></FontAwesomeIcon>
-             </View>
-             {/* <FontAwesomeIcon
-                name="star"
-                style={styles.icon6}
-              ></FontAwesomeIcon> */}
+      <Card containerStyle={styles.cardStyle}>
+        <View style={styles.mainView}>
+        <Avatar
+                size={64}
+                rounded
+                title={item.UserName.substr(0,1)}
+                containerStyle={{ backgroundColor: 'coral' }} />
+                  
+                  <View styles={styles.middleView}>
+                  <Text styles={styles.middleView.title}>{item.UserName}</Text>
+                <Text styles={styles.reviewText}>{item.ReviewText}</Text>    
+        
+                  </View>
 
-              {/* <View style={styles.leftAlign}>
-              <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
-              
-              </View>
-               <View style={styles.centeredAlign}>
-               <Text style={styles.HallNameStyle.Hallnamecontent}>{item.VenueName} </Text>
-              <Text style={styles.UserNameStyle.Usernamecontent}>{item.UserName}</Text>
-              <Text style={styles.centeredAlign.content}>{item.ReviewText}</Text>
-              
-              <Divider  color="white" style={styles.DividerColor} />
-               </View> */}
-               
-               
-              
-              {/* <View style={styles.rightAligned}>
-              <FontAwesomeIcon style={styles.rightAligned.icon} name="star" ></FontAwesomeIcon>
-              <Text style={styles.rightAligned.content}>({item.rating})</Text>
-          
-              </View> */}
-       
-              {/* <Divider  color="white" style={styles.DividerColor} /> */}
-              
-              </Card>
-       </View>
-      
+                <Rating 
+            type="star"
+            fractions={1}
+            startingValue={item.Rating}         
+            imageSize={12}   
+            styles={styles.avatarImage}     
+          />
 
-      
-    // {/* //   <Card style={styles.card}>
-    // //   <Card.Title titleStyle={styles.cardTitle} title={item.userName} subtitle={item.review} left={LeftContent} />
-    // //   {/* <Card.Content>
-    // //     <Title>{item.hallName}</Title>
-    // //     <Paragraph>{item.review}</Paragraph>
-    // //   </Card.Content> */}
-    // //   {/* <Card.Cover source={{ uri: 'https://picsum.photos/700' }} /> */}
-    // //   {/* <Card.Actions>
-    // //     <Button>Cancel</Button>
-    // //     <Button>Ok</Button>
-    // //   </Card.Actions> */}
-    // //    <Divider /> */}
-
-    
-   
+                </View>
+      </Card>
   
         )}
         
       />
- 
+ </ScrollView>
 
 
 </ImageBackground>
@@ -336,7 +168,55 @@ useEffect(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    
   },
+  cardStyle:{
+ 
+    borderRadius:6,
+    // backgroundColor:'rgba(222,206,206,1)', 
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.3,
+    shadowRadius: 4,
+    elevation: 5,
+
+  },
+  mainView: {
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    
+  },
+  avatarImage:{
+    flex:2,
+    backgroundColor:'rgba(222,206,206,1)', 
+    // alignSelf:'flex-end'
+  },
+  middleView:{
+    flex:6,
+    flexDirection:'column',
+    justifyContent:'space-between',
+    title: {
+      fontSize: 16,
+      color:'red',
+      fontFamily:'cursive',
+    },
+},
+
+ 
+ 
+  // contentView:{
+  //   flexDirection:'column',
+  //   justifyContent:'space-around',
+   
+  // },
+  // userName:{
+  //   fontWeight:'bold',
+  //   fontStyle:'cursive',
+  //   fontSize:12
+  // },
+
+
+ 
   icon6: {
     bottom:90,
     right:30,
@@ -353,19 +233,7 @@ backgroundColor: 'white'
     color: 'black',
     fontSize:20,
   },
-  cardStyle:{
-    // borderColor:'#800000',
-    // borderWidth:3,
-    borderRadius:10,
-    backgroundColor:'rgba(222,206,206,1)',
-    flexDirection: "row",
-    shadowColor: '#000',
-    height:150,
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity:  0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
+
   eachItem: 
   {
     flex:1,

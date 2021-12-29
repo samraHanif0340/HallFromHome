@@ -12,51 +12,7 @@ import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
 
 const  TrackingStatusPage = (props) => {
-  const [filteredData, setfilteredData] = React.useState([{
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    TrackingStatus: 'success',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Modern Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    TrackingStatus: 'success',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Ayan Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    TrackingStatus: 'success',
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Diamond Palace",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    TrackingStatus: 'success',
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    TrackingStatus: 'success',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  }]);
+
   const [masterData, setmasterData] = React.useState([{
     hallName: "Majestic Banquet",
     userName: 'Samra Hanif',
@@ -102,26 +58,7 @@ const  TrackingStatusPage = (props) => {
     setReservation: "Reserved",
     comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
   }]);
-  let [searchText, setSearchText] = React.useState('')
-
-  const searchFilterFunction = (searchText) => {
-    if (searchText) {
-
-      const newData = masterData.filter(
-        function (item) {
-          const itemData = item.hallName
-            ? item.hallName.toUpperCase()
-            : ''.toUpperCase();
-          const textData = searchText.toUpperCase();
-          return itemData.indexOf(textData) > -1;
-        });
-      setfilteredData(newData);
-      setSearchText(searchText);
-    } else {
-      setfilteredData(masterData);
-      setSearchText(searchText);
-    }
-  };
+ 
   return (
     <View style={styles.container}>
        <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
@@ -132,7 +69,7 @@ const  TrackingStatusPage = (props) => {
             >
       
       <FlatList
-        data={filteredData}
+        data={masterData}
         renderItem={({ item }) => (
           <Card containerStyle={styles.cardStyle}>
             <View style={styles.imageStackStack}>
@@ -157,39 +94,6 @@ const  TrackingStatusPage = (props) => {
           </View>
           
         </Card>
-        // {/* <Card.Title titleStyle={styles.cardTitle} title={item.hallName} subtitleStyle={styles.cardTitle} subtitle={item.status}/> */}
-        //     {/* <Image
-        //           source={require("../../assets/images/download2.jpg")}
-        //           resizeMode="center"
-        //           style={styles.image}
-        //         ></Image> */}
-        //   {/* <Card.Content >
-        //     <Title style={styles.cardPricePaid}>{item.pricePaid} </Title>
-        //     <Paragraph style={styles.commentStyle}>{item.comments}</Paragraph>
-        //   </Card.Content>
-        //   <Divider style={styles.DividerColor} /> */}
-       
-          // <View style={styles.eachItem}>
-          //     <View style={styles.leftAlign}>
-          //     <FontAwesomeIcon style={styles.leftAlign.icon} name="user" ></FontAwesomeIcon>
-          //     </View>
-          //      <View style={styles.centeredAlign}>
-          //      <Text style={styles.centeredAlign.content}>{item.hallName}</Text>
-          //     <Text style={styles.centeredAlign.content}>{item.userName}</Text>
-          //     <Text style={styles.centeredAlign.content}>{item.status}</Text>
-          //      </View>
-              
-          //     <View style={styles.rightAligned}>
-              
-          //     <Text style={styles.rightAligned.content}>({item.pricePaid})</Text>
-          //     </View>
-
-          //     <View >
-          //         <Text style={styles.comments}>{item.comments}</Text>
-          //     </View>
-    
-          // </View>
-  
         )}
       />
 

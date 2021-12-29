@@ -59,12 +59,8 @@ const LodgeReviewPage = (props) => {
 
 
   const saveData = async (data) => {
-    console.log('in save dtaa')
     let formData = Object.assign({}, data)
-    // formData.venueID = route.params.venueID
     formData.VenueID = +formData.VenueID
-    console.log(globalPayload)
-    console.log(formData)
 
     let configurationObject = {
       url: `${BASE_URL}InsertVenueReview`,
@@ -72,7 +68,6 @@ const LodgeReviewPage = (props) => {
       cancelToken: source.token,
       data: { ...formData, UserID: globalPayload.userId },
     }
-    console.log('in save data')
     try {
       setIsLoading(true);
       const response = await axios(
@@ -120,23 +115,21 @@ const LodgeReviewPage = (props) => {
       method: "GET",
     }
     try {
-      // setIsLoading(true);
       const response = await axios(
         configurationObject
       );
+      if (response.data.ResponseCode == "00") {   
+        if(response.data.Result_DTO)    {
+          setVenueList(response.data.Result_DTO)
 
-      if (response.data.ResponseCode == "00") {
-        setIsLoading(false);
-        setVenueList(response.data.Result_DTO)
+        }
         return;
-      } else {
-        setIsLoading(false);
-       
+      } else {   
+        setVenueList([])  
       }
     } catch (error) {
-     
-        setIsLoading(false);
-    
+      setVenueList([])  
+
     }
   };
 
@@ -179,7 +172,7 @@ const LodgeReviewPage = (props) => {
                   <SelectField items={venueList} value={values.VenueID} 
                   onChange={(e) => { mySelectFunc('VenueID', e) }} 
                   error={[errors.VenueID]} 
-                  nameOfIcon="envelope" mode="dialog" />
+                  nameOfIcon="envelope" mode="dialog"  pleaseSelectPlaceholder="Select Venue"/>
 
                   <TextField
                     placeholder="Rating" style={styles.labelText}

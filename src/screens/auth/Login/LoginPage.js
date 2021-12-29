@@ -85,8 +85,7 @@ const LoginPage = ({ navigation }) => {
     };
 
     const saveData = async (data) => {
-        console.log('in save data')
-        setErrortext(null)
+
         try {
             setIsLoading(true);
             const response = await axios(

@@ -17,7 +17,7 @@ const source = axios.CancelToken.source();
 
 const AddonsPage = (props) => {
 
-    const [additionalServices, setAdditionalServices] = React.useState({ foodService: false, foodServiceId: null })
+    const [additionalServices, setAdditionalServices] = React.useState({ foodService: false, CateringID: null })
     const appendPayload = useStoreActions((actions) => actions.appendPayload);
     const globalPayload = useStoreState((state) => state.payload);
     const [isLoading, setIsLoading] = React.useState(false);
@@ -26,7 +26,7 @@ const AddonsPage = (props) => {
     console.log('Global payload was ', globalPayload);
 
     const [foodDeals, setFoodDeals] = React.useState([{
-        foodServiceId: 1,
+        CateringID: 1,
         dealType: 'Wedding Food Service',
         totalCost: 'PKR 75,000',
         url: 'https://image.freepik.com/free-photo/top-view-vegetable-soup-with-meat-inside-plate-grey_140725-36040.jpg',
@@ -37,7 +37,7 @@ const AddonsPage = (props) => {
             'Salad'
         ]
     }, {
-        foodServiceId: 2,
+        CateringID: 2,
         dealType: 'Engagement Food Service',
         totalCost: 'PKR 75,000',
         uri: '../../assets/images/download2.jpg',
@@ -49,7 +49,7 @@ const AddonsPage = (props) => {
         ]
     },
     {
-        foodServiceId: 3,
+        CateringID: 3,
         dealType: 'Mayo Food Service',
         totalCost: 'PKR 75,000',
         uri: '../../assets/images/Gradient_MI39RPu.png',
@@ -135,7 +135,7 @@ const AddonsPage = (props) => {
 
             <Card containerStyle={[styles.eachCarousalItem]}>
             <TouchableOpacity  onPress={() => {
-               const addonObject = { ...additionalServices, foodServiceId: item.CateringID };
+               const addonObject = { ...additionalServices, CateringID: item.CateringID };
                setAdditionalServices(addonObject);
                appendPayload({ addons: addonObject });
            }}> 

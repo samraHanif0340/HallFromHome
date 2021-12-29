@@ -1,6 +1,8 @@
 import React, { Component, useEffect } from "react";
 import { StyleSheet, View, Text, Image, FlatList, ImageBackground, StatusBar, TouchableHighlight, ScrollView } from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
+import {  Loader } from '../../components/customComponents/customComponents'
+
 import Svg, { Ellipse } from "react-native-svg";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
@@ -39,103 +41,41 @@ function SearchPage(props) {
 
       if (response.data.ResponseCode == "00") {
         setIsLoading(false);
-        setmasterData(response.data.Result_DTO)
-        setfilteredData(response.data.Result_DTO)
-
-        // setmasterData([{
-        //   hallId:1,
-        //   hallName: "Majestic Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:2,
-        //   hallName: "Ayan Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:3,
-        //   hallName: "Modern Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:4,
-        //   hallName: "Magnolia Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:5,
-        //   hallName: "Diamond Palace",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // }])
-        // setfilteredData([{
-        //   hallId:1,
-        //   hallName: "Majestic Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:2,
-        //   hallName: "Ayan Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:3,
-        //   hallName: "Modern Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:4,
-        //   hallName: "Magnolia Banquet",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // },
-        // {
-        //   hallId:5,
-        //   hallName: "Diamond Palace",
-        //   seatingCapacity: 700,
-        //   price: "150,000 PKR",
-        //   rating: 4.5,
-        //   imgURL: "../../assets/images/download2.jpg"
-        // }])
+        if(response.data.Result_DTO){
+          setmasterData(response.data.Result_DTO)
+          setfilteredData(response.data.Result_DTO)
+        }
         return;
       } else {
-        console.log(response)
-        throw new Error("Failed to fetch records");
+        setmasterData([])
+        setfilteredData([])
+        Snackbar.show({
+          text: response.data.ResponseDesc,
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: 'black',
+          textColor: 'white',
+          action: {
+              text: 'OK',
+              textColor: 'white',
+              onPress: () => { /* Do something. */ },
+          },
+      });
       }
     } catch (error) {
-      // handle error
-      if (axios.isCancel(error)) {
-        console.log('Data fetching cancelled');
-      } else {
-        setErrorFlag(true);
+      setmasterData([])
+      setfilteredData([])
         setIsLoading(false);
-      }
-      // alert(error.message);
+        Snackbar.show({
+          text: 'Something Went Wrong',
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: 'black',
+          textColor: 'white',
+          action: {
+              text: 'OK',
+              textColor: 'white',
+              onPress: () => { /* Do something. */ },
+          },
+      });
     }
   };
 
@@ -198,14 +138,12 @@ function SearchPage(props) {
 
   return (
     <View style={styles.container}>
+     <Loader isLoading={isLoading} />
+
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
       <ImageBackground
-        style={styles.rect1}
-        imageStyle={styles.rect1_imageStyle}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
       >
-
-
         <SearchBar
           lightTheme
           searchIcon={{ size: 25 }}
@@ -213,7 +151,7 @@ function SearchPage(props) {
           value={searchText}
           onChangeText={text => searchFilterFunction(text)}
           containerStyle={styles.searchBar}
-          placeholderTextColor="black"
+          placeholderTextColor="#726F6F"
           leftIconContainerStyle={styles.searchBar.icon}
           // showLoading="true"
           inputStyle={styles.searchBar.inputStyle}
@@ -225,32 +163,39 @@ function SearchPage(props) {
           keyExtractor={item => item.VenueID}
           renderItem={({ item }) => (
             <Card containerStyle={styles.cardStyle}>
-              <View style={styles.imageStackStack}>
-                <View style={styles.imageStack}>
-                  <TouchableOpacity activeOpacity={0.2} onPress={() => {
-                    appendPayload({ venueId: item.VenueID });
-                    props.navigation.navigate('HallDetails', { VenueID: item.VenueID })
-                  }}>
-                    <Image
-                      source={{ uri: item.ImageURL }}
-                      resizeMode="stretch"
-                      style={styles.image}
-                    ></Image>
-                  </TouchableOpacity>
 
-                  <Text style={styles.majesticBanquet}>{item.VenueName} ({item.VenueTypeDesc})</Text>
-                  <Text style={styles.limit700Persons}>Limit {item.MaxCapacity} Persons</Text>
-                </View>
-                <View style={styles.loremIpsum2Stack}>
-                  <Text style={styles.loremIpsum2}>PKR {item.RentPrice}</Text>
-                  <FontAwesomeIcon
-                    name="star"
-                    style={styles.icon6}
-                  ></FontAwesomeIcon>
-                </View>
-                <Text style={styles.loremIpsum3}>({item.Rating})</Text>
 
+              <TouchableOpacity activeOpacity={0.2} onPress={() => {
+                appendPayload({ venueId: item.VenueID });
+                props.navigation.navigate('HallDetails', { VenueID: item.VenueID })
+              }}>
+                <Image
+                  source={{ uri: item.ImageURL }}
+                  resizeMode="stretch"
+                  style={styles.image}
+                ></Image>
+            
+
+              <View styles={styles.contentView}>
+                <View styles={styles.eachRowContentOne}>
+                <Text styles={styles.eachRowContentOne.contentLeft}>{item.VenueName} ({item.VenueTypeDesc})</Text>
+                {/* <Text >PKR {item.RentPrice}</Text> */}
+          
+                </View>            
+
+                <View style={styles.eachRowContentTwo}>
+                <Text >Limit {item.MaxCapacity} Persons</Text>
+                <Text >PKR {item.RentPrice}</Text>
+           
+                <Rating styles={styles.eachRowContentTwo.contentRight}
+            type="star"
+            fractions={1}
+            startingValue={item.Rating}         
+            imageSize={12}        
+          />
+                </View>
               </View>
+              </TouchableOpacity>
             </Card>
           )}
         />
@@ -263,32 +208,73 @@ function SearchPage(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection:'column',
+    justifyContent:'space-between'
 
   },
   cardStyle: {
     // borderColor:'#800000',
     // borderWidth:3,
-    borderRadius: 10,
+    borderRadius: 6,
     shadowColor: '#000',
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5,
+    flexDirection:'column',
+    justifyContent:"space-between",
+    backgroundColor:'rgba(222,206,206,1)', 
   },
 
-  rect: {
-    flex: 1,
+  contentView:{
+    flexDirection:'column',
+    justifyContent:'space-around'
   },
+  eachRowContentOne:{
+    flexDirection:'row',
+    justifyContent:'space-between',  
+    contentRight:{
+      alignSelf:'flex-end'
+    },
+    contentLeft:{
+      alignSelf:'flex-start',
+      fontSize:12,
+      fontWeight:'bold',
+      color:'black'
+    }
+  },
+
+  eachRowContentTwo:{
+    flexDirection:'row',
+    justifyContent:'space-between',  
+    contentRight:{
+      alignSelf:'flex-end'
+    },
+    contentLeft:{
+      alignSelf:'flex-start',
+      fontSize:12,
+      fontWeight:'bold',
+      color:'black'
+    }
+  },
+
   searchBar: {
     // backgroundColor: '#800000',
-    opacity: 1,
-    borderColor: '#800000',
-    borderWidth: 3,
+    // opacity: 1,
+    // borderColor: '#800000',
+    // borderWidth: 3,
+    borderRadius: 6,
+    shadowColor: '#8E4141',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 7,
     icon: {
-      color: 'black'
+      color: '#726F6F'
     },
     inputStyle: {
-      color: 'black'
+      color: '#726F6F',
+      fontWeight:'italic'
     }
   },
   rect3: {
@@ -381,33 +367,7 @@ const styles = StyleSheet.create({
     height: 44,
     width: 40
   },
-  ellipseStack: {
-    width: 56,
-    height: 56
-  },
-  home: {
-    fontFamily: "roboto-700",
-    color: "rgba(249,242,242,1)",
-    fontSize: 24,
-    marginLeft: 25,
-    marginTop: 10
-  },
-  icon4: {
-    color: "rgba(248,238,238,1)",
-    fontSize: 32,
-    height: 32,
-    width: 32,
-    marginLeft: 100,
-    marginTop: 10
-  },
-  icon5: {
-    color: "rgba(242,235,235,1)",
-    fontSize: 32,
-    height: 35,
-    width: 32,
-    marginLeft: 12,
-    marginTop: 8
-  },
+
   ellipseStackRow: {
     height: 56,
     flexDirection: "row",
@@ -421,15 +381,8 @@ const styles = StyleSheet.create({
     marginTop: 23
   },
   image: {
-    // top: 0,
-
-    // width: 355,
-    // height: 175,
-    // borderRadius: 5
-    // marginRigth:8,
-
-    width: 335,
-    height: 175,
+    width: 350,
+    height: 200,
     borderRadius: 5
   },
   majesticBanquet: {
@@ -500,20 +453,7 @@ const styles = StyleSheet.create({
     // marginRight: 20,
 
   },
-  image1: {
-    width: 335,
-    height: 175,
-    borderRadius: 16,
-    marginTop: 18,
-    marginLeft: 12
-  },
-  ayanHall: {
-    top: 0,
-    left: 0,
-    position: "absolute",
-    fontFamily: "georgia-regular",
-    color: "rgba(66,62,62,1)"
-  },
+ 
   limit500Persons: {
     top: 18,
     left: 1,
@@ -522,11 +462,7 @@ const styles = StyleSheet.create({
     color: "rgba(0,0,0,1)",
     fontSize: 12
   },
-  ayanHallStack: {
-    width: 84,
-    height: 34,
-    marginTop: 5
-  },
+
   loremIpsum4: {
     fontFamily: "roboto-700",
     color: "#121212",
@@ -558,13 +494,7 @@ const styles = StyleSheet.create({
     marginLeft: 125,
     marginBottom: 5
   },
-  ayanHallStackRow: {
-    height: 39,
-    flexDirection: "row",
-    marginTop: 6,
-    marginLeft: 17,
-    marginRight: 15
-  },
+
   image2: {
     width: 335,
     height: 175,

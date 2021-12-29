@@ -18,17 +18,17 @@ import { useStoreState } from 'easy-peasy';
 const source = axios.CancelToken.source();
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
+  Name: Yup.string()
     .min(2, 'Name must be atleast 6 characters long')
     .max(80, 'Name must be atmost 80 characters long')
     .required('Required'),
 
-  email: Yup.string().email('Enter a valid EMAIL (abc@abc.com)').required('Required').max(50, 'Email must be atmost 50 characters long'),
-  cnic: Yup.string()
+  Email: Yup.string().email('Enter a valid EMAIL (abc@abc.com)').required('Required').max(50, 'Email must be atmost 50 characters long'),
+  CNIC: Yup.string()
     .min(13, 'CNIC must be of 13 characters long')
     .max(13, 'CNIC must be of 13 characters long')
     .required('Required'),
-  mobileNumber: Yup.string()
+  MobileNumber: Yup.string()
     .min(11, 'Mobile Number should be in format 03xxxxxxxxx')
     .max(11, 'Mobile Number should be in format 03xxxxxxxxx')
     .matches(/^[0][3][\d]{9}$/, 'Mobile Number should be in format 03xxxxxxxxx')
@@ -47,15 +47,15 @@ const CustomerBookingPage = ({ route,navigation }) => {
   const [markedDates, setMarkedDates] = React.useState({})
 
   const [shiftList, setShiftList] = React.useState([
-    { label: ' Please Select', value: '', enable: true },
-    { label: 'Day', value: 'Day', enable: true },
-    { label: 'Night', value: 'Night', enable: true },
+    {label:'Day',value:'Day',enable:false},
+    {label:'Night',value:'Night',enable:true}
+
   ])
   const [initialFormValues, setInitialFormValues] = React.useState({
-    name: '',
-    email: '',
-    cnic: '',
-    mobileNumber: '',
+    Name: '',
+    Email: '',
+    CNIC: '',
+    MobileNumber: '',
     EventDate: '',
     EventShift: ''
   })
@@ -66,6 +66,8 @@ const CustomerBookingPage = ({ route,navigation }) => {
 
   useEffect(() => {
     getReservedDates(globalPayload.venueId)
+
+    return () => source.cancel("Data fetching cancelled");
   }, [globalPayload.venueId])
 
 
@@ -130,11 +132,18 @@ const CustomerBookingPage = ({ route,navigation }) => {
         configurationObject,
       );
       if (response.data.ResponseCode === "00") {
-         setShiftList(response.data.Result_DTO)
+        if(response.data.Result_DTO){
+          setShiftList(response.data.Result_DTO)
+
+        }
         return;
       } else {
+        setShiftList([])
+
       }
     } catch (error) {
+      setShiftList([])
+
     }
   };
 
@@ -147,7 +156,8 @@ const CustomerBookingPage = ({ route,navigation }) => {
 
   const saveData = async (data) => {
     let formData = Object.assign({}, data)
-    formData.venueID = route.params.venueID
+    
+    formData.ReservedCapacity = 600
 
     console.log(globalPayload)
     console.log(formData)
@@ -156,7 +166,7 @@ const CustomerBookingPage = ({ route,navigation }) => {
       url: `${BASE_URL}VenueBooking`,
       method: "POST",
       cancelToken: source.token,
-      data: { ...formData, ...globalPayload },
+      data: { ...formData, CateringID : globalPayload.addons.CateringID, VenueID: globalPayload.venueId, UserID: globalPayload.userId },
     }
     // navigation.navigate('BookingConfirm')
 
@@ -166,12 +176,19 @@ const CustomerBookingPage = ({ route,navigation }) => {
       const response = await axios(
         configurationObject,
       );
-      if (response.data.ResponseCode === "00") {
+      if (response.data.ResponseCode === "14") {
         setIsLoading(false);
         Snackbar.show({
           text: response.data.ResponseDesc,
           duration: Snackbar.LENGTH_LONG,
         });
+        setInitialFormValues({ Name: '',
+        Email: '',
+        CNIC: '',
+        MobileNumber: '',
+        EventDate: '',
+        EventShift: ''})
+        setMarkedDates({})
         navigation.navigate('BookingConfirm')
         return;
       } else {
@@ -306,10 +323,10 @@ const CustomerBookingPage = ({ route,navigation }) => {
                     placeholderTextColor="#800000"
                     nameOfIcon="user"
                     maxLength={80}
-                    onChangeText={(e) => { myChangeFunc('name', e) }}
-                    onBlur={handleBlur('name')}
-                    value={values.name}
-                    error={[errors.name]}
+                    onChangeText={(e) => { myChangeFunc('Name', e) }}
+                    onBlur={handleBlur('Name')}
+                    value={values.Name}
+                    error={[errors.Name]}
                   />
                   <TextField
                     placeholder="Email" style={styles.labelText}
@@ -318,10 +335,10 @@ const CustomerBookingPage = ({ route,navigation }) => {
                     placeholderTextColor="#800000"
                     nameOfIcon="envelope"
                     maxLength={50}
-                    onChangeText={(e) => { myChangeFunc('email', e) }}
-                    onBlur={handleBlur('email')}
-                    value={values.email}
-                    error={[errors.email]}
+                    onChangeText={(e) => { myChangeFunc('Email', e) }}
+                    onBlur={handleBlur('Email')}
+                    value={values.Email}
+                    error={[errors.Email]}
                   />
                   <TextField
                     placeholder="CNIC" style={styles.labelText}
@@ -330,10 +347,10 @@ const CustomerBookingPage = ({ route,navigation }) => {
                     placeholderTextColor="#800000"
                     nameOfIcon="credit-card"
                     maxLength={13}
-                    onChangeText={(e) => { myChangeFunc('cnic', e) }}
-                    onBlur={handleBlur('cnic')}
-                    value={values.cnic}
-                    error={[errors.cnic]}
+                    onChangeText={(e) => { myChangeFunc('CNIC', e) }}
+                    onBlur={handleBlur('CNIC')}
+                    value={values.CNIC}
+                    error={[errors.CNIC]}
                   />
                   <TextField
                     placeholder="Mobile Number" style={styles.labelText}
@@ -342,10 +359,10 @@ const CustomerBookingPage = ({ route,navigation }) => {
                     placeholderTextColor="#800000"
                     nameOfIcon="bell"
                     maxLength={11}
-                    onChangeText={(e) => { myChangeFunc('mobileNumber', e) }}
-                    onBlur={handleBlur('mobileNumber')}
-                    value={values.mobileNumber}
-                    error={[errors.mobileNumber]}
+                    onChangeText={(e) => { myChangeFunc('MobileNumber', e) }}
+                    onBlur={handleBlur('MobileNumber')}
+                    value={values.MobileNumber}
+                    error={[errors.MobileNumber]}
                   />
 
                   {showCalendar ? <CalendarComponent markedDates={markedDates} parentCallback={setEventDateMethod} /> : null}
@@ -366,7 +383,7 @@ const CustomerBookingPage = ({ route,navigation }) => {
                     disabled={true}
                     error={[errors.EventDate]}
                   />
-                  {initialFormValues.EventDate ? <SelectField items={shiftList} value={values.EventShift} onChange={handleChange('EventShift')} error={[errors.EventShift]} nameOfIcon="clock" mode="dialog" /> : null}
+                  {initialFormValues.EventDate ? <SelectField pleaseSelectPlaceholder="Select Shift" items={shiftList} value={values.EventShift} onChange={handleChange('EventShift')} error={[errors.EventShift]} nameOfIcon="clock" mode="dialog" /> : null}
 
                   {/* <View style={styles.eventDetails}>
                 <View style={styles.eventChilds}>
