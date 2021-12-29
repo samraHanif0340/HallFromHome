@@ -78,7 +78,7 @@ const CustomerDashboardPage = (props) => {
         EventTime: 'Night',
         comments: 'Venue request holded because the customer was not paying for advance requested amount days',
         statusColor: 'blue',
-        color:'primary'
+        color:'warning'
     }
     ])
 
