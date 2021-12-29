@@ -44,6 +44,8 @@ const CustomerBookingPage = ({ route,navigation }) => {
   console.log('customer booking page params', route)
   const [isLoading, setIsLoading] = React.useState(false)
   const [showCalendar, setShowCalendar] = React.useState(false)
+  const [markedDates, setMarkedDates] = React.useState({})
+
   const [shiftList, setShiftList] = React.useState([
     { label: ' Please Select', value: '', enable: true },
     { label: 'Day', value: 'Day', enable: true },
@@ -63,18 +65,18 @@ const CustomerBookingPage = ({ route,navigation }) => {
 
 
   useEffect(() => {
-    getReservedDates(route.params.venueID)
-  }, [route.params.venueID])
+    getReservedDates(globalPayload.venueId)
+  }, [globalPayload.venueId])
 
 
 
   const getReservedDates = async (venueID) => {
     let payload = {
-      venueID: venueID
+      VenueID: venueID
     }
 
     let configurationObject = {
-      url: `${BASE_URL}getReservedDates`,
+      url: `${BASE_URL}GetEventBookedDatesByVenue`,
       method: "POST",
       cancelToken: source.token,
       data: payload,
@@ -84,11 +86,30 @@ const CustomerBookingPage = ({ route,navigation }) => {
         configurationObject,
       );
       if (response.data.ResponseCode === "00") {
-        //  setShiftList(response.data.Result_DTO)
+        if(response.data.Result_DTO){
+          let obj = {}
+          for(let i=0;i<response.data.Result_DTO.length;i++){
+            // let date = response.data.Result_DTO[i].format("YYYY-MM-DD")
+            let date = '2022-01-02'
+
+            obj[date] = {
+              disabled: true, color: 'white', disableTouchEvent: true,backgroundColor:'red' ,customStyles:styles.stylesReserved
+            }
+          }
+
+          console.log(obj)
+          setMarkedDates(obj)
+        }
+
+       
         return;
       } else {
+        setMarkedDates([])
+
       }
     } catch (error) {
+      setMarkedDates([])
+
     }
   };
 
@@ -96,10 +117,10 @@ const CustomerBookingPage = ({ route,navigation }) => {
     let formData = Object.assign({}, data)
 
     console.log(formData)
-    formData.venueID = route.params.venueID
+    formData.VenueID = globalPayload.venueId
 
     let configurationObject = {
-      url: `${BASE_URL}getTimesDropdown`,
+      url: `${BASE_URL}GetBookedTiming_DD`,
       method: "POST",
       cancelToken: source.token,
       data: formData,
@@ -109,7 +130,7 @@ const CustomerBookingPage = ({ route,navigation }) => {
         configurationObject,
       );
       if (response.data.ResponseCode === "00") {
-        //  setShiftList(response.data.Result_DTO)
+         setShiftList(response.data.Result_DTO)
         return;
       } else {
       }
@@ -137,7 +158,7 @@ const CustomerBookingPage = ({ route,navigation }) => {
       cancelToken: source.token,
       data: { ...formData, ...globalPayload },
     }
-    navigation.navigate('BookingConfirm')
+    // navigation.navigate('BookingConfirm')
 
     console.log('in save data')
     try {
@@ -185,9 +206,13 @@ const CustomerBookingPage = ({ route,navigation }) => {
     // setEventDate(formValues.EventDate)
     setInitialFormValues({ ...initialFormValues, EventDate: formValues.EventDate });
     setShowCalendar(false)
+    if(formValues.EventDate){
+      getTimesDropdown(formValues)
+    }
   }
 
   const CalendarComponent = (props) => {
+    console.log(props)
     const changeSelection = (day) => {
       let selectedDate = moment(day);
       selectedDate = selectedDate.format("YYYY-MM-DD");
@@ -204,13 +229,14 @@ const CustomerBookingPage = ({ route,navigation }) => {
 
         <Calendar
           hideExtraDays={true}
-          markedDates={{
-            '2022-01-20': { customStyles: styles.stylesReserved, disableTouchEvent: true },
-            '2021-01-22': { startingDay: true, color: 'green', disableTouchEvent: true, customStyles: styles.stylesReserved },
-            '2021-12-31': { selected: true, endingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true },
-            '2021-12-28': { disabled: true, startingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true },
-            '2021-12-12': { disabled: true, startingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true }
-          }}
+          // markedDates={{
+          //   '2022-01-20': { customStyles: styles.stylesReserved, disableTouchEvent: true },
+          //   '2021-01-22': { startingDay: true, color: 'green', disableTouchEvent: true, customStyles: styles.stylesReserved },
+          //   '2021-12-31': { selected: true, endingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true },
+          //   '2021-12-28': { disabled: true, startingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true },
+          //   '2021-12-12': { disabled: true, startingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true }
+          // }}
+          markedDates={props['markedDates']}
           current={new Date()}
           minDate={new Date()}
           onDayPress={day => changeSelection(day.dateString)}
@@ -322,7 +348,7 @@ const CustomerBookingPage = ({ route,navigation }) => {
                     error={[errors.mobileNumber]}
                   />
 
-                  {showCalendar ? <CalendarComponent parentCallback={setEventDateMethod} /> : null}
+                  {showCalendar ? <CalendarComponent markedDates={markedDates} parentCallback={setEventDateMethod} /> : null}
 
 
 
@@ -436,7 +462,16 @@ const styles = StyleSheet.create({
         alignContent: 'space-around'
       }
     }
-  }
+  },
+  stylesReserved: {
+    container: {
+      backgroundColor: 'red'
+    },
+    text: {
+      color: 'black',
+      fontWeight: 'bold'
+    }
+  },
 
 })
 

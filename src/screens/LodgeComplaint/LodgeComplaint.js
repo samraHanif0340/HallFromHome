@@ -36,10 +36,17 @@ const LodgeReviewPage = (props) => {
   const [venueList, setVenueList] = React.useState([])
   const globalPayload = useStoreState((state) => state.payload);
 
+  const resetForm = ()=>{
+    
+    setIsLoading(false)
+    setInitialFormValues({VenueID:'',Rating:'',ReviewText:''})
+    setVenueList([])
+    source.cancel('Data fetch cancelled')
+  }
 
   useEffect(() => {
     getVenueDropdown();
-    return () => source.cancel("Data fetching cancelled");
+    return () => resetForm()
   }, []);
 
   const submitForm = (formData) => {
@@ -49,11 +56,13 @@ const LodgeReviewPage = (props) => {
     }
   }
 
+
+
   const saveData = async (data) => {
     console.log('in save dtaa')
     let formData = Object.assign({}, data)
     // formData.venueID = route.params.venueID
-
+    formData.VenueID = +formData.VenueID
     console.log(globalPayload)
     console.log(formData)
 
@@ -75,6 +84,7 @@ const LodgeReviewPage = (props) => {
           text: response.data.ResponseDesc,
           duration: Snackbar.LENGTH_LONG,
         });
+        setInitialFormValues({VenueID:'',Rating:'',ReviewText:''})
         return;
       } else {
         setIsLoading(false);
@@ -89,6 +99,7 @@ const LodgeReviewPage = (props) => {
         });
       }
     } catch (error) {
+      console.log(error)
       setIsLoading(false);
       Snackbar.show({
         text: 'Something Went Wrong',
@@ -105,11 +116,11 @@ const LodgeReviewPage = (props) => {
 
   const getVenueDropdown = async () => {
     let configurationObject = {
-      url: `${BASE_URL}GetVenueList`,
+      url: `${BASE_URL}GetVenueList_DD`,
       method: "GET",
     }
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await axios(
         configurationObject
       );
@@ -119,17 +130,13 @@ const LodgeReviewPage = (props) => {
         setVenueList(response.data.Result_DTO)
         return;
       } else {
-        console.log(response)
-        throw new Error("Failed to fetch records");
+        setIsLoading(false);
+       
       }
     } catch (error) {
-      // handle error
-      if (axios.isCancel(error)) {
-        console.log('Data fetching cancelled');
-      } else {
+     
         setIsLoading(false);
-      }
-      // alert(error.message);
+    
     }
   };
 
