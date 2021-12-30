@@ -145,7 +145,7 @@ const LodgeReviewPage = (props) => {
         source={require("../../assets/images/Gradient_MI39RPu.png")}
       >
         <View style={styles.titleWrapper}>
-          <Text style={styles.title}>Feedback/Review</Text>
+          <Text style={styles.title}>Review/Feedback</Text>
         </View>
         <ScrollView>
           <Formik
@@ -172,7 +172,7 @@ const LodgeReviewPage = (props) => {
                   <SelectField items={venueList} value={values.VenueID} 
                   onChange={(e) => { mySelectFunc('VenueID', e) }} 
                   error={[errors.VenueID]} 
-                  nameOfIcon="envelope" mode="dialog"  pleaseSelectPlaceholder="Select Venue"/>
+                  nameOfIcon="home-heart" mode="dialog"  pleaseSelectPlaceholder="Select Venue"/>
 
                   <TextField
                     placeholder="Rating" style={styles.labelText}
@@ -205,7 +205,7 @@ const LodgeReviewPage = (props) => {
                     style={styles.submitButtonWrapper}
 
                   >
-                    <Text style={styles.submitButtonText}>SUBMIT FEEDBACK</Text>
+                    <Text style={styles.submitButtonText}>SUBMIT REVIEW</Text>
                   </TouchableOpacity>
                 </View>
               )

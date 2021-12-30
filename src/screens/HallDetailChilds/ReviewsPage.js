@@ -125,7 +125,7 @@ useEffect(() => {
           inputStyle={styles.searchBar.inputStyle}
         /> */}
      
-     <ScrollView >
+     <ScrollView nestedScrollEnabled={true}>
       <FlatList style={styles.container}
         data={masterData}
         renderItem={({ item }) => (

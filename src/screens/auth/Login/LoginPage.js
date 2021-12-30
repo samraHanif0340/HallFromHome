@@ -106,7 +106,7 @@ const LoginPage = ({ navigation }) => {
                 });
                 //   AsyncStorage.setItem('user_id', response.data.Username);
                 //   console.log(response.data.Username);
-                navigation.replace('Home');
+                navigation.replace('DrawerNavigation');
                 return;
             } else {
                 setIsLoading(false);

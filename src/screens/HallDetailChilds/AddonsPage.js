@@ -144,7 +144,8 @@ const AddonsPage = (props) => {
                   
                   <View style={styles.middleView}>
                   <Text style={styles.dealType}>{item.CateringName}</Text>        
-                  <FlatList
+                  <FlatList scrollEnabled={false}
+							nestedScrollEnabled={true}
                             keyExtractor={item => item.ItemID}
                             data={item.ItemList} numColumns={2}
                             renderItem={({ item }) => <Text styles={styles.content}>{item.ItemName} | </Text>} />
@@ -181,7 +182,7 @@ const AddonsPage = (props) => {
                     <View style={styles.headingWrapper}><Text style={styles.heading}>Please select one from the below deals</Text></View> : null}
                 {additionalServices.foodService ?
                   
-                        <ScrollView >
+                        <ScrollView nestedScrollEnabled={true}>
                             <FlatList
 
                                 data={foodDeals}

@@ -36,7 +36,7 @@ function BookingConfirmedPage(props) {
           selectionColor="rgba(255,255,255,1)"
           style={styles.textInput2}
         ></TextInput>
-      <TouchableOpacity style={styles.submitButtonWrapper} onPress={() => props.navigation.navigate('Home')}><Text style={styles.submitButtonText}>OK</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.submitButtonWrapper} onPress={() => props.navigation.navigate('SearchHallStack')}><Text style={styles.submitButtonText}>OK</Text></TouchableOpacity>
       </ImageBackground>
     </View>
 

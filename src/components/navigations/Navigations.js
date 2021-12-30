@@ -63,16 +63,20 @@ const AuthRoutes = () => {
 
 const SearchHallStack = () => {
   return (
-<Stack.Navigator>
+<Stack.Navigator initialRouteName="Home" >
       <Stack.Screen
+  
+            
             name="Home"
             component={SearchPage}
             options={{title: 'Home', headerShown: false }}
           />
            <Stack.Screen
+  
             name="HallDetails"
             component={HallDetailPage}
-            options={{ title: 'Venue Details'  }}
+ 
+  options={{ title: 'Venue Details' ,  headerShown:false, }}
           />
         </Stack.Navigator>
   )
@@ -81,7 +85,7 @@ const SearchHallStack = () => {
 
 const BookingConfirmStack = () => {
   return (
-<Stack.Navigator>
+<Stack.Navigator initialRouteName="CustomerBooking">
       <Stack.Screen
             name="CustomerBooking"
             component={CustomerBookingPage}
@@ -102,7 +106,7 @@ const Drawer = createDrawerNavigator();
 
 const CustomerDrawerNavigator = () => {
   return (
-    <Drawer.Navigator initialRouteName="Home" 
+    <Drawer.Navigator initialRouteName="SearchHallStack" 
     screenOptions={({ navigation,route,options }) => ({
       headerStyle: {
         backgroundColor: '#800000',
@@ -113,13 +117,14 @@ const CustomerDrawerNavigator = () => {
         fontWeight: 'bold',
       },
       overlayColor: 'transparent',
-      
-      headerLeft: (props) => 
+ 
+      header:  (props) => 
 <Header navigation={navigation} route={route} options={options} {...props}/>,
     })}
      drawerContent={(props) => <CustomSidebar {...props} />}>
-      <Drawer.Screen  name="Home" options={{
+      <Drawer.Screen  name="SearchHallStack" options={{
         drawerLabel: 'Home',
+        title:'Home',
         // groupName: 'Category 1',
         //activeTintColor: '#FF6F00',
         activeTintColor: '#8b0000',
@@ -127,6 +132,7 @@ const CustomerDrawerNavigator = () => {
 
 <Drawer.Screen  name="CustomerDashboard" options={{
         drawerLabel: 'Dashboard',
+        title: 'Dashboard',
         // groupName: 'Category 1',
         //activeTintColor: '#FF6F00',
         activeTintColor: '#8b0000',
@@ -134,6 +140,8 @@ const CustomerDrawerNavigator = () => {
 
      <Drawer.Screen name="Tracking/Status"  options={{
         drawerLabel: 'Tracking/Status',
+        title: 'Tracking/Status',
+
         //activeTintColor: '#FF6F00',
         activeTintColor: '#8b0000',
       }}
@@ -143,6 +151,8 @@ const CustomerDrawerNavigator = () => {
         
       <Drawer.Screen name="Review/Feedback" options={{
         drawerLabel: 'Review/Feedback',
+        title: 'Review/Feedback',
+
         activeTintColor: '#8b0000',
       }}
         component={LodgeReviewPage} />
@@ -237,6 +247,8 @@ const HallDetailTabs = (props) => {
   const [hallId,setHallId] = useState(props.venueID)
   return (
     <Tab.Navigator
+    lazy={true}
+    removeClippedSubviews={true}
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
@@ -253,6 +265,7 @@ const HallDetailTabs = (props) => {
      
       tabBarActiveTintColor: 'rgba(248,231,28,1)',
       tabBarInactiveTintColor: 'rgba(157,24,24,0.8)',
+     
       })}
     >
     <Tab.Screen name="Details"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <DetailOfHallPage  venueID={props.venueID} />}</Tab.Screen>

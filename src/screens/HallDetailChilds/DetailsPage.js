@@ -182,7 +182,7 @@ title:'Tables View'
       
 
        <View style={styles.eachItem}>
- <ScrollView>
+ <ScrollView >
           <View style={styles.centeredAlign}>
             <Icon style= {styles.icon} name="home" size={20}></Icon>
             <Text style={styles.centeredAlign.content}>{detail.VenueName}</Text>

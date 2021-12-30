@@ -16,13 +16,18 @@ import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
 import { useStoreActions } from 'easy-peasy';
 
+
 function SearchPage(props) {
+  console.log(props)
+  const setGlobalStack = useStoreActions((actions) => actions.setStackDetails);
   const [isLoading, setIsLoading] = React.useState(false);
   const [hasError, setErrorFlag] = React.useState(false);
   let [searchText, setSearchText] = React.useState('')
   const [filteredData, setfilteredData] = React.useState([]);
   const [masterData, setmasterData] = React.useState([]);
   const appendPayload = useStoreActions((actions) => actions.appendPayload);
+  // setGlobalStack({level:0,type:'stack',title:'Home',navigation:props.navigation})
+
 
   const source = axios.CancelToken.source();
   const configurationObject = {
@@ -31,6 +36,17 @@ function SearchPage(props) {
     cancelToken: source.token
     // data: { fullName, email },
   };
+
+
+  useEffect(() => {
+    props.navigation.addListener('focus',
+      () => {
+        console.log('focus is called from SEARCH');
+        setGlobalStack({level:0,type:'stack',title:'Home',navigation:props.navigation})
+        //your logic here.
+      }
+    );
+  }, [])
 
   const getData = async () => {
     try {
@@ -93,6 +109,10 @@ function SearchPage(props) {
   //   );
   // }
 
+  // useEffect(() => {
+  //   setGlobalStack({level:0,type:'stack',title:'Home',navigation:props.navigation})
+
+  // });
 
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -15,12 +15,18 @@ import { TouchableHighlight } from "react-native";
 import { Avatar } from "react-native-elements";
 import moment from 'moment';
 import { DropdownField, SelectField } from '../../components/customComponents/customComponents'
+import { useStoreActions, useStoreState } from 'easy-peasy';
 
 const HallDetailPage = ({ route, navigation }) => {
+  console.log('stack check', route, navigation)
+
   const [venueId, setVenueId] = useState(route.params.VenueID)
   const [pageState, setPageState] = useState('parent-page');
   const [bookingDetail, setBookingDetail] = useState({ selectedDate: null, selectedTime: null });
+  const setGlobalStack = useStoreActions((actions) => actions.setStackDetails);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  // setGlobalStack({ level: 1, type: 'stack', title: 'Venue Details', navigation: navigation })
+
   const [data, setData] = useState({
     hallName: "Majestic Banquet",
     seatingCapacity: 700,
@@ -38,6 +44,23 @@ const HallDetailPage = ({ route, navigation }) => {
     console.log(bookingDetail)
 
   };
+
+  useEffect(() => {
+    navigation.addListener('focus',
+      () => {
+        setGlobalStack({ level: 1, type: 'stack', title: 'Venue Details', navigation: navigation })
+
+        //your logic here.
+      }
+    );
+  }, [])
+
+
+  // useEffect(() => {
+  //   setGlobalStack({level:1,type:'stack',title:'Venue Details',navigation:navigation})
+
+  // });
+
 
   const CalendarComponent = (props) => {
 
@@ -180,11 +203,11 @@ const HallDetailPage = ({ route, navigation }) => {
         imageStyle={styles.rect1_imageStyle}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
       >
-      
 
 
 
- 
+
+
 
         <HallDetailTabs venueID={route.params.VenueID} />
         {/* 

@@ -110,7 +110,6 @@ const App: () => Node = () => {
   // const backgroundStyle = {
   //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   // };
-
   const store = createStore({
     payload: {},
     setPayload: action((state, payload) => {
@@ -118,6 +117,10 @@ const App: () => Node = () => {
     }),
     appendPayload: action((state, payload) => {
       state.payload = { ...state.payload, ...payload };
+    }),
+    stackDetails: {},
+    setStackDetails: action((state, payload) => {
+      state.stackDetails = payload;
     })
   });
 
@@ -140,7 +143,7 @@ const App: () => Node = () => {
             <Stack.Screen
               name="BookingConfirmStack"
               component={BookingConfirmStack}
-              options={{ headerShown: false }}
+              options={{ title:'Add Booking Details', headerShown: false }}
             />
             {/* <Stack.Screen
             name="CustomerBooking"
@@ -148,7 +151,7 @@ const App: () => Node = () => {
             options={{ headerShown: false }}
           /> */}
             <Stack.Screen
-              name="Home"
+              name="DrawerNavigation"
               component={CustomerDrawerNavigator}
               options={{ headerShown: false }}
             />

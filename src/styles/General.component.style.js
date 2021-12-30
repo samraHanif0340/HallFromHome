@@ -23,6 +23,7 @@ export const fonts = {
 
 
 const styles = StyleSheet.create({
+  
     textFieldWrapper: {
         height: 59,
         //backgroundColor: "rgba(251,247,247,0.25)",
