@@ -116,12 +116,12 @@ const handleSubmitPress = () => {
                 rounded
                 title={item.BookedByUsername.substr(0,1).toUpperCase()}
                 containerStyle={{ backgroundColor: 'coral' }} />                 
-                  <View styles={styles.middleView}>
-                  <Text styles={styles.title}>{item.BookedByUsername}</Text>
-                <Text styles={styles.review}>{item.VenueName}</Text> 
-                <View styles={styles.lastRow}>   
-                <Text styles={styles.review}>{item.EventDate} | {item.EventTime}</Text>      
-                <Text styles={styles.review}>{item.RequestStatus}</Text>    
+                  <View style={styles.middleView}>
+                  <Text style={styles.title}>{item.BookedByUsername}</Text>
+                <Text style={styles.review}>{item.VenueName}</Text> 
+                <View style={styles.lastRow}>   
+                <Text style={styles.review}>{item.EventDate} | {item.EventTime}</Text>      
+                <Text style={styles.review}>{item.RequestStatus}</Text>    
                   </View>
                 </View>
                 </View>

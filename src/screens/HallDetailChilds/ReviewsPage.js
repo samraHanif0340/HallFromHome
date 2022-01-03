@@ -137,15 +137,15 @@ useEffect(() => {
                 title={item.UserName.substr(0,1).toUpperCase()}
                 containerStyle={{ backgroundColor: 'coral' }} />
                   
-                  <View styles={styles.middleView}>
-                  <Text styles={[styles.title, { flexShrink:1}]}>{item.UserName}</Text>
-                <Text styles={[styles.review, { flexShrink:1}]}>{item.ReviewText}</Text>    
+                  <View style={styles.middleView}>
+                  <Text style={[styles.title, { flexShrink:1}]}>{item.UserName}</Text>
+                <Text style={[styles.review, { flexShrink:1}]}>{item.ReviewText}</Text>    
                 <Rating 
             type="star"
             fractions={1}
             startingValue={item.Rating}         
             imageSize={12}   
-            styles={styles.rating}     
+            style={styles.rating}     
           />
 
                   </View>

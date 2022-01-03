@@ -140,7 +140,7 @@ const AddonsPage = (props) => {
                appendPayload({ addons: addonObject });
            }}> 
             <View style={styles.mainView}>
-            <Image styles={styles.image} resizeMode="cover" style={{ width: 80, height: 80 }} source={{uri: item.CateringImage}} />
+            <Image style={styles.image} resizeMode="cover" style={{ width: 80, height: 80 }} source={{uri: item.CateringImage}} />
                   
                   <View style={styles.middleView}>
                   <Text style={styles.dealType}>{item.CateringName}</Text>        
@@ -148,7 +148,7 @@ const AddonsPage = (props) => {
 							nestedScrollEnabled={true}
                             keyExtractor={item => item.ItemID}
                             data={item.ItemList} numColumns={2}
-                            renderItem={({ item }) => <Text styles={styles.content}>{item.ItemName} | </Text>} />
+                            renderItem={({ item }) => <Text style={styles.content}>{item.ItemName} | </Text>} />
                   </View>
 
                   <Text style={styles.name}>{item.PricePerPerson} /Person</Text>

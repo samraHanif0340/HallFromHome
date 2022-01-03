@@ -196,9 +196,9 @@ function SearchPage(props) {
                 ></Image>
             
 
-              <View styles={styles.contentView}>
-                <View styles={styles.eachRowContentOne}>
-                <Text styles={styles.eachRowContentOne.contentLeft}>{item.VenueName} ({item.VenueTypeDesc})</Text>
+              <View style={styles.contentView}>
+                <View style={styles.eachRowContentOne}>
+                <Text style={styles.eachRowContentOne.contentLeft}>{item.VenueName} ({item.VenueTypeDesc})</Text>
                 {/* <Text >PKR {item.RentPrice}</Text> */}
           
                 </View>            
@@ -207,7 +207,7 @@ function SearchPage(props) {
                 <Text >Limit {item.MaxCapacity} Persons</Text>
                 <Text >PKR {item.RentPrice}</Text>
            
-                <Rating styles={styles.eachRowContentTwo.contentRight}
+                <Rating style={styles.eachRowContentTwo.contentRight}
             type="star"
             fractions={1}
             startingValue={item.Rating}         
