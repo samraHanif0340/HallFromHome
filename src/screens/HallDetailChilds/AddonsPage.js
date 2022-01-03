@@ -182,7 +182,7 @@ const AddonsPage = (props) => {
                     <View style={styles.headingWrapper}><Text style={styles.heading}>Please select one from the below deals</Text></View> : null}
                 {additionalServices.foodService ?
                   
-                        <ScrollView nestedScrollEnabled={true}>
+                        <ScrollView >
                             <FlatList
 
                                 data={foodDeals}

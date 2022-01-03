@@ -47,8 +47,6 @@ export const SelectField = props => {
   )
 }
 
-
-
 const TextField = props => (
   <View>
     <View style={styles.textFieldWrapper}>

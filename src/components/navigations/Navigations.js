@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, Text, StyleSheet,Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useStoreActions } from 'easy-peasy';
 
 import {
   createDrawerNavigator, DrawerContentScrollView,
@@ -9,8 +10,6 @@ import {
 } from "@react-navigation/drawer";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-
-
 
 import NavigationHeader from './navComponents/drawerHeader'
 import Header from '../header/Header'
@@ -22,13 +21,9 @@ import TrackingStatusPage from '../../screens/TrackingStatus/TrackingStatus';
 import LodgeReviewPage from '../../screens/LodgeComplaint/LodgeComplaint';
 import LodgeCamplaintListPage from '../../screens/LodgeComplaint/LodgeCamplaintList';
 
-
-
 import HallReviewsPage from '../../screens/HallDetailChilds/ReviewsPage';
 import DetailOfHallPage from '../../screens/HallDetailChilds/DetailsPage';
 import AddonsPage from '../../screens/HallDetailChilds/AddonsPage';
-
-
 
 import LoginPage from '../../screens/auth/Login/LoginPage';
 import RegistrationPage from '../../screens/auth/Registration/RegistrationPage';
@@ -60,46 +55,6 @@ const AuthRoutes = () => {
         </Stack.Navigator>
   )
 }
-
-const SearchHallStack = () => {
-  return (
-<Stack.Navigator initialRouteName="Home" >
-      <Stack.Screen
-  
-            
-            name="Home"
-            component={SearchPage}
-            options={{title: 'Home', headerShown: false }}
-          />
-           <Stack.Screen
-  
-            name="HallDetails"
-            component={HallDetailPage}
- 
-  options={{ title: 'Venue Details' ,  headerShown:false, }}
-          />
-        </Stack.Navigator>
-  )
-}
-
-
-const BookingConfirmStack = () => {
-  return (
-<Stack.Navigator initialRouteName="CustomerBooking">
-      <Stack.Screen
-            name="CustomerBooking"
-            component={CustomerBookingPage}
-            options={{ title: 'Add Booking Details', headerShown: false }}
-          />
-           <Stack.Screen
-            name="BookingConfirm"
-            component={BookingConfirmedPage}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-  )
-}
-
 
 // DRAWER NAVIGATION // 
 const Drawer = createDrawerNavigator();
@@ -160,6 +115,8 @@ const CustomerDrawerNavigator = () => {
   );
 }
 const CustomSidebar = (props) => {
+  const setPayload = useStoreActions((actions) => actions.setPayload);
+
   const { state, descriptors, navigation } = props;
   let lastGroupName = '';
   let newGroup = true;
@@ -226,6 +183,7 @@ const CustomSidebar = (props) => {
                 text: 'Yes',
                 onPress: () => {
                   // AsyncStorage.clear();
+                  setPayload({})
                   navigation.replace('Auth');
                 },
               },
@@ -238,6 +196,44 @@ const CustomSidebar = (props) => {
     </SafeAreaView>
   );
 };
+
+const SearchHallStack = () => {
+  return (
+<Stack.Navigator initialRouteName="Home" >
+      <Stack.Screen
+  
+            
+            name="Home"
+            component={SearchPage}
+            options={{title: 'Home', headerShown: false }}
+          />
+           <Stack.Screen
+  
+            name="HallDetails"
+            component={HallDetailPage}
+ 
+  options={{ title: 'Venue Details' ,  headerShown:false, }}
+          />
+        </Stack.Navigator>
+  )
+}
+
+const BookingConfirmStack = () => {
+  return (
+<Stack.Navigator initialRouteName="CustomerBooking">
+      <Stack.Screen
+            name="CustomerBooking"
+            component={CustomerBookingPage}
+            options={{ title: 'Add Booking Details', headerShown: false }}
+          />
+           <Stack.Screen
+            name="BookingConfirm"
+            component={BookingConfirmedPage}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+  )
+}
 
 // HALL DETAILS TABS //
 const Tab = createMaterialTopTabNavigator();

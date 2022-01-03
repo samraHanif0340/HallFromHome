@@ -26,7 +26,7 @@ const SplashScreen = ({ navigation }) => {
 
     useEffect(() => {
         if (authLoaded) {
-            navigation.replace('DrawerNavigation');
+            navigation.replace('Auth');
         }
     }, [authLoaded, navigation]);
 

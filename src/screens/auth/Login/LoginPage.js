@@ -94,7 +94,7 @@ const LoginPage = ({ navigation }) => {
             );
             console.log(response)
             if (response.data.ResponseCode === "00") {
-                appendPayload({ userId: response.data.Result_DTO.ID });
+                appendPayload({ userId: response.data.Result_DTO.ID, isVenueOwner: response.data.Result_DTO.IsVenueOwner  });
                 setIsLoading(false);
                 // setErrortext({text:'Success',styles:ToastStyles.success})
                 Snackbar.show({
@@ -106,7 +106,12 @@ const LoginPage = ({ navigation }) => {
                 });
                 //   AsyncStorage.setItem('user_id', response.data.Username);
                 //   console.log(response.data.Username);
-                navigation.replace('DrawerNavigation');
+                if(response.data.Result_DTO.IsVenueOwner == true){
+                    navigation.replace('OwnerDashboard')
+                }
+                else{
+                    navigation.replace('CustomerDrawerNavigation');
+                }
                 return;
             } else {
                 setIsLoading(false);

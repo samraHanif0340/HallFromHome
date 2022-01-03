@@ -30,21 +30,15 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 
-// import SearchPage from './src/screens/Search-Hall/SearchHall';
-// import HallDetailPage from './src/screens/Hall-Details-Page/HallDetailsPage';
-
 import { CustomerDrawerNavigator } from './src/components/navigations/Navigations';
 import { AuthRoutes } from './src/components/navigations/Navigations';
 import { BookingConfirmStack } from './src/components/navigations/Navigations';
-
-
 import SplashScreen from './src/screens/SplashScreen/SplashScreen';
+import OwnerDashboard from './src/screens/VenueOwnerScreens/OwnerDashboard';
 
 import { action, createStore, StoreProvider } from 'easy-peasy';
 
@@ -145,13 +139,18 @@ const App: () => Node = () => {
               component={BookingConfirmStack}
               options={{ title:'Add Booking Details', headerShown: false }}
             />
+             <Stack.Screen
+              name="OwnerDashboard"
+              component={OwnerDashboard}
+              options={{ title:'Dashboard', headerShown: true }}
+            />
             {/* <Stack.Screen
             name="CustomerBooking"
             component={CustomerDrawerNavigator}
             options={{ headerShown: false }}
           /> */}
             <Stack.Screen
-              name="DrawerNavigation"
+              name="CustomerDrawerNavigation"
               component={CustomerDrawerNavigator}
               options={{ headerShown: false }}
             />
