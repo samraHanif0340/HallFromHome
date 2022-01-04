@@ -118,7 +118,7 @@ function DetailOfHallPage(props) {
           <Carousel
             // ref={carouselRef}
             sliderWidth={SCREEN_WIDTH}
-            sliderHeight={SCREEN_HEIGHT}
+            sliderHeight={SCREEN_HEIGHT - 5}
             itemWidth={SCREEN_WIDTH - 20}
             data={pictures}
             renderItem={_renderItemWithParallax}
@@ -415,6 +415,7 @@ const styles = StyleSheet.create({
 
   },
   viewWrapper: {
+   
     backgroundColor: 'floralwhite',
     borderRadius: 5,
     justifyContent: 'space-around',

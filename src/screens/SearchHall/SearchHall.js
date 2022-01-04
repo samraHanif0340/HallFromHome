@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
     marginTop: 23
   },
   image: {
-    width: 300,
+    width: 350,
     height: 200,
     borderRadius: 5
   },
