@@ -60,8 +60,9 @@ const LodgeReviewPage = (props) => {
 
   const saveData = async (data) => {
     let formData = Object.assign({}, data)
-    formData.VenueID = +formData.VenueID
+    formData.VenueID = formData.VenueID
 
+    console.log('global payload in review', globalPayload)
     let configurationObject = {
       url: `${BASE_URL}InsertVenueReview`,
       method: "POST",

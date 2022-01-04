@@ -90,11 +90,12 @@ const CustomerBookingPage = ({ route,navigation }) => {
       if (response.data.ResponseCode === "00") {
         if(response.data.Result_DTO){
           let obj = {}
-          for(let i=0;i<response.data.Result_DTO.length;i++){
+          let dateArray = ['2022-01-05', '2022-01-10', '2022-01-26', '2022-01-25','2022-02-06','2022-02-10']
+          for(let i=0;i<dateArray.length;i++){
             // let date = response.data.Result_DTO[i].format("YYYY-MM-DD")
-            let date = '2022-01-02'
+            
 
-            obj[date] = {
+            obj[dateArray[i]] = {
               disabled: true, color: 'white', disableTouchEvent: true,backgroundColor:'red' ,customStyles:styles.stylesReserved
             }
           }

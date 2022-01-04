@@ -196,6 +196,8 @@ function DetailOfHallPage(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection:'column',
+    justifyContent:'space-between'
   },
   rect1: {
     flex: 1

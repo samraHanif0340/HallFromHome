@@ -38,7 +38,7 @@ const SplashScreen = ({ navigation }) => {
                 <Animatable.View style={styles.header}>
                     <Animatable.Image
                         animation="bounceIn"
-                        duration={1500}
+                        duration={1000}
                         source={require('../../assets/hallFromHomeLogo.png')}
                         style={styles.logo}
                         resizeMode="stretch"
