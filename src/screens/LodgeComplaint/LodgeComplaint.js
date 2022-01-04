@@ -172,11 +172,11 @@ const LodgeReviewPage = (props) => {
                   <SelectField items={venueList} value={values.VenueID} 
                   onChange={(e) => { mySelectFunc('VenueID', e) }} 
                   error={[errors.VenueID]} 
-                  nameOfIcon="home-heart" mode="dialog"  pleaseSelectPlaceholder="Select Venue"/>
+                  nameOfIcon="envelope" mode="dialog"  pleaseSelectPlaceholder="Select Venue"/>
 
                   <TextField
                     placeholder="Rating" style={styles.labelText}
-                    keyboardType='number'
+                    keyboardType='phone-pad'
                     mode="outlined"
                     placeholderTextColor="#800000"
                     nameOfIcon="envelope"

@@ -245,6 +245,7 @@ const HallDetailTabs = (props) => {
     <Tab.Navigator
     lazy={true}
     removeClippedSubviews={true}
+    swipeEnabled={false} 
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;

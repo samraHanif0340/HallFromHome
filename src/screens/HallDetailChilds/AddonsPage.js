@@ -265,12 +265,12 @@ const styles = StyleSheet.create({
         color: 'rgba(157,24,24,0.8)'
     },
     subTitle: {
-        fontSize: 20,
+        fontSize: 14,
         fontStyle: 'italic',
         color: 'rgba(157,24,24,0.8)'
     },
     content: {
-        fontSize: 16,
+        fontSize: 12,
         fontFamily: 'dancing-script',
     },
     headingWrapper: {

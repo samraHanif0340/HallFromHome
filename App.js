@@ -29,6 +29,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import { LogBox } from "react-native";
+
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -55,6 +57,9 @@ global.fetch = function (uri, options, ...args) {
     return response;
   });
 };
+
+LogBox.ignoreAllLogs();
+
 
 
 // const Drawer = createDrawerNavigator();

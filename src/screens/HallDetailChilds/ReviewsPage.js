@@ -1,11 +1,11 @@
-import React, { Component,useEffect } from "react";
-import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground ,ScrollView} from "react-native";
+import React, { Component, useEffect } from "react";
+import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight, StatusBar, ImageBackground, ScrollView } from "react-native";
 import { SearchBar, Rating } from 'react-native-elements';
-import {  Loader } from '../../components/customComponents/customComponents'
+import { Loader } from '../../components/customComponents/customComponents'
 
 import { TouchableOpacity } from "react-native";
 // import { Avatar } from 'react-native-paper';
-import {Divider,Card,Avatar} from 'react-native-elements'
+import { Divider, Card, Avatar } from 'react-native-elements'
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
@@ -18,12 +18,12 @@ import { BASE_URL } from '../../constants/constants'
 
 function HallReviewsPage(props) {
   const source = axios.CancelToken.source();
-const configurationObject = {
-  url: `${BASE_URL}GetVenueReviews`,
-  method: "POST",
-  cancelToken: source.token,
-  data: { venueID:props.venueID },
-};
+  const configurationObject = {
+    url: `${BASE_URL}GetVenueReviews`,
+    method: "POST",
+    cancelToken: source.token,
+    data: { venueID: props.venueID },
+  };
   // const [filteredData, setfilteredData] = React.useState([]);
   const [masterData, setmasterData] = React.useState([]);
   let [searchText, setSearchText] = React.useState('')
@@ -49,7 +49,7 @@ const configurationObject = {
     }
   };
 
-  
+
   const getData = async () => {
     try {
       setIsLoading(true);
@@ -59,11 +59,11 @@ const configurationObject = {
 
       if (response.data.ResponseCode == "00") {
         setIsLoading(false);
-        if(response.data.Result_DTO){
+        if (response.data.Result_DTO) {
           setmasterData(response.data.Result_DTO)
 
         }
-   
+
         return;
       } else {
         setmasterData([])
@@ -73,46 +73,46 @@ const configurationObject = {
           backgroundColor: 'black',
           textColor: 'white',
           action: {
-              text: 'OK',
-              textColor: 'white',
-              onPress: () => { /* Do something. */ },
+            text: 'OK',
+            textColor: 'white',
+            onPress: () => { /* Do something. */ },
           },
-      });
+        });
       }
     } catch (error) {
       setmasterData([])
-        setIsLoading(false);
-        Snackbar.show({
-          text: 'Something Went Wrong',
-          duration: Snackbar.LENGTH_LONG,
-          backgroundColor: 'black',
+      setIsLoading(false);
+      Snackbar.show({
+        text: 'Something Went Wrong',
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: 'black',
+        textColor: 'white',
+        action: {
+          text: 'OK',
           textColor: 'white',
-          action: {
-              text: 'OK',
-              textColor: 'white',
-              onPress: () => { /* Do something. */ },
-          },
+          onPress: () => { /* Do something. */ },
+        },
       });
 
     }
   };
 
-  
-useEffect(() => {
-  getData();
 
-  return () => source.cancel("Data fetching cancelled");
-}, []);
+  useEffect(() => {
+    getData();
+
+    return () => source.cancel("Data fetching cancelled");
+  }, []);
 
   return (
     <View style={styles.container}>
-     <Loader isLoading={isLoading} />
+      <Loader isLoading={isLoading} />
 
-       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            <ImageBackground style={styles.container}
-                source={require("../../assets/images/Gradient_MI39RPu.png")}
-            >
-        
+      <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
+      <ImageBackground style={styles.container}
+        source={require("../../assets/images/Gradient_MI39RPu.png")}
+      >
+
         {/* <SearchBar
           lightTheme
           searchIcon={{ size: 25, color: 'white'}}
@@ -124,43 +124,43 @@ useEffect(() => {
           leftIconContainerStyle={styles.searchBar.icon}
           inputStyle={styles.searchBar.inputStyle}
         /> */}
-     
-     <ScrollView nestedScrollEnabled={true}>
-      <FlatList style={styles.container}
-        data={masterData}
-        renderItem={({ item }) => (
-      <Card containerStyle={styles.cardStyle}>
-        <View style={styles.mainView}>
-        <Avatar
-                size={64}
-                rounded
-                title={item.UserName.substr(0,1).toUpperCase()}
-                containerStyle={{ backgroundColor: 'coral' }} />
-                  
+
+        <ScrollView nestedScrollEnabled={true}>
+          <FlatList style={styles.container}
+            data={masterData}
+            renderItem={({ item }) => (
+              <Card containerStyle={styles.cardStyle}>
+                <View style={styles.mainView}>
+                  <Avatar
+                    size={64}
+                    rounded
+                    title={item.UserName.substr(0, 1).toUpperCase()}
+                    containerStyle={{ backgroundColor: 'coral' }} />
+
                   <View style={styles.middleView}>
-                  <Text style={[styles.title, { flexShrink:1}]}>{item.UserName}</Text>
-                <Text style={[styles.review, { flexShrink:1}]}>{item.ReviewText}</Text>    
-                <Rating 
-            type="star"
-            fractions={1}
-            startingValue={item.Rating}         
-            imageSize={12}   
-            style={styles.rating}     
-          />
+                    <Text style={[styles.title, { flexShrink: 1 }]}>{item.UserName}</Text>
+                    <Text style={[styles.review, { flexShrink: 1 }]}>{item.ReviewText}</Text>
 
                   </View>
+                  <Rating
+                    type="star"
+                    fractions={1}
+                    startingValue={item.Rating}
+                    imageSize={12}
+                    style={styles.rating}
+                  />
 
-              
+
                 </View>
-      </Card>
-  
-        )}
-        
-      />
- </ScrollView>
+              </Card>
+
+            )}
+
+          />
+        </ScrollView>
 
 
-</ImageBackground>
+      </ImageBackground>
     </View>
   );
 }
@@ -168,58 +168,65 @@ useEffect(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
+
   },
-  cardStyle:{
- 
-    borderRadius:6,
+  cardStyle: {
+
+    borderRadius: 6,
     // backgroundColor:'rgba(222,206,206,1)', 
     shadowColor: '#000',
     shadowOffset: { width: 1, height: 1 },
-    shadowOpacity:  0.3,
+    shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
 
   },
   mainView: {
     flexDirection: 'row',
-    justifyContent:'flex-start',
-    flexShrink:1
-    
-  },
-  middleView:{
-   
-    flexDirection:'column',
-    flexShrink:1
+    justifyContent: 'flex-start',
+    flexShrink: 1
 
-},
-  rating:{
-    flex:2,
-    backgroundColor:'rgba(222,206,206,1)', 
+  },
+  middleView: {
+
+    flexDirection: 'column',
+    flexShrink: 1,
+    justifyContent: 'flex-start'
+
+
+  },
+  rating: {
+    flex: 2,
+    backgroundColor: 'rgba(222,206,206,1)',
     // alignSelf:'flex-end'
   },
   title: {
     fontSize: 16,
-    color:'red',
-    fontFamily:'cursive',
+    color: 'black',
+    fontWeight: 'bold',
+    alignSelf: 'flex-start'
+
+    // fontFamily:'cursive',
   },
   review: {
+    flexWrap: 'wrap',
     fontSize: 10,
-    color:'red',
-    fontFamily:'cursive',
-   
+    alignSelf: 'center'
+    // color:'red',
+    // fontFamily:'cursive',
+
   },
-  rating:{
-    // alignSelf:'flex-end',
+  rating: {
+    alignSelf: 'flex-end',
   },
 
 
- 
- 
+
+
   // contentView:{
   //   flexDirection:'column',
   //   justifyContent:'space-around',
-   
+
   // },
   // userName:{
   //   fontWeight:'bold',
@@ -228,118 +235,118 @@ const styles = StyleSheet.create({
   // },
 
 
- 
+
   icon6: {
-    bottom:90,
-    right:30,
+    bottom: 90,
+    right: 30,
     position: "absolute",
     color: "yellow",
     fontSize: 15,
     height: 20,
     width: 19
   },
-  card:{
-backgroundColor: 'white'
+  card: {
+    backgroundColor: 'white'
   },
-  cardTitle : {
+  cardTitle: {
     color: 'black',
-    fontSize:20,
+    fontSize: 20,
   },
 
-  eachItem: 
+  eachItem:
   {
-    flex:1,
-    flexDirection:'row',
-    color:'rgba(222,206,206,1)',
-    marginBottom : 10,
-    marginTop:10,
-    width:320,
-    height:140,
+    flex: 1,
+    flexDirection: 'row',
+    color: 'rgba(222,206,206,1)',
+    marginBottom: 10,
+    marginTop: 10,
+    width: 320,
+    height: 140,
     // backgroundColor:'yellow'
   },
-  leftAlign:{
-    marginLeft:-2,
-    flex:2,
-    icon:{
-      fontSize:30,
-      height:100,
+  leftAlign: {
+    marginLeft: -2,
+    flex: 2,
+    icon: {
+      fontSize: 30,
+      height: 100,
       //color:'rgba(255,255,255,1)',
-      color:'maroon',
-      bottom:5,
+      color: 'maroon',
+      bottom: 5,
     }
   },
-  centeredAlign:{
-    marginLeft:10,
+  centeredAlign: {
+    marginLeft: 10,
     //marginRight:40,
-    bottom:10,
-    height:100,
-    content:{
-      color:'rgba(255,255,255,1)', 
+    bottom: 10,
+    height: 100,
+    content: {
+      color: 'rgba(255,255,255,1)',
     },
-    flex:6,
+    flex: 6,
   },
-  ReviewStyle:{
-    Reviewcontent:{
+  ReviewStyle: {
+    Reviewcontent: {
       //color:'rgba(255,255,255,1)', 
-      color:'black',
-      bottom:35,
-      textAlign:'left',
-      left:40,
-      width:220,
-      fontWeight: 'normal', 
+      color: 'black',
+      bottom: 35,
+      textAlign: 'left',
+      left: 40,
+      width: 220,
+      fontWeight: 'normal',
       fontStyle: 'italic',
       fontSize: 14,
     },
-    flex:6,
+    flex: 6,
   },
-  UserNameStyle:{
-    Usernamecontent:{
+  UserNameStyle: {
+    Usernamecontent: {
       //color:'rgba(255,255,255,1)', 
-      color:'black',
-      bottom:40,
-      textAlign:'left',
-      left:40,
-      fontWeight: 'normal', 
+      color: 'black',
+      bottom: 40,
+      textAlign: 'left',
+      left: 40,
+      fontWeight: 'normal',
       fontStyle: 'italic',
       fontSize: 14,
     },
-    flex:6,
+    flex: 6,
   },
-  HallNameStyle:{
-    Hallnamecontent:{
+  HallNameStyle: {
+    Hallnamecontent: {
       // color:'rgba(255,255,255,1)', 
-      color:'black',
-      fontWeight: 'bold', 
+      color: 'black',
+      fontWeight: 'bold',
       fontSize: 17,
-      right:5,
-      bottom:25,
+      right: 5,
+      bottom: 25,
     },
-    flex:6,
+    flex: 6,
   },
-  rightAligned:{
-    flex:2,
-    flexDirection:'row',
-    alignItems:'center',
-    content:{
-      color:'rgba(255,255,255,1)',   
-    },   
-    icon:{
-      fontSize:15,
-      color:'yellow',
-      bottom:79,
-      left:240,
+  rightAligned: {
+    flex: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    content: {
+      color: 'rgba(255,255,255,1)',
     },
-    icon2:{
-      fontSize:15,
-      color:'yellow',
-      bottom:94,
-      left:220,
+    icon: {
+      fontSize: 15,
+      color: 'yellow',
+      bottom: 79,
+      left: 240,
     },
-    icon3:{
-      fontSize:15,
-      color:'yellow',
-      bottom:109,
-      left:200,
+    icon2: {
+      fontSize: 15,
+      color: 'yellow',
+      bottom: 94,
+      left: 220,
+    },
+    icon3: {
+      fontSize: 15,
+      color: 'yellow',
+      bottom: 109,
+      left: 200,
     },
   },
   DividerColor: {
@@ -348,22 +355,22 @@ backgroundColor: 'white'
     left: -95,
     alignItems: "center",
     right: 5,
-    width:390,
-    bottom:20,
-    top:20,
+    width: 390,
+    bottom: 20,
+    top: 20,
     // marginTop: 10,
     // marginBottom: 10,
 
 
   },
-  searchBar:{
-    backgroundColor:'rgba(142,7,27,1)',
-    opacity:0.5,
-    icon:{
-    color:'Blue',
+  searchBar: {
+    backgroundColor: 'rgba(142,7,27,1)',
+    opacity: 0.5,
+    icon: {
+      color: 'Blue',
     },
-    inputStyle:{
-      color:'white',
+    inputStyle: {
+      color: 'white',
     }
   },
   rect: {
