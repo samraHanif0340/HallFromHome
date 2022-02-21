@@ -29,6 +29,8 @@ import LoginPage from '../../screens/auth/Login/LoginPage';
 import RegistrationPage from '../../screens/auth/Registration/RegistrationPage';
 
 import CustomerBookingPage from '../../screens/BookingDetails/CustomerBookingPage';
+import HallRegistrationPage from '../../screens/BookingDetails/HallRegistrationPage';
+import VenueOwnerRegistrationPage from '../../screens/auth/Registration/VenueOwnerRegistrationPage';
 import BookingConfirmedPage from '../sharedComponents/BookingConfirmedPage'
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -100,7 +102,23 @@ const CustomerDrawerNavigator = () => {
       }}
         component={TrackingStatusPage} />
 
+<Drawer.Screen name="Hall Registration"  options={{
+        drawerLabel: 'Hall Registration',
+        title: 'Hall Registration',
 
+        //activeTintColor: '#FF6F00',
+        activeTintColor: '#8b0000',
+      }}
+        component={HallRegistrationPage} />
+        
+<Drawer.Screen name="Venue Owner Registration"  options={{
+        drawerLabel: 'Venue Owner Registration',
+        title: 'Venue Owner Registration',
+
+        //activeTintColor: '#FF6F00',
+        activeTintColor: '#8b0000',
+      }}
+        component={VenueOwnerRegistrationPage} />
         
       <Drawer.Screen name="Review/Feedback" options={{
         drawerLabel: 'Review/Feedback',
