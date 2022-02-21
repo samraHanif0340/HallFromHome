@@ -107,7 +107,7 @@ const LoginPage = ({ navigation }) => {
                 //   AsyncStorage.setItem('user_id', response.data.Username);
                 //   console.log(response.data.Username);
                 if(response.data.Result_DTO.IsVenueOwner == true){
-                    navigation.replace('OwnerDashboard')
+                    navigation.replace('OwnerTabs')
                 }
                 else{
                     navigation.replace('CustomerDrawerNavigation');

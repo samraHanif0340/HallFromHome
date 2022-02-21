@@ -38,6 +38,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { CustomerDrawerNavigator } from './src/components/navigations/Navigations';
 import { AuthRoutes } from './src/components/navigations/Navigations';
+import { VenueOwnerTabs } from './src/components/navigations/Navigations';
 import { BookingConfirmStack } from './src/components/navigations/Navigations';
 import SplashScreen from './src/screens/SplashScreen/SplashScreen';
 import OwnerDashboard from './src/screens/VenueOwnerScreens/OwnerDashboard';
@@ -145,9 +146,9 @@ const App: () => Node = () => {
               options={{ title:'Add Booking Details', headerShown: false }}
             />
              <Stack.Screen
-              name="OwnerDashboard"
-              component={OwnerDashboard}
-              options={{ title:'Dashboard', headerShown: true }}
+              name="OwnerTabs"
+              component={VenueOwnerTabs}
+              options={{ title:'Dashboard', headerShown: false }}
             />
             {/* <Stack.Screen
             name="CustomerBooking"

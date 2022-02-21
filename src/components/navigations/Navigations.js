@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState,Suspense } from "react";
 import { SafeAreaView, View, Text, StyleSheet,Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useStoreActions } from 'easy-peasy';
@@ -32,7 +32,12 @@ import CustomerBookingPage from '../../screens/BookingDetails/CustomerBookingPag
 import HallRegistrationPage from '../../screens/BookingDetails/HallRegistrationPage';
 import VenueOwnerRegistrationPage from '../../screens/auth/Registration/VenueOwnerRegistrationPage';
 import BookingConfirmedPage from '../sharedComponents/BookingConfirmedPage'
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+const VenueDashboard = React.lazy(()=> import('../../screens/VenueOwnerScreens/OwnerDashboard') )
+
 const Tab = createMaterialTopTabNavigator();
+const OwnerTabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 // AUTH ROUTES //
@@ -216,9 +221,7 @@ const CustomSidebar = (props) => {
 const SearchHallStack = () => {
   return (
 <Stack.Navigator initialRouteName="Home" >
-      <Stack.Screen
-  
-            
+      <Stack.Screen   
             name="Home"
             component={SearchPage}
             options={{title: 'Home', headerShown: false }}
@@ -288,7 +291,40 @@ const HallDetailTabs = (props) => {
   );
 }
 
-export { CustomerDrawerNavigator,HallDetailTabs,AuthRoutes,BookingConfirmStack,SearchHallStack};
+// VENUE OWNER V=NAVIGATIONS
+// TAB NAVIGATORS
+const VenueOwnerTabs = (props) => {
+  return (
+    <OwnerTabs.Navigator
+    lazy={true}
+    removeClippedSubviews={true}
+    swipeEnabled={false} 
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName;
+
+        if (route.name === 'Home') {
+          iconName = focused
+            ? 'ios-information-circle'
+            : 'ios-information-circle-outline';
+        } else if (route.name === 'Settings') {
+          iconName = focused ? 'ios-list-box' : 'ios-list';
+        }
+        // return <Ionicons name={iconName} size={size} color={color} />;
+      },  
+      tabBarActiveTintColor: 'rgba(248,231,28,1)',
+      tabBarInactiveTintColor: 'rgba(157,24,24,0.8)',    
+      })}
+    >
+    <OwnerTabs.Screen name="Dashboard"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><VenueDashboard /></Suspense>}</OwnerTabs.Screen>
+    <OwnerTabs.Screen name="Your Halls" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="plus-circle" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <AddonsPage  venueID={props.venueID} />}</OwnerTabs.Screen>
+    <OwnerTabs.Screen name="Profile" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="thumbs-up" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <HallReviewsPage  venueID={props.venueID} />}</OwnerTabs.Screen>
+  </OwnerTabs.Navigator>
+  );
+}
+
+
+export { CustomerDrawerNavigator,HallDetailTabs,AuthRoutes,BookingConfirmStack,SearchHallStack,VenueOwnerTabs};
 
 
 const styles = StyleSheet.create({
