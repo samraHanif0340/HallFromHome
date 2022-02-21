@@ -13,6 +13,7 @@ import { NavigationContainer } from "@react-navigation/native";
 
 
 
+
 const OwnerDashboard = (props) => {
   // const appendPayload = useStoreActions((actions) => actions.appendPayload);
   const globalPayload = useStoreState((state) => state.payload);
@@ -20,7 +21,10 @@ const OwnerDashboard = (props) => {
   const source = axios.CancelToken.source();
 
   const [pendingData, setpendingData] = React.useState([]);
+  const [dashboardData, setDashboardData] = React.useState([{id:1,name:'Pending',count:49},{id:2,name:'Approved',count:23},{id:3,name:'Rejected',count:12}]);
+
   const [isLoading, setIsLoading] = React.useState(false);
+
 
 
 
@@ -118,21 +122,28 @@ const OwnerDashboard = (props) => {
     return obj
   }
 
+  const renderDashboardItem = ({ item }) => (
+    <Card containerStyle={styles.cardStyle}>
+      <Text style={styles.itemName}>{item.name}</Text>
+      <Text style={styles.itemCount}>{item.count}</Text>
+    </Card>
+  );
+
   return (
     <View style={styles.container}>
       <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-      <ImageBackground style={styles.container}
+      {/* <ImageBackground style={styles.container}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
-      >
-        <TouchableOpacity
+      > */}
+        {/* <TouchableOpacity
           onPress={handleSubmitPress}
           style={styles.button2}
         >
           <Text style={styles.text5}>LOGOUT</Text>
-        </TouchableOpacity>
-        <ScrollView >
+        </TouchableOpacity> */}
+        {/* <ScrollView >
           <FlatList 
             data={pendingData}
             renderItem={({ item }) => (
@@ -160,10 +171,20 @@ const OwnerDashboard = (props) => {
             )}
 
           />
+        </ScrollView> */}
+
+        <ScrollView>
+          <Text>Summary</Text>
+          <FlatList
+          data={dashboardData}
+          renderItem={renderDashboardItem}
+          keyExtractor={item => item.id}
+          numColumns={2}
+          />
         </ScrollView>
 
 
-      </ImageBackground>
+      {/* </ImageBackground> */}
     </View>
   );
 }
@@ -171,17 +192,23 @@ const OwnerDashboard = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
   },
   cardStyle: {
+    flex:1,
+    justifyContent:'space-between',
     borderRadius: 6,
-    // backgroundColor:'rgba(222,206,206,1)', 
+    backgroundColor:'#EC6A6A', 
     shadowColor: '#000',
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
-
+  },
+  itemName:{
+    fontSize:16,
+    color:'black',
+    fontWeight:'bold',
+    
   },
   mainView: {
     flexDirection: 'row',

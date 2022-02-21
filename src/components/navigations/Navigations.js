@@ -30,10 +30,10 @@ import RegistrationPage from '../../screens/auth/Registration/RegistrationPage';
 
 import CustomerBookingPage from '../../screens/BookingDetails/CustomerBookingPage';
 import BookingConfirmedPage from '../sharedComponents/BookingConfirmedPage'
-
-
-// AUTH ROUTES //
+const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+// AUTH ROUTES //
 const AuthRoutes = () => {
   return (
 <Stack.Navigator>
@@ -57,8 +57,6 @@ const AuthRoutes = () => {
 }
 
 // DRAWER NAVIGATION // 
-const Drawer = createDrawerNavigator();
-
 const CustomerDrawerNavigator = () => {
   return (
     <Drawer.Navigator initialRouteName="SearchHallStack" 
@@ -236,7 +234,7 @@ const BookingConfirmStack = () => {
 }
 
 // HALL DETAILS TABS //
-const Tab = createMaterialTopTabNavigator();
+
 
 const HallDetailTabs = (props) => {
   console.log(props)
