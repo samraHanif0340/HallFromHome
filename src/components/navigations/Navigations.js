@@ -25,6 +25,7 @@ import HallReviewsPage from '../../screens/HallDetailChilds/ReviewsPage';
 import DetailOfHallPage from '../../screens/HallDetailChilds/DetailsPage';
 import AddonsPage from '../../screens/HallDetailChilds/AddonsPage';
 import CustomerBookingPage from '../../screens/BookingDetails/CustomerBookingPage';
+import NewVenueServicesPage from '../../screens/BookingDetails/NewVenueServices';
 
 import LoginPage from '../../screens/auth/Login/LoginPage';
 import RegistrationPage from '../../screens/auth/Registration/RegistrationPage';
@@ -105,6 +106,14 @@ const CustomerDrawerNavigator = () => {
         //activeTintColor: '#FF6F00',
         activeTintColor: '#8b0000',
       }} component={CustomerDashboardPage} />
+
+<Drawer.Screen  name="Venue Internal Services" options={{
+        drawerLabel: 'Venue Internal Services',
+        title: 'Venue Internal Services',
+        // groupName: 'Category 1',
+        //activeTintColor: '#FF6F00',
+        activeTintColor: '#8b0000',
+      }} component={NewVenueServicesPage} />
 
      <Drawer.Screen name="Tracking/Status"  options={{
         drawerLabel: 'Tracking/Status',
