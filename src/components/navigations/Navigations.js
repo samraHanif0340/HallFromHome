@@ -38,6 +38,7 @@ import VenueOwnerRegistrationPage from '../../screens/auth/Registration/VenueOwn
 import HallVideoPicturesPage from '../../screens/VenueOwnerScreens/HallVideosPictures';
 import OwnerHallsPage from '../../screens/VenueOwnerScreens/OwnerHalls';
 import NewVenueAdditionPage from '../../screens/VenueOwnerScreens/NewVenueAddition';
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 
 const VenueDashboard = React.lazy(()=> import('../../screens/VenueOwnerScreens/OwnerDashboard') )
@@ -312,7 +313,31 @@ const VenueOwnerTabs = (props) => {
     <OwnerTabs.Screen name="Dashboard"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><VenueDashboard /></Suspense>}</OwnerTabs.Screen>
     <OwnerTabs.Screen name="Your Halls" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="plus-circle" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{()=> <VenueListingAndAddition/>}</OwnerTabs.Screen>
     <OwnerTabs.Screen name="Profile" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="thumbs-up" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><VenueDashboard /></Suspense>}</OwnerTabs.Screen>
-    <OwnerTabs.Screen name="Logout"></OwnerTabs.Screen>
+    {/* <TouchableOpacity><Text>Logout</Text></TouchableOpacity> */}
+    {/* <OwnerTabs.Screen name="Logout"  options={
+      {
+        tabPress:() => {
+          Alert.alert(
+            'Logout',
+            'Are you sure, you want to logout?',
+            [
+              {
+                text: 'No',
+                onPress: () => {
+                  return null;
+                },
+              },
+              {
+                text: 'Yes',
+                onPress: () => {
+                  // AsyncStorage.clear();
+                  setPayload({})
+                  navigation.replace('Auth');
+                },
+              },
+            ],
+            {cancelable: false},
+          )}}}></OwnerTabs.Screen> */}
 
   </OwnerTabs.Navigator>
   );
