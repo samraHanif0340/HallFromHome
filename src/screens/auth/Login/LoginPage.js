@@ -45,15 +45,6 @@ const LoginPage = ({ navigation }) => {
         // }
         // formBody = formBody.join('&');
         console.log(dataToSend)
-        // navigation.replace('Home');
-
-        // if (dataToSend.Username == 'samra.hanif@yahoo.com' && dataToSend.Password == 'admin12345') {
-        //     alert('LOGIN SUCCESSFUL')
-        //     saveData(dataToSend)
-        // }
-        // else {
-        //     alert('INCORRECT EMAIL OR PASSWORD')
-        // }
 
         saveData(dataToSend)
 

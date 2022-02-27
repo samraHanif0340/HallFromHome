@@ -1,5 +1,5 @@
 import React, { Component, useEffect } from "react";
-import { StyleSheet, View, Text, Image, FlatList, TouchableOpacity, TouchableHighlight, StatusBar, ImageBackground, ScrollView } from "react-native";
+import { StyleSheet, View, Dimensions,Text, Image, FlatList, SafeAreaView,TouchableOpacity, VirtualizedList,TouchableHighlight, StatusBar, ImageBackground, ScrollView } from "react-native";
 import { Loader } from '../../components/customComponents/customComponents'
 import { Divider, Card, Avatar , Badge} from 'react-native-elements'
 import axios from 'axios';
@@ -7,8 +7,12 @@ import { BASE_URL } from '../../constants/constants'
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { NavigationContainer } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 
+export const SCREEN_WIDTH = Dimensions.get('window').width;
+export const CAROUSEL_VERTICAL_OUTPUT = 56;
+export const CAROUSEL_ITEM_WIDTH = SCREEN_WIDTH - CAROUSEL_VERTICAL_OUTPUT;
 
 
 // const LeftContent = props => <Avatar.Icon {...props} icon="account-circle-outline" />
@@ -136,24 +140,20 @@ const OwnerDashboard = (props) => {
     </Card>
   );
 
+
   const renderRecentBookings = ({item}) =>(
-    <Card containerStyle={styles.cardStyle}>
-    <View style={styles.mainView}>
-      {/* <Avatar
-        size={64}
-        rounded
-        title={item.BookedByUsername.substr(0, 1).toUpperCase()}
-        containerStyle={{ backgroundColor: 'coral' }} /> */}
+  
+ 
+     
       <View style={styles.middleView}>
         <Text style={styles.username}>{item.BookedByUsername}</Text>
         <Text style={styles.venueName}>{item.VenueName}</Text>
         <View style={styles.lastRow}>
           <Text style={styles.eventDateTime}>{item.EventDate} | {item.EventTime}</Text>
-      <Badge style={styles.statusBadge} value={getStatusDescription(item.RequestStatus).statusDecription} status={getStatusDescription(item.RequestStatus).color}/>
+      {/* <Badge style={styles.statusBadge} value={getStatusDescription(item.RequestStatus).statusDecription} status={getStatusDescription(item.RequestStatus).color}/> */}
         </View>
       </View>
-    </View>
-  </Card>
+ 
   )
 
   return (
@@ -200,7 +200,6 @@ const OwnerDashboard = (props) => {
           />
         </ScrollView> */}
         <View style={styles.childParents}>
-
         <ScrollView>
           <Card containerStyle={styles.cardParentStyle}>
           <Card.Title>Requests And Approvals</Card.Title>
@@ -210,41 +209,55 @@ const OwnerDashboard = (props) => {
           renderItem={renderDashboardItem}
           keyExtractor={item => item.id}
           numColumns={2}
+     
           />
           </Card>
-      
-          </ScrollView>
+</ScrollView>
          
-          <ScrollView>
           <Card containerStyle={styles.cardParentStyle}>
           <Card.Title>Recent Bookings</Card.Title>
           <TouchableHighlight style={styles.viewMoreButton}><Text >View More</Text></TouchableHighlight>
           <Card.Divider />
-          <FlatList
+          {/* <FlatList
+          contentContainerStyle={styles.flatListView}
           data={pendingData}
           renderItem={renderRecentBookings}
           keyExtractor={item => item.id}
           horizontal
-          />
+          /> */}
+           <Carousel
+                            layout={"default"}
+                            data={pendingData}
+                            sliderWidth={250}
+            itemWidth={250}
+                            renderItem={renderRecentBookings}
+                            onSnapToItem={(index) => console.log('carousel index', index)} />
+                               <Pagination
+                                containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+                                dotStyle={styles.ww}
+                                inactiveDotOpacity={0.4}
+                                inactiveDotScale={0.6}
+                                
+
+
+                            />
           </Card>
-          </ScrollView>
-
-        
-
+ 
           <ScrollView>
          
           <Card containerStyle={styles.cardParentStyle}>
           <Card.Title>Your Halls </Card.Title>
           <TouchableHighlight style={styles.viewMoreButton}><Text >View More</Text></TouchableHighlight>
           <Card.Divider />
-          
+          <SafeAreaView>
           <FlatList
           data={pendingData}
+          contentContainerStyle={styles.flatListView}
           renderItem={renderRecentBookings}
           keyExtractor={item => item.id}
           horizontal
           />
-          <TouchableHighlight><Text>View More</Text></TouchableHighlight>
+          </SafeAreaView>
           </Card>
 
           </ScrollView>
@@ -265,11 +278,11 @@ const styles = StyleSheet.create({
     justifyContent:'space-between'
   },
   cardParentStyle: {
-    flex:1,
+   
     justifyContent:'space-between',
     borderRadius: 6,
     shadowColor: '#000',
-    // backgroundColor:'#FDE1C9',
+    backgroundColor:'#FDE1C9',
     shadowOffset: { width: 1.5, height: 1.5 },
     shadowOpacity: 0.5,
     shadowRadius: 4,
@@ -312,9 +325,13 @@ const styles = StyleSheet.create({
     color:'black',
     fontWeight:'bold'
   },
+  flatListView:{
+    flexDirection:'row',
+    justifyContent:'space-between'
+  },
   mainView: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+   
+
     
   },
   username: {
@@ -328,38 +345,10 @@ const styles = StyleSheet.create({
 
   },
   middleView: {
-    flexDirection: 'column',
-    justifyContent:'space-between',
-    alignContent:'space-between'
+    // flexDirection: 'row',
+    // justifyContent:'space-between',
+    // alignContent:'space-between'
 
-  },
-  lastRow: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    textAlign:'center'
-  },
-  statusBadge:{
-    fontSize:5,
-    alignSelf:'flex-end'
-    
-  },
-
-  button2: {
-    height: 59,
-    //backgroundColor: "rgba(31,178,204,1)",
-    backgroundColor: "rgba(255,255,255,1)",
-    borderRadius: 5,
-    justifyContent: "center",
-    marginRight: 20,
-    marginLeft: 20,
-    marginTop: 14,
-    marginBottom: 14
-  },
-  text5: {
-    color: "rgba(142,7,27,1)",
-    textAlign: "center",
-    fontSize: 20,
-    alignSelf: "center"
   },
 });
 

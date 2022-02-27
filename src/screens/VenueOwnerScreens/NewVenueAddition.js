@@ -30,52 +30,61 @@ const validationSchema = Yup.object().shape({
   //   .max(13, 'CNIC must be of 13 characters long')
   //   .required('Required'),
     Capacity: Yup.string()
+    .min(2,'Capacity must be 2 digit long')
+    .max(7,'Capacity must be atmost 7 digits long')
     .required('Required'),
+
     RentPrice: Yup.string()
+    .min(4,'Rent Price must be 4 digit long')
+    .max(12,'Rent Price must be 12 digit long')
     .required('Required'),
+   
+
     Longitude: Yup.string()
+    .trim()
+    .matches(/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/, 'Longitude should be between -180 to 180')
     .required('Required'),
+
     Latitude: Yup.string()
+    .trim()
+    .matches(/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/, 'Latitude should be between -90 to 90')
     .required('Required'),
+
     Location: Yup.string()
     .required('Required'),
+
     HallType: Yup.string()
     .required('Required'),
+
     City: Yup.string()
     .required('Required'),
-  // MobileNumber: Yup.string()
-  //   .min(11, 'Mobile Number should be in format 03xxxxxxxxx')
-  //   .max(11, 'Mobile Number should be in format 03xxxxxxxxx')
-  //   .matches(/^[0][3][\d]{9}$/, 'Mobile Number should be in format 03xxxxxxxxx')
-  //   .required('Required'),
-  // EventDate: Yup.string()
-  //   .required('Required'),
+
   EventShift: Yup.string()
     .required('Required'),
 });
 
 
-const HallRegistrationPage = ({ route,navigation }) => {
-  console.log('Hall Registration page params', route)
+const NewVenueAdditionPage = (props) => {
+  // console.log('Hall Registration page params', route)
   const [isLoading, setIsLoading] = React.useState(false)
   const [showCalendar, setShowCalendar] = React.useState(false)
   const [markedDates, setMarkedDates] = React.useState({})
 
   const [shiftList, setShiftList] = React.useState([
-    {label:'Day',value:'Day',enable:false},
-    {label:'Night',value:'Night',enable:false},
-    {label:'Both',value:'Both',enable:false}
+    {label:'Day',value:'Day',enable:true},
+    {label:'Night',value:'Night',enable:true},
+    {label:'Both',value:'Both',enable:true}
 
   ])
   const [VenueType, setVenueType] = React.useState([
     {label:'Banquet',value:'Banquet',enable:false},
-    {label:'Fixed Marquee',value:'Fixed Marquee',enable:false},
-    {label:'Hall Indoor',value:'Hall Indoor',enable:false},
+    {label:'Fixed Marquee',value:'Fixed Marquee',enable:true},
+    {label:'Hall Indoor',value:'Hall Indoor',enable:true},
     {label:'Outdoor Lawn',value:'Outdoor Lawn',enable:false}
 
   ])
   const [City, setCity] = React.useState([
-    {label:'Karachi',value:'Karachi',enable:false}
+    {label:'Karachi',value:'Karachi',enable:true}
 
   ])
   const [initialFormValues, setInitialFormValues] = React.useState({
@@ -99,52 +108,6 @@ const HallRegistrationPage = ({ route,navigation }) => {
 
 
   // }, [globalPayload.venueId])
-
-
-
-  // const getReservedDates = async (venueID) => {
-  //   let payload = {
-  //     VenueID: venueID
-  //   }
-
-  //   let configurationObject = {
-  //     url: `${BASE_URL}GetEventBookedDatesByVenue`,
-  //     method: "POST",
-  //     cancelToken: source.token,
-  //     data: payload,
-  //   }
-  //   try {
-  //     const response = await axios(
-  //       configurationObject,
-  //     );
-  //     if (response.data.ResponseCode === "00") {
-  //       if(response.data.Result_DTO){
-  //         let obj = {}
-  //         let dateArray = ['2022-01-05', '2022-01-10', '2022-01-26', '2022-01-25','2022-02-06','2022-02-10']
-  //         for(let i=0;i<dateArray.length;i++){
-  //           // let date = response.data.Result_DTO[i].format("YYYY-MM-DD")
-            
-
-  //           obj[dateArray[i]] = {
-  //             disabled: true, color: 'white', disableTouchEvent: true,backgroundColor:'red' ,customStyles:styles.stylesReserved
-  //           }
-  //         }
-
-  //         console.log(obj)
-  //         setMarkedDates(obj)
-  //       }
-
-       
-  //       return;
-  //     } else {
-  //       setMarkedDates([])
-
-  //     }
-  //   } catch (error) {
-  //     setMarkedDates([])
-
-  //   }
-  // };
 
   const getTimesDropdown = async (data) => {
     let formData = Object.assign({}, data)
@@ -259,7 +222,7 @@ const HallRegistrationPage = ({ route,navigation }) => {
       url: `${BASE_URL}VenueBooking`,
       method: "POST",
       cancelToken: source.token,
-      data: { ...formData, CateringID : globalPayload.addons.CateringID, VenueID: globalPayload.venueId, userId: globalPayload.userId },
+      // data: { ...formData, CateringID : globalPayload.addons.CateringID, VenueID: globalPayload.venueId, userId: globalPayload.userId },
     }
     // navigation.navigate('BookingConfirm')
 
@@ -316,12 +279,8 @@ const HallRegistrationPage = ({ route,navigation }) => {
 
   const setEventDateMethod = (formValues) => {
     console.log(formValues)
-    // setEventDate(formValues.EventDate)
     setInitialFormValues({ ...initialFormValues, EventDate: formValues.EventDate });
     setShowCalendar(false)
-    // if(formValues.EventDate){
-    //   getTimesDropdown(formValues)
-    // }
   }
 
   const CalendarComponent = (props) => {
@@ -333,7 +292,6 @@ const HallRegistrationPage = ({ route,navigation }) => {
         EventDate: selectedDate
       }
       props.parentCallback(obj);
-
       getTimesDropdown(obj)
     }
 
@@ -385,6 +343,10 @@ const HallRegistrationPage = ({ route,navigation }) => {
     )
   }
 
+  const goToPicsAdditionPage = () =>{
+    props.navigation.push('VenuePicVideos')
+  }
+
   return (
     <View style={styles.container}>
 
@@ -395,7 +357,7 @@ const HallRegistrationPage = ({ route,navigation }) => {
         source={require("../../assets/images/Gradient_MI39RPu.png")}
       >
         <View style={styles.titleWrapper}>
-          <Text style={styles.title}>Enter Hall Details</Text>
+          <Text style={styles.title}>Add New Venue</Text>
         </View>
         <ScrollView>
           <Formik
@@ -419,8 +381,8 @@ const HallRegistrationPage = ({ route,navigation }) => {
                     placeholderTextColor="#800000"
                     nameOfIcon="user"
                     maxLength={80}
-                    onChangeText={(e) => { myChangeFunc('Name', e) }}
-                    onBlur={handleBlur('Name')}
+                    onChangeText={(e) => { myChangeFunc('HallName', e) }}
+                    onBlur={handleBlur('HallName')}
                     value={values.HallName}
                     error={[errors.HallName]}
                   />
@@ -428,7 +390,7 @@ const HallRegistrationPage = ({ route,navigation }) => {
                     pleaseSelectPlaceholder="Hall Type" 
                     items={VenueType} 
                     value={values.HallType} 
-                    onChange={handleChange('VenueType')} 
+                    onChange={handleChange('HallType')} 
                     error={[errors.HallType]} 
                     nameOfIcon="home" 
                     mode="dialog" /> 
@@ -443,7 +405,7 @@ const HallRegistrationPage = ({ route,navigation }) => {
                     mode="dialog" /> 
 
                     <TextField
-                    placeholder="Location" style={styles.labelText}
+                    placeholder="Address" style={styles.labelText}
                     keyboardType='default'
                     mode="outlined"
                     placeholderTextColor="#800000"
@@ -456,7 +418,7 @@ const HallRegistrationPage = ({ route,navigation }) => {
                   />
                   <TextField
                     placeholder="Longitude" style={styles.labelText}
-                    keyboardType='Longitude'
+                    keyboardType='default'
                     mode="outlined"
                     placeholderTextColor="#800000"
                     nameOfIcon="envelope"
@@ -468,7 +430,7 @@ const HallRegistrationPage = ({ route,navigation }) => {
                   />
                   <TextField
                     placeholder="Latitude" style={styles.labelText}
-                    keyboardType='Latitude'
+                    keyboardType='default'
                     mode="outlined"
                     placeholderTextColor="#800000"
                     nameOfIcon="credit-card"
@@ -480,7 +442,7 @@ const HallRegistrationPage = ({ route,navigation }) => {
                   />
                    <TextField
                     placeholder="Capacity" style={styles.labelText}
-                    keyboardType='Capacity'
+                    keyboardType='phone-pad'
                     mode="outlined"
                     placeholderTextColor="#800000"
                     nameOfIcon="credit-card"
@@ -492,13 +454,13 @@ const HallRegistrationPage = ({ route,navigation }) => {
                   />
                    <TextField
                     placeholder="Rent Price" style={styles.labelText}
-                    keyboardType='Rent Price'
+                    keyboardType='phone-pad'
                     mode="outlined"
                     placeholderTextColor="#800000"
                     nameOfIcon="credit-card"
                     maxLength={50}
-                    onChangeText={(e) => { myChangeFunc('Rent Price', e) }}
-                    onBlur={handleBlur('Rent Price')}
+                    onChangeText={(e) => { myChangeFunc('RentPrice', e) }}
+                    onBlur={handleBlur('RentPrice')}
                     value={values.RentPrice}
                     error={[errors.RentPrice]}
                   />
@@ -510,59 +472,13 @@ const HallRegistrationPage = ({ route,navigation }) => {
                     error={[errors.EventShift]} 
                     nameOfIcon="clock" 
                     mode="dialog" /> 
-                    
-                  {/* <TextField
-                    placeholder="Mobile Number" style={styles.labelText}
-                    keyboardType='phone-pad'
-                    mode="outlined"
-                    placeholderTextColor="#800000"
-                    nameOfIcon="bell"
-                    maxLength={11}
-                    onChangeText={(e) => { myChangeFunc('MobileNumber', e) }}
-                    onBlur={handleBlur('MobileNumber')}
-                    value={values.MobileNumber}
-                    error={[errors.MobileNumber]}
-                  />
-
-                  {showCalendar ? <CalendarComponent markedDates={markedDates} parentCallback={setEventDateMethod} /> : null}
-
-
-
-                  <TextField
-                    placeholder="Event Date" style={styles.labelText}
-                    keyboardType='default'
-                    mode="outlined"
-                    placeholderTextColor="#800000"
-                    nameOfIcon="calendar"
-                    maxLength={11}
-                    onPress={() => setShowCalendar(!showCalendar)}
-                    // onChangeText={handleChange('EventDate')}
-                    onBlur={handleBlur('EventDate')}
-                    value={values.EventDate}
-                    disabled={true}
-                    error={[errors.EventDate]}
-                  />
-                  {initialFormValues.EventDate ? <SelectField pleaseSelectPlaceholder="Select Shift" items={shiftList} value={values.EventShift} onChange={handleChange('EventShift')} error={[errors.EventShift]} nameOfIcon="clock" mode="dialog" /> : null} */}
-
-                  {/* <View style={styles.eventDetails}>
-                <View style={styles.eventChilds}>
-                  <Text style={styles.eventChilds.content.viewTypeLeft}>Event Date:</Text>
-                  <Text style={styles.eventChilds.content.viewTypeLeft}>Event Time:</Text>
-                  <Text style={styles.eventChilds.content.viewTypeLeft}>Advance Payment:</Text>
-                </View>
-                <View style={styles.eventChilds}>
-                <Text style={styles.eventChilds.content.viewTypeRight}>14-12-2021</Text>
-                  <Text style={styles.eventChilds.content.viewTypeRight}>7PM - 11 PM</Text>
-                  <Text style={styles.eventChilds.content.viewTypeRight}>30,000 PKR</Text>
-                </View>
-              </View> */}
 
                   <TouchableOpacity
                     onPress={handleSubmit}
                     style={styles.submitButtonWrapper}
 
                   >
-                    <Text style={styles.submitButtonText}>SEND HALL REQUEST</Text>
+                    <Text style={styles.submitButtonText} onPress={()=>goToPicsAdditionPage()}>NEXT</Text>
                   </TouchableOpacity>
                 </View>
               )
@@ -654,6 +570,6 @@ const styles = StyleSheet.create({
 
 })
 
-export default HallRegistrationPage;
+export default NewVenueAdditionPage;
 
 

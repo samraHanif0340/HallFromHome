@@ -24,18 +24,26 @@ import LodgeCamplaintListPage from '../../screens/LodgeComplaint/LodgeCamplaintL
 import HallReviewsPage from '../../screens/HallDetailChilds/ReviewsPage';
 import DetailOfHallPage from '../../screens/HallDetailChilds/DetailsPage';
 import AddonsPage from '../../screens/HallDetailChilds/AddonsPage';
+import CustomerBookingPage from '../../screens/BookingDetails/CustomerBookingPage';
 
 import LoginPage from '../../screens/auth/Login/LoginPage';
 import RegistrationPage from '../../screens/auth/Registration/RegistrationPage';
 
-import CustomerBookingPage from '../../screens/BookingDetails/CustomerBookingPage';
-import HallRegistrationPage from '../../screens/BookingDetails/HallRegistrationPage';
-import VenueOwnerRegistrationPage from '../../screens/auth/Registration/VenueOwnerRegistrationPage';
+
 import BookingConfirmedPage from '../sharedComponents/BookingConfirmedPage'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-const VenueDashboard = React.lazy(()=> import('../../screens/VenueOwnerScreens/OwnerDashboard') )
+// VENUE OWNER PAGES IMPORT
+import VenueOwnerRegistrationPage from '../../screens/auth/Registration/VenueOwnerRegistrationPage';
+import HallVideoPicturesPage from '../../screens/VenueOwnerScreens/HallVideosPictures';
+import OwnerHallsPage from '../../screens/VenueOwnerScreens/OwnerHalls';
+import NewVenueAdditionPage from '../../screens/VenueOwnerScreens/NewVenueAddition';
 
+
+const VenueDashboard = React.lazy(()=> import('../../screens/VenueOwnerScreens/OwnerDashboard') )
+// const VenueOwnerHalls = React.lazy(()=> import('../../screens/VenueOwnerScreens/OwnerHalls') )
+// const VenueAdditionPage = React.lazy(()=> import('../../screens/VenueOwnerScreens/NewVenueAddition') )
+const VenuePicsVideos =  React.lazy(()=> import('../../screens/VenueOwnerScreens/HallVideosPictures') )
 const Tab = createMaterialTopTabNavigator();
 const OwnerTabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -106,21 +114,9 @@ const CustomerDrawerNavigator = () => {
         activeTintColor: '#8b0000',
       }}
         component={TrackingStatusPage} />
-
-<Drawer.Screen name="Hall Registration"  options={{
-        drawerLabel: 'Hall Registration',
-        title: 'Hall Registration',
-
-        //activeTintColor: '#FF6F00',
-        activeTintColor: '#8b0000',
-      }}
-        component={HallRegistrationPage} />
-        
 <Drawer.Screen name="Venue Owner Registration"  options={{
         drawerLabel: 'Venue Owner Registration',
         title: 'Venue Owner Registration',
-
-        //activeTintColor: '#FF6F00',
         activeTintColor: '#8b0000',
       }}
         component={VenueOwnerRegistrationPage} />
@@ -137,7 +133,6 @@ const CustomerDrawerNavigator = () => {
 }
 const CustomSidebar = (props) => {
   const setPayload = useStoreActions((actions) => actions.setPayload);
-
   const { state, descriptors, navigation } = props;
   let lastGroupName = '';
   let newGroup = true;
@@ -255,8 +250,6 @@ const BookingConfirmStack = () => {
 }
 
 // HALL DETAILS TABS //
-
-
 const HallDetailTabs = (props) => {
   console.log(props)
   const [hallId,setHallId] = useState(props.venueID)
@@ -317,10 +310,35 @@ const VenueOwnerTabs = (props) => {
       })}
     >
     <OwnerTabs.Screen name="Dashboard"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><VenueDashboard /></Suspense>}</OwnerTabs.Screen>
-    <OwnerTabs.Screen name="Your Halls" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="plus-circle" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <AddonsPage  venueID={props.venueID} />}</OwnerTabs.Screen>
-    <OwnerTabs.Screen name="Profile" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="thumbs-up" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <HallReviewsPage  venueID={props.venueID} />}</OwnerTabs.Screen>
+    <OwnerTabs.Screen name="Your Halls" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="plus-circle" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{()=> <VenueListingAndAddition/>}</OwnerTabs.Screen>
+    <OwnerTabs.Screen name="Profile" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="thumbs-up" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><VenueDashboard /></Suspense>}</OwnerTabs.Screen>
   </OwnerTabs.Navigator>
   );
+}
+
+const VenueListingAndAddition = () => {
+  return (
+  
+<Stack.Navigator initialRouteName="VenueList">
+      <Stack.Screen
+            name="VenueList"
+            component={OwnerHallsPage}
+            options={{ title: 'Venue List', headerShown: true }}
+          />
+           <Stack.Screen
+            name="AddNewVenue"
+            component={NewVenueAdditionPage}
+            options={{ title: 'Add New Venue', headerShown: true }}
+
+          />
+           <Stack.Screen
+            name="VenuePicVideos"
+            component={HallVideoPicturesPage}
+            options={{ title: 'Add Pictures/Videos', headerShown: true }}
+
+          />
+        </Stack.Navigator>
+  )
 }
 
 
