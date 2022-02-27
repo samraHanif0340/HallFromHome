@@ -312,6 +312,8 @@ const VenueOwnerTabs = (props) => {
     <OwnerTabs.Screen name="Dashboard"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><VenueDashboard /></Suspense>}</OwnerTabs.Screen>
     <OwnerTabs.Screen name="Your Halls" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="plus-circle" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{()=> <VenueListingAndAddition/>}</OwnerTabs.Screen>
     <OwnerTabs.Screen name="Profile" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="thumbs-up" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><VenueDashboard /></Suspense>}</OwnerTabs.Screen>
+    <OwnerTabs.Screen name="Logout"></OwnerTabs.Screen>
+
   </OwnerTabs.Navigator>
   );
 }
@@ -323,18 +325,18 @@ const VenueListingAndAddition = () => {
       <Stack.Screen
             name="VenueList"
             component={OwnerHallsPage}
-            options={{ title: 'Venue List', headerShown: true }}
+            options={{ title: 'Venue List', headerShown: false }}
           />
            <Stack.Screen
             name="AddNewVenue"
             component={NewVenueAdditionPage}
-            options={{ title: 'Add New Venue', headerShown: true }}
+            options={{ title: 'Add New Venue', headerShown: false }}
 
           />
            <Stack.Screen
             name="VenuePicVideos"
             component={HallVideoPicturesPage}
-            options={{ title: 'Add Pictures/Videos', headerShown: true }}
+            options={{ title: 'Add Pictures/Videos', headerShown: false }}
 
           />
         </Stack.Navigator>

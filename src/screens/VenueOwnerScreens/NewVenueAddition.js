@@ -375,7 +375,7 @@ const NewVenueAdditionPage = (props) => {
               return (
                 <View>
                   <TextField
-                    placeholder="Hall Name" style={styles.labelText}
+                    placeholder="Venue Name" style={styles.labelText}
                     keyboardType='default'
                     mode="outlined"
                     placeholderTextColor="#800000"
@@ -387,7 +387,7 @@ const NewVenueAdditionPage = (props) => {
                     error={[errors.HallName]}
                   />
                    <SelectField 
-                    pleaseSelectPlaceholder="Hall Type" 
+                    pleaseSelectPlaceholder="Venue Type" 
                     items={VenueType} 
                     value={values.HallType} 
                     onChange={handleChange('HallType')} 
@@ -465,13 +465,39 @@ const NewVenueAdditionPage = (props) => {
                     error={[errors.RentPrice]}
                   />
                   <SelectField 
-                    pleaseSelectPlaceholder="Shift" 
+                    pleaseSelectPlaceholder="Shifts" 
                     items={shiftList} 
                     value={values.EventShift} 
                     onChange={handleChange('EventShift')} 
                     error={[errors.EventShift]} 
                     nameOfIcon="clock" 
                     mode="dialog" /> 
+
+                  <TextField
+                    placeholder="POC Name" style={styles.labelText}
+                    keyboardType='default'
+                    mode="outlined"
+                    placeholderTextColor="#800000"
+                    nameOfIcon="user"
+                    maxLength={80}
+                    onChangeText={(e) => { myChangeFunc('HallName', e) }}
+                    onBlur={handleBlur('HallName')}
+                    value={values.HallName}
+                    error={[errors.HallName]}
+                  />
+
+                  <TextField
+                    placeholder="POC Number" style={styles.labelText}
+                    keyboardType='phone-pad'
+                    mode="outlined"
+                    placeholderTextColor="#800000"
+                    nameOfIcon="bell"
+                    maxLength={11}
+                    onChangeText={(e) => { myChangeFunc('MobileNumber', e) }}
+                    onBlur={handleBlur('MobileNumber')}
+                    value={values.MobileNumber}
+                    error={[errors.MobileNumber]}
+                  />
 
                   <TouchableOpacity
                     onPress={handleSubmit}
