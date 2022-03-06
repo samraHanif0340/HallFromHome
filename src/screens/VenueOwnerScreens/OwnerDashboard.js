@@ -150,6 +150,7 @@ const OwnerDashboard = (props) => {
         <Text style={styles.venueName}>{item.VenueName}</Text>
         <View style={styles.lastRow}>
           <Text style={styles.eventDateTime}>{item.EventDate} | {item.EventTime}</Text>
+          
       {/* <Badge style={styles.statusBadge} value={getStatusDescription(item.RequestStatus).statusDecription} status={getStatusDescription(item.RequestStatus).color}/> */}
         </View>
       </View>
@@ -202,7 +203,7 @@ const OwnerDashboard = (props) => {
         <View style={styles.childParents}>
         <ScrollView>
           <Card containerStyle={styles.cardParentStyle}>
-          <Card.Title>Requests And Approvals</Card.Title>
+          <Card.Title style = {styles.TitleStyling}> Requests And Approvals </Card.Title>
           <Card.Divider />
           <FlatList
           data={dashboardData}
@@ -215,7 +216,7 @@ const OwnerDashboard = (props) => {
 </ScrollView>
          
           <Card containerStyle={styles.cardParentStyle}>
-          <Card.Title>Recent Bookings</Card.Title>
+          <Card.Title style = {styles.TitleStyling}> Recent Bookings</Card.Title>
           <TouchableHighlight style={styles.viewMoreButton}><Text >View More</Text></TouchableHighlight>
           <Card.Divider />
           {/* <FlatList
@@ -246,10 +247,26 @@ const OwnerDashboard = (props) => {
           <ScrollView>
          
           <Card containerStyle={styles.cardParentStyle}>
-          <Card.Title>Your Halls </Card.Title>
+          <Card.Title style = {styles.TitleStyling}> Your Halls </Card.Title>
           <TouchableHighlight style={styles.viewMoreButton}><Text >View More</Text></TouchableHighlight>
           <Card.Divider />
-          <SafeAreaView>
+          <Carousel
+                            layout={"default"}
+                            data={pendingData}
+                            sliderWidth={250}
+            itemWidth={250}
+                            renderItem={renderRecentBookings}
+                            onSnapToItem={(index) => console.log('carousel index', index)} />
+                               <Pagination
+                                containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+                                dotStyle={styles.ww}
+                                inactiveDotOpacity={0.4}
+                                inactiveDotScale={0.6}
+                                
+
+
+                            />
+          {/* <SafeAreaView>
           <FlatList
           data={pendingData}
           contentContainerStyle={styles.flatListView}
@@ -257,7 +274,7 @@ const OwnerDashboard = (props) => {
           keyExtractor={item => item.id}
           horizontal
           />
-          </SafeAreaView>
+          </SafeAreaView> */}
           </Card>
 
           </ScrollView>
@@ -280,18 +297,18 @@ const styles = StyleSheet.create({
   cardParentStyle: {
    
     justifyContent:'space-between',
-    borderRadius: 6,
+    borderRadius: 16,
     shadowColor: '#000',
     backgroundColor:'#FDE1C9',
     shadowOffset: { width: 1.5, height: 1.5 },
     shadowOpacity: 0.5,
-    shadowRadius: 4,
+    shadowRadius: 14,
     elevation: 6,
   },
   cardChildStyle: {
     flex:1,
     justifyContent:'space-between',
-    borderRadius: 6,
+    borderRadius: 9,
     borderColor:'rgba(157,24,24,0.8)',
     backgroundColor:'rgba(157,24,24,0.8)', 
     shadowColor: 'rgba(157,24,24,0.8)',
@@ -306,6 +323,18 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
 
   },
+  TitleStyling:{
+    fontSize:20,
+    color:'black',
+    fontWeight:'bold',
+
+  },
+  eventDateTime: {
+    fontSize:16,
+    color:'#FDE1C9',
+    fontWeight:'bold',
+  },
+
   itemCount:{
     fontSize:16,
     color:'#FDE1C9',
@@ -322,6 +351,7 @@ const styles = StyleSheet.create({
   viewMoreButton:{
     alignSelf:'flex-end',
     borderColor:'red',
+    fontStyle: 'italic',
     color:'black',
     fontWeight:'bold'
   },
