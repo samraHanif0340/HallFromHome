@@ -1,7 +1,7 @@
 import React, { Component, useState ,useEffect} from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, ImageBackground, SafeAreaView, ScrollView, Image, FlatList } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
-import { MultiLineTextInput, CheckboxField,Loader } from '../../components/customComponents/customComponents'
+import { Loader } from '../../components/customComponents/customComponents'
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { TouchableHighlight } from "react-native-gesture-handler";
@@ -12,9 +12,9 @@ import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
 import Snackbar from 'react-native-snackbar';
 import { CheckBox, Icon } from 'react-native-elements';
-import { Checkbox } from 'react-native-paper';
-import { faCheckSquare } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+// import { Checkbox } from 'react-native-paper';
+// import { faCheckSquare } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 
 const source = axios.CancelToken.source();
 
@@ -143,42 +143,7 @@ const NewVenueServicesPage = (props) => {
             }
         
     }
- 
-    // const _renderItemFoodService = ({ item, index }) => {
-    //     return (
 
-    //         <Card containerStyle={[styles.eachCarousalItem]}>
-    //         <TouchableOpacity  onPress={() => {
-    //            const addonObject = { ...additionalServices, CateringID: item.CateringID };
-    //            setAdditionalServices(addonObject);
-    //            appendPayload({ addons: addonObject });
-    //        }}> 
-    //         <View style={styles.mainView}>
-    //         <Image style={styles.image} resizeMode="cover" style={{ width: 80, height: 80 }} source={{uri: item.CateringImage}} />
-                  
-    //               <View style={styles.middleView}>
-    //               <Text style={styles.dealType}>{item.CateringName}</Text>        
-    //               <FlatList scrollEnabled={false}
-		// 					nestedScrollEnabled={true}
-    //                         keyExtractor={item => item.ItemID}
-    //                         data={item.ItemList} numColumns={2}
-    //                         renderItem={({ item }) => <Text style={styles.content}>{item.ItemName} | </Text>} />
-    //               </View>
-
-    //               <Text style={styles.name}>{item.PricePerPerson} /Person</Text>
-
-    //             </View>
-                
-      
-    //        </TouchableOpacity> 
-    //     </Card> 
-
-           
-
-
-
-    //     );
-    // }
     return (
       
         <View style={styles.container}>
