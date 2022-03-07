@@ -77,7 +77,7 @@ const NewVenueAdditionPage = (props) => {
   const [showCalendar, setShowCalendar] = React.useState(false)
   const [markedDates, setMarkedDates] = React.useState({})
 
-  const [shiftList, setShiftList] = React.useState([])
+  const [shiftList, setShiftList] = React.useState([{label:'Day',value:1}])
   const [VenueType, setVenueType] = React.useState([
     {label:'Banquet',value:'Banquet',enable:false},
     {label:'Fixed Marquee',value:'Fixed Marquee',enable:true},
@@ -115,7 +115,7 @@ const NewVenueAdditionPage = (props) => {
 
 
   React.useEffect(() => {
-    getTimesDropdown()
+    // getTimesDropdown()
     getVenueTypeDropdown()
     getCityDropdown()
     getAreaDropdown()
@@ -222,10 +222,17 @@ const NewVenueAdditionPage = (props) => {
 
 
   const submitForm = (formData) => {
+    goToPicsAdditionPage()
+
     console.log(formData)
-    if (formData != null || formData != {}) {
-      saveData(formData)
-    }
+    // if (formData != null || formData != {}) {
+    //   saveData(formData)
+    //   appendPayload({ venueAdditionPayload: formData });
+    //   console.log('global payload in venue addition', globalPayload)
+    //   goToPicsAdditionPage()
+    // }
+
+   
   }
 
   const saveData = async (data) => {
@@ -298,7 +305,6 @@ const NewVenueAdditionPage = (props) => {
 
   return (
     <View style={styles.container}>
-
       <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
@@ -339,27 +345,27 @@ const NewVenueAdditionPage = (props) => {
                     placeholder="Please Select Venue Type" 
                     items={VenueType} 
                     value={values.VenueTypeId} 
-                    onChange={handleChange('VenueTypeId')} 
+                    onChange={(e)=>myChangeFunc('VenueTypeId',e)} 
                     error={[errors.VenueTypeId]} 
-                    nameOfIcon="home" 
+                    nameOfIcon="credit-card" 
                     mode="dialog" /> 
 
                      <SelectField 
                    placeholder="Please Select City" 
                     items={City} 
                     value={values.CityId} 
-                    onChange={handleChange('CityId')} 
+                    onChange={(e)=>myChangeFunc('CityId',e)} 
                     error={[errors.CityId]} 
-                    nameOfIcon="map" 
+                    nameOfIcon="credit-card" 
                     mode="dialog" /> 
 
                     <SelectField 
                     placeholder="Please Select Area" 
                     items={AreaDropdown} 
                     value={values.AreaId} 
-                    onChange={handleChange('AreaId')} 
+                    onChange={(e)=>myChangeFunc('AreaId',e)} 
                     error={[errors.AreaId]} 
-                    nameOfIcon="map" 
+                    nameOfIcon="credit-card" 
                     mode="dialog" /> 
 
                     <TextField
@@ -379,7 +385,7 @@ const NewVenueAdditionPage = (props) => {
                     keyboardType='default'
                     mode="outlined"
                     placeholderTextColor="#800000"
-                    nameOfIcon="envelope"
+                    nameOfIcon="credit-card"
                     maxLength={50}
                     onChangeText={(e) => { myChangeFunc('Longitude', e) }}
                     onBlur={handleBlur('Longitude')}
@@ -423,10 +429,10 @@ const NewVenueAdditionPage = (props) => {
                     error={[errors.RentPrice]}
                   />
                   <SelectField 
-                   placeholder=" please select shifts" 
+                   placeholder="Please Select Shifts" 
                     items={shiftList} 
                     value={values.Shift} 
-                    onChange={handleChange('Shift')} 
+                    onChange={(e)=>myChangeFunc('Shift',e)} 
                     error={[errors.Shift]} 
                     nameOfIcon="clock" 
                     mode="dialog" /> 
@@ -458,11 +464,11 @@ const NewVenueAdditionPage = (props) => {
                   />
 
                   <TouchableOpacity
-                    onPress={handleSubmit}
+                    onPress={goToPicsAdditionPage}
                     style={styles.submitButtonWrapper}
 
                   >
-                    <Text style={styles.submitButtonText} onPress={()=>goToPicsAdditionPage()}>NEXT</Text>
+                    <Text style={styles.submitButtonText} >NEXT</Text>
                   </TouchableOpacity>
                 </View>
               )

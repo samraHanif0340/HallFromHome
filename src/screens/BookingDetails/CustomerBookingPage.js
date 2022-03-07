@@ -384,7 +384,7 @@ const CustomerBookingPage = ({ route,navigation }) => {
                     disabled={true}
                     error={[errors.EventDate]}
                   />
-                  {initialFormValues.EventDate ? <SelectField pleaseSelectPlaceholder="Select Shift" items={shiftList} value={values.EventShift} onChange={handleChange('EventShift')} error={[errors.EventShift]} nameOfIcon="clock" mode="dialog" /> : null}
+                  {initialFormValues.EventDate ? <SelectField placeholder="Select Shift" items={shiftList} value={values.EventShift} onChange={handleChange('EventShift')} error={[errors.EventShift]} nameOfIcon="clock" mode="dialog" /> : null}
 
                   {/* <View style={styles.eventDetails}>
                 <View style={styles.eventChilds}>

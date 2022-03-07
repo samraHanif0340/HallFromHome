@@ -299,7 +299,7 @@ const HallDetailTabs = (props) => {
 const VenueOwnerTabs = (props) => {
   return (
     <OwnerTabs.Navigator
-    lazy={true}
+
     removeClippedSubviews={true}
     swipeEnabled={false} 
     screenOptions={({ route }) => ({

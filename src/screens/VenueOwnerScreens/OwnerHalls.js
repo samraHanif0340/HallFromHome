@@ -9,6 +9,7 @@ import { Badge } from 'react-native-elements';
 import { BASE_URL } from '../../constants/constants'
 import { Loader } from '../../components/customComponents/customComponents'
 import { useStoreState } from 'easy-peasy';
+import Snackbar from 'react-native-snackbar';
 
 
 import axios from 'axios';
@@ -89,7 +90,7 @@ const  OwnerHallsPage = (props) => {
                 ></Image>
   <View style={styles.rightView}>
   <Card.Title style = {styles.cardTitle}> {item.VenueName}</Card.Title>
-    <Card.Divider/>
+
   <Text>{item.VenueTypeDesc}</Text>
     <Text>{item.CityDesc}</Text>
       <Text style={styles.cardPricePaid}>{item.RentPrice}</Text>
@@ -111,7 +112,7 @@ const  OwnerHallsPage = (props) => {
             >
       <FlatList
         data={masterData}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.VenueID}
         renderItem={renderHallListing}
       />
 
