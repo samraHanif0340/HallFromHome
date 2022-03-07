@@ -359,24 +359,24 @@ const VenueListingAndAddition = () => {
       <Stack.Screen
             name="VenueList"
             component={OwnerHallsPage}
-            options={{ title: 'Venue List', headerShown: false }}
+            options={{ title: 'Venue List', headerShown: true }}
           />
            <Stack.Screen
             name="AddNewVenue"
             component={NewVenueAdditionPage}
-            options={{ title: 'Add New Venue', headerShown: false }}
+            options={{ title: 'Add New Venue', headerShown: true }}
 
           />
            <Stack.Screen
             name="VenuePicVideos"
             component={HallVideoPicturesPage}
-            options={{ title: 'Add Pictures/Videos', headerShown: false }}
+            options={{ title: 'Add Pictures/Videos', headerShown: true }}
 
           />
              <Stack.Screen
             name="VenueInternalServices"
             component={NewVenueServicesPage}
-            options={{ title: 'Add Internal Services', headerShown: false }}
+            options={{ title: 'Add Internal Services', headerShown: true }}
 
           />
         </Stack.Navigator>

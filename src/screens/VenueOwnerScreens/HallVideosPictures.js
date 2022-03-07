@@ -198,6 +198,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  titleWrapper: {
+    width: 278,
+    height: 111,
+    alignContent: "center",
+    textAlign: "center"
+  },
+  title: {
+    color: "rgba(248,231,28,1)",
+    fontSize: 40,
+    width: 335,
+    height: 70,
+    flex: 1,
+    fontFamily: "cursive",
+    marginLeft: 30,
+    marginTop: 30,
+    marginRight: 30,
+    alignContent: "center",
+    textAlign: "center",
+    //fontFamily: "dancing-script-regular",
+    marginBottom: 28
+  },
   selectFileButton: {
     height: 59,
     //backgroundColor: "rgba(31,178,204,1)",

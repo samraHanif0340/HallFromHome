@@ -84,7 +84,7 @@ const  OwnerHallsPage = (props) => {
   const renderHallListing = ({item}) => 
     <Card containerStyle={styles.cardStyle}> 
     <Image
-                  source={{ uri: item.ImageURL }}
+                  source={{ uri: 'https://www.pchotels.com/uploads/wed-and-cel/c9a5690c1e23f1248e628bbfcabec7211564221003.jpg' }}
                   resizeMode="stretch"
                   style={styles.image}
                 ></Image>
@@ -93,10 +93,10 @@ const  OwnerHallsPage = (props) => {
 
   <Text>{item.VenueTypeDesc}</Text>
     <Text>{item.CityDesc}</Text>
-      <Text style={styles.cardPricePaid}>{item.RentPrice}</Text>
-      <Text style={styles.cardPricePaid}>{item.MaxCapacity}</Text>       
+      <Text >{item.RentPrice}</Text>
+      <Text >{item.MaxCapacity}</Text>       
   
-      <Text style={styles.commentStyle}>{item.Rating}</Text>
+      <Text>{item.Rating}</Text>
   </View> 
 </Card>
   

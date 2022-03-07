@@ -19,32 +19,24 @@ import { CheckBox, Icon } from 'react-native-elements';
 const source = axios.CancelToken.source();
 
 const validationSchema = Yup.object().shape({
-  Segregation: Yup.string()
-    .required('Required'),
+  Segregation: Yup.boolean(),
 
-    Projector: Yup.string()
-    .required('Required'),
 
-    Stage_Decoration: Yup.string()
-    .required('Required'),
+    Projector: Yup.boolean(),
 
-    Waitress: Yup.string()
-    .required('Required'),
+    Stage_Decoration: Yup.boolean(),
 
-    Wifi: Yup.string()
-    .required('Required'),
+    Waitress: Yup.boolean(),
 
-    Music_System: Yup.string()
-    .required('Required'),
+    Wifi:Yup.boolean(),
 
-    SpecialLights: Yup.string()
-    .required('Required'),
+    Music_System: Yup.boolean(),
 
-    Air_Condition: Yup.string()
-    .required('Required'),
+    SpecialLights: Yup.boolean(),
 
-    DJ: Yup.string()
-    .required('Required'),
+    Air_Condition: Yup.boolean(),
+
+    DJ: Yup.boolean(),
 
     Facebook_Page:Yup.string()
     .required('Required'),
@@ -61,15 +53,15 @@ const NewVenueServicesPage = (props) => {
      
       
   const [initialFormValues, setInitialFormValues] = React.useState({
-    Segregation: '',
-    Projector:'',
-    Stage_Decoration:'',
-    Waitress: '',
-    Wifi: '',
-    Music_System: '',
-    SpecialLights: '',
-    Air_Condition: '',
-    DJ: '',
+    Segregation: false,
+    Projector:false,
+    Stage_Decoration:false,
+    Waitress: false,
+    Wifi: false,
+    Music_System: false,
+    SpecialLights: false,
+    Air_Condition: false,
+    DJ: false,
     Website:'',
     Facebook_Page:''
 
