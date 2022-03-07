@@ -1,7 +1,7 @@
 import React, { Component, useState ,useEffect} from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, ImageBackground, SafeAreaView, ScrollView, Image, FlatList } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
-import { MultiLineTextInput, CheckboxField,Loader } from '../../components/customComponents/customComponents'
+import { Loader,TextField } from '../../components/customComponents/customComponents'
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { TouchableHighlight } from "react-native-gesture-handler";
@@ -12,29 +12,60 @@ import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
 import Snackbar from 'react-native-snackbar';
 import { CheckBox, Icon } from 'react-native-elements';
-import { Checkbox } from 'react-native-paper';
-import { faCheckSquare } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+// import { Checkbox } from 'react-native-paper';
+// import { faCheckSquare } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 
 const source = axios.CancelToken.source();
 
+const validationSchema = Yup.object().shape({
+  Segregation: Yup.boolean(),
 
+
+    Projector: Yup.boolean(),
+
+    Stage_Decoration: Yup.boolean(),
+
+    Waitress: Yup.boolean(),
+
+    Wifi:Yup.boolean(),
+
+    Music_System: Yup.boolean(),
+
+    SpecialLights: Yup.boolean(),
+
+    Air_Condition: Yup.boolean(),
+
+    DJ: Yup.boolean(),
+
+    Facebook_Page:Yup.string()
+    .required('Required'),
+
+    Website:Yup.string()
+    .required('Required')
+});
 const NewVenueServicesPage = (props) => {
 
     const [additionalServices, setAdditionalServices] = React.useState({ foodService: false, CateringID: null })
     const appendPayload = useStoreActions((actions) => actions.appendPayload);
     const globalPayload = useStoreState((state) => state.payload);
     const [isLoading, setIsLoading] = React.useState(false);
-      const [check1, setCheck1] = useState(false);
-      const [check2, setCheck2] = useState(false);
-      const [check3, setCheck3] = useState(false);
-      const [check4, setCheck4] = useState(false);
-      const [check5, setCheck5] = useState(false);
-      const [check6, setCheck6] = useState(false);
-      const [check7, setCheck7] = useState(false);
-      const [check8, setCheck8] = useState(false);
-      const [check9, setCheck9] = useState(false);
-      const [check10, setCheck10] = useState(false);
+     
+      
+  const [initialFormValues, setInitialFormValues] = React.useState({
+    Segregation: false,
+    Projector:false,
+    Stage_Decoration:false,
+    Waitress: false,
+    Wifi: false,
+    Music_System: false,
+    SpecialLights: false,
+    Air_Condition: false,
+    DJ: false,
+    Website:'',
+    Facebook_Page:''
+
+  })
     
      
     console.log('Global payload was ', globalPayload);
@@ -143,45 +174,23 @@ const NewVenueServicesPage = (props) => {
             }
         
     }
- 
-    // const _renderItemFoodService = ({ item, index }) => {
-    //     return (
 
-    //         <Card containerStyle={[styles.eachCarousalItem]}>
-    //         <TouchableOpacity  onPress={() => {
-    //            const addonObject = { ...additionalServices, CateringID: item.CateringID };
-    //            setAdditionalServices(addonObject);
-    //            appendPayload({ addons: addonObject });
-    //        }}> 
-    //         <View style={styles.mainView}>
-    //         <Image style={styles.image} resizeMode="cover" style={{ width: 80, height: 80 }} source={{uri: item.CateringImage}} />
-                  
-    //               <View style={styles.middleView}>
-    //               <Text style={styles.dealType}>{item.CateringName}</Text>        
-    //               <FlatList scrollEnabled={false}
-		// 					nestedScrollEnabled={true}
-    //                         keyExtractor={item => item.ItemID}
-    //                         data={item.ItemList} numColumns={2}
-    //                         renderItem={({ item }) => <Text style={styles.content}>{item.ItemName} | </Text>} />
-    //               </View>
+    const submitForm = (formData) => {
+      console.log(formData)
+      if (formData != null || formData != {}) {
+        // saveData(formData)
+        // appendPayload({ venueAdditionPayload: formData });
+        // console.log('global payload in venue addition', globalPayload)
+        console.log('internal Services called',formData)
+      }
+  
+     
+    }
 
-    //               <Text style={styles.name}>{item.PricePerPerson} /Person</Text>
-
-    //             </View>
-                
-      
-    //        </TouchableOpacity> 
-    //     </Card> 
-
-           
-
-
-
-    //     );
-    // }
     return (
       
         <View style={styles.container}>
+<Loader isLoading={isLoading} />
             <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
             <ImageBackground style={styles.container}
                 source={require("../../assets/images/Gradient_MI39RPu.png")}
@@ -191,26 +200,177 @@ const NewVenueServicesPage = (props) => {
             <Text style={styles.title}>Venue Services</Text>
             
           </View>
-        
-         
-          <CheckBox containerStyle = {styles.CheckboxWrapper}
-            left
+          <ScrollView>
+          <Formik
+            initialValues={initialFormValues}
+            validationSchema={validationSchema}
+            enableReinitialize={true}
+            onSubmit={(values, errors) => submitForm(values)}>
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValidating }) => {
+
+              const myChangeFunc = (key, val) => {
+                setInitialFormValues({ ...initialFormValues, [key]: val });
+                return handleChange(val)
+              }
+
+              const myCheckBoxFunc = (key,val) =>{
+                console.log(key,val)
+                setInitialFormValues({ ...initialFormValues, [key]: val });
+              }
+
+              return (
+                <View>
             
+             <CheckBox containerStyle = {styles.CheckboxWrapper}
+            left
+            title="Segregation"
+            textStyle = {{fontSize: 20}}
+            checked={initialFormValues.Segregation}
+            checkedColor="red"
+            onPress={(e) => myCheckBoxFunc('Segregation', !initialFormValues.Segregation)}
+         
+          />
+
+<CheckBox containerStyle = {styles.CheckboxWrapper}
+            left
+            title="Projector"
+            textStyle = {{fontSize: 20}}
+            checked={initialFormValues.Projector}
+            checkedColor="red"
+            onPress={(e) => myCheckBoxFunc('Projector', !initialFormValues.Projector)}
+         
+          />
+
+<CheckBox containerStyle = {styles.CheckboxWrapper}
+            left
+            title="Stage Decoration"
+            textStyle = {{fontSize: 20}}
+            checked={initialFormValues.Stage_Decoration}
+            checkedColor="red"
+            onPress={(e) => myCheckBoxFunc('Stage_Decoration', !initialFormValues.Stage_Decoration)}
+         
+          />
+
+
+<CheckBox containerStyle = {styles.CheckboxWrapper}
+            left
+            title="Waitress"
+            textStyle = {{fontSize: 20}}
+            checked={initialFormValues.Waitress}
+            checkedColor="red"
+            onPress={(e) => myCheckBoxFunc('Waitress', !initialFormValues.Waitress)}
+         
+          />
+
+<CheckBox containerStyle = {styles.CheckboxWrapper}
+            left
+            title="Wifi"
+            textStyle = {{fontSize: 20}}
+            checked={initialFormValues.Wifi}
+            checkedColor="red"
+            onPress={(e) => myCheckBoxFunc('Wifi', !initialFormValues.Wifi)}
+         
+          />
+
+<CheckBox containerStyle = {styles.CheckboxWrapper}
+            left
+            title="Music System"
+            textStyle = {{fontSize: 20}}
+            checked={initialFormValues.Music_System}
+            checkedColor="red"
+            onPress={(e) => myCheckBoxFunc('Music_System', !initialFormValues.Music_System)}
+         
+          />
+
+<CheckBox containerStyle = {styles.CheckboxWrapper}
+            left
+            title="Special Lights"
+            textStyle = {{fontSize: 20}}
+            checked={initialFormValues.SpecialLights}
+            checkedColor="red"
+            onPress={(e) => myCheckBoxFunc('SpecialLights', !initialFormValues.SpecialLights)}
+         
+          />
+
+<CheckBox containerStyle = {styles.CheckboxWrapper}
+            left
+            title="Air Condition"
+            textStyle = {{fontSize: 20}}
+            checked={initialFormValues.Air_Condition}
+            checkedColor="red"
+            onPress={(e) => myCheckBoxFunc('Air_Condition', !initialFormValues.Air_Condition)}
+         
+          />
+
+<CheckBox containerStyle = {styles.CheckboxWrapper}
+            left
+            title="DJ"
+            textStyle = {{fontSize: 20}}
+            checked={initialFormValues.DJ}
+            checkedColor="red"
+            onPress={(e) => myCheckBoxFunc('DJ', !initialFormValues.DJ)}
+         
+          />
+
+<TextField
+                    placeholder="Website URL (If any)" style={styles.labelText}
+                    keyboardType='default'
+                    mode="outlined"
+                    placeholderTextColor="#800000"
+                    nameOfIcon="credit-card"
+                    maxLength={50}
+                    onChangeText={(e) => { myChangeFunc('Website', e) }}
+                    onBlur={handleBlur('Website')}
+                    value={values.Website}
+                    error={[errors.Website]}
+                  />
+
+<TextField
+                    placeholder="Facebook Page URL (If any)" style={styles.labelText}
+                    keyboardType='default'
+                    mode="outlined"
+                    placeholderTextColor="#800000"
+                    nameOfIcon="credit-card"
+                    maxLength={50}
+                    onChangeText={(e) => { myChangeFunc('Facebook_Page', e) }}
+                    onBlur={handleBlur('Facebook_Page')}
+                    value={values.Facebook_Page}
+                    error={[errors.Facebook_Page]}
+                  />
+                
+
+          
+
+
+                  <TouchableOpacity
+                    onPress={handleSubmit}
+                    style={styles.submitButtonWrapper}
+
+                  >
+                    <Text style={styles.submitButtonText} >SUBMIT</Text>
+                  </TouchableOpacity>
+                
+                </View>
+              )
+            }}
+
+          </Formik>
+            </ScrollView>
+         
+          {/* <CheckBox containerStyle = {styles.CheckboxWrapper}
+            left         
             title="Catering"
             textStyle = {{fontSize: 20 , color: 'black'}}
             // checkedIcon={
             //   <FontAwesomeIcon icon={ faCheckSquare } color="red" opacity = {0.9} size ={ 20 } />
-
-            // }
-           
-            checked={check1}
-           
+            // }       
+            checked={check1}   
             checkedColor="red"
             onPress={() => setCheck1(!check1)}
           //  iconStyle={{ marginRight: 20 }}
          
-          />
-          <CheckBox containerStyle = {styles.CheckboxWrapper}
+          /> */}
+          {/* <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Stage Decoration"
             textStyle = {{fontSize: 20}}
@@ -263,31 +423,7 @@ const NewVenueServicesPage = (props) => {
             checkedColor="red"
             onPress={() => setCheck7(!check7)}
          
-          />
-              
-              
-                {/* <CheckboxField center={true} checked={additionalServices.foodService}
-                    onChangeText={onFoodServiceSelection}
-                    label="We have tremendous catering services available, Do you want additional food services?" /> */}
-
-
-<Loader isLoading={isLoading} />
-
-                {additionalServices.foodService ?
-                    <View style={styles.headingWrapper}><Text style={styles.heading}>Please select one from the below deals</Text></View> : null}
-                {additionalServices.foodService ?
-                  
-                        <ScrollView >
-                            <FlatList
-
-                                data={foodDeals}
-                                keyExtractor={item => item.CateringID}
-                                renderItem={_renderItemFoodService}
-
-                            />
-                        </ScrollView>
-                    : null}
-                {/* <TouchableOpacity style={styles.checkAvailability} onPress={submitAddonDetails()}><Text style={styles.checkAvailability.Availabilitycontent}>Save Add ons</Text></TouchableOpacity> */}
+          /> */}
 
             </ImageBackground>
         </View>
@@ -299,6 +435,44 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         
+    },
+    titleWrapper: {
+      width: 278,
+      height: 111,
+      alignContent: "center",
+      textAlign: "center"
+    },
+    title: {
+      color: "rgba(248,231,28,1)",
+      fontSize: 40,
+      width: 335,
+      height: 70,
+      flex: 1,
+      fontFamily: "cursive",
+      marginLeft: 30,
+      marginTop: 30,
+      marginRight: 30,
+      alignContent: "center",
+      textAlign: "center",
+      //fontFamily: "dancing-script-regular",
+      marginBottom: 28
+    },
+    submitButtonWrapper: {
+      height: 59,
+      //backgroundColor: "rgba(31,178,204,1)",
+      backgroundColor: "rgba(142,7,27,1)",
+      borderRadius: 5,
+      justifyContent: "center",
+      marginRight: 20,
+      marginLeft: 20,
+      marginTop: 14,
+      marginBottom: 14
+    },
+    submitButtonText: {
+      color: "rgba(255,255,255,1)",
+      textAlign: "center",
+      fontSize: 20,
+      alignSelf: "center"
     },
     mainView: {
         flexDirection: 'row',

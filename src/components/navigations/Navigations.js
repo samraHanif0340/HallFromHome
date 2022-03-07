@@ -25,7 +25,6 @@ import HallReviewsPage from '../../screens/HallDetailChilds/ReviewsPage';
 import DetailOfHallPage from '../../screens/HallDetailChilds/DetailsPage';
 import AddonsPage from '../../screens/HallDetailChilds/AddonsPage';
 import CustomerBookingPage from '../../screens/BookingDetails/CustomerBookingPage';
-import NewVenueServicesPage from '../../screens/BookingDetails/NewVenueServices';
 
 import LoginPage from '../../screens/auth/Login/LoginPage';
 import RegistrationPage from '../../screens/auth/Registration/RegistrationPage';
@@ -39,7 +38,8 @@ import VenueOwnerRegistrationPage from '../../screens/auth/Registration/VenueOwn
 import HallVideoPicturesPage from '../../screens/VenueOwnerScreens/HallVideosPictures';
 import OwnerHallsPage from '../../screens/VenueOwnerScreens/OwnerHalls';
 import NewVenueAdditionPage from '../../screens/VenueOwnerScreens/NewVenueAddition';
-import { TouchableOpacity } from "react-native-gesture-handler";
+import NewVenueServicesPage from '../../screens/VenueOwnerScreens/NewVenueServices';
+
 
 
 const VenueDashboard = React.lazy(()=> import('../../screens/VenueOwnerScreens/OwnerDashboard') )
@@ -299,7 +299,7 @@ const HallDetailTabs = (props) => {
 const VenueOwnerTabs = (props) => {
   return (
     <OwnerTabs.Navigator
-    lazy={true}
+
     removeClippedSubviews={true}
     swipeEnabled={false} 
     screenOptions={({ route }) => ({
@@ -359,18 +359,24 @@ const VenueListingAndAddition = () => {
       <Stack.Screen
             name="VenueList"
             component={OwnerHallsPage}
-            options={{ title: 'Venue List', headerShown: false }}
+            options={{ title: 'Venue List', headerShown: true }}
           />
            <Stack.Screen
             name="AddNewVenue"
             component={NewVenueAdditionPage}
-            options={{ title: 'Add New Venue', headerShown: false }}
+            options={{ title: 'Add New Venue', headerShown: true }}
 
           />
            <Stack.Screen
             name="VenuePicVideos"
             component={HallVideoPicturesPage}
-            options={{ title: 'Add Pictures/Videos', headerShown: false }}
+            options={{ title: 'Add Pictures/Videos', headerShown: true }}
+
+          />
+             <Stack.Screen
+            name="VenueInternalServices"
+            component={NewVenueServicesPage}
+            options={{ title: 'Add Internal Services', headerShown: true }}
 
           />
         </Stack.Navigator>

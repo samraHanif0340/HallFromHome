@@ -5,89 +5,105 @@ import { SearchBar, Rating,FAB } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
 import {  Button, Title, Paragraph} from 'react-native-paper';
 import { Divider, Card } from "react-native-elements";
-import { Avatar, Badge, withBadge } from 'react-native-elements';
-// import SearchBar from "react-native-dynamic-search-bar";
-import {ListItem, Icon } from 'react-native-elements'
+import { Badge } from 'react-native-elements';
 import { BASE_URL } from '../../constants/constants'
+import { Loader } from '../../components/customComponents/customComponents'
+import { useStoreState } from 'easy-peasy';
+import Snackbar from 'react-native-snackbar';
+
+
 import axios from 'axios';
-
+const source = axios.CancelToken.source();
 const  OwnerHallsPage = (props) => {
+  const globalPayload = useStoreState((state) => state.payload);
+  const [masterData, setmasterData] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false)
 
-  const [masterData, setmasterData] = React.useState([{
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    TrackingStatus: 'success',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Modern Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    TrackingStatus: 'success',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name\n Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Ayan Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    TrackingStatus: 'success',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Diamond Palace",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    TrackingStatus: 'success',
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    TrackingStatus: 'success',
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  }]);
+  const getData = async () => {  
+  const configurationObject = {
+    url: `${BASE_URL}GetOwnerVenueList`,
+    method: "POST",
+    cancelToken: source.token,
+    data: { OwnerID: globalPayload.userId  },
+  };
+    try {
+      setIsLoading(true);
+      const response = await axios(
+        configurationObject
+      );
+
+      if (response.data.ResponseCode == "00") {
+        setIsLoading(false);
+        if (response.data.Result_DTO) {
+          setmasterData(response.data.Result_DTO)
+        }
+
+        return;
+      } else {
+        setmasterData([])
+        Snackbar.show({
+          text: response.data.ResponseDesc,
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: 'black',
+          textColor: 'white',
+          action: {
+            text: 'OK',
+            textColor: 'white',
+            onPress: () => { /* Do something. */ },
+          },
+        });
+      }
+    } catch (error) {
+      setmasterData([])
+      setIsLoading(false);
+      Snackbar.show({
+        text: 'Something Went Wrong',
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: 'black',
+        textColor: 'white',
+        action: {
+          text: 'OK',
+          textColor: 'white',
+          onPress: () => { /* Do something. */ },
+        },
+      });
+
+    }
+  };
+
+  React.useEffect(() => {
+    getData();
+
+    return () => source.cancel("Data fetching cancelled");
+  }, []);
 
   const addEditHallDetail = () =>{
       props.navigation.push('AddNewVenue')
   }
 
   const renderHallListing = ({item}) => 
-    <Card containerStyle={styles.cardStyle}>
-    <View style={styles.imageStackStack}>
-    <View style={styles.imageStack}>
+    <Card containerStyle={styles.cardStyle}> 
     <Image
-          source={require("../../assets/images/download2.jpg")}
-          style={styles.image}
-        ></Image>
-    <Card.Title style = {styles.cardTitle}> {item.hallName}</Card.Title>
-    </View>
-    <View>
-    <Badge containerStyle={styles.badgeTitle} value ={item.status} status ={item.TrackingStatus}/>
-    </View>
-    <View style={styles.loremIpsum2Stack}>
-      <Text style={styles.cardPricePaid} h4>{item.pricePaid}</Text>
-    </View>
-    <View>
-      <Text style={styles.commentStyle} h4>{item.comments}</Text>
-    </View> 
-  </View>
+                  source={{ uri: 'https://www.pchotels.com/uploads/wed-and-cel/c9a5690c1e23f1248e628bbfcabec7211564221003.jpg' }}
+                  resizeMode="stretch"
+                  style={styles.image}
+                ></Image>
+  <View style={styles.rightView}>
+  <Card.Title style = {styles.cardTitle}> {item.VenueName}</Card.Title>
+
+  <Text>{item.VenueTypeDesc}</Text>
+    <Text>{item.CityDesc}</Text>
+      <Text >{item.RentPrice}</Text>
+      <Text >{item.MaxCapacity}</Text>       
+  
+      <Text>{item.Rating}</Text>
+  </View> 
 </Card>
   
  
   return (
     <View style={styles.container}>
+      <Loader isLoading={isLoading} />
        <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
             <ImageBackground
                 style={styles.rect1}
@@ -96,7 +112,7 @@ const  OwnerHallsPage = (props) => {
             >
       <FlatList
         data={masterData}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.VenueID}
         renderItem={renderHallListing}
       />
 
@@ -118,18 +134,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
   },
-  image: {
-    // top: 0,
-    right: 9,
-    left: -2,
+  image: { 
     flex: 1,
-     width: 100,
-    flexDirection: "column",
-    height: 140,
-    marginTop:-65,
-    marginBottom: 3,
-    borderRadius: 5,
-    // marginRigth:8, 
+  },
+  rightView:{
+    flexDirection:'column'
   },
   loremIpsum2Stack: {
     top: -205,

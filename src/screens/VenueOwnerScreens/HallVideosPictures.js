@@ -1,5 +1,5 @@
 import React, { Component, useEffect,useState,useCallback } from "react";
-import { StyleSheet, View, StatusBar, ImageBackground,SafeAreaView,Text } from "react-native";
+import { StyleSheet, View, StatusBar, ImageBackground,SafeAreaView,Text,Image } from "react-native";
 import { Loader } from '../../components/customComponents/customComponents'
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
@@ -9,8 +9,13 @@ import DocumentPicker from 'react-native-document-picker';
 const source = axios.CancelToken.source();
 const  HallVideoPicturesPage = (props) => {
 
-  const [fileResponse, setFileResponse] = useState(null);
+  const [fileResponse, setFileResponse] = useState([]);
+  const [isLoading, setIsLoading] = React.useState(false)
 
+
+  const goToInternalServicesPage = () =>{
+    props.navigation.push('VenueInternalServices')
+  }
 
   const getData = async () => {
     const configurationObject = {
@@ -82,16 +87,13 @@ const  HallVideoPicturesPage = (props) => {
 //   }, []);
 
 const uploadDocument = async () => {
-    // Check if any file is selected or not
     if (fileResponse != null) {
-      // If file selected then create FormData
       const fileToUpload = fileResponse;
       const data = new FormData();
       data.append('file_attachment', fileToUpload);
-      // Please change file upload URL
         console.log('fileData',data)
+        goToInternalServicesPage()
     } else {
-      // If no file selected the show alert
       alert('Please Select File first');
     }
   };
@@ -100,8 +102,9 @@ const uploadDocument = async () => {
     try {
       const res = await DocumentPicker.pick({
         // Provide which type of file you want user to pick
-        type: [DocumentPicker.types.allFiles],
-        presentationStyle:'fullScreen'
+        type: [DocumentPicker.types.images],
+        presentationStyle:'fullScreen',
+        allowMultiSelection:true
         // There can me more options as well
         // DocumentPicker.types.allFiles
         // DocumentPicker.types.images
@@ -110,7 +113,14 @@ const uploadDocument = async () => {
         // DocumentPicker.types.pdf
       });
       // Printing the log realted to the file
-      console.log('res : ' + JSON.stringify(res));
+      // for (const res of res) {
+      //   console.log('res : ' + JSON.stringify(res));
+      //   console.log('URI : ' + res.uri);
+      //   console.log('Type : ' + res.type);
+      //   console.log('File Name : ' + res.name);
+      //   console.log('File Size : ' + res.size);
+      // }
+      console.log(res)
       // Setting the state to show single file attributes
       setFileResponse(res);
     } catch (err) {
@@ -133,12 +143,16 @@ const uploadDocument = async () => {
 
   return (
     <View style={styles.container}>
-      {/* <Loader isLoading={isLoading} /> */}
+      <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
       <ImageBackground style={styles.container}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
       >
+
+<View style={styles.titleWrapper}>
+          <Text style={styles.title}>Add Venue Pictures</Text>
+        </View>
            <SafeAreaView style={styles.container} >
      
       {/* {fileResponse.map((file, index) => (
@@ -150,19 +164,23 @@ const uploadDocument = async () => {
           {file?.uri}
         </Text>
       ))} */}
-
-{fileResponse != null ? (
+{ 
+fileResponse != null &&   fileResponse.length > 0 ? fileResponse.map((file, index) => (
+  <>
         <Text style={styles.textStyle}>
-          File Name: {fileResponse.name ? fileResponse.name : ''}
+          File Name: {fileResponse[0].name ? fileResponse[0].name : ''}
           {'\n'}
-          Type: {fileResponse.type ? fileResponse.type : ''}
+          Type: {fileResponse[0].type ? fileResponse[0].type : ''}
           {'\n'}
-          File Size: {fileResponse.size ? fileResponse.size : ''}
+          File Size: {fileResponse[0].size ? fileResponse[0].size : ''}
           {'\n'}
-          URI: {fileResponse.uri ? fileResponse.uri : ''}
+          URI: {fileResponse[0].uri ? fileResponse[0].uri : ''}
           {'\n'}
         </Text>
-      ) : null}
+        <Image source={{uri: fileResponse[0].uri}}></Image>
+        </>
+      )) : null} 
+      
       <TouchableOpacity onPress={handleDocumentSelection} style={styles.selectFileButton}>
             <Text style={styles.selectFileText}>Select 📑</Text>
        </TouchableOpacity>
@@ -179,6 +197,27 @@ const uploadDocument = async () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  titleWrapper: {
+    width: 278,
+    height: 111,
+    alignContent: "center",
+    textAlign: "center"
+  },
+  title: {
+    color: "rgba(248,231,28,1)",
+    fontSize: 40,
+    width: 335,
+    height: 70,
+    flex: 1,
+    fontFamily: "cursive",
+    marginLeft: 30,
+    marginTop: 30,
+    marginRight: 30,
+    alignContent: "center",
+    textAlign: "center",
+    //fontFamily: "dancing-script-regular",
+    marginBottom: 28
   },
   selectFileButton: {
     height: 59,

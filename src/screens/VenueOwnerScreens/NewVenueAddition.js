@@ -19,17 +19,23 @@ import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 const source = axios.CancelToken.source();
 
 const validationSchema = Yup.object().shape({
-  HallName: Yup.string()
-    .min(2, 'Name must be atleast 6 characters long')
-    .max(80, 'Name must be atmost 80 characters long')
+  VenueName: Yup.string()
+    .min(2, 'Venue Name must be atleast 6 characters long')
+    .max(80, 'Venue Name must be atmost 80 characters long')
     .required('Required'),
 
-  // Email: Yup.string().email('Enter a valid EMAIL (abc@abc.com)').required('Required').max(50, 'Email must be atmost 50 characters long'),
-  // CNIC: Yup.string()
-  //   .min(13, 'CNIC must be of 13 characters long')
-  //   .max(13, 'CNIC must be of 13 characters long')
-  //   .required('Required'),
-    Capacity: Yup.string()
+    POCName:Yup.string()
+    .min(2, 'POC Name must be atleast 6 characters long')
+    .max(80, 'POC Name must be atmost 80 characters long')
+    .required('Required'),
+
+    ContactNumber:Yup.string()
+    .min(11, 'Contact Number should be in format 03xxxxxxxxx')
+    .max(11, 'Contact Number should be in format 03xxxxxxxxx')
+    .matches(/^[0][3][\d]{9}$/, 'Mobile Number should be in format 03xxxxxxxxx')
+    .required('Required'),
+
+  MaxCapacity: Yup.string()
     .min(2,'Capacity must be 2 digit long')
     .max(7,'Capacity must be atmost 7 digits long')
     .required('Required'),
@@ -39,7 +45,6 @@ const validationSchema = Yup.object().shape({
     .max(12,'Rent Price must be 12 digit long')
     .required('Required'),
    
-
     Longitude: Yup.string()
     .trim()
     .matches(/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/, 'Longitude should be between -180 to 180')
@@ -53,29 +58,26 @@ const validationSchema = Yup.object().shape({
     Location: Yup.string()
     .required('Required'),
 
-    HallType: Yup.string()
+    VenueTypeId: Yup.string()
     .required('Required'),
 
-    City: Yup.string()
+    CityId: Yup.string()
     .required('Required'),
 
-  EventShift: Yup.string()
+    AreaId: Yup.string()
+    .required('Required'),
+
+    Shift: Yup.string()
     .required('Required'),
 });
 
 
 const NewVenueAdditionPage = (props) => {
-  // console.log('Hall Registration page params', route)
   const [isLoading, setIsLoading] = React.useState(false)
   const [showCalendar, setShowCalendar] = React.useState(false)
   const [markedDates, setMarkedDates] = React.useState({})
 
-  const [shiftList, setShiftList] = React.useState([
-    {label:'Day',value:'Day',enable:true},
-    {label:'Night',value:'Night',enable:true},
-    {label:'Both',value:'Both',enable:true}
-
-  ])
+  const [shiftList, setShiftList] = React.useState([{label:'Day',value:1}])
   const [VenueType, setVenueType] = React.useState([
     {label:'Banquet',value:'Banquet',enable:false},
     {label:'Fixed Marquee',value:'Fixed Marquee',enable:true},
@@ -87,39 +89,44 @@ const NewVenueAdditionPage = (props) => {
     {label:'Karachi',value:'Karachi',enable:true}
 
   ])
+
+  const [AreaDropdown, setAreaDropdown] = React.useState([
+    {label:'Karachi',value:'Karachi',enable:true}
+
+  ])
+
   const [initialFormValues, setInitialFormValues] = React.useState({
-    HallName: '',
-    Capacity: '',
+    VenueName: '',
+    POCName:'',
+    ContactNumber:'',
+    MaxCapacity: '',
     RentPrice: '',
     Longitude: '',
     Latitude: '',
-    EventShift: '',
+    Shift: '',
     Location: '',
-    HallType: '',
-    City: ''
+    VenueTypeId: '',
+    CityId: '',
+    AreaId:''
   })
   // const [EventDate, setEventDate] = React.useState('')
   // const [venueID, setVenueID] = React.useState(route.params.venueID)
-  // const globalPayload = useStoreState((state) => state.payload);
+  const globalPayload = useStoreState((state) => state.payload);
 
 
-  // useEffect(() => {
-  //   getReservedDates(globalPayload.venueId)
+  React.useEffect(() => {
+    // getTimesDropdown()
+    getVenueTypeDropdown()
+    getCityDropdown()
+    getAreaDropdown()
+  }, [])
 
-
-  // }, [globalPayload.venueId])
-
-  const getTimesDropdown = async (data) => {
-    let formData = Object.assign({}, data)
-
-    console.log(formData)
-    formData.VenueID = globalPayload.venueId
+  const getTimesDropdown = async () => {
 
     let configurationObject = {
-      url: `${BASE_URL}GetBookedTiming_DD`,
-      method: "POST",
+      url: `${BASE_URL}GetShiftTimeLOV`,
+      method: "GET",
       cancelToken: source.token,
-      data: formData,
     }
     try {
       const response = await axios(
@@ -140,17 +147,11 @@ const NewVenueAdditionPage = (props) => {
 
     }
   };
-  const getVenueTypeDropdown = async (data) => {
-    let formData = Object.assign({}, data)
-
-    console.log(formData)
-    formData.VenueID = globalPayload.venueId
-
+  const getVenueTypeDropdown = async () => {
     let configurationObject = {
-      url: `${BASE_URL}GetVenueType_DD`,
-      method: "POST",
+      url: `${BASE_URL}GetVenueTypeList`,
+      method: "GET",
       cancelToken: source.token,
-      data: formData,
     }
     try {
       const response = await axios(
@@ -159,29 +160,20 @@ const NewVenueAdditionPage = (props) => {
       if (response.data.ResponseCode === "00") {
         if(response.data.Result_DTO){
           setVenueType(response.data.Result_DTO)
-
         }
         return;
       } else {
         setVenueType([])
-
       }
     } catch (error) {
       setVenueType([])
-
     }
   };
-  const getCityeDropdown = async (data) => {
-    let formData = Object.assign({}, data)
-
-    console.log(formData)
-    formData.VenueID = globalPayload.venueId
-
+  const getCityDropdown = async () => {
     let configurationObject = {
-      url: `${BASE_URL}GetHallCity_DD`,
-      method: "POST",
+      url: `${BASE_URL}GetCityList`,
+      method: "GET",
       cancelToken: source.token,
-      data: formData,
     }
     try {
       const response = await axios(
@@ -202,22 +194,49 @@ const NewVenueAdditionPage = (props) => {
 
     }
   };
+  const getAreaDropdown = async () => {
+    let configurationObject = {
+      url: `${BASE_URL}GetAreaList`,
+      method: "GET",
+      cancelToken: source.token,
+    }
+    try {
+      const response = await axios(
+        configurationObject,
+      );
+      if (response.data.ResponseCode === "00") {
+        if(response.data.Result_DTO){
+          setAreaDropdown(response.data.Result_DTO)
+
+        }
+        return;
+      } else {
+        setAreaDropdown([])
+
+      }
+    } catch (error) {
+      setAreaDropdown([])
+
+    }
+  };
+
 
   const submitForm = (formData) => {
+    goToPicsAdditionPage()
+
     console.log(formData)
-    if (formData != null || formData != {}) {
-      saveData(formData)
-    }
+    // if (formData != null || formData != {}) {
+    //   saveData(formData)
+    //   appendPayload({ venueAdditionPayload: formData });
+    //   console.log('global payload in venue addition', globalPayload)
+    //   goToPicsAdditionPage()
+    // }
+
+   
   }
 
   const saveData = async (data) => {
     let formData = Object.assign({}, data)
-    
-    formData.ReservedCapacity = 600
-
-    console.log(globalPayload)
-    console.log(formData)
-
     let configurationObject = {
       url: `${BASE_URL}VenueBooking`,
       method: "POST",
@@ -238,15 +257,18 @@ const NewVenueAdditionPage = (props) => {
           text: response.data.ResponseDesc,
           duration: Snackbar.LENGTH_LONG,
         });
-        setInitialFormValues({ HallName: '',
-        Capacity: '',
+        setInitialFormValues({ VenueName: '',
+        POCName:'',
+        ContactNumber:'',
+        MaxCapacity: '',
         RentPrice: '',
         Longitude: '',
         Latitude: '',
-        EventShift: '',
+        Shift: '',
         Location: '',
-        City: '',
-        HallType: ''})
+        CityId: '',
+        AreaId:'',
+        VenueTypeId: ''})
         setMarkedDates({})
         navigation.navigate('BookingConfirm')
         return;
@@ -277,79 +299,12 @@ const NewVenueAdditionPage = (props) => {
     }
   };
 
-  const setEventDateMethod = (formValues) => {
-    console.log(formValues)
-    setInitialFormValues({ ...initialFormValues, EventDate: formValues.EventDate });
-    setShowCalendar(false)
-  }
-
-  const CalendarComponent = (props) => {
-    console.log(props)
-    const changeSelection = (day) => {
-      let selectedDate = moment(day);
-      selectedDate = selectedDate.format("YYYY-MM-DD");
-      let obj = {
-        EventDate: selectedDate
-      }
-      props.parentCallback(obj);
-      getTimesDropdown(obj)
-    }
-
-    return (
-      <View>
-
-        <Calendar
-          hideExtraDays={true}
-          // markedDates={{
-          //   '2022-01-20': { customStyles: styles.stylesReserved, disableTouchEvent: true },
-          //   '2021-01-22': { startingDay: true, color: 'green', disableTouchEvent: true, customStyles: styles.stylesReserved },
-          //   '2021-12-31': { selected: true, endingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true },
-          //   '2021-12-28': { disabled: true, startingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true },
-          //   '2021-12-12': { disabled: true, startingDay: true, customStyles: styles.stylesReserved, disableTouchEvent: true }
-          // }}
-          markedDates={props['markedDates']}
-          current={new Date()}
-          minDate={new Date()}
-          onDayPress={day => changeSelection(day.dateString)}
-          markingType={'custom'}
-          theme={{
-            backgroundColor: '#ffffff',
-            calendarBackground: '#ffffff',
-            textSectionTitleColor: '#b6c1cd',
-            selectedDayBackgroundColor: '#00adf5',
-            selectedDayTextColor: '#ffffff',
-            todayTextColor: '#00adf5',
-            dayTextColor: '#2d4150',
-            textDisabledColor: '#d9e1e8',
-            dotColor: '#00adf5',
-            selectedDotColor: '#ffffff',
-            arrowColor: 'red',
-            disabledArrowColor: '#d9e1e8',
-            monthTextColor: 'red',
-            indicatorColor: 'blue',
-            textDayFontFamily: 'monospace',
-            textMonthFontFamily: 'monospace',
-            textDayHeaderFontFamily: 'monospace',
-            textDayFontWeight: '300',
-            textMonthFontWeight: 'bold',
-            textDayHeaderFontWeight: '300',
-            textDayFontSize: 16,
-            textMonthFontSize: 16,
-            textDayHeaderFontSize: 16
-          }}
-        />
-      </View>
-
-    )
-  }
-
   const goToPicsAdditionPage = () =>{
     props.navigation.push('VenuePicVideos')
   }
 
   return (
     <View style={styles.container}>
-
       <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
@@ -381,27 +336,36 @@ const NewVenueAdditionPage = (props) => {
                     placeholderTextColor="#800000"
                     nameOfIcon="user"
                     maxLength={80}
-                    onChangeText={(e) => { myChangeFunc('HallName', e) }}
-                    onBlur={handleBlur('HallName')}
-                    value={values.HallName}
-                    error={[errors.HallName]}
+                    onChangeText={(e) => { myChangeFunc('VenueName', e) }}
+                    onBlur={handleBlur('VenueName')}
+                    value={values.VenueName}
+                    error={[errors.VenueName]}
                   />
                    <SelectField 
-                    pleaseSelectPlaceholder="Venue Type" 
+                    placeholder="Please Select Venue Type" 
                     items={VenueType} 
-                    value={values.HallType} 
-                    onChange={handleChange('HallType')} 
-                    error={[errors.HallType]} 
-                    nameOfIcon="home" 
+                    value={values.VenueTypeId} 
+                    onChange={(e)=>myChangeFunc('VenueTypeId',e)} 
+                    error={[errors.VenueTypeId]} 
+                    nameOfIcon="credit-card" 
                     mode="dialog" /> 
 
                      <SelectField 
-                    pleaseSelectPlaceholder="City" 
+                   placeholder="Please Select City" 
                     items={City} 
-                    value={values.City} 
-                    onChange={handleChange('City')} 
-                    error={[errors.City]} 
-                    nameOfIcon="map" 
+                    value={values.CityId} 
+                    onChange={(e)=>myChangeFunc('CityId',e)} 
+                    error={[errors.CityId]} 
+                    nameOfIcon="credit-card" 
+                    mode="dialog" /> 
+
+                    <SelectField 
+                    placeholder="Please Select Area" 
+                    items={AreaDropdown} 
+                    value={values.AreaId} 
+                    onChange={(e)=>myChangeFunc('AreaId',e)} 
+                    error={[errors.AreaId]} 
+                    nameOfIcon="credit-card" 
                     mode="dialog" /> 
 
                     <TextField
@@ -421,7 +385,7 @@ const NewVenueAdditionPage = (props) => {
                     keyboardType='default'
                     mode="outlined"
                     placeholderTextColor="#800000"
-                    nameOfIcon="envelope"
+                    nameOfIcon="credit-card"
                     maxLength={50}
                     onChangeText={(e) => { myChangeFunc('Longitude', e) }}
                     onBlur={handleBlur('Longitude')}
@@ -441,16 +405,16 @@ const NewVenueAdditionPage = (props) => {
                     error={[errors.Latitude]}
                   />
                    <TextField
-                    placeholder="Capacity" style={styles.labelText}
+                    placeholder="MaxCapacity" style={styles.labelText}
                     keyboardType='phone-pad'
                     mode="outlined"
                     placeholderTextColor="#800000"
                     nameOfIcon="credit-card"
                     maxLength={50}
-                    onChangeText={(e) => { myChangeFunc('Capacity', e) }}
-                    onBlur={handleBlur('Capacity')}
-                    value={values.Capacity}
-                    error={[errors.Capacity]}
+                    onChangeText={(e) => { myChangeFunc('MaxCapacity', e) }}
+                    onBlur={handleBlur('MaxCapacity')}
+                    value={values.MaxCapacity}
+                    error={[errors.MaxCapacity]}
                   />
                    <TextField
                     placeholder="Rent Price" style={styles.labelText}
@@ -465,11 +429,11 @@ const NewVenueAdditionPage = (props) => {
                     error={[errors.RentPrice]}
                   />
                   <SelectField 
-                    pleaseSelectPlaceholder="Shifts" 
+                   placeholder="Please Select Shifts" 
                     items={shiftList} 
-                    value={values.EventShift} 
-                    onChange={handleChange('EventShift')} 
-                    error={[errors.EventShift]} 
+                    value={values.Shift} 
+                    onChange={(e)=>myChangeFunc('Shift',e)} 
+                    error={[errors.Shift]} 
                     nameOfIcon="clock" 
                     mode="dialog" /> 
 
@@ -480,10 +444,10 @@ const NewVenueAdditionPage = (props) => {
                     placeholderTextColor="#800000"
                     nameOfIcon="user"
                     maxLength={80}
-                    onChangeText={(e) => { myChangeFunc('HallName', e) }}
-                    onBlur={handleBlur('HallName')}
-                    value={values.HallName}
-                    error={[errors.HallName]}
+                    onChangeText={(e) => { myChangeFunc('POCName', e) }}
+                    onBlur={handleBlur('POCName')}
+                    value={values.POCName}
+                    error={[errors.POCName]}
                   />
 
                   <TextField
@@ -493,18 +457,18 @@ const NewVenueAdditionPage = (props) => {
                     placeholderTextColor="#800000"
                     nameOfIcon="bell"
                     maxLength={11}
-                    onChangeText={(e) => { myChangeFunc('MobileNumber', e) }}
-                    onBlur={handleBlur('MobileNumber')}
-                    value={values.MobileNumber}
-                    error={[errors.MobileNumber]}
+                    onChangeText={(e) => { myChangeFunc('ContactNumber', e) }}
+                    onBlur={handleBlur('ContactNumber')}
+                    value={values.ContactNumber}
+                    error={[errors.ContactNumber]}
                   />
 
                   <TouchableOpacity
-                    onPress={handleSubmit}
+                    onPress={goToPicsAdditionPage}
                     style={styles.submitButtonWrapper}
 
                   >
-                    <Text style={styles.submitButtonText} onPress={()=>goToPicsAdditionPage()}>NEXT</Text>
+                    <Text style={styles.submitButtonText} >NEXT</Text>
                   </TouchableOpacity>
                 </View>
               )

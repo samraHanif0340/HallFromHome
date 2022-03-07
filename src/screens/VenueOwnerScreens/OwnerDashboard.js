@@ -27,6 +27,7 @@ const OwnerDashboard = (props) => {
   const globalPayload = useStoreState((state) => state.payload);
   const setPayload = useStoreActions((actions) => actions.setPayload);
   const source = axios.CancelToken.source();
+  const [activeTab, setActiveTab] = React.useState(0)
 
   const [pendingData, setpendingData] = React.useState([]);
   const [dashboardData, setDashboardData] = React.useState([{id:1,name:'Pending',count:49,icon:"list" },{id:2,name:'Approved',count:23,icon:"check" },{id:3,name:'Rejected',count:12,icon:"ban" }]);
@@ -234,12 +235,14 @@ const OwnerDashboard = (props) => {
                             sliderWidth={250}
             itemWidth={250}
                             renderItem={renderRecentBookings}
-                            onSnapToItem={(index) => console.log('carousel index', index)} />
+                            onSnapToItem={i => setActiveTab({ activeTab: i })} />
                                <Pagination
                                 containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
                                 dotStyle={styles.ww}
                                 inactiveDotOpacity={0.4}
                                 inactiveDotScale={0.6}
+                                activeDotIndex={activeTab}
+                                dotsLength={pendingData.length}
                                 
 
 

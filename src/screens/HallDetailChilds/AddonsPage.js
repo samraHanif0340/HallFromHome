@@ -129,7 +129,7 @@ const AddonsPage = (props) => {
             }
         
     }
- 
+    // style={{ width: 80, height: 80 }}
     const _renderItemFoodService = ({ item, index }) => {
         return (
 
@@ -140,7 +140,7 @@ const AddonsPage = (props) => {
                appendPayload({ addons: addonObject });
            }}> 
             <View style={styles.mainView}>
-            <Image style={styles.image} resizeMode="cover" style={{ width: 80, height: 80 }} source={{uri: item.CateringImage}} />
+            <Image style={styles.image} resizeMode="cover"  source={{uri: item.CateringImage}} />
                   
                   <View style={styles.middleView}>
                   <Text style={styles.dealType}>{item.CateringName}</Text>        

@@ -34,6 +34,8 @@ const LoginPage = ({ navigation }) => {
     };
 
     const handleSubmitPress = () => {
+        // navigation.replace('OwnerTabs')
+
         setEmailError(validate('userEmail', userEmail, 'email'))
         setPasswordError(validate('userPassword', userPassword, 'password'))
         let dataToSend = { EmailAddress: userEmail, Password: userPassword };
@@ -46,7 +48,7 @@ const LoginPage = ({ navigation }) => {
         // formBody = formBody.join('&');
         console.log(dataToSend)
 
-        saveData(dataToSend)
+        // saveData(dataToSend)
 
         // fetch('http://localhost:3000/api/user/login', {
         //   method: 'POST',

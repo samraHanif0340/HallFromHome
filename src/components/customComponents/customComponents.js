@@ -30,7 +30,7 @@ export const SelectField = props => {
         {/* <Text style={styles.selectLabel}>{props.labelName}</Text> */}
         {props.nameOfIcon ? <EvilIconsIcon name={props.nameOfIcon} style={styles.icon2}></EvilIconsIcon> : null}
         <Picker style={styles.selectField} mode={props.mode} placeholder={props.placeholder} selectedValue={props.value} onValueChange={props.onChange}>
-        <Picker.Item  label={props.pleaseSelectPlaceholder} value='' enabled={true}/>
+        <Picker.Item  label={props.placeholder} value='' enabled={true}/>
           {props.items.map(item => (
             // <Picker.Item key={item.VenueID} label={item.VenueName} value={item.VenueID} enabled={item.enable}
             // />
