@@ -115,7 +115,7 @@ const NewVenueAdditionPage = (props) => {
 
 
   React.useEffect(() => {
-    // getTimesDropdown()
+    getTimesDropdown()
     getVenueTypeDropdown()
     getCityDropdown()
     getAreaDropdown()

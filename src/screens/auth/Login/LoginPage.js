@@ -48,7 +48,7 @@ const LoginPage = ({ navigation }) => {
         // formBody = formBody.join('&');
         console.log(dataToSend)
 
-        // saveData(dataToSend)
+        saveData(dataToSend)
 
         // fetch('http://localhost:3000/api/user/login', {
         //   method: 'POST',

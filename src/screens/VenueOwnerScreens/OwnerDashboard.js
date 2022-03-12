@@ -234,7 +234,7 @@ const OwnerDashboard = (props) => {
             itemWidth={250}
                             renderItem={renderRecentBookings}
                             onSnapToItem={i => setActiveTab({ activeTab: i })} />
-                               <Pagination
+                               {/* <Pagination
                                 containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
                                 dotStyle={styles.ww}
                                 inactiveDotOpacity={0.4}
@@ -244,7 +244,7 @@ const OwnerDashboard = (props) => {
                                 
 
 
-                            />
+                            /> */}
           </Card>
  
           <ScrollView>

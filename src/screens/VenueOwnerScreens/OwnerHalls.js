@@ -82,14 +82,18 @@ const  OwnerHallsPage = (props) => {
   }
 
   const renderHallListing = ({item}) => 
-    <Card containerStyle={styles.cardStyle}> 
+  
+ 
+    <Card containerStyle={styles.cardStyle}>  
     <Image
                   source={{ uri: 'https://www.pchotels.com/uploads/wed-and-cel/c9a5690c1e23f1248e628bbfcabec7211564221003.jpg' }}
                   resizeMode="stretch"
                   style={styles.image}
                 ></Image>
+  
+    
   <View style={styles.rightView}>
-  <Card.Title style = {styles.cardTitle}> {item.VenueName}</Card.Title>
+  <Text style = {styles.cardTitle}> {item.VenueName}</Text>
 
   <Text>{item.VenueTypeDesc}</Text>
     <Text>{item.CityDesc}</Text>
@@ -98,6 +102,7 @@ const  OwnerHallsPage = (props) => {
   
       <Text>{item.Rating}</Text>
   </View> 
+
 </Card>
   
  
@@ -131,13 +136,84 @@ const  OwnerHallsPage = (props) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1, 
+    flexDirection:'column'  
+  },
+  cardStyle:{    
+    flex:1,
+    borderRadius:10,
+    flexDirection: "row",
+    shadowColor: '#000',
+    height:160,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  imageStack: {
+    top: 0,
+    left: -20,
+    width: 310,
+    height: 90,
+    position: "absolute",
+
+  },
+  imageStackStack: {
+    width: 199,
+    height: 9,
+    marginTop: 60,
+    marginLeft: 20,
+    // marginRight: 20,
+
+  },
+  cardTitle : {
+    color: 'black',
+    marginLeft: 10,
+    flexDirection: 'row',
+    bottom: 135,
+    marginBottom: -2,
+    marginRight:8,
+  },
+  cardPricePaid : {
+    left: 220,
+    color: 'black',
+    fontStyle: 'italic',
+    position: "absolute",
+    fontFamily: "roboto-700",
+    color: "black",
+    height: 14,
+    width: 139,
+    textAlign: "left",
+    fontSize: 11
+  },
+    image: {
+    // top: 0,
+    right: 9,
+    left: -2,
     flex: 1,
+     width: 100,
     flexDirection: "column",
+    height: 140,
+    marginTop:-65,
+    marginBottom: 3,
+    borderRadius: 5,
+    // marginRigth:8, 
+  },
+  loremIpsum2Stack: {
+    top: -205,
+    position: "absolute"
+  },
+  imageWrapper:{
+    width: 199,
+    height: 9,
+    marginTop: 60,
+    marginLeft: 20,
   },
   image: { 
     flex: 1,
   },
   rightView:{
+    flex:1,
     flexDirection:'column'
   },
   loremIpsum2Stack: {
@@ -167,18 +243,7 @@ const styles = StyleSheet.create({
     // marginRight: 20,
 
   },
-  cardStyle:{
-    // borderColor:'#800000',
-    // borderWidth:3,
-    borderRadius:10,
-    flexDirection: "row",
-    shadowColor: '#000',
-    height:160,
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity:  0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
+ 
 
   eachItem: 
   {

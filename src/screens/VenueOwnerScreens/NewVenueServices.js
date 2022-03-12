@@ -106,74 +106,7 @@ const NewVenueServicesPage = (props) => {
         ]
     }])
 
-    const getCateringDeals = async () => {
-        console.log(globalPayload)
-        let configurationObject = {
-            url: `${BASE_URL}GetCateringList`,
-            method: "POST",
-            cancelToken: source.token,
-            data: {  VenueID: globalPayload.venueId  },
-          }
-      try {
-        setIsLoading(true);
-        const response = await axios(
-          configurationObject
-        );
   
-        if (response.data.ResponseCode == "00") {
-          setIsLoading(false);
-          setFoodDeals(response.data.Result_DTO)
-
-          return;
-        } else {
-          setIsLoading(false);
-
-            Snackbar.show({
-                text: response.data.ResponseDesc,
-                duration: Snackbar.LENGTH_LONG,
-                backgroundColor: 'black',
-                textColor: 'white',
-                action: {
-                    text: 'OK',
-                    textColor: 'white',
-                    onPress: () => { /* Do something. */ },
-                },
-            });
-        //   console.log(response)
-        //   throw new Error("Failed to fetch records");
-        }
-      } catch (error) {
-      
-          setIsLoading(false);
-          Snackbar.show({
-            text: response.data.ResponseDesc,
-            duration: Snackbar.LENGTH_LONG,
-            backgroundColor: 'black',
-            textColor: 'white',
-            action: {
-                text: 'OK',
-                textColor: 'white',
-                onPress: () => { /* Do something. */ },
-            },
-        });
-      }
-    };
-
-    const onFoodServiceSelection = () => {
-
-            const addonObject = { ...additionalServices, foodService: !additionalServices.foodService };
-            setAdditionalServices(addonObject);
-            appendPayload({ addons: addonObject });
-            console.log(addonObject.foodService)
-            if(addonObject.foodService == true || addonObject.foodService == "true"){
-                getCateringDeals()
-
-            }
-            else{
-                setFoodDeals([])
-            }
-        
-    }
 
     const submitForm = (formData) => {
       console.log(formData)
@@ -183,10 +116,73 @@ const NewVenueServicesPage = (props) => {
         // console.log('global payload in venue addition', globalPayload)
         console.log('internal Services called',formData)
       }
-  
-     
     }
 
+    const saveData = async (data) => {
+      let formData = Object.assign({}, data)
+      console.log(globalPayload)
+      console.log(formData)
+  
+      let configurationObject = {
+        url: `${BASE_URL}AddNewVenue`,
+        method: "POST",
+        cancelToken: source.token,
+        data: { ...formData, UserID: globalPayload.userId , ...globalPayload.venueAdditionPayload},
+      }
+      // navigation.navigate('BookingConfirm')
+  
+      console.log('in save data')
+      try {
+        setIsLoading(true);
+        const response = await axios(
+          configurationObject,
+        );
+        if (response.data.ResponseCode === "00") {
+          setIsLoading(false);
+          Snackbar.show({
+            text: response.data.ResponseDesc,
+            duration: Snackbar.LENGTH_LONG,
+          });
+          setInitialFormValues({ Segregation: false,
+            Projector:false,
+            Stage_Decoration:false,
+            Waitress: false,
+            Wifi: false,
+            Music_System: false,
+            SpecialLights: false,
+            Air_Condition: false,
+            DJ: false,
+            Website:'',
+            Facebook_Page:''})
+        
+          navigation.navigate('VenueList')
+          return;
+        } else {
+          setIsLoading(false);
+          Snackbar.show({
+            text: response.data.ResponseDesc,
+            duration: Snackbar.LENGTH_LONG,
+            action: {
+              text: 'OK',
+              textColor: 'white',
+              onPress: () => { /* Do something. */ },
+            },
+          });
+        }
+      } catch (error) {
+        setIsLoading(false);
+        Snackbar.show({
+          text: 'Something Went Wrong',
+          duration: Snackbar.LENGTH_LONG,
+          action: {
+            text: 'OK',
+            textColor: 'white',
+            onPress: () => { /* Do something. */ },
+          },
+        });
+  
+      }
+    };
     return (
       
         <View style={styles.container}>
