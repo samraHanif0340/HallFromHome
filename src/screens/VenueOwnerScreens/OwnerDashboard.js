@@ -8,6 +8,8 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import { NavigationContainer } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Snackbar from 'react-native-snackbar';
+
 
 
 export const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -93,7 +95,7 @@ const OwnerDashboard = (props) => {
     getData();
 
     return () => source.cancel("Data fetching cancelled");
-  }, []);
+  }, [globalPayload.userId]);
 
   const handleSubmitPress = () => {
     setPayload({});
@@ -202,7 +204,7 @@ const OwnerDashboard = (props) => {
           />
         </ScrollView> */}
         <View style={styles.childParents}>
-        <ScrollView>
+         {/* <ScrollView> */}
           <Card containerStyle={styles.cardParentStyle}>
           <Card.Title style = {styles.TitleStyling}> Requests And Approvals </Card.Title>
           <Card.Divider />
@@ -214,7 +216,7 @@ const OwnerDashboard = (props) => {
      
           />
           </Card>
-</ScrollView>
+{/* </ScrollView> */}
          
           <Card containerStyle={styles.cardParentStyle}>
           <Card.Title style = {styles.TitleStyling}> Recent Bookings</Card.Title>
