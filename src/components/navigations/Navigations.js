@@ -40,6 +40,7 @@ import OwnerHallsPage from '../../screens/VenueOwnerScreens/OwnerHalls';
 import NewVenueAdditionPage from '../../screens/VenueOwnerScreens/NewVenueAddition';
 import NewVenueServicesPage from '../../screens/VenueOwnerScreens/NewVenueServices';
 import OwnerDashboard from '../../screens/VenueOwnerScreens/OwnerDashboard';
+import OwnerBookingPage from '../../screens/VenueOwnerScreens/OwnerBookings';
 
 
 
@@ -398,6 +399,12 @@ const OwnerDashboardStack = () => {
             name="VenueList"
             component={() => <OwnerHallsPage isFromDashboard={true}/>}
             options={{ title: 'Venue List', headerShown: true }}
+          />
+
+<Stack.Screen
+            name="OwnerBookings"
+            component={() => <OwnerBookingPage isFromDashboard={true}/>}
+            options={{ title: 'Owner Bookings', headerShown: true }}
           />
          
          

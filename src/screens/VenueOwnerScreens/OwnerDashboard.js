@@ -108,7 +108,11 @@ const OwnerDashboard = (props) => {
   }
 
   const goToVenueListPage = () =>{
-    props.navigation.replace('VenueList')
+    props.navigation.push('VenueList')
+  }
+
+  const goToOwnerBookingPage = () =>{
+    props.navigation.push('OwnerBookings')
   }
 
 
@@ -228,7 +232,7 @@ const OwnerDashboard = (props) => {
          
           <Card containerStyle={styles.cardParentStyle}>
           <Card.Title style = {styles.TitleStyling}> Recent Bookings</Card.Title>
-          <TouchableHighlight style={styles.viewMoreButton}><Text >View More</Text></TouchableHighlight>
+          <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToOwnerBookingPage()}><Text >View More</Text></TouchableHighlight>
           <Card.Divider />
           {/* <FlatList
           contentContainerStyle={styles.flatListView}
