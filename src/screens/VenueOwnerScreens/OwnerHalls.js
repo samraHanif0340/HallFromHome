@@ -15,6 +15,8 @@ import Snackbar from 'react-native-snackbar';
 import axios from 'axios';
 const source = axios.CancelToken.source();
 const  OwnerHallsPage = (props) => {
+  console.log('halllist',props)
+
   const globalPayload = useStoreState((state) => state.payload);
   const [masterData, setmasterData] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false)
@@ -122,16 +124,16 @@ const  OwnerHallsPage = (props) => {
         renderItem={renderHallListing}
       />
 
-        <FAB
+      { props.isFromDashboard ? null : <FAB 
          placement="right"
           visible={true}
           onPress={()=> addEditHallDetail()}
           icon={{ name: 'add', color: 'white' }}
           color="maroon"
-        />
+        />}  
 
 {/* </ImageBackground> */}
-<Text>Samra</Text>
+
     </View>
 );
 }

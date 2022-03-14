@@ -307,7 +307,7 @@ const VenueOwnerTabs = (props) => {
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
 
-        if (route.name === 'Home') {
+        if (route.name === 'Dashboard') {
           iconName = focused
             ? 'ios-information-circle'
             : 'ios-information-circle-outline';
@@ -320,7 +320,7 @@ const VenueOwnerTabs = (props) => {
       tabBarInactiveTintColor: 'rgba(157,24,24,0.8)',    
       })}
     >
-    <OwnerTabs.Screen name="Dashboard"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <OwnerDashboard/>}</OwnerTabs.Screen>
+    <OwnerTabs.Screen name="Dashboard"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{(props) => <OwnerDashboardStack isDashboard={true}/>}</OwnerTabs.Screen>
     <OwnerTabs.Screen name="Your Halls" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="plus-circle" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{()=> <VenueListingAndAddition/>}</OwnerTabs.Screen>
     <OwnerTabs.Screen name="Profile" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="thumbs-up" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><VenueDashboard /></Suspense>}</OwnerTabs.Screen>
     {/* <TouchableOpacity><Text>Logout</Text></TouchableOpacity> */}
@@ -380,6 +380,27 @@ const VenueListingAndAddition = () => {
             options={{ title: 'Add Internal Services', headerShown: true }}
 
           />
+        </Stack.Navigator>
+  )
+}
+
+const OwnerDashboardStack = () => {
+  return (
+  
+<Stack.Navigator initialRouteName="Dashboard">
+<Stack.Screen
+            name="Dashboard"
+            component={OwnerDashboard}
+            options={{ title: 'Dashboard', headerShown: true }}
+
+          />
+      <Stack.Screen
+            name="VenueList"
+            component={() => <OwnerHallsPage isFromDashboard={true}/>}
+            options={{ title: 'Venue List', headerShown: true }}
+          />
+         
+         
         </Stack.Navigator>
   )
 }

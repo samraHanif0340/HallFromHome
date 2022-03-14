@@ -24,6 +24,7 @@ export const CAROUSEL_ITEM_WIDTH = SCREEN_WIDTH - CAROUSEL_VERTICAL_OUTPUT;
 
 const OwnerDashboard = (props) => {
   // const appendPayload = useStoreActions((actions) => actions.appendPayload);
+  console.log('dashboard',props)
   const globalPayload = useStoreState((state) => state.payload);
   const setPayload = useStoreActions((actions) => actions.setPayload);
   const source = axios.CancelToken.source();
@@ -75,7 +76,7 @@ const OwnerDashboard = (props) => {
         });
       }
     } catch (error) {
-      
+
       setpendingData([])
       setIsLoading(false);
       Snackbar.show({
