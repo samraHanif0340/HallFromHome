@@ -321,9 +321,9 @@ const VenueOwnerTabs = (props) => {
       tabBarInactiveTintColor: 'rgba(157,24,24,0.8)',    
       })}
     >
-    <OwnerTabs.Screen name="Dashboard"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{(props) => <OwnerDashboardStack isDashboard={true}/>}</OwnerTabs.Screen>
+    <OwnerTabs.Screen name="Dashboard"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{(props) => <OwnerDashboardStack/>}</OwnerTabs.Screen>
     <OwnerTabs.Screen name="Your Halls" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="plus-circle" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{()=> <VenueListingAndAddition/>}</OwnerTabs.Screen>
-    <OwnerTabs.Screen name="Profile" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="thumbs-up" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><VenueDashboard /></Suspense>}</OwnerTabs.Screen>
+    <OwnerTabs.Screen name="Profile" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="thumbs-up" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><OwnerDashboardStack /></Suspense>}</OwnerTabs.Screen>
     {/* <TouchableOpacity><Text>Logout</Text></TouchableOpacity> */}
     {/* <OwnerTabs.Screen name="Logout"  options={
       {

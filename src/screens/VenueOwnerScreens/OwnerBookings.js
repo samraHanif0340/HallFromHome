@@ -17,51 +17,7 @@ const source = axios.CancelToken.source();
 
 const  OwnerBookingPage = (props) => {
 
-  const [masterData, setmasterData] = React.useState([{
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    TrackingStatus: 'success',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Modern Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    TrackingStatus: 'success',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name\n Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Ayan Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    TrackingStatus: 'success',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Diamond Palace",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    TrackingStatus: 'success',
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    TrackingStatus: 'success',
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  }]);
+  const [masterData, setmasterData] = React.useState([]);
   const globalPayload = useStoreState((state) => state.payload);
   const [isLoading, setIsLoading] = React.useState(false)
 

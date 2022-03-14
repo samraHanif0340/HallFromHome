@@ -215,8 +215,9 @@ const OwnerDashboard = (props) => {
 
           />
         </ScrollView> */}
+      
         <View style={styles.childParents}>
-         {/* <ScrollView> */}
+         <ScrollView>
           <Card containerStyle={styles.cardParentStyle}>
           <Card.Title style = {styles.TitleStyling}> Requests And Approvals </Card.Title>
           <Card.Divider />
@@ -228,8 +229,8 @@ const OwnerDashboard = (props) => {
      
           />
           </Card>
-{/* </ScrollView> */}
-         
+</ScrollView>
+<ScrollView>
           <Card containerStyle={styles.cardParentStyle}>
           <Card.Title style = {styles.TitleStyling}> Recent Bookings</Card.Title>
           <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToOwnerBookingPage()}><Text >View More</Text></TouchableHighlight>
@@ -260,9 +261,10 @@ const OwnerDashboard = (props) => {
 
                             /> */}
           </Card>
+          </ScrollView>
  
-          <ScrollView>
-         
+    
+         <ScrollView>
           <Card containerStyle={styles.cardParentStyle}>
           <Card.Title style = {styles.TitleStyling}> Your Halls </Card.Title>
           <TouchableHighlight style={styles.viewMoreButton} onPress={()=>goToVenueListPage()}><Text >View More</Text></TouchableHighlight>
@@ -293,11 +295,11 @@ const OwnerDashboard = (props) => {
           />
           </SafeAreaView> */}
           </Card>
-
-          </ScrollView>
-          </View>
+</ScrollView>
+        
 
       {/* </ImageBackground> */}
+    </View>
     </View>
   );
 }
