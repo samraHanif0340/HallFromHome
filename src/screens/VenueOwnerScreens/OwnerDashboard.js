@@ -1,7 +1,7 @@
 import React, { Component, useEffect } from "react";
-import { StyleSheet, View, Dimensions,Text, Image, FlatList, SafeAreaView,TouchableOpacity, VirtualizedList,TouchableHighlight, StatusBar, ImageBackground, ScrollView } from "react-native";
+import { StyleSheet, View, Dimensions, Text, Image, FlatList, SafeAreaView, TouchableOpacity, VirtualizedList, TouchableHighlight, StatusBar, ImageBackground, ScrollView } from "react-native";
 import { Loader } from '../../components/customComponents/customComponents'
-import { Divider, Card, Avatar , Badge} from 'react-native-elements'
+import { Divider, Card, Avatar, Badge } from 'react-native-elements'
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
 import { useStoreActions, useStoreState } from 'easy-peasy';
@@ -24,14 +24,14 @@ export const CAROUSEL_ITEM_WIDTH = SCREEN_WIDTH - CAROUSEL_VERTICAL_OUTPUT;
 
 const OwnerDashboard = (props) => {
   // const appendPayload = useStoreActions((actions) => actions.appendPayload);
-  console.log('dashboard',props)
+  console.log('dashboard', props)
   const globalPayload = useStoreState((state) => state.payload);
   const setPayload = useStoreActions((actions) => actions.setPayload);
   const source = axios.CancelToken.source();
   const [activeTab, setActiveTab] = React.useState(0)
 
   const [pendingData, setpendingData] = React.useState([]);
-  const [dashboardData, setDashboardData] = React.useState([{id:1,name:'Pending',count:49,icon:"list" },{id:2,name:'Approved',count:23,icon:"check" },{id:3,name:'Rejected',count:12,icon:"ban" }]);
+  const [dashboardStats, setDashboardStats] = React.useState([{ id: 1, name: 'Pending', count: 49, icon: "list" }, { id: 2, name: 'Approved', count: 23, icon: "check" }, { id: 3, name: 'Rejected', count: 12, icon: "ban" }]);
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -94,9 +94,34 @@ const OwnerDashboard = (props) => {
     }
   };
 
+  const getDashboardStats = async () => {
+    const configurationObject = {
+      url: `${BASE_URL}GetRequestStatistics`,
+      method: "POST",
+      cancelToken: source.token,
+      data: { OwnerID: globalPayload.userId },
+    };
+    try {
+      const response = await axios(
+        configurationObject
+      );
+      if (response.data.ResponseCode == "00") {
+        if (response.data.Result_DTO) {
+          setDashboardStats(response.data.Result_DTO)
+        }
+        return;
+      } else {
+        setDashboardStats([])
+      }
+    } catch (error) {
+      setDashboardStats([])
+    }
+  };
+
 
   useEffect(() => {
     getData();
+    // getDashboardStats()
 
     return () => source.cancel("Data fetching cancelled");
   }, [globalPayload.userId]);
@@ -107,11 +132,11 @@ const OwnerDashboard = (props) => {
     props.navigation.replace('Auth')
   }
 
-  const goToVenueListPage = () =>{
+  const goToVenueListPage = () => {
     props.navigation.push('VenueList')
   }
 
-  const goToOwnerBookingPage = () =>{
+  const goToOwnerBookingPage = () => {
     props.navigation.push('OwnerBookings')
   }
 
@@ -119,16 +144,16 @@ const OwnerDashboard = (props) => {
   const getStatusDescription = (status) => {
     let statusDesc = 'Pending'
     let statusColor = 'primary'
-    if(status == 'P'){
+    if (status == 'P') {
       statusDesc = 'Pending'
       statusColor = 'primary'
     }
-    else  if(status == 'A'){
+    else if (status == 'A') {
       statusDesc = 'Approved'
       statusColor = 'success'
 
     }
-    else{
+    else {
       statusDesc = 'Rejected'
       statusColor = 'error'
 
@@ -136,7 +161,7 @@ const OwnerDashboard = (props) => {
 
     let obj = {
       statusDecription: statusDesc,
-      color:statusColor
+      color: statusColor
 
     }
 
@@ -146,30 +171,30 @@ const OwnerDashboard = (props) => {
   const renderDashboardItem = ({ item }) => (
     <Card containerStyle={styles.cardChildStyle}>
       <View style={styles.requestsIcon}>
-      <Icon name={item.icon} size={30} color='#FDE1C9'/>
+        <Icon name={item.icon} size={30} color='#FDE1C9' />
       </View>
-      <View  style={styles.requestsContent}>
-      <Text style={styles.itemName}>{item.name}</Text>
-      <Text style={styles.itemCount}>{item.count}</Text>
-      </View>   
+      <View style={styles.requestsContent}>
+        <Text style={styles.itemName}>{item.name}</Text>
+        <Text style={styles.itemCount}>{item.count}</Text>
+      </View>
     </Card>
   );
 
 
-  const renderRecentBookings = ({item}) =>(
-  
- 
-     
-      <View style={styles.middleView}>
-        <Text style={styles.username}>{item.BookedByUsername}</Text>
-        <Text style={styles.venueName}>{item.VenueName}</Text>
-        <View style={styles.lastRow}>
-          <Text style={styles.eventDateTime}>{item.EventDate} | {item.EventTime}</Text>
-          
-      {/* <Badge style={styles.statusBadge} value={getStatusDescription(item.RequestStatus).statusDecription} status={getStatusDescription(item.RequestStatus).color}/> */}
-        </View>
+  const renderRecentBookings = ({ item }) => (
+
+
+
+    <View style={styles.middleView}>
+      <Text style={styles.username}>{item.BookedByUsername}</Text>
+      <Text style={styles.venueName}>{item.VenueName}</Text>
+      <View style={styles.lastRow}>
+        <Text style={styles.eventDateTime}>{item.EventDate} | {item.EventTime}</Text>
+
+        {/* <Badge style={styles.statusBadge} value={getStatusDescription(item.RequestStatus).statusDecription} status={getStatusDescription(item.RequestStatus).color}/> */}
       </View>
- 
+    </View>
+
   )
 
   return (
@@ -177,79 +202,43 @@ const OwnerDashboard = (props) => {
       <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-      {/* <ImageBackground style={styles.container}
-        source={require("../../assets/images/Gradient_MI39RPu.png")}
-      > */}
-        {/* <TouchableOpacity
-          onPress={handleSubmitPress}
-          style={styles.button2}
-        >
-          <Text style={styles.text5}>LOGOUT</Text>
-        </TouchableOpacity> */}
-        {/* <ScrollView >
-          <FlatList 
-            data={pendingData}
-            renderItem={({ item }) => (
-              <Card containerStyle={styles.cardStyle}>
-                <View style={styles.mainView}>
-                  <Avatar
-                    size={64}
-                    rounded
-                    title={item.BookedByUsername.substr(0, 1).toUpperCase()}
-                    containerStyle={{ backgroundColor: 'coral' }} />
-                  <View style={styles.middleView}>
 
-                    <Text style={styles.username}>{item.BookedByUsername}</Text>
-                    <Text style={styles.venueName}>{item.VenueName}</Text>
-                    <View style={styles.lastRow}>
-                      <Text style={styles.eventDateTime}>{item.EventDate} | {item.EventTime}</Text>
-                  <Badge style={styles.statusBadge} value={getStatusDescription(item.RequestStatus).statusDecription} status={getStatusDescription(item.RequestStatus).color}/>
+      <TouchableOpacity
+        onPress={handleSubmitPress}
+        style={styles.button2}
+      >
+        <Text style={styles.text5}>LOGOUT</Text>
+      </TouchableOpacity>
 
-                     
-                    </View>
-                  </View>
-                </View>
-              </Card>
 
-            )}
-
-          />
-        </ScrollView> */}
-      
-        <View style={styles.childParents}>
-         <ScrollView>
+      <View style={styles.childParents}>
+        <ScrollView>
           <Card containerStyle={styles.cardParentStyle}>
-          <Card.Title style = {styles.TitleStyling}> Requests And Approvals </Card.Title>
-          <Card.Divider />
-          <FlatList
-          data={dashboardData}
-          renderItem={renderDashboardItem}
-          keyExtractor={item => item.id}
-          numColumns={2}
-     
-          />
+            <Card.Title style={styles.TitleStyling}> Requests And Approvals </Card.Title>
+            <Card.Divider />
+            <FlatList
+              data={dashboardStats}
+              renderItem={renderDashboardItem}
+              keyExtractor={item => item.id}
+              numColumns={2}
+
+            />
           </Card>
-</ScrollView>
-<ScrollView>
+        </ScrollView>
+        <ScrollView>
           <Card containerStyle={styles.cardParentStyle}>
-          <Card.Title style = {styles.TitleStyling}> Recent Bookings</Card.Title>
-          <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToOwnerBookingPage()}><Text >View More</Text></TouchableHighlight>
-          <Card.Divider />
-          {/* <FlatList
-          contentContainerStyle={styles.flatListView}
-          data={pendingData}
-          renderItem={renderRecentBookings}
-          keyExtractor={item => item.id}
-          horizontal
-          /> */}
-           <Carousel
-                            layout={"default"}
-                            data={pendingData}
-                            sliderWidth={250}
-            itemWidth={250}
-                            renderItem={renderRecentBookings}
-                            onSnapToItem={i => setActiveTab({ activeTab: i })} />
-                               {/* <Pagination
+            <Card.Title style={styles.TitleStyling}> Recent Bookings</Card.Title>
+            <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToOwnerBookingPage()}><Text >View More</Text></TouchableHighlight>
+            <Card.Divider />
+
+            <Carousel
+              layout={"default"}
+              data={pendingData}
+              sliderWidth={250}
+              itemWidth={250}
+              renderItem={renderRecentBookings}
+              onSnapToItem={i => setActiveTab({ activeTab: i })} />
+            {/* <Pagination
                                 containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
                                 dotStyle={styles.ww}
                                 inactiveDotOpacity={0.4}
@@ -261,31 +250,31 @@ const OwnerDashboard = (props) => {
 
                             /> */}
           </Card>
-          </ScrollView>
- 
-    
-         <ScrollView>
+        </ScrollView>
+
+
+        <ScrollView>
           <Card containerStyle={styles.cardParentStyle}>
-          <Card.Title style = {styles.TitleStyling}> Your Halls </Card.Title>
-          <TouchableHighlight style={styles.viewMoreButton} onPress={()=>goToVenueListPage()}><Text >View More</Text></TouchableHighlight>
-          <Card.Divider />
-          <Carousel
-                            layout={"default"}
-                            data={pendingData}
-                            sliderWidth={250}
-            itemWidth={250}
-                            renderItem={renderRecentBookings}
-                            onSnapToItem={(index) => console.log('carousel index', index)} />
-                               <Pagination
-                                containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
-                                dotStyle={styles.ww}
-                                inactiveDotOpacity={0.4}
-                                inactiveDotScale={0.6}
-                                
+            <Card.Title style={styles.TitleStyling}> Your Halls </Card.Title>
+            <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToVenueListPage()}><Text >View More</Text></TouchableHighlight>
+            <Card.Divider />
+            <Carousel
+              layout={"default"}
+              data={pendingData}
+              sliderWidth={250}
+              itemWidth={250}
+              renderItem={renderRecentBookings}
+              onSnapToItem={(index) => console.log('carousel index', index)} />
+            <Pagination
+              containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+              dotStyle={styles.ww}
+              inactiveDotOpacity={0.4}
+              inactiveDotScale={0.6}
 
 
-                            />
-          {/* <SafeAreaView>
+
+            />
+            {/* <SafeAreaView>
           <FlatList
           data={pendingData}
           contentContainerStyle={styles.flatListView}
@@ -295,11 +284,8 @@ const OwnerDashboard = (props) => {
           />
           </SafeAreaView> */}
           </Card>
-</ScrollView>
-        
-
-      {/* </ImageBackground> */}
-    </View>
+        </ScrollView>
+      </View>
     </View>
   );
 }
@@ -308,89 +294,89 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  childParents:{
-    flex:1,
-    flexDirection:'column',
-    justifyContent:'space-between'
+  childParents: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   },
   cardParentStyle: {
-   
-    justifyContent:'space-between',
+
+    justifyContent: 'space-between',
     borderRadius: 16,
     shadowColor: '#000',
-    backgroundColor:'#FDE1C9',
+    backgroundColor: '#FDE1C9',
     shadowOffset: { width: 1.5, height: 1.5 },
     shadowOpacity: 0.5,
     shadowRadius: 14,
     elevation: 6,
   },
   cardChildStyle: {
-    flex:1,
-    justifyContent:'space-between',
+    flex: 1,
+    justifyContent: 'space-between',
     borderRadius: 9,
-    borderColor:'rgba(157,24,24,0.8)',
-    backgroundColor:'rgba(157,24,24,0.8)', 
+    borderColor: 'rgba(157,24,24,0.8)',
+    backgroundColor: 'rgba(157,24,24,0.8)',
     shadowColor: 'rgba(157,24,24,0.8)',
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
   },
-  itemName:{
-    fontSize:16,
-    color:'#FDE1C9',
-    fontWeight:'bold',
+  itemName: {
+    fontSize: 16,
+    color: '#FDE1C9',
+    fontWeight: 'bold',
 
   },
-  TitleStyling:{
-    fontSize:20,
-    color:'black',
-    fontWeight:'bold',
+  TitleStyling: {
+    fontSize: 20,
+    color: 'black',
+    fontWeight: 'bold',
 
   },
   eventDateTime: {
-    fontSize:16,
-    color:'#FDE1C9',
-    fontWeight:'bold',
+    fontSize: 16,
+    color: '#FDE1C9',
+    fontWeight: 'bold',
   },
 
-  itemCount:{
-    fontSize:16,
-    color:'#FDE1C9',
-    fontWeight:'bold',
-    borderRadius:7,
+  itemCount: {
+    fontSize: 16,
+    color: '#FDE1C9',
+    fontWeight: 'bold',
+    borderRadius: 7,
 
   },
-  requestsIcon:{
-    alignSelf:'center'
+  requestsIcon: {
+    alignSelf: 'center'
   },
-  requestsContent:{
-    alignItems:'center'
+  requestsContent: {
+    alignItems: 'center'
   },
-  viewMoreButton:{
-    alignSelf:'flex-end',
-    borderColor:'red',
+  viewMoreButton: {
+    alignSelf: 'flex-end',
+    borderColor: 'red',
     fontStyle: 'italic',
-    color:'black',
-    fontWeight:'bold'
+    color: 'black',
+    fontWeight: 'bold'
   },
-  flatListView:{
-    flexDirection:'row',
-    justifyContent:'space-between'
+  flatListView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   mainView: {
-   
 
-    
+
+
   },
   username: {
     fontSize: 16,
-    fontWeight:'bold',
-    color:'black'
+    fontWeight: 'bold',
+    color: 'black'
   },
   venueName: {
     fontSize: 12,
-    fontStyle:'italic'
+    fontStyle: 'italic'
 
   },
   middleView: {

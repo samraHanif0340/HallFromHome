@@ -321,7 +321,7 @@ const VenueOwnerTabs = (props) => {
       tabBarInactiveTintColor: 'rgba(157,24,24,0.8)',    
       })}
     >
-    <OwnerTabs.Screen name="Dashboard"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{(props) => <OwnerDashboardStack/>}</OwnerTabs.Screen>
+    <OwnerTabs.Screen name="DashboardStack"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <OwnerDashboardStack/>}</OwnerTabs.Screen>
     <OwnerTabs.Screen name="Your Halls" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="plus-circle" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{()=> <VenueListingAndAddition/>}</OwnerTabs.Screen>
     <OwnerTabs.Screen name="Profile" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="thumbs-up" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><OwnerDashboardStack /></Suspense>}</OwnerTabs.Screen>
     {/* <TouchableOpacity><Text>Logout</Text></TouchableOpacity> */}
@@ -396,16 +396,15 @@ const OwnerDashboardStack = () => {
 
           />
       <Stack.Screen
-            name="VenueList"
-            component={() => <OwnerHallsPage isFromDashboard={true}/>}
-            options={{ title: 'Venue List', headerShown: true }}
-          />
+            name="VenueList"           
+            options={{ title: 'Venue List', headerShown: true }}>
+            {(props) => <OwnerHallsPage {...props} isFromDashboard={true} />}
+          </Stack.Screen>
 
 <Stack.Screen
             name="OwnerBookings"
-            component={() => <OwnerBookingPage isFromDashboard={true}/>}
             options={{ title: 'Owner Bookings', headerShown: true }}
-          />
+          >{(props) => <OwnerBookingPage {...props} isFromDashboard={true} />}</Stack.Screen>
          
          
         </Stack.Navigator>

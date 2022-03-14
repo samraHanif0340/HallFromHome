@@ -112,7 +112,7 @@ const NewVenueServicesPage = (props) => {
         url: `${BASE_URL}AddNewVenue`,
         method: "POST",
         cancelToken: source.token,
-        data: { ...formData, UserID: globalPayload.userId , ...globalPayload.venueAdditionPayload, ImageURL:globalPayload.ImageURL}
+        data: { ...formData, UserID: globalPayload.userId , ...globalPayload.venueAdditionPayload, ImageList:globalPayload.ImageURL}
       }
       // navigation.navigate('BookingConfirm')
   
