@@ -39,10 +39,11 @@ import HallVideoPicturesPage from '../../screens/VenueOwnerScreens/HallVideosPic
 import OwnerHallsPage from '../../screens/VenueOwnerScreens/OwnerHalls';
 import NewVenueAdditionPage from '../../screens/VenueOwnerScreens/NewVenueAddition';
 import NewVenueServicesPage from '../../screens/VenueOwnerScreens/NewVenueServices';
+import OwnerDashboard from '../../screens/VenueOwnerScreens/OwnerDashboard';
 
 
 
-const VenueDashboard = React.lazy(()=> import('../../screens/VenueOwnerScreens/OwnerDashboard') )
+// const VenueDashboard = React.lazy(()=> import('../../screens/VenueOwnerScreens/OwnerDashboard') )
 // const VenueOwnerHalls = React.lazy(()=> import('../../screens/VenueOwnerScreens/OwnerHalls') )
 // const VenueAdditionPage = React.lazy(()=> import('../../screens/VenueOwnerScreens/NewVenueAddition') )
 const VenuePicsVideos =  React.lazy(()=> import('../../screens/VenueOwnerScreens/HallVideosPictures') )
@@ -319,7 +320,7 @@ const VenueOwnerTabs = (props) => {
       tabBarInactiveTintColor: 'rgba(157,24,24,0.8)',    
       })}
     >
-    <OwnerTabs.Screen name="Dashboard"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><VenueDashboard /></Suspense>}</OwnerTabs.Screen>
+    <OwnerTabs.Screen name="Dashboard"  options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="list-ul"   color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <OwnerDashboard/>}</OwnerTabs.Screen>
     <OwnerTabs.Screen name="Your Halls" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="plus-circle" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{()=> <VenueListingAndAddition/>}</OwnerTabs.Screen>
     <OwnerTabs.Screen name="Profile" options={{tabBarIcon: ({ tintColor ,focused}) => (<Icon name="thumbs-up" color={{ tintColor }} size={25} transform={{ rotate: 42 }}/>) }}>{() => <Suspense fallback={<Text>Loading...</Text>}><VenueDashboard /></Suspense>}</OwnerTabs.Screen>
     {/* <TouchableOpacity><Text>Logout</Text></TouchableOpacity> */}

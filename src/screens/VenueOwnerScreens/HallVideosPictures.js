@@ -5,12 +5,23 @@ import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
 import { TouchableHighlight,TouchableOpacity } from "react-native-gesture-handler";
 import DocumentPicker from 'react-native-document-picker';
+import { CommonHelper } from "../../components/utility/helper";
+var RNFS = require('react-native-fs');
+import { useStoreState,useStoreActions } from 'easy-peasy';
+
+
+
 
 const source = axios.CancelToken.source();
 const  HallVideoPicturesPage = (props) => {
 
   const [fileResponse, setFileResponse] = useState([]);
+  const [filesArray, setFilesArray] = useState([]);
+
   const [isLoading, setIsLoading] = React.useState(false)
+  const appendPayload = useStoreActions((actions) => actions.appendPayload);
+  const globalPayload = useStoreState((state) => state.payload);
+
 
 
   const goToInternalServicesPage = () =>{
@@ -86,22 +97,24 @@ const  HallVideoPicturesPage = (props) => {
 //     }
 //   }, []);
 
-const uploadDocument = async () => {
-    if (fileResponse != null) {
-      const fileToUpload = fileResponse;
-      const data = new FormData();
-      data.append('file_attachment', fileToUpload);
-        console.log('fileData',data)
+
+
+const uploadDocument =  () => {
+    if (filesArray != null) {
+     
+         appendPayload({ ImageURL: filesArray });
+      console.log('global payload in venue addition', globalPayload)
+      // const data = new FormData();
+      // data.append('file_attachment', fileToUpload);
+      //   console.log('fileData',data)
         goToInternalServicesPage()
     } else {
       alert('Please Select File first');
     }
   };
   const handleDocumentSelection = useCallback(async () => {
-    // Opening Document Picker to select one file
     try {
       const res = await DocumentPicker.pick({
-        // Provide which type of file you want user to pick
         type: [DocumentPicker.types.images],
         presentationStyle:'fullScreen',
         allowMultiSelection:true
@@ -112,30 +125,28 @@ const uploadDocument = async () => {
         // DocumentPicker.types.audio
         // DocumentPicker.types.pdf
       });
-      // Printing the log realted to the file
-      // for (const res of res) {
-      //   console.log('res : ' + JSON.stringify(res));
-      //   console.log('URI : ' + res.uri);
-      //   console.log('Type : ' + res.type);
-      //   console.log('File Name : ' + res.name);
-      //   console.log('File Size : ' + res.size);
-      // }
       console.log(res)
-      // Setting the state to show single file attributes
+      let filesArrayCopy = [...filesArray]
+      res.map( async (file)=>{
+        let base64 = ( await RNFS.readFile(file.uri, 'base64'))
+        console.log(base64)
+        let obj = {
+          // fileName: file.name,
+          // fileType:file.type,
+          fileBase64: base64.toString()
+        }
+       filesArray.push(obj.fileBase64)   
+      })
+      setFilesArray(filesArrayCopy)
+      console.log('filesArray',filesArray)
       setFileResponse(res);
     } catch (err) {
-        setFileResponse(null);
-      // Handling any exception (If any)
+      setFilesArray([]);
       if (DocumentPicker.isCancel(err)) {
-        // If user canceled the document selection
-        setFileResponse(null);
-
-        alert('Canceled');
+        setFilesArray([]);
       } else {
-        // For Unknown Error
-        setFileResponse(null);
-
-        alert('Unknown Error: ' + JSON.stringify(err));
+        setFilesArray([]);
+      console.log(err)
         throw err;
       }
     }
@@ -154,30 +165,15 @@ const uploadDocument = async () => {
           <Text style={styles.title}>Add Venue Pictures</Text>
         </View>
            <SafeAreaView style={styles.container} >
-     
-      {/* {fileResponse.map((file, index) => (
-        <Text
-          key={index.toString()}
-          style={styles.uri}
-          numberOfLines={3}
-          ellipsizeMode={'middle'}>
-          {file?.uri}
-        </Text>
-      ))} */}
 { 
-fileResponse != null &&   fileResponse.length > 0 ? fileResponse.map((file, index) => (
+filesArray != null &&   filesArray.length > 0 ? filesArray.map((file, index) => (
   <>
-        <Text style={styles.textStyle}>
-          File Name: {fileResponse[0].name ? fileResponse[0].name : ''}
+        {/* <Text style={styles.textStyle}>
+          File Name: {file.fileName ? file.fileName : ''}
           {'\n'}
-          Type: {fileResponse[0].type ? fileResponse[0].type : ''}
-          {'\n'}
-          File Size: {fileResponse[0].size ? fileResponse[0].size : ''}
-          {'\n'}
-          URI: {fileResponse[0].uri ? fileResponse[0].uri : ''}
-          {'\n'}
-        </Text>
-        <Image source={{uri: fileResponse[0].uri}}></Image>
+          
+        </Text> */}
+        {/* <Image style={{width: 100, height: 50}} source={{uri:'data:${file.fileType};base64,${file.fileBase64}'}}></Image> */}
         </>
       )) : null} 
       

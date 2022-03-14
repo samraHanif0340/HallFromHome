@@ -12,7 +12,7 @@ import Snackbar from 'react-native-snackbar';
 import { Avatar } from "react-native-elements";
 import moment from 'moment';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
-import { useStoreState } from 'easy-peasy';
+import { useStoreState,useStoreActions } from 'easy-peasy';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 
@@ -96,21 +96,22 @@ const NewVenueAdditionPage = (props) => {
   ])
 
   const [initialFormValues, setInitialFormValues] = React.useState({
-    VenueName: '',
-    POCName:'',
-    ContactNumber:'',
-    MaxCapacity: '',
-    RentPrice: '',
-    Longitude: '',
-    Latitude: '',
+    VenueName: 'modern',
+    POCName:'samra',
+    ContactNumber:'03402042202',
+    MaxCapacity: '200',
+    RentPrice: '10000',
+    Longitude: '24.56',
+    Latitude: '88.66',
     Shift: '',
-    Location: '',
+    Location: 'dfdsfs',
     VenueTypeId: '',
     CityId: '',
     AreaId:''
   })
   // const [EventDate, setEventDate] = React.useState('')
   // const [venueID, setVenueID] = React.useState(route.params.venueID)
+  const appendPayload = useStoreActions((actions) => actions.appendPayload);
   const globalPayload = useStoreState((state) => state.payload);
 
 
@@ -222,15 +223,17 @@ const NewVenueAdditionPage = (props) => {
 
 
   const submitForm = (formData) => {
-    goToPicsAdditionPage()
+    // goToPicsAdditionPage()
 
     console.log(formData)
-    // if (formData != null || formData != {}) {
-    //   saveData(formData)
-    //   appendPayload({ venueAdditionPayload: formData });
-    //   console.log('global payload in venue addition', globalPayload)
-    //   goToPicsAdditionPage()
-    // }
+    if (formData != null || formData != {}) {
+      // saveData(formData)
+    console.log(formData)
+
+      appendPayload({ venueAdditionPayload: formData });
+      console.log('global payload in venue addition', globalPayload)
+      goToPicsAdditionPage()
+    }
 
    
   }
@@ -314,7 +317,7 @@ const NewVenueAdditionPage = (props) => {
         <View style={styles.titleWrapper}>
           <Text style={styles.title}>Add New Venue</Text>
         </View>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps='handled'>
           <Formik
             initialValues={initialFormValues}
             validationSchema={validationSchema}
@@ -382,7 +385,7 @@ const NewVenueAdditionPage = (props) => {
                   />
                   <TextField
                     placeholder="Longitude" style={styles.labelText}
-                    keyboardType='default'
+                    keyboardType='phone-pad'
                     mode="outlined"
                     placeholderTextColor="#800000"
                     nameOfIcon="credit-card"
@@ -394,7 +397,7 @@ const NewVenueAdditionPage = (props) => {
                   />
                   <TextField
                     placeholder="Latitude" style={styles.labelText}
-                    keyboardType='default'
+                    keyboardType='phone-pad'
                     mode="outlined"
                     placeholderTextColor="#800000"
                     nameOfIcon="credit-card"
@@ -464,7 +467,7 @@ const NewVenueAdditionPage = (props) => {
                   />
 
                   <TouchableOpacity
-                    onPress={goToPicsAdditionPage}
+                    onPress={handleSubmit}
                     style={styles.submitButtonWrapper}
 
                   >

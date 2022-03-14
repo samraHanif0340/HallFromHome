@@ -15,10 +15,10 @@ import { useStoreActions } from 'easy-peasy';
 
 
 const LoginPage = ({ navigation }) => {
-    const [userEmail, setUserEmail] = useState('');
+    const [userEmail, setUserEmail] = useState('hallowner@gmail.com');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
-    const [userPassword, setUserPassword] = useState('');
+    const [userPassword, setUserPassword] = useState('testpassword');
     const [loading, setLoading] = useState(false);
     const [errortext, setErrortext] = useState(null);
     const [hasError, setErrorFlag] = React.useState(false);

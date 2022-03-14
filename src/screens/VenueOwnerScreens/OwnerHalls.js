@@ -27,19 +27,20 @@ const  OwnerHallsPage = (props) => {
     data: { OwnerID: globalPayload.userId  },
   };
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await axios(
         configurationObject
       );
 
       if (response.data.ResponseCode == "00") {
-        setIsLoading(false);
+        // setIsLoading(false);
         if (response.data.Result_DTO) {
           setmasterData(response.data.Result_DTO)
         }
 
         return;
       } else {
+      setIsLoading(false);
         setmasterData([])
         Snackbar.show({
           text: response.data.ResponseDesc,
@@ -110,12 +111,12 @@ const  OwnerHallsPage = (props) => {
     <View style={styles.container}>
       <Loader isLoading={isLoading} />
        <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            <ImageBackground
-                style={styles.rect1}
+            {/* <ImageBackground
+                
                 imageStyle={styles.rect1_imageStyle}
                 source={require("../../assets/images/Gradient_MI39RPu.png")}
-            >
-      <FlatList
+            > */}
+     <FlatList
         data={masterData}
         keyExtractor={item => item.VenueID}
         renderItem={renderHallListing}
@@ -129,7 +130,8 @@ const  OwnerHallsPage = (props) => {
           color="maroon"
         />
 
-</ImageBackground>
+{/* </ImageBackground> */}
+<Text>Samra</Text>
     </View>
 );
 }

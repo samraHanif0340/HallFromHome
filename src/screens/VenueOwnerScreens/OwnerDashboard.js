@@ -59,6 +59,8 @@ const OwnerDashboard = (props) => {
 
         return;
       } else {
+        setIsLoading(false);
+
         setpendingData([])
         Snackbar.show({
           text: response.data.ResponseDesc,
@@ -73,6 +75,7 @@ const OwnerDashboard = (props) => {
         });
       }
     } catch (error) {
+      
       setpendingData([])
       setIsLoading(false);
       Snackbar.show({
@@ -101,6 +104,10 @@ const OwnerDashboard = (props) => {
     setPayload({});
 
     props.navigation.replace('Auth')
+  }
+
+  const goToVenueListPage = () =>{
+    props.navigation.replace('VenueList')
   }
 
 
@@ -253,7 +260,7 @@ const OwnerDashboard = (props) => {
          
           <Card containerStyle={styles.cardParentStyle}>
           <Card.Title style = {styles.TitleStyling}> Your Halls </Card.Title>
-          <TouchableHighlight style={styles.viewMoreButton}><Text >View More</Text></TouchableHighlight>
+          <TouchableHighlight style={styles.viewMoreButton} onPress={()=>goToVenueListPage()}><Text >View More</Text></TouchableHighlight>
           <Card.Divider />
           <Carousel
                             layout={"default"}

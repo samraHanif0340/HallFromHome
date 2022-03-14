@@ -20,34 +20,19 @@ const source = axios.CancelToken.source();
 
 const validationSchema = Yup.object().shape({
   Segregation: Yup.boolean(),
-
-
     Projector: Yup.boolean(),
-
     Stage_Decoration: Yup.boolean(),
-
     Waitress: Yup.boolean(),
-
     Wifi:Yup.boolean(),
-
     Music_System: Yup.boolean(),
-
     SpecialLights: Yup.boolean(),
-
     Air_Condition: Yup.boolean(),
-
     DJ: Yup.boolean(),
-
-    Facebook_Page:Yup.string()
-    .required('Required'),
-
-    Website:Yup.string()
-    .required('Required')
+    Facebook_Page:Yup.string(),
+    Website:Yup.string(),
 });
 const NewVenueServicesPage = (props) => {
 
-    const [additionalServices, setAdditionalServices] = React.useState({ foodService: false, CateringID: null })
-    const appendPayload = useStoreActions((actions) => actions.appendPayload);
     const globalPayload = useStoreState((state) => state.payload);
     const [isLoading, setIsLoading] = React.useState(false);
      
@@ -111,7 +96,7 @@ const NewVenueServicesPage = (props) => {
     const submitForm = (formData) => {
       console.log(formData)
       if (formData != null || formData != {}) {
-        // saveData(formData)
+        saveData(formData)
         // appendPayload({ venueAdditionPayload: formData });
         // console.log('global payload in venue addition', globalPayload)
         console.log('internal Services called',formData)
@@ -127,7 +112,7 @@ const NewVenueServicesPage = (props) => {
         url: `${BASE_URL}AddNewVenue`,
         method: "POST",
         cancelToken: source.token,
-        data: { ...formData, UserID: globalPayload.userId , ...globalPayload.venueAdditionPayload},
+        data: { ...formData, UserID: globalPayload.userId , ...globalPayload.venueAdditionPayload, ImageURL:globalPayload.ImageURL}
       }
       // navigation.navigate('BookingConfirm')
   
