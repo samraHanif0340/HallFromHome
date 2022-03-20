@@ -55,7 +55,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/, 'Latitude should be between -90 to 90')
     .required('Required'),
 
-    Location: Yup.string()
+    Address: Yup.string()
     .required('Required'),
 
     VenueTypeId: Yup.string()
@@ -104,7 +104,7 @@ const NewVenueAdditionPage = (props) => {
     Longitude: '24.56',
     Latitude: '88.66',
     Shift: '',
-    Location: 'dfdsfs',
+    Address: 'dfdsfs',
     VenueTypeId: '',
     CityId: '',
     AreaId:''
@@ -268,7 +268,7 @@ const NewVenueAdditionPage = (props) => {
         Longitude: '',
         Latitude: '',
         Shift: '',
-        Location: '',
+        Address: '',
         CityId: '',
         AreaId:'',
         VenueTypeId: ''})
@@ -378,10 +378,10 @@ const NewVenueAdditionPage = (props) => {
                     placeholderTextColor="#800000"
                     nameOfIcon="user"
                     maxLength={80}
-                    onChangeText={(e) => { myChangeFunc('Location', e) }}
-                    onBlur={handleBlur('Location')}
-                    value={values.Location}
-                    error={[errors.Location]}
+                    onChangeText={(e) => { myChangeFunc('Address', e) }}
+                    onBlur={handleBlur('Address')}
+                    value={values.Address}
+                    error={[errors.Address]}
                   />
                   <TextField
                     placeholder="Longitude" style={styles.labelText}

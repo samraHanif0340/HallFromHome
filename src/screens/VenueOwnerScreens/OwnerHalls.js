@@ -13,13 +13,19 @@ import Snackbar from 'react-native-snackbar';
 
 
 import axios from 'axios';
-const source = axios.CancelToken.source();
 const  OwnerHallsPage = (props) => {
-  console.log('halllist',props)
 
+  console.log('halllist',props)
+  const source = axios.CancelToken.source();
   const globalPayload = useStoreState((state) => state.payload);
   const [masterData, setmasterData] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false)
+
+  React.useEffect(() => {
+    getData();
+
+    return () => source.cancel("Data fetching cancelled");
+  }, []);
 
   const getData = async () => {  
   const configurationObject = {
@@ -57,6 +63,7 @@ const  OwnerHallsPage = (props) => {
         });
       }
     } catch (error) {
+      console.log(error)
       setmasterData([])
       setIsLoading(false);
       Snackbar.show({
@@ -74,11 +81,7 @@ const  OwnerHallsPage = (props) => {
     }
   };
 
-  React.useEffect(() => {
-    getData();
-
-    return () => source.cancel("Data fetching cancelled");
-  }, []);
+ 
 
   const addEditHallDetail = () =>{
       props.navigation.push('AddNewVenue')

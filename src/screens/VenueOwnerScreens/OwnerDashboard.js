@@ -25,11 +25,10 @@ export const CAROUSEL_ITEM_WIDTH = SCREEN_WIDTH - CAROUSEL_VERTICAL_OUTPUT;
 const OwnerDashboard = (props) => {
   // const appendPayload = useStoreActions((actions) => actions.appendPayload);
   console.log('dashboard', props)
+  const source = axios.CancelToken.source();
   const globalPayload = useStoreState((state) => state.payload);
   const setPayload = useStoreActions((actions) => actions.setPayload);
-  const source = axios.CancelToken.source();
   const [activeTab, setActiveTab] = React.useState(0)
-
   const [pendingData, setpendingData] = React.useState([]);
   const [dashboardStats, setDashboardStats] = React.useState([{ id: 1, name: 'Pending', count: 49, icon: "list" }, { id: 2, name: 'Approved', count: 23, icon: "check" }, { id: 3, name: 'Rejected', count: 12, icon: "ban" }]);
 

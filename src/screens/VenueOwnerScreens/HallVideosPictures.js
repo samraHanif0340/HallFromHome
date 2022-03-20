@@ -86,33 +86,20 @@ const  HallVideoPicturesPage = (props) => {
     return () => source.cancel("Data fetching cancelled");
   }, []);
 
-//   const handleDocumentSelection = useCallback(async () => {
-//     try {
-//       const response = await DocumentPicker.pick({
-//         presentationStyle: 'fullScreen',
-//       });
-//       setFileResponse(response);
-//     } catch (err) {
-//       console.warn(err);
-//     }
-//   }, []);
-
-
-
 const uploadDocument =  () => {
     if (filesArray != null) {
-     
-         appendPayload({ ImageURL: filesArray });
-      console.log('global payload in venue addition', globalPayload)
-      // const data = new FormData();
-      // data.append('file_attachment', fileToUpload);
-      //   console.log('fileData',data)
+    let ImageList = filesArray.map((file)=> {return file.fileBase64})
+         appendPayload({ ImageList: ImageList });
         goToInternalServicesPage()
     } else {
       alert('Please Select File first');
     }
   };
+
+
   const handleDocumentSelection = useCallback(async () => {
+    setFilesArray(null)
+    appendPayload({ ImageList: null })
     try {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.images],
@@ -127,19 +114,23 @@ const uploadDocument =  () => {
       });
       console.log(res)
       let filesArrayCopy = [...filesArray]
+      // const unresolved = res.map(async(file) => {
+      //    let base64 = await RNFS.readFile(file.uri, 'base64')
+      //    return base64;
+      //  })
       res.map( async (file)=>{
         let base64 = ( await RNFS.readFile(file.uri, 'base64'))
         console.log(base64)
         let obj = {
-          // fileName: file.name,
-          // fileType:file.type,
+          fileName: file.name,
+          fileType:file.type,
           fileBase64: base64.toString()
         }
-       filesArray.push(obj.fileBase64)   
+        filesArrayCopy.push(obj)   
       })
       setFilesArray(filesArrayCopy)
-      console.log('filesArray',filesArray)
-      setFileResponse(res);
+      console.log('filesArray',filesArrayCopy)
+     
     } catch (err) {
       setFilesArray([]);
       if (DocumentPicker.isCancel(err)) {
@@ -168,12 +159,17 @@ const uploadDocument =  () => {
 { 
 filesArray != null &&   filesArray.length > 0 ? filesArray.map((file, index) => (
   <>
-        {/* <Text style={styles.textStyle}>
+        <Text style={styles.textStyle}>
           File Name: {file.fileName ? file.fileName : ''}
           {'\n'}
           
-        </Text> */}
-        {/* <Image style={{width: 100, height: 50}} source={{uri:'data:${file.fileType};base64,${file.fileBase64}'}}></Image> */}
+        </Text>
+        <Text style={styles.textStyle}>
+          File Name: {file.fileType ? file.fileType : ''}
+          {'\n'}
+          
+        </Text>
+        <Image style={{width: 100, height: 50}} source={{uri:'data:${file.fileType};base64,${file.fileBase64}'}}></Image>
         </>
       )) : null} 
       

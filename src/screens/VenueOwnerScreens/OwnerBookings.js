@@ -13,10 +13,9 @@ import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
 import { useStoreState } from 'easy-peasy';
 import Snackbar from 'react-native-snackbar';
-const source = axios.CancelToken.source();
 
 const  OwnerBookingPage = (props) => {
-
+  const source = axios.CancelToken.source();
   const [masterData, setmasterData] = React.useState([]);
   const globalPayload = useStoreState((state) => state.payload);
   const [isLoading, setIsLoading] = React.useState(false)
@@ -38,13 +37,10 @@ const  OwnerBookingPage = (props) => {
         setIsLoading(false);
         if (response.data.Result_DTO) {
           setmasterData(response.data.Result_DTO)
-
         }
-
         return;
       } else {
         setIsLoading(false);
-
         setmasterData([])
         Snackbar.show({
           text: response.data.ResponseDesc,
@@ -59,7 +55,7 @@ const  OwnerBookingPage = (props) => {
         });
       }
     } catch (error) {
-
+      console.log(error)
       setmasterData([])
       setIsLoading(false);
       Snackbar.show({
