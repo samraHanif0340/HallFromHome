@@ -92,6 +92,7 @@ const  OwnerBookingPage = (props) => {
       
       <FlatList
         data={masterData}
+        keyExtractor={item => item.VenueID}
         renderItem={({ item }) => (
           <Card containerStyle={styles.cardStyle}>
             <View style={styles.imageStackStack}>

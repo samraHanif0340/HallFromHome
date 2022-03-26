@@ -116,15 +116,34 @@ const  OwnerHallsPage = (props) => {
     <View style={styles.container}>
       <Loader isLoading={isLoading} />
        <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            {/* <ImageBackground
+            <ImageBackground
                 
+                style={styles.rect1}
                 imageStyle={styles.rect1_imageStyle}
                 source={require("../../assets/images/Gradient_MI39RPu.png")}
-            > */}
+            >
      <FlatList
         data={masterData}
         keyExtractor={item => item.VenueID}
-        renderItem={renderHallListing}
+        renderItem={({ item }) => (
+          <Card containerStyle={styles.cardStyle}>
+            <View style={styles.imageStackStack}>
+            <View style={styles.imageStack}>
+            <Image
+                  source={require("../../assets/images/download2.jpg")}
+                  style={styles.image}
+                ></Image>
+            <Card.Title style = {styles.cardTitle}> {item.VenueName}</Card.Title>
+            </View>
+            <View>
+           <Text>{item.VenueTypeDesc}</Text>
+            </View>        
+            <View>
+              <Text style={styles.commentStyle} h4>{item.CityDesc} | {item.MaxCapacity} | {item.RentPrice} | {item.Rating}</Text>
+            </View>          
+          </View>         
+        </Card>
+        )}
       />
 
       { props.isFromDashboard ? null : <FAB 
@@ -135,7 +154,7 @@ const  OwnerHallsPage = (props) => {
           color="maroon"
         />}  
 
-{/* </ImageBackground> */}
+</ImageBackground>
 
     </View>
 );
@@ -143,57 +162,10 @@ const  OwnerHallsPage = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    flexDirection:'column'  
+    flex: 1,
+    flexDirection: "column",
   },
-  cardStyle:{    
-    flex:1,
-    borderRadius:10,
-    flexDirection: "row",
-    shadowColor: '#000',
-    height:160,
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity:  0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  imageStack: {
-    top: 0,
-    left: -20,
-    width: 310,
-    height: 90,
-    position: "absolute",
-
-  },
-  imageStackStack: {
-    width: 199,
-    height: 9,
-    marginTop: 60,
-    marginLeft: 20,
-    // marginRight: 20,
-
-  },
-  cardTitle : {
-    color: 'black',
-    marginLeft: 10,
-    flexDirection: 'row',
-    bottom: 135,
-    marginBottom: -2,
-    marginRight:8,
-  },
-  cardPricePaid : {
-    left: 220,
-    color: 'black',
-    fontStyle: 'italic',
-    position: "absolute",
-    fontFamily: "roboto-700",
-    color: "black",
-    height: 14,
-    width: 139,
-    textAlign: "left",
-    fontSize: 11
-  },
-    image: {
+  image: {
     // top: 0,
     right: 9,
     left: -2,
@@ -205,23 +177,6 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     borderRadius: 5,
     // marginRigth:8, 
-  },
-  loremIpsum2Stack: {
-    top: -205,
-    position: "absolute"
-  },
-  imageWrapper:{
-    width: 199,
-    height: 9,
-    marginTop: 60,
-    marginLeft: 20,
-  },
-  image: { 
-    flex: 1,
-  },
-  rightView:{
-    flex:1,
-    flexDirection:'column'
   },
   loremIpsum2Stack: {
     top: -205,
@@ -250,7 +205,18 @@ const styles = StyleSheet.create({
     // marginRight: 20,
 
   },
- 
+  cardStyle:{
+    // borderColor:'#800000',
+    // borderWidth:3,
+    borderRadius:10,
+    flexDirection: "row",
+    shadowColor: '#000',
+    height:160,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
 
   eachItem: 
   {

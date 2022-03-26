@@ -37,11 +37,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 
 import { CustomerDrawerNavigator } from './src/components/navigations/Navigations';
+import { OwnerInterface } from './src/components/navigations/OwnerNavigations';
+
 import { AuthRoutes } from './src/components/navigations/Navigations';
-import { VenueOwnerTabs } from './src/components/navigations/Navigations';
 import { BookingConfirmStack } from './src/components/navigations/Navigations';
 import SplashScreen from './src/screens/SplashScreen/SplashScreen';
-import OwnerDashboard from './src/screens/VenueOwnerScreens/OwnerDashboard';
+
 
 import { action, createStore, StoreProvider } from 'easy-peasy';
 
@@ -64,7 +65,6 @@ LogBox.ignoreAllLogs();
 
 
 // const Drawer = createDrawerNavigator();
-
 
 const Stack = createStackNavigator();
 const Section = ({ children, title }): Node => {
@@ -146,9 +146,9 @@ const App: () => Node = () => {
               options={{ title:'Add Booking Details', headerShown: false }}
             />
              <Stack.Screen
-              name="OwnerTabs"
-              component={VenueOwnerTabs}
-              options={{ title:'Dashboard', headerShown: false }}
+              name="OwnerInterface"
+              component={OwnerInterface}
+              options={{ headerShown: false }}
             />
             {/* <Stack.Screen
             name="CustomerBooking"

@@ -16,12 +16,6 @@ export const SCREEN_WIDTH = Dimensions.get('window').width;
 export const CAROUSEL_VERTICAL_OUTPUT = 56;
 export const CAROUSEL_ITEM_WIDTH = SCREEN_WIDTH - CAROUSEL_VERTICAL_OUTPUT;
 
-
-// const LeftContent = props => <Avatar.Icon {...props} icon="account-circle-outline" />
-
-
-
-
 const OwnerDashboard = (props) => {
   // const appendPayload = useStoreActions((actions) => actions.appendPayload);
   console.log('dashboard', props)
@@ -36,6 +30,12 @@ const OwnerDashboard = (props) => {
 
 
 
+  React.useEffect( () => {
+    
+     getDashboardStats()
+     getData();
+
+  }, []);
 
   const getData = async () => {
     const configurationObject = {
@@ -53,11 +53,17 @@ const OwnerDashboard = (props) => {
       if (response.data.ResponseCode == "00") {
         setIsLoading(false);
         if (response.data.Result_DTO) {
-          setpendingData(response.data.Result_DTO)
+          let newArray = []
+          if(response.data.Result_DTO.length > 3){
+           newArray =  JSON.parse(JSON.stringify(response.data.Result_DTO.slice(0,3))) 
+          }
+          else{
+            newArray = JSON.parse(JSON.stringify(response.data.Result_DTO))
+          }
+          setpendingData(newArray)
 
         }
-
-        return;
+        
       } else {
         setIsLoading(false);
 
@@ -75,7 +81,7 @@ const OwnerDashboard = (props) => {
         });
       }
     } catch (error) {
-
+      console.log(error)
       setpendingData([])
       setIsLoading(false);
       Snackbar.show({
@@ -107,36 +113,25 @@ const OwnerDashboard = (props) => {
       if (response.data.ResponseCode == "00") {
         if (response.data.Result_DTO) {
           setDashboardStats(response.data.Result_DTO)
+          
         }
-        return;
+       
       } else {
         setDashboardStats([])
       }
     } catch (error) {
+      console.log(erro)
       setDashboardStats([])
     }
   };
 
 
-  useEffect(() => {
-    getData();
-    // getDashboardStats()
-
-    return () => source.cancel("Data fetching cancelled");
-  }, [globalPayload.userId]);
-
-  const handleSubmitPress = () => {
-    setPayload({});
-
-    props.navigation.replace('Auth')
-  }
-
   const goToVenueListPage = () => {
-    props.navigation.push('VenueList')
+    props.navigation.navigate('OwnerVenues')
   }
 
   const goToOwnerBookingPage = () => {
-    props.navigation.push('OwnerBookings')
+    props.navigation.navigate('OwnerBookings')
   }
 
 
@@ -181,9 +176,6 @@ const OwnerDashboard = (props) => {
 
 
   const renderRecentBookings = ({ item }) => (
-
-
-
     <View style={styles.middleView}>
       <Text style={styles.username}>{item.BookedByUsername}</Text>
       <Text style={styles.venueName}>{item.VenueName}</Text>
@@ -202,89 +194,53 @@ const OwnerDashboard = (props) => {
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
 
-      <TouchableOpacity
-        onPress={handleSubmitPress}
-        style={styles.button2}
-      >
-        <Text style={styles.text5}>LOGOUT</Text>
-      </TouchableOpacity>
-
-
-      <View style={styles.childParents}>
-        <ScrollView>
+      
+        
           <Card containerStyle={styles.cardParentStyle}>
             <Card.Title style={styles.TitleStyling}> Requests And Approvals </Card.Title>
             <Card.Divider />
             <FlatList
               data={dashboardStats}
               renderItem={renderDashboardItem}
-              keyExtractor={item => item.id}
+              key={'_'}
+              keyExtractor={item => "_" + item.id}
               numColumns={2}
 
             />
           </Card>
-        </ScrollView>
-        <ScrollView>
-          <Card containerStyle={styles.cardParentStyle}>
-            <Card.Title style={styles.TitleStyling}> Recent Bookings</Card.Title>
+      
+   
+        <Card containerStyle={styles.cardParentStyle}>
+            <Card.Title style={styles.TitleStyling}> Recent Bookings </Card.Title>
             <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToOwnerBookingPage()}><Text >View More</Text></TouchableHighlight>
+
             <Card.Divider />
-
-            <Carousel
-              layout={"default"}
+            <FlatList
+            
+             keyExtractor={item =>item.id}
               data={pendingData}
-              sliderWidth={250}
-              itemWidth={250}
               renderItem={renderRecentBookings}
-              onSnapToItem={i => setActiveTab({ activeTab: i })} />
-            {/* <Pagination
-                                containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
-                                dotStyle={styles.ww}
-                                inactiveDotOpacity={0.4}
-                                inactiveDotScale={0.6}
-                                activeDotIndex={activeTab}
-                                dotsLength={pendingData.length}
-                                
-
-
-                            /> */}
-          </Card>
-        </ScrollView>
-
-
-        <ScrollView>
-          <Card containerStyle={styles.cardParentStyle}>
-            <Card.Title style={styles.TitleStyling}> Your Halls </Card.Title>
-            <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToVenueListPage()}><Text >View More</Text></TouchableHighlight>
-            <Card.Divider />
-            <Carousel
-              layout={"default"}
-              data={pendingData}
-              sliderWidth={250}
-              itemWidth={250}
-              renderItem={renderRecentBookings}
-              onSnapToItem={(index) => console.log('carousel index', index)} />
-            <Pagination
-              containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
-              dotStyle={styles.ww}
-              inactiveDotOpacity={0.4}
-              inactiveDotScale={0.6}
-
-
+             horizontal
 
             />
-            {/* <SafeAreaView>
-          <FlatList
-          data={pendingData}
-          contentContainerStyle={styles.flatListView}
-          renderItem={renderRecentBookings}
-          keyExtractor={item => item.id}
-          horizontal
-          />
-          </SafeAreaView> */}
           </Card>
-        </ScrollView>
-      </View>
+     
+
+        {/* <Card containerStyle={styles.cardParentStyle}>
+            <Card.Title style={styles.TitleStyling}> Your Venues </Card.Title>
+            <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToVenueListPage()}><Text >View More</Text></TouchableHighlight>
+
+            <Card.Divider />
+            <FlatList
+             key={'@'}
+             keyExtractor={item => "@" + item.id}
+              data={pendingData}
+              renderItem={renderRecentBookings}
+             horizontal
+           
+            />
+          </Card> */}
+
     </View>
   );
 }
