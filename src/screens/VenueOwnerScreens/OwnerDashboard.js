@@ -9,6 +9,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Snackbar from 'react-native-snackbar';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 
 
 
@@ -24,16 +26,16 @@ const OwnerDashboard = (props) => {
   const setPayload = useStoreActions((actions) => actions.setPayload);
   const [activeTab, setActiveTab] = React.useState(0)
   const [pendingData, setpendingData] = React.useState([]);
-  const [dashboardStats, setDashboardStats] = React.useState([{ id: 1, name: 'Pending', count: 49, icon: "list" }, { id: 2, name: 'Approved', count: 23, icon: "check" }, { id: 3, name: 'Rejected', count: 12, icon: "ban" }]);
+  const [dashboardStats, setDashboardStats] = React.useState([{ id: 1, name: 'Pending', count: 0, icon: "list" }, { id: 2, name: 'Approved', count: 0, icon: "check" }, { id: 3, name: 'Rejected', count: 0, icon: "ban" }]);
 
   const [isLoading, setIsLoading] = React.useState(false);
 
 
 
-  React.useEffect( () => {
-    
-     getDashboardStats()
-     getData();
+  React.useEffect(() => {
+
+    getDashboardStats()
+    getData();
 
   }, []);
 
@@ -54,16 +56,16 @@ const OwnerDashboard = (props) => {
         setIsLoading(false);
         if (response.data.Result_DTO) {
           let newArray = []
-          if(response.data.Result_DTO.length > 3){
-           newArray =  JSON.parse(JSON.stringify(response.data.Result_DTO.slice(0,3))) 
+          if (response.data.Result_DTO.length > 3) {
+            newArray = JSON.parse(JSON.stringify(response.data.Result_DTO.slice(0, 3)))
           }
-          else{
+          else {
             newArray = JSON.parse(JSON.stringify(response.data.Result_DTO))
           }
           setpendingData(newArray)
 
         }
-        
+
       } else {
         setIsLoading(false);
 
@@ -113,14 +115,14 @@ const OwnerDashboard = (props) => {
       if (response.data.ResponseCode == "00") {
         if (response.data.Result_DTO) {
           setDashboardStats(response.data.Result_DTO)
-          
+
         }
-       
+
       } else {
         setDashboardStats([])
       }
     } catch (error) {
-      console.log(erro)
+      console.log(error)
       setDashboardStats([])
     }
   };
@@ -165,7 +167,7 @@ const OwnerDashboard = (props) => {
   const renderDashboardItem = ({ item }) => (
     <Card containerStyle={styles.cardChildStyle}>
       <View style={styles.requestsIcon}>
-        <Icon name={item.icon} size={30} color='#FDE1C9' />
+        <Icon name={item.icon} size={30} color='black' />
       </View>
       <View style={styles.requestsContent}>
         <Text style={styles.itemName}>{item.name}</Text>
@@ -176,15 +178,17 @@ const OwnerDashboard = (props) => {
 
 
   const renderRecentBookings = ({ item }) => (
-    <View style={styles.middleView}>
-      <Text style={styles.username}>{item.BookedByUsername}</Text>
-      <Text style={styles.venueName}>{item.VenueName}</Text>
-      <View style={styles.lastRow}>
-        <Text style={styles.eventDateTime}>{item.EventDate} | {item.EventTime}</Text>
-
-        {/* <Badge style={styles.statusBadge} value={getStatusDescription(item.RequestStatus).statusDecription} status={getStatusDescription(item.RequestStatus).color}/> */}
-      </View>
-    </View>
+    <Card containerStyle={styles.cardStyle}>   
+        <Avatar
+          size={32}
+          rounded
+          title={item.RequestStatus.substr(0, 1).toUpperCase()}
+          containerStyle={{ backgroundColor: 'coral',alignSelf:'flex-end' }} />
+        <Text style={styles.venueName}> {item.VenueName}</Text>
+        <Text style={styles.bookingUser}>{item.BookedByUsername} - ({item.ContactNumber})</Text>    
+          <Text style={styles.eventTypesLabel}>(Date | Day | Shift)</Text>
+        <Text style={styles.eventTypes}>{item.EventDate} | {item.EventDay} | {item.EventTime}</Text>
+    </Card>
 
   )
 
@@ -194,39 +198,43 @@ const OwnerDashboard = (props) => {
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
 
-      
+
+
+      <View>
+        <Card.Title style={styles.TitleStyling}> Requests And Approvals </Card.Title>
+        <Card.Divider color='black' />
+
+        <FlatList
+          data={dashboardStats}
+          renderItem={renderDashboardItem}
+          keyExtractor={item => item.id}
+          numColumns={2}
+
+        />
+      </View>
+      <View>
+        <Text style={styles.TitleStyling}>Recent Bookings</Text>
+        <Card.Divider color='black' />
+        <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToOwnerBookingPage()}>
+          <View style={styles.viewMoreWrapper}>
+          <FontAwesomeIcon  icon={ faEye } size={ 20 } color='black' />
+          <Text style={styles.viewMore} >View More</Text>
+          </View>
+          </TouchableHighlight>
         
-          <Card containerStyle={styles.cardParentStyle}>
-            <Card.Title style={styles.TitleStyling}> Requests And Approvals </Card.Title>
-            <Card.Divider />
-            <FlatList
-              data={dashboardStats}
-              renderItem={renderDashboardItem}
-              key={'_'}
-              keyExtractor={item => "_" + item.id}
-              numColumns={2}
 
-            />
-          </Card>
-      
-   
-        <Card containerStyle={styles.cardParentStyle}>
-            <Card.Title style={styles.TitleStyling}> Recent Bookings </Card.Title>
-            <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToOwnerBookingPage()}><Text >View More</Text></TouchableHighlight>
+        <FlatList
+          keyExtractor={item => item.BookingID}
+          data={pendingData}
+          renderItem={renderRecentBookings}
+          horizontal
 
-            <Card.Divider />
-            <FlatList
-            
-             keyExtractor={item =>item.id}
-              data={pendingData}
-              renderItem={renderRecentBookings}
-             horizontal
+        />
+      </View>
 
-            />
-          </Card>
-     
 
-        {/* <Card containerStyle={styles.cardParentStyle}>
+
+      {/* <Card containerStyle={styles.cardParentStyle}>
             <Card.Title style={styles.TitleStyling}> Your Venues </Card.Title>
             <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToVenueListPage()}><Text >View More</Text></TouchableHighlight>
 
@@ -249,6 +257,56 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  cardStyle: {
+    flex: 1,
+    borderRadius: 10,
+    flexDirection: "column",
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    height: 150,
+    width: 300,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 7,
+    backgroundColor: '#F5B9AF'
+  },
+ 
+  venueName:{
+    fontSize:20,
+    color:'black',
+    fontWeight: 'bold'
+  },
+
+  bookingUser:{
+    color:'black',
+    fontStyle:'italic',
+    fontSize:16
+  },
+  requestStatus:{
+    fontSize:16,
+    fontWeight:'bold',
+    fontStyle:'italic',
+    color: 'coral'
+  },
+  eventTypes:{
+    alignSelf:'flex-end'
+  },
+  eventTypesLabel:{
+    alignSelf:'flex-end',
+    color:'black',
+    fontWeight:'bold'
+  },
+  viewMoreWrapper:{
+    flexDirection:'row',
+    justifyContent:'space-between'
+  },
+  viewMore:{
+    fontSize:16,
+    marginLeft:3,
+    marginRight:3
+
+  },
   childParents: {
     flex: 1,
     flexDirection: 'column',
@@ -263,23 +321,23 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1.5, height: 1.5 },
     shadowOpacity: 0.5,
     shadowRadius: 14,
-    elevation: 6,
+    elevation: 7,
   },
   cardChildStyle: {
     flex: 1,
     justifyContent: 'space-between',
     borderRadius: 9,
-    borderColor: 'rgba(157,24,24,0.8)',
-    backgroundColor: 'rgba(157,24,24,0.8)',
+    borderColor: '#DD928E',
+    backgroundColor: '#F5B9AF',
     shadowColor: 'rgba(157,24,24,0.8)',
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 7,
   },
   itemName: {
     fontSize: 16,
-    color: '#FDE1C9',
+    color: 'black',
     fontWeight: 'bold',
 
   },
@@ -287,7 +345,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
     fontWeight: 'bold',
-
+    marginTop:20,
+    marginBottom:4,
+    alignSelf:'center',
   },
   eventDateTime: {
     fontSize: 16,
@@ -297,7 +357,7 @@ const styles = StyleSheet.create({
 
   itemCount: {
     fontSize: 16,
-    color: '#FDE1C9',
+    color: 'black',
     fontWeight: 'bold',
     borderRadius: 7,
 

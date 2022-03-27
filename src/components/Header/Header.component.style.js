@@ -12,16 +12,14 @@ export const styles = StyleSheet.create({
         justifyContent:'space-between',
         backgroundColor:'#800000',
         alignItems:'center'
+        // alignSelft:"flex-start"
     },
     drawerTitle:{
-        flex:6,
+        flex:3,
         color:'floralwhite',
         fontWeight:'bold',
-        fontSize:20,
+        fontSize:18,
         textAlign:'center'
     }
- 
-  
-
 
 })

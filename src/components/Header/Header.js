@@ -30,8 +30,8 @@ const Header = ({ navigation, route, options }) => {
             {globalStack && globalStack.type == 'stack' && globalStack.level > 0 ? <Icon name='arrow-left' raised
                 type='font-awsome' size={20} onPress={() => { globalStack.navigation.popToTop() }} /> :
                 <Icon name='list' raised
-                    type='font-awsome' size={20} onPress={() => { navigation.toggleDrawer() }} />}
-            <Text style={styles.drawerTitle}>{globalStack && globalStack.type == 'stack' && globalStack.title ? globalStack.title : title}</Text>
+                    type='font-awsome' size={25} onPress={() => { navigation.toggleDrawer() }} />}
+            <Text style={styles.drawerTitle}>{globalStack && globalStack.type == 'stack' && globalStack.title ? globalStack.title.toUpperCase() : title.toUpperCase()}</Text>
         </View>
 
 

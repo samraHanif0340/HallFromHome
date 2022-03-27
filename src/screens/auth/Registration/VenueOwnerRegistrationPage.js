@@ -47,8 +47,9 @@ const VenueOwnerRegistrationPage = ({navigation}) => {
 
   const saveData = async (data) => {
     let formData = Object.assign({},data)
+    formData.IsVenueOwner = true
     let configurationObject = {
-      url: `${BASE_URL}VenueOwnerRegistration`,
+      url: `${BASE_URL}UserRegistration`,
       method: "POST",
       cancelToken: source.token,
       data: formData,
@@ -62,7 +63,7 @@ const VenueOwnerRegistrationPage = ({navigation}) => {
         if (response.data.ResponseCode === "00") {
             setIsLoading(false);
             Snackbar.show({
-              text: 'Success',
+              text: 'Registered Successfully',
               backgroundColor:'black',
           textColor:'white',
               duration: Snackbar.LENGTH_LONG,

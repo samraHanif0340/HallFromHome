@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground } from "react-native";
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
 import {  Button, Title, Paragraph} from 'react-native-paper';
@@ -13,6 +12,10 @@ import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
 import { useStoreState } from 'easy-peasy';
 import Snackbar from 'react-native-snackbar';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faCheckSquare,faCircleCheck,faCircleStop,faBan, faCoffee } from '@fortawesome/free-solid-svg-icons'
+
+
 
 const  OwnerBookingPage = (props) => {
   const source = axios.CancelToken.source();
@@ -73,53 +76,118 @@ const  OwnerBookingPage = (props) => {
     }
   };
 
+  const approveRejectBookingService = async (payload) => {  
+    const configurationObject = {
+      url: `${BASE_URL}ApproveRejectBookingRequest`,
+      method: "POST",
+      cancelToken: source.token,
+      data: { ...payload  },
+    };
+      try {
+        setIsLoading(true);
+        const response = await axios(
+          configurationObject
+        );
+  
+        if (response.data.ResponseCode == "00") {
+          setIsLoading(false);
+          // if (response.data.Result_DTO) {
+          //   setmasterData(response.data.Result_DTO)
+          // }
+          getData()
+         
+        } else {
+        setIsLoading(false);
+          // setmasterData([])
+          Snackbar.show({
+            text: response.data.ResponseDesc,
+            duration: Snackbar.LENGTH_LONG,
+            backgroundColor: 'black',
+            textColor: 'white',
+            action: {
+              text: 'OK',
+              textColor: 'white',
+              onPress: () => { /* Do something. */ },
+            },
+          });
+        }
+      } catch (error) {
+        console.log(error)
+        // setmasterData([])
+        setIsLoading(false);
+        Snackbar.show({
+          text: 'Something Went Wrong',
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: 'black',
+          textColor: 'white',
+          action: {
+            text: 'OK',
+            textColor: 'white',
+            onPress: () => { /* Do something. */ },
+          },
+        });
+  
+      }
+    };
+
+  const approveRejectBooking = (item,status) => {
+    console.log(item)
+    let payload = {
+      BookingID:item.BookingID,
+      ReqStatus: status,
+      RejectionComment:""
+    }
+    approveRejectBookingService(payload)
+  }
+
+
   React.useEffect(() => {
     getData();
 
     return () => source.cancel("Data fetching cancelled");
   }, []);
+
+  const renderBookings = ({ item }) =>
+    <Card containerStyle={styles.cardStyle}>
+      <Avatar
+          size={32}
+          rounded
+          title={item.RequestStatus.substr(0, 1).toUpperCase()}
+          containerStyle={{ backgroundColor: 'coral',alignSelf:'flex-start' }} />
+      <Text style={styles.venueName}> {item.VenueName}</Text>
+      <Text style={styles.bookingUser}>{item.BookedByUsername} - ({item.ContactNumber})</Text>
+      <View>
+      {/* <Text style={styles.requestStatus}>({item.RequestStatus})</Text> */}
+      <Text style={styles.eventTypesLabel}>(Date | Day | Shift)</Text>
+      </View>
+     
+      <Text style={styles.eventTypes}>{item.EventDate} | {item.EventDay} | {item.EventTime}</Text>
+
+      <View style={styles.approvRejButton}>
+     {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{marginRight:4}}onPress={() => approveRejectBooking(item, 'A')}><FontAwesomeIcon  icon={ faCircleCheck } size={ 20 } color='green' /></TouchableOpacity> : null}
+     {!item.RequestStatus || item.RequestStatus == 'Pending' ?  <TouchableOpacity onPress={() => approveRejectBooking(item, 'R')} ><FontAwesomeIcon  icon={ faBan } size={ 20 } color='red' /></TouchableOpacity> : null}
+      </View>
+    </Card>
+  
+
  
+
+
+
   return (
     <View style={styles.container}>
       <Loader isLoading={isLoading} />
 
-       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            <ImageBackground
-                style={styles.rect1}
-                imageStyle={styles.rect1_imageStyle}
-                source={require("../../assets/images/Gradient_MI39RPu.png")}
-            >
-      
+      <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
+
       <FlatList
         data={masterData}
         keyExtractor={item => item.VenueID}
-        renderItem={({ item }) => (
-          <Card containerStyle={styles.cardStyle}>
-            <View style={styles.imageStackStack}>
-            <View style={styles.imageStack}>
-            <Image
-                  source={require("../../assets/images/download2.jpg")}
-                  style={styles.image}
-                ></Image>
-            <Card.Title style = {styles.cardTitle}> {item.VenueName}</Card.Title>
-            </View>
-            <View>
-            <Badge containerStyle={styles.badgeTitle} value ='success' status ={item.RequestStatus}/>
-            </View>
-            <View style={styles.loremIpsum2Stack}>
-              <Text style={styles.cardPricePaid} h4>{item.RequestStatus}</Text>
-            </View>
-            <View>
-              <Text style={styles.commentStyle} h4>{item.BookedByUsername} | {item.EventDate} | {item.EventDay} | {item.EventTime}</Text>
-            </View>
-           
-          </View>
-          
-        </Card>
-        )}
+        renderItem={renderBookings}
       />
 
-</ImageBackground>
+      {
+}
     </View>
 );
 }
@@ -127,8 +195,58 @@ const  OwnerBookingPage = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
   },
+  cardStyle:{
+    flex:1,
+    borderRadius:10,
+    flexDirection: "column",
+    justifyContent:'space-between',
+    shadowColor: 'black',
+    height:160,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.3,
+    shadowRadius: 4,
+    elevation: 5,
+    backgroundColor:'#EADEDB'
+
+  },
+  approvRejButton:{
+    marginTop:2,
+    flexDirection:'row',
+    justifyContent:'space-around',
+    alignSelf:'flex-end',
+  },
+  venueName:{
+    fontSize:18,
+    color:'black',
+    fontWeight: 'bold'
+  },
+
+  bookingUser:{
+    color:'grey',
+    fontStyle:'italic',
+    fontSize:16
+
+  },
+  requestStatus:{
+    fontSize:16,
+    fontWeight:'bold',
+    fontStyle:'italic',
+    color: 'orange'
+  },
+  eventTypes:{
+    alignSelf:'flex-end'
+  },
+  eventTypesLabel:{
+    alignSelf:'flex-end',
+    color:'black',
+    fontWeight:'bold'
+  },
+  setImageStyles:{
+    marginTop:20,
+    marginBottom:20,
+  },
+
   image: {
     // top: 0,
     right: 9,
@@ -169,18 +287,7 @@ const styles = StyleSheet.create({
     // marginRight: 20,
 
   },
-  cardStyle:{
-    // borderColor:'#800000',
-    // borderWidth:3,
-    borderRadius:10,
-    flexDirection: "row",
-    shadowColor: '#000',
-    height:160,
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity:  0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
+ 
 
   eachItem: 
   {

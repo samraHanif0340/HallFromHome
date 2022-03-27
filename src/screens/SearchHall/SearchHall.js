@@ -145,8 +145,8 @@ function SearchPage(props) {
           const textData =  hasNumber.test(searchText) ? searchText :  searchText.toUpperCase();
           return (vName.indexOf(textData) > -1 
           || vType.indexOf(textData) > -1 || 
-          vRent.indexOf(textData) > -1  || 
-          vRating.indexOf(textData) > -1 )
+          vRent.indexOf(textData) > -1
+          )
         });
       setfilteredData(newData);
       setSearchText(searchText);

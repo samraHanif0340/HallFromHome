@@ -6,6 +6,8 @@ import { useStoreActions } from 'easy-peasy';
 import { createDrawerNavigator, DrawerContentScrollView,DrawerItem} from "@react-navigation/drawer";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { DrawerActions } from '@react-navigation/native';
+
 
 import NavigationHeader from './navComponents/drawerHeader'
 import Header from '../header/Header'
@@ -19,6 +21,7 @@ import NewVenueAdditionPage from '../../screens/VenueOwnerScreens/NewVenueAdditi
 import NewVenueServicesPage from '../../screens/VenueOwnerScreens/NewVenueServices';
 import OwnerDashboard from '../../screens/VenueOwnerScreens/OwnerDashboard';
 import OwnerBookingPage from '../../screens/VenueOwnerScreens/OwnerBookings';
+import VenueConfirmationPage from '../../components/sharedComponents/VenueConfirmationPage'
 const VenueDashboard = React.lazy(()=> import('../../screens/VenueOwnerScreens/OwnerDashboard') )
 
 
@@ -103,7 +106,17 @@ const CustomSidebar = (props) => {
                                     ) === state.index
                                 }
                                 activeTintColor={activeTintColor}
-                                onPress={() => navigation.navigate(route.name)}
+                                onPress = {()=> 
+                                   
+                                        navigation.dispatch(
+                                    DrawerActions.jumpTo(
+                                       route.name,
+                                      {
+                                        name: route.key,
+                                      },
+                                    ))}
+                                
+                                // onPress={() => navigation.navigate(route.name)}
                                 // onItemPress={({ route, focused }) => {
                                 //     if(!focused) {
                                 //       setTimeout(() => {              
@@ -178,6 +191,11 @@ const VenueListingAndAddition = () => {
                 options={{ title: 'Add Internal Services', headerShown: false }}
 
             />
+              <Stack.Screen
+            name="VenueConfirmation"
+            component={VenueConfirmationPage}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
     )
 }

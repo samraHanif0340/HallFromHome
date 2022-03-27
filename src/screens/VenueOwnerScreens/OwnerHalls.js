@@ -10,6 +10,8 @@ import { BASE_URL } from '../../constants/constants'
 import { Loader } from '../../components/customComponents/customComponents'
 import { useStoreState } from 'easy-peasy';
 import Snackbar from 'react-native-snackbar';
+import ImagedCardView from "react-native-imaged-card-view";
+
 
 
 import axios from 'axios';
@@ -35,13 +37,13 @@ const  OwnerHallsPage = (props) => {
     data: { OwnerID: globalPayload.userId  },
   };
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
       const response = await axios(
         configurationObject
       );
 
       if (response.data.ResponseCode == "00") {
-        // setIsLoading(false);
+        setIsLoading(false);
         if (response.data.Result_DTO) {
           setmasterData(response.data.Result_DTO)
         }
@@ -88,62 +90,48 @@ const  OwnerHallsPage = (props) => {
   }
 
   const renderHallListing = ({item}) => 
-  
- 
-    <Card containerStyle={styles.cardStyle}>  
-    <Image
-                  source={{ uri: 'https://www.pchotels.com/uploads/wed-and-cel/c9a5690c1e23f1248e628bbfcabec7211564221003.jpg' }}
-                  resizeMode="stretch"
-                  style={styles.image}
-                ></Image>
-  
-    
-  <View style={styles.rightView}>
-  <Text style = {styles.cardTitle}> {item.VenueName}</Text>
+  <View style={styles.setImageStyles}>
+  <ImagedCardView 
+stars={Number(item.Rating)}
+ratings={Number(item.Rating)}
+title={item.VenueName}
+reviews={item.ReviewCount}
+titleColor='black'
+subtitleColor='grey'
+dividerColor='black'
+leftSideColor='black'
+leftSideValueColor='grey'
+rightSideColor='black'
+rightSideValueColor='grey'
+starColor='yellow'
+rightSideTitle = 'Price'
+rightSideValue={Number(item.RentPrice)}
+subtitle={item.VenueTypeDesc}
+leftSideTitle='Max Persons'
+leftSideValue={item.MaxCapacity}
+backgroundColor="#EADEDB"
+borderRadius={45}
+source={
+require('../../assets/images/download2.jpg')
+}
+/>
+ </View>   
 
-  <Text>{item.VenueTypeDesc}</Text>
-    <Text>{item.CityDesc}</Text>
-      <Text >{item.RentPrice}</Text>
-      <Text >{item.MaxCapacity}</Text>       
-  
-      <Text>{item.Rating}</Text>
-  </View> 
-
-</Card>
-  
  
   return (
     <View style={styles.container}>
       <Loader isLoading={isLoading} />
        <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            <ImageBackground
+            {/* <ImageBackground
                 
                 style={styles.rect1}
                 imageStyle={styles.rect1_imageStyle}
                 source={require("../../assets/images/Gradient_MI39RPu.png")}
-            >
+            > */}
      <FlatList
         data={masterData}
         keyExtractor={item => item.VenueID}
-        renderItem={({ item }) => (
-          <Card containerStyle={styles.cardStyle}>
-            <View style={styles.imageStackStack}>
-            <View style={styles.imageStack}>
-            <Image
-                  source={require("../../assets/images/download2.jpg")}
-                  style={styles.image}
-                ></Image>
-            <Card.Title style = {styles.cardTitle}> {item.VenueName}</Card.Title>
-            </View>
-            <View>
-           <Text>{item.VenueTypeDesc}</Text>
-            </View>        
-            <View>
-              <Text style={styles.commentStyle} h4>{item.CityDesc} | {item.MaxCapacity} | {item.RentPrice} | {item.Rating}</Text>
-            </View>          
-          </View>         
-        </Card>
-        )}
+        renderItem={renderHallListing}
       />
 
       { props.isFromDashboard ? null : <FAB 
@@ -154,7 +142,7 @@ const  OwnerHallsPage = (props) => {
           color="maroon"
         />}  
 
-</ImageBackground>
+{/* </ImageBackground> */}
 
     </View>
 );
@@ -164,6 +152,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
+  },
+  setImageStyles:{
+    marginTop:20,
+    marginBottom:20,
   },
   image: {
     // top: 0,

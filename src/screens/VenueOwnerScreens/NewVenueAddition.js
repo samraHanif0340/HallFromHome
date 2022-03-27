@@ -96,15 +96,15 @@ const NewVenueAdditionPage = (props) => {
   ])
 
   const [initialFormValues, setInitialFormValues] = React.useState({
-    VenueName: 'modern',
-    POCName:'samra',
+    VenueName: 'Sample Banquet 1',
+    POCName:'Samra Sheikh',
     ContactNumber:'03402042202',
-    MaxCapacity: '200',
-    RentPrice: '10000',
-    Longitude: '24.56',
-    Latitude: '88.66',
+    MaxCapacity: '500',
+    RentPrice: '250000',
+    Longitude: '-24.56',
+    Latitude: '89.66',
     Shift: '',
-    Address: 'dfdsfs',
+    Address: 'R-98/ block 17 F.b Area Karachi',
     VenueTypeId: '',
     CityId: '',
     AreaId:''

@@ -61,9 +61,15 @@ const AuthRoutes = () => {
             component={LoginPage}
             options={{ headerShown: false }}
           />
+         
            <Stack.Screen
             name="CustomerRegistration"
             component={RegistrationPage}
+            options={{ headerShown: false }}
+          />
+           <Stack.Screen
+            name="OwnerRegisteration"
+            component={VenueOwnerRegistrationPage}
             options={{ headerShown: false }}
           />
              <Stack.Screen
@@ -110,13 +116,6 @@ const CustomerDrawerNavigator = () => {
         activeTintColor: '#8b0000',
       }} component={CustomerDashboardPage} />
 
-<Drawer.Screen  name="Venue Internal Services" options={{
-        drawerLabel: 'Venue Internal Services',
-        title: 'Venue Internal Services',
-        // groupName: 'Category 1',
-        //activeTintColor: '#FF6F00',
-        activeTintColor: '#8b0000',
-      }} component={NewVenueServicesPage} />
 
      <Drawer.Screen name="Tracking/Status"  options={{
         drawerLabel: 'Tracking/Status',
@@ -126,12 +125,7 @@ const CustomerDrawerNavigator = () => {
         activeTintColor: '#8b0000',
       }}
         component={TrackingStatusPage} />
-<Drawer.Screen name="Venue Owner Registration"  options={{
-        drawerLabel: 'Venue Owner Registration',
-        title: 'Venue Owner Registration',
-        activeTintColor: '#8b0000',
-      }}
-        component={VenueOwnerRegistrationPage} />
+
         
       <Drawer.Screen name="Review/Feedback" options={{
         drawerLabel: 'Review/Feedback',

@@ -125,7 +125,7 @@ const NewVenueServicesPage = (props) => {
         if (response.data.ResponseCode === "00") {
           setIsLoading(false);
           Snackbar.show({
-            text: response.data.ResponseDesc,
+            text: response.data.Messages[0] ?  response.data.Messages[0] : 'Venue Request Submitted Successfully',
             duration: Snackbar.LENGTH_LONG,
           });
           setInitialFormValues({ Segregation: false,
@@ -139,8 +139,8 @@ const NewVenueServicesPage = (props) => {
             DJ: false,
             Website:'',
             Facebook_Page:''})
-        
-          navigation.navigate('VenueList')
+            
+            props.navigation.push('VenueConfirmation')
           return;
         } else {
           setIsLoading(false);
@@ -337,74 +337,7 @@ const NewVenueServicesPage = (props) => {
 
           </Formik>
             </ScrollView>
-         
-          {/* <CheckBox containerStyle = {styles.CheckboxWrapper}
-            left         
-            title="Catering"
-            textStyle = {{fontSize: 20 , color: 'black'}}
-            // checkedIcon={
-            //   <FontAwesomeIcon icon={ faCheckSquare } color="red" opacity = {0.9} size ={ 20 } />
-            // }       
-            checked={check1}   
-            checkedColor="red"
-            onPress={() => setCheck1(!check1)}
-          //  iconStyle={{ marginRight: 20 }}
-         
-          /> */}
-          {/* <CheckBox containerStyle = {styles.CheckboxWrapper}
-            left
-            title="Stage Decoration"
-            textStyle = {{fontSize: 20}}
-            checked={check2}
-            checkedColor="red"
-            onPress={() => setCheck2(!check2)}
-         
-          />
-           <CheckBox containerStyle = {styles.CheckboxWrapper}
-            left
-            title="Segregation"
-            textStyle = {{fontSize: 20}}
-            checked={check3}
-            checkedColor="red"
-            onPress={() => setCheck3(!check3)}
-         
-          />
-           <CheckBox containerStyle = {styles.CheckboxWrapper}
-            left
-            title="Music System"
-            textStyle = {{fontSize: 20}}
-            checked={check4}
-            checkedColor="red"
-            onPress={() => setCheck4(!check4)}
-         
-          />
-             <CheckBox containerStyle = {styles.CheckboxWrapper}
-            left
-            title="Valet Service"
-            textStyle = {{fontSize: 20}}
-            checked={check5}
-            checkedColor="red"
-            onPress={() => setCheck5(!check5)}
-         
-          />
-             <CheckBox containerStyle = {styles.CheckboxWrapper}
-            left
-            title="Projector"
-            textStyle = {{fontSize: 20}}
-            checked={check6}
-            checkedColor="red"
-            onPress={() => setCheck6(!check6)}
-         
-          />
-            <CheckBox containerStyle = {styles.CheckboxWrapper}
-            left
-            title="Special Lights"
-            textStyle = {{fontSize: 20}}
-            checked={check7}
-            checkedColor="red"
-            onPress={() => setCheck7(!check7)}
-         
-          /> */}
+   
 
             </ImageBackground>
         </View>

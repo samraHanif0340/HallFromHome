@@ -199,7 +199,9 @@ const LoginPage = ({ navigation }) => {
                     </TouchableOpacity>
                     <Text style={styles.linksStyle} onPress={() => navigation.navigate('ForgotPassword')} >Forgot Your Login Details?</Text>
 
-                    <Text style={styles.linksStyle} onPress={() => navigation.navigate('CustomerRegistration')}>Create an account?</Text>
+                    <Text style={styles.linksStyle} onPress={() => navigation.navigate('CustomerRegistration')}>Register as a Customer</Text>
+                    <Text style={styles.linksStyle} onPress={() => navigation.navigate('OwnerRegisteration')}>Register as a Venue Owner</Text>
+
                     {/* {errortext != null ?  <Toaster message={errortext}  /> : null} */}
                 </View>
             </ImageBackground>
