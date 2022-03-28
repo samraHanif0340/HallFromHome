@@ -162,7 +162,7 @@ const Loader = (props) => {
   return (
     <Spinner
       visible={props.isLoading}
-      color="rgba(248,231,28,1)"
+      color="black"
       animation="slide"
       size="large"
       textContent={'Please wait...'}

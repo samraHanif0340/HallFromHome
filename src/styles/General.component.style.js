@@ -189,8 +189,8 @@ const styles = StyleSheet.create({
     },
 
     spinnerTextStyle: {
-        color: 'rgba(248,231,28,1)',
-        fontFamily:"cursive",
+        color: 'black',
+        // fontFamily:"cursive",
         fontWeight:"bold"
       },
       lottie: {

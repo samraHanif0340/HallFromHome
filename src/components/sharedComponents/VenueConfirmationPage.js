@@ -22,20 +22,20 @@ function VenueConfirmationPage(props) {
         <Text style={styles.bookingConfirmed}>VENUE REQUEST SENT SUCCESSFULLY</Text>
         <Icon name="check-circle-o" style={styles.icon}></Icon>
      
-
+{/* 
       <TextInput
         placeholder="Your venue addition request has been lodged successfully"
         placeholderTextColor="rgba(255,255,255,1)"
         selectionColor="rgba(255,255,255,1)"
         style={styles.textInput}
-      ></TextInput>
-
+      ></TextInput> */}
+{/* 
 <TextInput
           placeholder="Admin will get back to you soon"
           placeholderTextColor="rgba(255,255,255,1)"
           selectionColor="rgba(255,255,255,1)"
           style={styles.textInput2}
-        ></TextInput>
+        ></TextInput> */}
       <TouchableOpacity style={styles.submitButtonWrapper} onPress={() => props.navigation.popToTop()}><Text style={styles.submitButtonText}>OK</Text></TouchableOpacity>
       </ImageBackground>
     </View>
@@ -45,10 +45,14 @@ function VenueConfirmationPage(props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+   
   },
   rect1: {
-    flex: 1
+    flex: 1,
+    flexDirection:'column',
+    justifyContent:'space-around',
+
   },
   okHall: {
     backgroundColor: "rgba(142,7,27,1)",

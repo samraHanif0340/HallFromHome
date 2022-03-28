@@ -205,7 +205,7 @@ const NewVenueServicesPage = (props) => {
              <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Segregation"
-            textStyle = {{fontSize: 20}}
+            textStyle = {{fontSize: 20,color:'maroon'}}
             checked={initialFormValues.Segregation}
             checkedColor="red"
             onPress={(e) => myCheckBoxFunc('Segregation', !initialFormValues.Segregation)}
@@ -215,7 +215,7 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Projector"
-            textStyle = {{fontSize: 20}}
+            textStyle = {{fontSize: 20,color:'maroon'}}
             checked={initialFormValues.Projector}
             checkedColor="red"
             onPress={(e) => myCheckBoxFunc('Projector', !initialFormValues.Projector)}
@@ -225,7 +225,7 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Stage Decoration"
-            textStyle = {{fontSize: 20}}
+            textStyle = {{fontSize: 20,color:'maroon'}}
             checked={initialFormValues.Stage_Decoration}
             checkedColor="red"
             onPress={(e) => myCheckBoxFunc('Stage_Decoration', !initialFormValues.Stage_Decoration)}
@@ -236,7 +236,7 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Waitress"
-            textStyle = {{fontSize: 20}}
+            textStyle = {{fontSize: 20,color:'maroon'}}
             checked={initialFormValues.Waitress}
             checkedColor="red"
             onPress={(e) => myCheckBoxFunc('Waitress', !initialFormValues.Waitress)}
@@ -246,7 +246,7 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Wifi"
-            textStyle = {{fontSize: 20}}
+            textStyle = {{fontSize: 20,color:'maroon'}}
             checked={initialFormValues.Wifi}
             checkedColor="red"
             onPress={(e) => myCheckBoxFunc('Wifi', !initialFormValues.Wifi)}
@@ -256,7 +256,7 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Music System"
-            textStyle = {{fontSize: 20}}
+            textStyle = {{fontSize: 20,color:'maroon'}}
             checked={initialFormValues.Music_System}
             checkedColor="red"
             onPress={(e) => myCheckBoxFunc('Music_System', !initialFormValues.Music_System)}
@@ -266,7 +266,7 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Special Lights"
-            textStyle = {{fontSize: 20}}
+            textStyle = {{fontSize: 20,color:'maroon'}}
             checked={initialFormValues.SpecialLights}
             checkedColor="red"
             onPress={(e) => myCheckBoxFunc('SpecialLights', !initialFormValues.SpecialLights)}
@@ -276,7 +276,7 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Air Condition"
-            textStyle = {{fontSize: 20}}
+            textStyle = {{fontSize: 20,color:'maroon'}}
             checked={initialFormValues.Air_Condition}
             checkedColor="red"
             onPress={(e) => myCheckBoxFunc('Air_Condition', !initialFormValues.Air_Condition)}
@@ -286,7 +286,7 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="DJ"
-            textStyle = {{fontSize: 20}}
+            textStyle = {{fontSize: 20,color:'maroon'}}
             checked={initialFormValues.DJ}
             checkedColor="red"
             onPress={(e) => myCheckBoxFunc('DJ', !initialFormValues.DJ)}
@@ -479,13 +479,14 @@ const styles = StyleSheet.create({
       height: 111
     },
     CheckboxWrapper: {
-      width: 350,
-     
-      backgroundColor:'floralwhite',
+      width: 370,
+      borderColor:'maroon',
+    borderWidth:2,
+      backgroundColor:'white',
       borderRadius: 5,
       alignItems:'flex-start',
       alignSelf: 'center',
-      height: 50,
+      height: 60,
       
     
     },
