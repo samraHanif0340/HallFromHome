@@ -215,12 +215,12 @@ const OwnerDashboard = (props) => {
       <View>
         <Text style={styles.TitleStyling}>Recent Bookings</Text>
         <Card.Divider color='black' />
-        <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToOwnerBookingPage()}>
+        <TouchableOpacity style={styles.viewMoreButton} onPress={() => goToOwnerBookingPage()}>
           <View style={styles.viewMoreWrapper}>
           <FontAwesomeIcon  icon={ faEye } size={ 20 } color='black' />
           <Text style={styles.viewMore} >View More</Text>
           </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
         
 
         <FlatList
@@ -304,7 +304,8 @@ const styles = StyleSheet.create({
   viewMore:{
     fontSize:16,
     marginLeft:3,
-    marginRight:3
+    marginRight:3,
+    color:'black'
 
   },
   childParents: {

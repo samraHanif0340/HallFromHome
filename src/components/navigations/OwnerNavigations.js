@@ -7,6 +7,8 @@ import { createDrawerNavigator, DrawerContentScrollView,DrawerItem} from "@react
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { DrawerActions } from '@react-navigation/native';
+import { NavigationActions } from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 
 
 import NavigationHeader from './navComponents/drawerHeader'
@@ -107,14 +109,17 @@ const CustomSidebar = (props) => {
                                 }
                                 activeTintColor={activeTintColor}
                                 onPress = {()=> 
-                                   
-                                        navigation.dispatch(
-                                    DrawerActions.jumpTo(
-                                       route.name,
-                                      {
-                                        name: route.key,
-                                      },
-                                    ))}
+                                   {navigation.dispatch(CommonActions.reset({
+                                       index:0,
+                                    routes:[{name: route.name}]
+                                  }))}}
+                                    //     navigation.dispatch(
+                                    // DrawerActions.jumpTo(
+                                    //    route.name,
+                                    //   {
+                                    //     name: route.key,
+                                    //   },
+                                    // ))}
                                 
                                 // onPress={() => navigation.navigate(route.name)}
                                 // onItemPress={({ route, focused }) => {

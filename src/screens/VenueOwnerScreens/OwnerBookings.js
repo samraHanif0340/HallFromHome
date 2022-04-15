@@ -14,6 +14,11 @@ import { useStoreState } from 'easy-peasy';
 import Snackbar from 'react-native-snackbar';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCheckSquare,faCircleCheck,faCircleStop,faBan, faCoffee } from '@fortawesome/free-solid-svg-icons'
+import { ConfirmDialog } from 'react-native-simple-dialogs';
+import validate from '../../shared-services/validationFunctions'
+import { TextField } from '../../components/customComponents/customComponents'
+
+
 
 
 
@@ -21,7 +26,17 @@ const  OwnerBookingPage = (props) => {
   const source = axios.CancelToken.source();
   const [masterData, setmasterData] = React.useState([]);
   const globalPayload = useStoreState((state) => state.payload);
+  const [bookingPayload, setBookingPayload] = React.useState({});
+  const [rejectionCommentError, setRejectionCommentError] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false)
+  const [showApproveModal, setShowApproveModal] = React.useState(false)
+  const [showRejectModal, setShowRejectModal] = React.useState(false)
+
+  React.useEffect(() => {
+    getData();
+
+    return () => source.cancel("Data fetching cancelled");
+  }, []);
 
   const getData = async () => {
     const configurationObject = {
@@ -91,9 +106,11 @@ const  OwnerBookingPage = (props) => {
   
         if (response.data.ResponseCode == "00") {
           setIsLoading(false);
-          // if (response.data.Result_DTO) {
-          //   setmasterData(response.data.Result_DTO)
-          // }
+          Snackbar.show({
+            text: response.data.Messages[0] ?  response.data.Messages[0] : 'Venue Status Submitted Successfully',
+            duration: Snackbar.LENGTH_LONG,
+            // color:'green'
+          });
           getData()
          
         } else {
@@ -130,22 +147,54 @@ const  OwnerBookingPage = (props) => {
       }
     };
 
-  const approveRejectBooking = (item,status) => {
+  const confirmApproveRejectBooking = (item,status) => {
+    setBookingPayload({})
     console.log(item)
     let payload = {
       BookingID:item.BookingID,
       ReqStatus: status,
-      RejectionComment:""
+      RejectionComment:rejectionComment
     }
-    approveRejectBookingService(payload)
+    if(status){
+      if(status == 'A'){
+        setShowApproveModal(true)
+        setShowRejectModal(false)
+        setBookingPayload(payload)
+  
+      }
+      else if(status == 'R'){
+        setShowRejectModal(true)
+        setShowApproveModal(false)  
+        setBookingPayload(payload)
+      }
+    }
   }
 
-
-  React.useEffect(() => {
-    getData();
-
-    return () => source.cancel("Data fetching cancelled");
-  }, []);
+  const approveRejectBooking = (payload) => {
+    console.log(payload)
+    if(payload){
+      if(payload.ReqStatus == 'R'){
+        if(!rejectionCommentError){
+          Snackbar.show({
+            text: 'Please Add the Rejection Comments',
+            duration: Snackbar.LENGTH_LONG,
+            backgroundColor: '#B53849',
+            textColor: 'black',
+            action: {
+              text: 'OK',
+              textColor: 'black',
+              onPress: () => { /* Do something. */ },
+            },
+          });
+        }
+        // approveRejectBookingService(payload)
+      }
+      else{
+        // approveRejectBookingService(payload)
+      }  
+    }
+  
+  }
 
   const renderBookings = ({ item }) =>
     <Card containerStyle={styles.cardStyle}>
@@ -164,22 +213,53 @@ const  OwnerBookingPage = (props) => {
       <Text style={styles.eventTypes}>{item.EventDate} | {item.EventDay} | {item.EventTime}</Text>
 
       <View style={styles.approvRejButton}>
-     {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{marginRight:4}}onPress={() => approveRejectBooking(item, 'A')}><FontAwesomeIcon  icon={ faCircleCheck } size={ 20 } color='green' /></TouchableOpacity> : null}
-     {!item.RequestStatus || item.RequestStatus == 'Pending' ?  <TouchableOpacity onPress={() => approveRejectBooking(item, 'R')} ><FontAwesomeIcon  icon={ faBan } size={ 20 } color='red' /></TouchableOpacity> : null}
+     {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{marginRight:4}}onPress={() => confirmApproveRejectBooking(item, 'A')}><FontAwesomeIcon  icon={ faCircleCheck } size={ 20 } color='green' /></TouchableOpacity> : null}
+     {!item.RequestStatus || item.RequestStatus == 'Pending' ?  <TouchableOpacity onPress={() => confirmApproveRejectBooking(item, 'R')} ><FontAwesomeIcon  icon={ faBan } size={ 20 } color='red' /></TouchableOpacity> : null}
       </View>
     </Card>
   
-
- 
-
-
-
   return (
     <View style={styles.container}>
       <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-
+      {(showApproveModal || showRejectModal) ? <ConfirmDialog
+        title="CONFIRMATION"
+        message="Are you sure you want to approve this customer booking request?"
+        visible={showApproveModal || showRejectModal}
+        onTouchOutside={() =>{showApproveModal ? setShowApproveModal(false): setShowRejectModal(false)}}
+        positiveButton={{
+          title: "YES",
+          onPress: () => approveRejectBooking(bookingPayload)
+        }}
+        negativeButton={{
+          title: "NO",
+          onPress: () => {showApproveModal ? setShowApproveModal(false) : setShowRejectModal(false)}
+        }}>
+           {showRejectModal ?
+           <View>
+             <Text>Are you sure you want to Reject this customer booking request? For rejecting this you need to add rejection comments as well.</Text>
+                <TextField
+                        placeholder="Rejection Comments" style={styles.labelText}
+                        keyboardType='default'
+                        mode="outlined"
+                        placeholderTextColor="black"
+                        nameOfIcon="envelope"
+                        defaultValue={rejectionComment}
+                        maxLength={50}
+                        onChangeText={value => {
+                            setBookingPayload((bookingPayload) => ({...bookingPayload,...{RejectionComment:value.trim()}})),
+                            setRejectionCommentError(validate('RejectionComment', bookingPayload.RejectionComment, 'textField'))
+                        }}
+                        error={rejectionCommentError}
+                    />
+          </View> : null }
+          {showApproveModal ?
+           <View>
+             <Text>Are you sure you want to Approve this customer booking request? Please fill the following details to be notified to the customer</Text>
+              
+          </View> : null }
+        </ConfirmDialog>: null}
       <FlatList
         data={masterData}
         keyExtractor={item => item.VenueID}
