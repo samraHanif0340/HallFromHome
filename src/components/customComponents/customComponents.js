@@ -1,13 +1,16 @@
-import React, { Component, useEffect } from 'react'
+import React, {  useEffect } from 'react'
 import { View, Text, TextInput } from 'react-native';
 import styles from '../../styles/General.component.style.js';
 import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
-import { Button, Snackbar } from 'react-native-paper';
+import {  Snackbar } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
-import { Dropdown, SelectCountry } from 'react-native-element-dropdown';
+import { SelectCountry } from 'react-native-element-dropdown';
 import { CheckBox } from 'react-native-elements'
 import { HelperText } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from 'react-native-datepicker';
+
 // import AnimatedLoader from "react-native-animated-loader";
 
 
@@ -49,14 +52,56 @@ export const SelectField = props => {
 
 const TextField = props => (
   <View>
-    <View style={styles.textFieldWrapper}>
+    <View style={props.textFieldWrapperStyle ? props.textFieldWrapperStyle :styles.textFieldWrapper}>
       {props.nameOfIcon ? <EvilIconsIcon name={props.nameOfIcon} style={styles.icon2} onPress={props.onPress}></EvilIconsIcon> : null}
       {/* <Text style={styles.label}>{props.labelName}</Text> */}
-      <TextInput style={styles.textField} keyboardType={props.keyboardType ? props.keyboardType : 'default'} placeholder={props.placeholder} placeholderTextColor={props.placeholderTextColor} defaultValue={props.defaultValue} secureTextEntry={props.secureTextEntry} maxLength={props.maxLength} value={props.value} onChangeText={props.onChangeText} onBlur={props.onBlur} disabled={props.disabled} />
+      <TextInput style={props.textFieldStyle ? props.textFieldStyle : styles.textField} keyboardType={props.keyboardType ? props.keyboardType : 'default'} placeholder={props.placeholder} placeholderTextColor={props.placeholderTextColor} defaultValue={props.defaultValue} secureTextEntry={props.secureTextEntry} maxLength={props.maxLength} value={props.value} onChangeText={props.onChangeText} onBlur={props.onBlur} disabled={props.disabled} />
     </View>
-    {props.error ? props.error.map((error, key) => <HelperText type="error" style={styles.errorMsg} key={key}>{error}</HelperText>) : null}
+    {props.error ? props.error.map((error, key) => <HelperText type="error" style={props.errorMsgStyle ? props.errorMsgStyle  : styles.errorMsg} key={key}>{error}</HelperText>) : null}
   </View>
 )
+
+const DateTimePickerComp = (props) => 
+  (
+  <View>
+    <DatePicker
+          // style={styles.datePickerStyle}
+          date={props.value}
+          mode={props.mode}
+          placeholder={props.placeholderValue}
+          onDateChange={props.onDateChange}
+          format="DD/MM/YYYY"
+          minDate={new Date()}
+          maxDate="01-01-3001"
+          confirmBtnText="OK"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              position: 'absolute',
+              right: -5,
+              top: 4,
+              marginLeft: 0,
+            },
+            dateInput: {
+              borderColor : "gray",
+              alignItems: "flex-start",
+              borderWidth: 0,
+              borderBottomWidth: 1,
+            },
+            placeholderText: {
+              fontSize: 17,
+              color: "gray"
+            },
+            dateText: {
+              fontSize: 17,
+            }
+          }}
+        />
+  </View>
+  )
+
+  
+
 
 const MultiLineTextInput = (props) => (
   <View>
@@ -176,4 +221,4 @@ const Loader = (props) => {
 
 
 
-export { TextField, MultiLineTextInput,DropdownField,CheckboxField ,Toaster,Loader};
+export { TextField, MultiLineTextInput,DropdownField,CheckboxField,DateTimePickerComp ,Toaster,Loader};

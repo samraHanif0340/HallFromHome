@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground } from "react-native";
+import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground,ScrollView } from "react-native";
 import { SearchBar, Rating } from 'react-native-elements';
 import { TouchableOpacity } from "react-native";
 import {  Button, Title, Paragraph} from 'react-native-paper';
@@ -16,10 +16,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCheckSquare,faCircleCheck,faCircleStop,faBan, faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { ConfirmDialog } from 'react-native-simple-dialogs';
 import validate from '../../shared-services/validationFunctions'
-import { TextField } from '../../components/customComponents/customComponents'
+import { TextField ,DateTimePickerComp} from '../../components/customComponents/customComponents'
+import { Formik } from "formik";
+import * as Yup from "yup";
 
-
-
+const validationSchema = Yup.object().shape({
+  AdvancePayment: Yup.string()
+    .min(5, 'Name must be atleast 5 characters long')
+    .max(20, 'Name must be atmost 20 characters long')
+    .required('Required'),
+  APDeadlineDate: Yup.string()
+    .required('Required'),
+});
 
 
 const  OwnerBookingPage = (props) => {
@@ -31,6 +39,10 @@ const  OwnerBookingPage = (props) => {
   const [isLoading, setIsLoading] = React.useState(false)
   const [showApproveModal, setShowApproveModal] = React.useState(false)
   const [showRejectModal, setShowRejectModal] = React.useState(false)
+  const [showAdvancePayModal, setShowAdvancePayModal] = React.useState(false)
+  const [showDatePicker,setShowDatePicker] = React.useState(false)
+  const [initialFormValues, setInitialFormValues] = React.useState({})
+
 
   React.useEffect(() => {
     getData();
@@ -111,11 +123,12 @@ const  OwnerBookingPage = (props) => {
             duration: Snackbar.LENGTH_LONG,
             // color:'green'
           });
+          setShowAdvancePayModal(true)
           getData()
          
         } else {
         setIsLoading(false);
-          // setmasterData([])
+        setShowAdvancePayModal(false)
           Snackbar.show({
             text: response.data.ResponseDesc,
             duration: Snackbar.LENGTH_LONG,
@@ -130,7 +143,7 @@ const  OwnerBookingPage = (props) => {
         }
       } catch (error) {
         console.log(error)
-        // setmasterData([])
+        setShowAdvancePayModal(false)
         setIsLoading(false);
         Snackbar.show({
           text: 'Something Went Wrong',
@@ -153,11 +166,12 @@ const  OwnerBookingPage = (props) => {
     let payload = {
       BookingID:item.BookingID,
       ReqStatus: status,
-      RejectionComment:rejectionComment
+      RejectionComment:bookingPayload.RejectionComment ? bookingPayload.RejectionComment : null
     }
     if(status){
       if(status == 'A'){
-        setShowApproveModal(true)
+        // setShowApproveModal(true)
+        setShowAdvancePayModal(true)
         setShowRejectModal(false)
         setBookingPayload(payload)
   
@@ -223,6 +237,7 @@ const  OwnerBookingPage = (props) => {
       <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
+
       {(showApproveModal || showRejectModal) ? <ConfirmDialog
         title="CONFIRMATION"
         message="Are you sure you want to approve this customer booking request?"
@@ -240,12 +255,15 @@ const  OwnerBookingPage = (props) => {
            <View>
              <Text>Are you sure you want to Reject this customer booking request? For rejecting this you need to add rejection comments as well.</Text>
                 <TextField
-                        placeholder="Rejection Comments" style={styles.labelText}
+                textFieldWrapperStyle={styles.textFieldWrapper}
+                textFieldStyle={styles.textField}
+                errorMsgStyle={styles.errorMsg}
+                        placeholder="Rejection Comments" 
                         keyboardType='default'
                         mode="outlined"
                         placeholderTextColor="black"
                         nameOfIcon="envelope"
-                        defaultValue={rejectionComment}
+                        defaultValue={bookingPayload.RejectionComment}
                         maxLength={50}
                         onChangeText={value => {
                             setBookingPayload((bookingPayload) => ({...bookingPayload,...{RejectionComment:value.trim()}})),
@@ -260,11 +278,80 @@ const  OwnerBookingPage = (props) => {
               
           </View> : null }
         </ConfirmDialog>: null}
+
+
+      
       <FlatList
         data={masterData}
         keyExtractor={item => item.VenueID}
         renderItem={renderBookings}
       />
+
+      {showAdvancePayModal ? <ConfirmDialog
+        title="Add Advance Payment"
+        visible={showAdvancePayModal}
+        // onTouchOutside={() => this.setState({ dialogVisible: false })}
+        positiveButton={{
+          title: "Send",
+          onPress: () => alert("Ok touched!")
+        }} >
+        <View>
+          <ScrollView>
+
+          <Formik
+            initialValues={initialFormValues}
+            validationSchema={validationSchema}
+            enableReinitialize={true}
+            onSubmit={(values, errors) => submitForm(values)}>
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValidating }) => {
+
+              const myChangeFunc = (key, val) => {
+                setInitialFormValues({ ...initialFormValues, [key]: val });
+                return handleChange(val)
+              }
+
+              return (
+                <View>
+                  <TextField
+                    placeholder="Name" style={styles.labelText}
+                    keyboardType='default'
+                    mode="outlined"
+                    placeholderTextColor="#800000"
+                    nameOfIcon="user"
+                    maxLength={80}
+                    onChangeText={(e) => { myChangeFunc('Name', e) }}
+                    onBlur={handleBlur('Name')}
+                    value={values.Name}
+                    error={[errors.Name]}
+                  />
+
+                  <TouchableHighlight onPress={()=> setShowDatePicker(true)}><Text>Select Date</Text></TouchableHighlight>
+                   
+                 <DateTimePickerComp
+                 mode="time"
+                 placeholderValue="Advance Payment Deadline Date"
+                 onDateChange={(e) => { myChangeFunc('APDeadlineDate', e) }}
+                 value={values.APDeadlineDate}
+                 error={[errors.APDeadlineDate]}
+                  />
+
+                 
+                  <TouchableOpacity
+                    onPress={handleSubmit}
+                    style={styles.submitButtonWrapper}
+
+                  >
+                    <Text style={styles.submitButtonText}>SEND</Text>
+                  </TouchableOpacity>
+                </View>
+              )
+            }}
+
+          </Formik>
+          </ScrollView>
+        </View>
+
+      </ConfirmDialog> : null}
 
       {
 }
@@ -326,6 +413,34 @@ const styles = StyleSheet.create({
     marginTop:20,
     marginBottom:20,
   },
+  textFieldWrapper: {
+    height: 60,
+    backgroundColor: "rgba(255,255,255,1)",
+    Opacity: 0.2,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: "black",
+    marginRight: 20,
+    marginLeft: 20,
+    marginTop: 10,
+    marginBottom: 10
+},
+textField: {
+    height: 40,
+    fontSize: 15,
+    color: "black",
+    marginLeft:5,
+    marginBottom:5
+    
+    
+},
+errorMsg:{
+    color: 'red',
+    marginRight: 20,
+    marginLeft: 20,
+    fontSize: 11,
+    fontStyle:'italic',
+},
 
   image: {
     // top: 0,
