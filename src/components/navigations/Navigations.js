@@ -10,6 +10,7 @@ import {
 } from "@react-navigation/drawer";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { CommonActions } from '@react-navigation/native';
 
 import NavigationHeader from './navComponents/drawerHeader'
 import Header from '../header/Header'
@@ -180,7 +181,11 @@ const CustomSidebar = (props) => {
                   ) === state.index
                 }
                 activeTintColor={activeTintColor}
-                onPress={() => navigation.navigate(route.name)}
+                onPress = {()=> 
+                  {navigation.dispatch(CommonActions.reset({
+                      index:0,
+                   routes:[{name: route.name}]
+                 }))}}
               />
               
             </>

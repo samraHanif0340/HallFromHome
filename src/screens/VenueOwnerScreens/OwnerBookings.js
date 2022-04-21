@@ -1,46 +1,53 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground,ScrollView } from "react-native";
-import { SearchBar, Rating } from 'react-native-elements';
+import { StyleSheet, View, Text, FlatList, StatusBar, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
-import {  Button, Title, Paragraph} from 'react-native-paper';
-import { Divider, Card } from "react-native-elements";
-import { Avatar, Badge, withBadge } from 'react-native-elements';
+import { Card } from "react-native-elements";
+import { Avatar } from 'react-native-elements';
 import { Loader } from '../../components/customComponents/customComponents'
-// import SearchBar from "react-native-dynamic-search-bar";
-import {ListItem, Icon } from 'react-native-elements'
 import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
 import { useStoreState } from 'easy-peasy';
 import Snackbar from 'react-native-snackbar';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faCheckSquare,faCircleCheck,faCircleStop,faBan, faCoffee } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faBan } from '@fortawesome/free-solid-svg-icons'
 import { ConfirmDialog } from 'react-native-simple-dialogs';
 import validate from '../../shared-services/validationFunctions'
-import { TextField ,DateTimePickerComp} from '../../components/customComponents/customComponents'
+import { TextField, DateTimePickerComp } from '../../components/customComponents/customComponents'
 import { Formik } from "formik";
 import * as Yup from "yup";
+import moment from 'moment';
 
 const validationSchema = Yup.object().shape({
   AdvancePayment: Yup.string()
     .min(5, 'Name must be atleast 5 characters long')
     .max(20, 'Name must be atmost 20 characters long')
     .required('Required'),
-  APDeadlineDate: Yup.string()
+  AdvancePaymentDeadlineDate: Yup.string()
     .required('Required'),
+  Comment: Yup.string(),
+});
+
+const validationSchemaBookCompletion = Yup.object().shape({
+  Comment: Yup.string()
+  .required('Required'),
 });
 
 
-const  OwnerBookingPage = (props) => {
+const OwnerBookingPage = (props) => {
   const source = axios.CancelToken.source();
   const [masterData, setmasterData] = React.useState([]);
   const globalPayload = useStoreState((state) => state.payload);
   const [bookingPayload, setBookingPayload] = React.useState({});
+  const [paymentPayload, setPaymentPayload] = React.useState(null);
+  const [paidPaymentPayload, setPaidPaymentPayload] = React.useState(null);
+
+
   const [rejectionCommentError, setRejectionCommentError] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false)
-  const [showApproveModal, setShowApproveModal] = React.useState(false)
+  const [showBookCompletionModal, setShowBookCompletionModal] = React.useState(false)
   const [showRejectModal, setShowRejectModal] = React.useState(false)
   const [showAdvancePayModal, setShowAdvancePayModal] = React.useState(false)
-  const [showDatePicker,setShowDatePicker] = React.useState(false)
+  const [showDatePicker, setShowDatePicker] = React.useState(false)
   const [initialFormValues, setInitialFormValues] = React.useState({})
 
 
@@ -75,11 +82,11 @@ const  OwnerBookingPage = (props) => {
         Snackbar.show({
           text: response.data.ResponseDesc,
           duration: Snackbar.LENGTH_LONG,
-          backgroundColor: 'black',
-          textColor: 'white',
+          backgroundColor: '#B53849',
+          textColor: 'black',
           action: {
             text: 'OK',
-            textColor: 'white',
+            textColor: 'black',
             onPress: () => { /* Do something. */ },
           },
         });
@@ -89,13 +96,13 @@ const  OwnerBookingPage = (props) => {
       setmasterData([])
       setIsLoading(false);
       Snackbar.show({
-        text: 'Something Went Wrong',
+        text: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
         duration: Snackbar.LENGTH_LONG,
-        backgroundColor: 'black',
-        textColor: 'white',
+        backgroundColor: '#B53849',
+        textColor: 'black',
         action: {
           text: 'OK',
-          textColor: 'white',
+          textColor: 'black',
           onPress: () => { /* Do something. */ },
         },
       });
@@ -103,82 +110,27 @@ const  OwnerBookingPage = (props) => {
     }
   };
 
-  const approveRejectBookingService = async (payload) => {  
-    const configurationObject = {
-      url: `${BASE_URL}ApproveRejectBookingRequest`,
-      method: "POST",
-      cancelToken: source.token,
-      data: { ...payload  },
-    };
-      try {
-        setIsLoading(true);
-        const response = await axios(
-          configurationObject
-        );
-  
-        if (response.data.ResponseCode == "00") {
-          setIsLoading(false);
-          Snackbar.show({
-            text: response.data.Messages[0] ?  response.data.Messages[0] : 'Venue Status Submitted Successfully',
-            duration: Snackbar.LENGTH_LONG,
-            // color:'green'
-          });
-          setShowAdvancePayModal(true)
-          getData()
-         
-        } else {
-        setIsLoading(false);
-        setShowAdvancePayModal(false)
-          Snackbar.show({
-            text: response.data.ResponseDesc,
-            duration: Snackbar.LENGTH_LONG,
-            backgroundColor: 'black',
-            textColor: 'white',
-            action: {
-              text: 'OK',
-              textColor: 'white',
-              onPress: () => { /* Do something. */ },
-            },
-          });
-        }
-      } catch (error) {
-        console.log(error)
-        setShowAdvancePayModal(false)
-        setIsLoading(false);
-        Snackbar.show({
-          text: 'Something Went Wrong',
-          duration: Snackbar.LENGTH_LONG,
-          backgroundColor: 'black',
-          textColor: 'white',
-          action: {
-            text: 'OK',
-            textColor: 'white',
-            onPress: () => { /* Do something. */ },
-          },
-        });
-  
-      }
-    };
-
-  const confirmApproveRejectBooking = (item,status) => {
+  const confirmApproveRejectBooking = (item, status) => {
     setBookingPayload({})
+    setPaymentPayload(null)
+    setPaymentPayload(item)
     console.log(item)
     let payload = {
-      BookingID:item.BookingID,
+      BookingID: item.BookingID,
       ReqStatus: status,
-      RejectionComment:bookingPayload.RejectionComment ? bookingPayload.RejectionComment : null
+      RejectionComment: bookingPayload.RejectionComment ? bookingPayload.RejectionComment : null
     }
-    if(status){
-      if(status == 'A'){
+    if (status) {
+      if (status == 'A') {
+        setBookingPayload(payload)
         // setShowApproveModal(true)
         setShowAdvancePayModal(true)
         setShowRejectModal(false)
-        setBookingPayload(payload)
-  
+
       }
-      else if(status == 'R'){
+      else if (status == 'R') {
         setShowRejectModal(true)
-        setShowApproveModal(false)  
+        // setShowApproveModal(false)  
         setBookingPayload(payload)
       }
     }
@@ -186,9 +138,9 @@ const  OwnerBookingPage = (props) => {
 
   const approveRejectBooking = (payload) => {
     console.log(payload)
-    if(payload){
-      if(payload.ReqStatus == 'R'){
-        if(!rejectionCommentError){
+    if (payload) {
+      if (payload.ReqStatus == 'R') {
+        if (!rejectionCommentError) {
           Snackbar.show({
             text: 'Please Add the Rejection Comments',
             duration: Snackbar.LENGTH_LONG,
@@ -201,108 +153,413 @@ const  OwnerBookingPage = (props) => {
             },
           });
         }
-        // approveRejectBookingService(payload)
+        else {
+          approveRejectBookingService(payload)
+        }
       }
-      else{
-        // approveRejectBookingService(payload)
-      }  
+      else {
+        approveRejectBookingService(payload)
+      }
     }
-  
+
   }
+
+  const approveRejectBookingService = async (payload) => {
+    const configurationObject = {
+      url: `${BASE_URL}ApproveRejectBookingRequest`,
+      method: "POST",
+      cancelToken: source.token,
+      data: { ...payload },
+    };
+    try {
+      setIsLoading(true);
+      const response = await axios(
+        configurationObject
+      );
+
+      if (response.data.ResponseCode == "00") {
+        setIsLoading(false);
+        Snackbar.show({
+          text: response.data.Messages[0] ? response.data.Messages[0] : 'Venue Status Submitted Successfully',
+          duration: Snackbar.LENGTH_LONG,
+          // color:'green'
+        });
+        // setShowApproveModal(false)
+        setShowRejectModal(false)
+        setShowAdvancePayModal(false)
+        getData()
+
+      } else {
+        setIsLoading(false);
+        // setShowApproveModal(false)
+        setShowRejectModal(false)
+        setShowAdvancePayModal(false)
+        Snackbar.show({
+          text: response.data.ResponseDesc,
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: '#B53849',
+          textColor: 'black',
+          action: {
+            text: 'OK',
+            textColor: 'black',
+            onPress: () => { /* Do something. */ },
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      // setShowApproveModal(false)
+      setShowRejectModal(false)
+      setShowAdvancePayModal(false)
+      setIsLoading(false);
+      Snackbar.show({
+        text: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: '#B53849',
+        textColor: 'black',
+        action: {
+          text: 'OK',
+          textColor: 'black',
+          onPress: () => { /* Do something. */ },
+        },
+      });
+
+    }
+  };
+
+  const submitAdvancePayForm = (item, formData) => {
+    console.log(formData)
+    console.log(item)
+    let payload = {
+      BookingID: item.BookingID,
+      VenueID: item.VenueID,
+      OwnerID: globalPayload.userId,
+      UserID: item.BookedById,
+      AdvancePaymentDeadlineTime: '11:59 PM',
+      ...formData
+    }
+    console.log(payload)
+    if (payload != null || payload != {}) {
+      sendAdvancePayService(payload)
+    }
+    else {
+      Snackbar.show({
+        text: 'Please Add the Required Fields',
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: '#B53849',
+        textColor: 'black',
+        action: {
+          text: 'OK',
+          textColor: 'black',
+          onPress: () => { /* Do something. */ },
+        },
+      });
+    }
+  }
+
+  const sendAdvancePayService = async (payload) => {
+    const configurationObject = {
+      url: `${BASE_URL}AddPaymentDetails`,
+      method: "POST",
+      cancelToken: source.token,
+      data: { ...payload },
+    };
+    try {
+      setIsLoading(true);
+      const response = await axios(
+        configurationObject
+      );
+
+      if (response.data.ResponseCode == "00") {
+        setIsLoading(false);
+        Snackbar.show({
+          text: response.data.Messages[0] ? response.data.Messages[0] : 'Venue Payment Information Submitted Successfully',
+          duration: Snackbar.LENGTH_LONG,
+          // color:'green'
+        });
+        setInitialFormValues(null)
+        setShowAdvancePayModal(false)
+        approveRejectBookingService(bookingPayload)
+
+
+      } else {
+        setIsLoading(false);
+        setShowAdvancePayModal(false)
+        setInitialFormValues(null)
+        Snackbar.show({
+          text: response.data.ResponseDesc,
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: '#B53849',
+          textColor: 'black',
+          action: {
+            text: 'OK',
+            textColor: 'black',
+            onPress: () => { /* Do something. */ },
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      setShowAdvancePayModal(false)
+      setInitialFormValues(null)
+      setIsLoading(false);
+      Snackbar.show({
+        text: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: '#B53849',
+        textColor: 'black',
+        action: {
+          text: 'OK',
+          textColor: 'black',
+          onPress: () => { /* Do something. */ },
+        },
+      });
+
+    }
+  };
+
+  const confirmPayment = (item, status) => {
+    let payload = {
+      ...item,
+      ReqStatus: status
+    }
+    setPaidPaymentPayload(payload)
+    if (status) {
+      setShowBookCompletionModal(true)
+    }
+  }
+
+  const submitBookCompletionForm = (item, formData) => {
+    console.log(formData)
+    console.log(item)
+    let payload = {
+      BookingID: item.BookingID,
+      VenueID: item.VenueID,
+      OwnerID: globalPayload.userId,
+      UserID: item.BookedById,
+      ...formData,
+      ReqStatus: paidPaymentPayload.ReqStatus,
+      isPaymentRecieved: true,
+    }
+    console.log('payload',payload)
+    if (payload != null || payload != {}) {
+      // sendBookCompletionService(payload)
+    }
+    else {
+      Snackbar.show({
+        text: 'Please Add the Required Fields',
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: '#B53849',
+        textColor: 'black',
+        action: {
+          text: 'OK',
+          textColor: 'black',
+          onPress: () => { /* Do something. */ },
+        },
+      });
+    }
+  }
+
+  const sendBookCompletionService = async (payload) => {
+    const configurationObject = {
+      url: `${BASE_URL}AddPaymentDetails`,
+      method: "POST",
+      cancelToken: source.token,
+      data: { ...payload },
+    };
+    try {
+      setIsLoading(true);
+      const response = await axios(
+        configurationObject
+      );
+
+      if (response.data.ResponseCode == "00") {
+        setIsLoading(false);
+        Snackbar.show({
+          text: response.data.Messages[0] ? response.data.Messages[0] : 'Venue Booked Successfully',
+          duration: Snackbar.LENGTH_LONG,
+          // color:'green'
+        });
+        setShowBookCompletionModal(false)
+
+
+      } else {
+        setIsLoading(false);
+        setShowBookCompletionModal(false)
+        Snackbar.show({
+          text: response.data.ResponseDesc,
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: '#B53849',
+          textColor: 'black',
+          action: {
+            text: 'OK',
+            textColor: 'black',
+            onPress: () => { /* Do something. */ },
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      setShowBookCompletionModal(false)
+      setIsLoading(false);
+      Snackbar.show({
+        text: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: '#B53849',
+        textColor: 'black',
+        action: {
+          text: 'OK',
+          textColor: 'black',
+          onPress: () => { /* Do something. */ },
+        },
+      });
+
+    }
+  };
+
+
 
   const renderBookings = ({ item }) =>
     <Card containerStyle={styles.cardStyle}>
       <Avatar
-          size={32}
-          rounded
-          title={item.RequestStatus.substr(0, 1).toUpperCase()}
-          containerStyle={{ backgroundColor: 'coral',alignSelf:'flex-start' }} />
+        size={32}
+        rounded
+        title={item.RequestStatus.substr(0, 1).toUpperCase()}
+        containerStyle={{ backgroundColor: 'coral', alignSelf: 'flex-start' }} />
       <Text style={styles.venueName}> {item.VenueName}</Text>
       <Text style={styles.bookingUser}>{item.BookedByUsername} - ({item.ContactNumber})</Text>
       <View>
-      {/* <Text style={styles.requestStatus}>({item.RequestStatus})</Text> */}
-      <Text style={styles.eventTypesLabel}>(Date | Day | Shift)</Text>
+        {/* <Text style={styles.requestStatus}>({item.RequestStatus})</Text> */}
+        <Text style={styles.eventTypesLabel}>(Date | Day | Shift)</Text>
       </View>
-     
+
       <Text style={styles.eventTypes}>{item.EventDate} | {item.EventDay} | {item.EventTime}</Text>
 
       <View style={styles.approvRejButton}>
-     {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{marginRight:4}}onPress={() => confirmApproveRejectBooking(item, 'A')}><FontAwesomeIcon  icon={ faCircleCheck } size={ 20 } color='green' /></TouchableOpacity> : null}
-     {!item.RequestStatus || item.RequestStatus == 'Pending' ?  <TouchableOpacity onPress={() => confirmApproveRejectBooking(item, 'R')} ><FontAwesomeIcon  icon={ faBan } size={ 20 } color='red' /></TouchableOpacity> : null}
+        {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'A')}><FontAwesomeIcon icon={faCircleCheck} size={20} color='green' /></TouchableOpacity> : null}
+        {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'R')} ><FontAwesomeIcon icon={faBan} size={20} color='red' /></TouchableOpacity> : null}
+        {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity onPress={() => confirmPayment(item, 'C')} ><Text>Paid</Text></TouchableOpacity> : null}
+
       </View>
     </Card>
-  
+
   return (
     <View style={styles.container}>
       <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
 
-      {(showApproveModal || showRejectModal) ? <ConfirmDialog
-        title="CONFIRMATION"
-        message="Are you sure you want to approve this customer booking request?"
-        visible={showApproveModal || showRejectModal}
-        onTouchOutside={() =>{showApproveModal ? setShowApproveModal(false): setShowRejectModal(false)}}
-        positiveButton={{
-          title: "YES",
-          onPress: () => approveRejectBooking(bookingPayload)
-        }}
-        negativeButton={{
-          title: "NO",
-          onPress: () => {showApproveModal ? setShowApproveModal(false) : setShowRejectModal(false)}
-        }}>
-           {showRejectModal ?
-           <View>
-             <Text>Are you sure you want to Reject this customer booking request? For rejecting this you need to add rejection comments as well.</Text>
-                <TextField
-                textFieldWrapperStyle={styles.textFieldWrapper}
-                textFieldStyle={styles.textField}
-                errorMsgStyle={styles.errorMsg}
-                        placeholder="Rejection Comments" 
-                        keyboardType='default'
-                        mode="outlined"
-                        placeholderTextColor="black"
-                        nameOfIcon="envelope"
-                        defaultValue={bookingPayload.RejectionComment}
-                        maxLength={50}
-                        onChangeText={value => {
-                            setBookingPayload((bookingPayload) => ({...bookingPayload,...{RejectionComment:value.trim()}})),
-                            setRejectionCommentError(validate('RejectionComment', bookingPayload.RejectionComment, 'textField'))
-                        }}
-                        error={rejectionCommentError}
-                    />
-          </View> : null }
-          {showApproveModal ?
-           <View>
-             <Text>Are you sure you want to Approve this customer booking request? Please fill the following details to be notified to the customer</Text>
-              
-          </View> : null }
-        </ConfirmDialog>: null}
+    
 
-
-      
       <FlatList
         data={masterData}
-        keyExtractor={item => item.VenueID}
+        keyExtractor={item => item.BookingID}
         renderItem={renderBookings}
       />
 
       {showAdvancePayModal ? <ConfirmDialog
         title="Add Advance Payment"
         visible={showAdvancePayModal}
-        // onTouchOutside={() => this.setState({ dialogVisible: false })}
+        onTouchOutside={() => setShowAdvancePayModal(false)}
         positiveButton={{
           title: "Send",
           onPress: () => alert("Ok touched!")
         }} >
         <View>
           <ScrollView>
+            <Text>Are you sure you want to Approve this customer booking request? Please fill the following details to be notified to the customer</Text>
+            <Formik
+              initialValues={initialFormValues}
+              validationSchema={validationSchema}
+              enableReinitialize={true}
+              onSubmit={(values, errors) => submitAdvancePayForm(paymentPayload, values)}>
+              {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValidating }) => {
 
+                const myChangeFunc = (key, val) => {
+                  setInitialFormValues({ ...initialFormValues, [key]: val });
+                  return handleChange(val)
+                }
+
+                return (
+                  <View>
+                    <TextField
+                      textFieldWrapperStyle={styles.textFieldWrapper}
+                      textFieldStyle={styles.textField}
+                      errorMsgStyle={styles.errorMsg}
+                      placeholder="Advance Payment"
+                      keyboardType='phone-pad'
+                      mode="outlined"
+                      placeholderTextColor="black"
+                      // nameOfIcon="user"
+                      maxLength={20}
+                      onChangeText={(e) => { myChangeFunc('AdvancePayment', e) }}
+                      onBlur={handleBlur('AdvancePayment')}
+                      value={values.AdvancePayment}
+                      error={[errors.AdvancePayment]}
+                    />
+
+                    <DateTimePickerComp
+                      errorMsgStyle={styles.errorMsg}
+                      mode="date"
+                      placeholderValue="Advance Payment Deadline Date"
+                      onDateChange={(e) => { myChangeFunc('AdvancePaymentDeadlineDate', e) }}
+                      value={values.AdvancePaymentDeadlineDate}
+                      error={[errors.AdvancePaymentDeadlineDate]}
+                    />
+
+                    <TextField
+                      placeholder="Comment" textFieldWrapperStyle={styles.textFieldWrapper}
+                      textFieldStyle={styles.textField}
+                      errorMsgStyle={styles.errorMsg}
+                      keyboardType='default'
+                      mode="outlined"
+                      placeholderTextColor="black"
+                      // nameOfIcon="user"
+                      maxLength={300}
+                      onChangeText={(e) => { myChangeFunc('Comment', e) }}
+                      onBlur={handleBlur('Comment')}
+                      value={values.Comment}
+                      error={[errors.Comment]}
+                    />
+
+
+                    <TouchableOpacity
+                      onPress={handleSubmit}
+                      style={styles.submitButtonWrapper}
+
+                    >
+                      <Text style={styles.submitButtonText}>SEND</Text>
+                    </TouchableOpacity>
+                  </View>
+                )
+              }}
+
+            </Formik>
+          </ScrollView>
+        </View>
+
+      </ConfirmDialog> : null}
+
+      {showBookCompletionModal ? <ConfirmDialog
+        title="CONFIRMATION"
+        visible={showBookCompletionModal}
+        onTouchOutside={() => { setShowBookCompletionModal(false) }}
+      // positiveButton={{
+      //   title: "YES",
+      //   onPress: () => setShowBookCompletionModal(bookingPayload)
+      // }}
+      // negativeButton={{
+      //   title: "NO",
+      //   onPress: () => setShowBookCompletionModal(false)
+      // }}
+      >
+        <View>
+          <Text>Payment Recieved from the customer?</Text>
           <Formik
             initialValues={initialFormValues}
-            validationSchema={validationSchema}
+            validationSchema={validationSchemaBookCompletion}
             enableReinitialize={true}
-            onSubmit={(values, errors) => submitForm(values)}>
+            onSubmit={(values, errors) => submitBookCompletionForm(paidPaymentPayload, values)}>
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValidating }) => {
 
               const myChangeFunc = (key, val) => {
@@ -313,105 +570,132 @@ const  OwnerBookingPage = (props) => {
               return (
                 <View>
                   <TextField
-                    placeholder="Name" style={styles.labelText}
+                    placeholder="Comment" textFieldWrapperStyle={styles.textFieldWrapper}
+                    textFieldStyle={styles.textField}
+                    errorMsgStyle={styles.errorMsg}
                     keyboardType='default'
                     mode="outlined"
-                    placeholderTextColor="#800000"
-                    nameOfIcon="user"
-                    maxLength={80}
-                    onChangeText={(e) => { myChangeFunc('Name', e) }}
-                    onBlur={handleBlur('Name')}
-                    value={values.Name}
-                    error={[errors.Name]}
+                    placeholderTextColor="black"
+                    maxLength={300}
+                    onChangeText={(e) => { myChangeFunc('Comment', e) }}
+                    onBlur={handleBlur('Comment')}
+                    value={values.Comment}
+                    error={[errors.Comment]}
                   />
 
-                  <TouchableHighlight onPress={()=> setShowDatePicker(true)}><Text>Select Date</Text></TouchableHighlight>
-                   
-                 <DateTimePickerComp
-                 mode="time"
-                 placeholderValue="Advance Payment Deadline Date"
-                 onDateChange={(e) => { myChangeFunc('APDeadlineDate', e) }}
-                 value={values.APDeadlineDate}
-                 error={[errors.APDeadlineDate]}
-                  />
-
-                 
                   <TouchableOpacity
                     onPress={handleSubmit}
                     style={styles.submitButtonWrapper}
 
                   >
-                    <Text style={styles.submitButtonText}>SEND</Text>
+                    <Text style={styles.submitButtonText}>BOOK</Text>
                   </TouchableOpacity>
                 </View>
               )
             }}
 
           </Formik>
-          </ScrollView>
         </View>
-
       </ConfirmDialog> : null}
 
-      {
-}
+      {showRejectModal ? <ConfirmDialog
+        title="CONFIRMATION"
+        visible={showRejectModal}
+        onTouchOutside={() => setShowRejectModal(false)}
+        positiveButton={{
+          title: "YES",
+          onPress: () => approveRejectBooking(bookingPayload)
+        }}
+        negativeButton={{
+          title: "NO",
+          // onPress: () => {showApproveModal ? setShowApproveModal(false) : setShowRejectModal(false)}
+          onPress: () => setShowRejectModal(false)
+        }}>
+        {showRejectModal ?
+          <View>
+            <Text>Are you sure you want to Reject this customer booking request? For rejecting this you need to add rejection comments as well.</Text>
+            <TextField
+              textFieldWrapperStyle={styles.textFieldWrapper}
+              textFieldStyle={styles.textField}
+              errorMsgStyle={styles.errorMsg}
+              placeholder="Rejection Comments"
+              keyboardType='default'
+              mode="outlined"
+              placeholderTextColor="black"
+              nameOfIcon="envelope"
+              defaultValue={bookingPayload.RejectionComment}
+              maxLength={50}
+              onChangeText={value => {
+                setBookingPayload((bookingPayload) => ({ ...bookingPayload, ...{ RejectionComment: value.trim() } })),
+                  setRejectionCommentError(validate('RejectionComment', bookingPayload.RejectionComment, 'textField'))
+              }}
+              error={rejectionCommentError}
+            />
+          </View> : null}
+        {/* {showApproveModal ?
+           <View>
+             <Text>Are you sure you want to Approve this customer booking request? Please fill the following details to be notified to the customer</Text>
+              
+          </View> : null } */}
+      </ConfirmDialog> : null}
+
     </View>
-);
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  cardStyle:{
-    flex:1,
-    borderRadius:10,
+  cardStyle: {
+    flex: 1,
+    borderRadius: 10,
     flexDirection: "column",
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
     shadowColor: 'black',
-    height:160,
+    height: 160,
     shadowOffset: { width: 1, height: 1 },
-    shadowOpacity:  0.3,
+    shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
-    backgroundColor:'#EADEDB'
+    backgroundColor: '#EADEDB'
 
   },
-  approvRejButton:{
-    marginTop:2,
-    flexDirection:'row',
-    justifyContent:'space-around',
-    alignSelf:'flex-end',
+  approvRejButton: {
+    marginTop: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignSelf: 'flex-end',
   },
-  venueName:{
-    fontSize:18,
-    color:'black',
+  venueName: {
+    fontSize: 18,
+    color: 'black',
     fontWeight: 'bold'
   },
 
-  bookingUser:{
-    color:'grey',
-    fontStyle:'italic',
-    fontSize:16
+  bookingUser: {
+    color: 'grey',
+    fontStyle: 'italic',
+    fontSize: 16
 
   },
-  requestStatus:{
-    fontSize:16,
-    fontWeight:'bold',
-    fontStyle:'italic',
+  requestStatus: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
     color: 'orange'
   },
-  eventTypes:{
-    alignSelf:'flex-end'
+  eventTypes: {
+    alignSelf: 'flex-end'
   },
-  eventTypesLabel:{
-    alignSelf:'flex-end',
-    color:'black',
-    fontWeight:'bold'
+  eventTypesLabel: {
+    alignSelf: 'flex-end',
+    color: 'black',
+    fontWeight: 'bold'
   },
-  setImageStyles:{
-    marginTop:20,
-    marginBottom:20,
+  setImageStyles: {
+    marginTop: 20,
+    marginBottom: 20,
   },
   textFieldWrapper: {
     height: 60,
@@ -424,33 +708,49 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 10,
     marginBottom: 10
-},
-textField: {
+  },
+  textField: {
     height: 40,
     fontSize: 15,
     color: "black",
-    marginLeft:5,
-    marginBottom:5
-    
-    
-},
-errorMsg:{
+    marginLeft: 5,
+    marginBottom: 5
+  },
+  errorMsg: {
     color: 'red',
     marginRight: 20,
     marginLeft: 20,
     fontSize: 11,
-    fontStyle:'italic',
-},
+    fontStyle: 'italic',
+  },
+
+  submitButtonWrapper: {
+    height: 59,
+    //backgroundColor: "rgba(31,178,204,1)",
+    backgroundColor: "rgba(142,7,27,1)",
+    borderRadius: 5,
+    justifyContent: "center",
+    marginRight: 20,
+    marginLeft: 20,
+    marginTop: 14,
+    marginBottom: 14
+  },
+  submitButtonText: {
+    color: "rgba(255,255,255,1)",
+    textAlign: "center",
+    fontSize: 20,
+    alignSelf: "center"
+  },
 
   image: {
     // top: 0,
     right: 9,
     left: -2,
     flex: 1,
-     width: 100,
+    width: 100,
     flexDirection: "column",
     height: 140,
-    marginTop:-65,
+    marginTop: -65,
     marginBottom: 3,
     borderRadius: 5,
     // marginRigth:8, 
@@ -468,10 +768,10 @@ errorMsg:{
 
   },
   badgeTitle: {
-    paddingVertical : 5,
-    height:10,
-    width:100,
-    right:-70,
+    paddingVertical: 5,
+    height: 10,
+    width: 100,
+    right: -70,
     top: -45,
   },
   imageStackStack: {
@@ -482,53 +782,53 @@ errorMsg:{
     // marginRight: 20,
 
   },
- 
 
-  eachItem: 
+
+  eachItem:
   {
-    flex:1,
+    flex: 1,
     // flexDirection:'row',
-    color:'rgba(0,0,0,1)',
-    marginBottom : 10
+    color: 'rgba(0,0,0,1)',
+    marginBottom: 10
     // backgroundColor:'yellow'
   },
-  cardTitle : {
+  cardTitle: {
     color: 'black',
     marginLeft: 10,
     flexDirection: 'row',
     bottom: 135,
     marginBottom: -2,
-    marginRight:8,
+    marginRight: 8,
   },
-  statusStyle : {
+  statusStyle: {
     color: 'black',
-    textAlign:"left",
+    textAlign: "left",
     marginLeft: 90,
     bottom: 45,
     width: 70,
-    height:20,
+    height: 20,
   },
   DividerColor: {
-    backgroundColor: 'black' ,
+    backgroundColor: 'black',
     borderBottomWidth: 3,
-    borderRadius:10,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 1, height: 1 },
-    shadowOpacity:  0.5,
+    shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5,
   },
-  commentStyle : {
+  commentStyle: {
     color: 'black',
     fontSize: 11,
-    bottom:15,
+    bottom: 15,
     right: -90,
-    height:190,
-    width:195,
+    height: 190,
+    width: 195,
     letterSpacing: 1,
     textAlign: "left",
   },
-  cardPricePaid : {
+  cardPricePaid: {
     left: 220,
     color: 'black',
     fontStyle: 'italic',
@@ -540,43 +840,43 @@ errorMsg:{
     textAlign: "left",
     fontSize: 11
   },
-  leftAlign:{
-    marginLeft:14,
-    flex:2,
-    icon:{
-      fontSize:45,
-      color:'rgba(255,255,255,1)',
+  leftAlign: {
+    marginLeft: 14,
+    flex: 2,
+    icon: {
+      fontSize: 45,
+      color: 'rgba(255,255,255,1)',
     }
   },
-  centeredAlign:{
-    content:{
-      color:'rgba(255,255,255,1)',   
+  centeredAlign: {
+    content: {
+      color: 'rgba(255,255,255,1)',
     },
-    flex:6,
+    flex: 6,
   },
-  rightAligned:{
-    flex:2,
-    flexDirection:'row',
-    alignItems:'center',
-    content:{
-      color:'rgba(255,255,255,1)',   
-    },   
-    icon:{
-      fontSize:10,
-      color:'yellow',
+  rightAligned: {
+    flex: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    content: {
+      color: 'rgba(255,255,255,1)',
+    },
+    icon: {
+      fontSize: 10,
+      color: 'yellow',
     },
   },
-  comments:{
-      color:'rgba(255,255,255,1)'
+  comments: {
+    color: 'rgba(255,255,255,1)'
   },
-  searchBar:{
-    backgroundColor:'rgba(142,7,27,1)',
-    opacity:0.7,
-    icon:{
-      color:'black'
+  searchBar: {
+    backgroundColor: 'rgba(142,7,27,1)',
+    opacity: 0.7,
+    icon: {
+      color: 'black'
     },
-    inputStyle:{
-      color:'white'
+    inputStyle: {
+      color: 'white'
     }
   },
   rect: {
@@ -613,9 +913,9 @@ errorMsg:{
     flexDirection: "row"
   },
 
- 
 
- 
+
+
 });
 
 export default OwnerBookingPage;

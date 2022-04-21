@@ -151,6 +151,19 @@ const styles = StyleSheet.create({
         fontStyle:'italic',
     },
 
+    datePickerStyle:{
+        height: 60,
+        backgroundColor: "rgba(255,255,255,1)",
+        Opacity: 0.2,
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: "black",
+        marginRight: 20,
+        marginLeft: 20,
+        marginTop: 10,
+        marginBottom: 10
+    },
+
     footerContainer: {
         flex: 1,
         flexDirection: "row",

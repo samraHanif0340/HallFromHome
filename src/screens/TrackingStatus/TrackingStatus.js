@@ -10,9 +10,15 @@ import { Avatar, Badge, withBadge } from 'react-native-elements';
 import {ListItem, Icon } from 'react-native-elements'
 import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
+import { useStoreState } from 'easy-peasy';
+import Snackbar from 'react-native-snackbar';
+
+
 
 const  TrackingStatusPage = (props) => {
-
+  const source = axios.CancelToken.source();
+  const globalPayload = useStoreState((state) => state.payload);
+  const [isLoading, setIsLoading] = React.useState(false)
   const [masterData, setmasterData] = React.useState([{
     hallName: "Majestic Banquet",
     userName: 'Samra Hanif',
@@ -58,6 +64,65 @@ const  TrackingStatusPage = (props) => {
     setReservation: "Reserved",
     comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
   }]);
+
+  React.useEffect(() => {
+    getData();
+
+    return () => source.cancel("Data fetching cancelled");
+  }, []);
+
+  const getData = async () => {
+    const configurationObject = {
+      url: `${BASE_URL}GetBookingDetails`,
+      method: "POST",
+      cancelToken: source.token,
+      data: { UserID: globalPayload.userId },
+    };
+    try {
+      setIsLoading(true);
+      const response = await axios(
+        configurationObject
+      );
+
+      if (response.data.ResponseCode == "00") {
+        setIsLoading(false);
+        if (response.data.Result_DTO) {
+          // setmasterData(response.data.Result_DTO)
+        }
+        return;
+      } else {
+        setIsLoading(false);
+        // setmasterData([])
+        Snackbar.show({
+          text: response.data.ResponseDesc,
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: '#B53849',
+          textColor: 'black',
+          action: {
+            text: 'OK',
+            textColor: 'black',
+            onPress: () => { /* Do something. */ },
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      // setmasterData([])
+      setIsLoading(false);
+      Snackbar.show({
+        text: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: '#B53849',
+        textColor: 'black',
+        action: {
+          text: 'OK',
+          textColor: 'black',
+          onPress: () => { /* Do something. */ },
+        },
+      });
+
+    }
+  };
  
   return (
     <View style={styles.container}>
