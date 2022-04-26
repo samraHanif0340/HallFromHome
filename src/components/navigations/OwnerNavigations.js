@@ -12,7 +12,7 @@ import { CommonActions } from '@react-navigation/native';
 
 
 import NavigationHeader from './navComponents/drawerHeader'
-import Header from '../header/Header'
+import Header from '../Header/Header'
 
 
 // VENUE OWNER PAGES IMPORT
@@ -36,6 +36,7 @@ const Drawer = createDrawerNavigator();
 const OwnerInterface = () => {
     return (
         <Drawer.Navigator initialRouteName="DashboardStack"
+        
             screenOptions={({ navigation, route, options }) => ({
                 headerStyle: {
                     backgroundColor: '#800000',

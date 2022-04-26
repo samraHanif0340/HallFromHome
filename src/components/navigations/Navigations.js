@@ -13,7 +13,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { CommonActions } from '@react-navigation/native';
 
 import NavigationHeader from './navComponents/drawerHeader'
-import Header from '../header/Header'
+import Header from '../Header/Header'
 import CustomerDashboardPage from '../../screens/CustomerDashboard/CustomerDashboard';
 import SearchPage from '../../screens/SearchHall/SearchHall';
 import SearchByMaps from '../../screens/SearchHall/SearchByMaps';
@@ -86,6 +86,7 @@ const AuthRoutes = () => {
 const CustomerDrawerNavigator = () => {
   return (
     <Drawer.Navigator initialRouteName="SearchHallStack" 
+    
     screenOptions={({ navigation,route,options }) => ({
       headerStyle: {
         backgroundColor: '#800000',

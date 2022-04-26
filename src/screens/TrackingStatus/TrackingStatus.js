@@ -76,7 +76,7 @@ const  TrackingStatusPage = (props) => {
       url: `${BASE_URL}GetBookingDetails`,
       method: "POST",
       cancelToken: source.token,
-      data: { UserID: globalPayload.userId },
+      data: { UserID: 0 , OwnerID:8},
     };
     try {
       setIsLoading(true);
@@ -87,12 +87,12 @@ const  TrackingStatusPage = (props) => {
       if (response.data.ResponseCode == "00") {
         setIsLoading(false);
         if (response.data.Result_DTO) {
-          // setmasterData(response.data.Result_DTO)
+          setmasterData(response.data.Result_DTO)
         }
         return;
       } else {
         setIsLoading(false);
-        // setmasterData([])
+        setmasterData([])
         Snackbar.show({
           text: response.data.ResponseDesc,
           duration: Snackbar.LENGTH_LONG,
@@ -107,7 +107,7 @@ const  TrackingStatusPage = (props) => {
       }
     } catch (error) {
       console.log(error)
-      // setmasterData([])
+      setmasterData([])
       setIsLoading(false);
       Snackbar.show({
         text: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
@@ -123,6 +123,39 @@ const  TrackingStatusPage = (props) => {
 
     }
   };
+
+  const renderBookings = ({ item }) =>
+  <Card containerStyle={styles.cardStyle}>
+    {item.RequestStatus ? <Avatar
+      size={32}
+      rounded
+      title={item.RequestStatus.substr(0, 1).toUpperCase()}
+      containerStyle={{ backgroundColor: 'blue', alignSelf: 'flex-start' }} /> : null }
+    <Text style={styles.venueName}> {item.VenueName}</Text>
+    {item.RequestStatus == 'Approved' ? 
+    <View>
+    <Text style={styles.eventTypesLabel}>(Advance Payment | Deadline)</Text>
+
+    <Text style={styles.bookingUser}>{item.AdvancePaymentDeadlineDate} - ({item.AdvancePaymentDeadlineTime})</Text>
+    </View> : null }
+    <View>
+      <Text style={styles.requestStatus}>({item.RequestStatus})</Text>
+      <Text style={styles.eventTypesLabel}>(Date | Day | Shift)</Text>
+    </View>
+
+    <Text style={styles.eventTypes}>{item.EventDate} | {item.EventDay} | {item.EventTime}</Text>
+
+    <View>
+      <Text>{item.Comment}</Text>
+    </View>
+
+    {/* <View style={styles.approvRejButton}>
+      {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'A')}><FontAwesomeIcon icon={faShare} size={20} color='black' /></TouchableOpacity> : null}
+      {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmPayment(item, 'C')} ><FontAwesomeIcon icon={faCircleCheck} size={20} color='black' /></TouchableOpacity> : null}
+      {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'R')} ><FontAwesomeIcon icon={faBan} size={20} color='black' /></TouchableOpacity> : null}
+
+    </View> */}
+  </Card>
  
   return (
     <View style={styles.container}>
@@ -135,31 +168,29 @@ const  TrackingStatusPage = (props) => {
       
       <FlatList
         data={masterData}
-        renderItem={({ item }) => (
-          <Card containerStyle={styles.cardStyle}>
-            <View style={styles.imageStackStack}>
-            <View style={styles.imageStack}>
-            <Image
-                  source={require("../../assets/images/download2.jpg")}
-                  style={styles.image}
-                ></Image>
-            <Card.Title style = {styles.cardTitle}> {item.hallName}</Card.Title>
-            </View>
-            <View>
-            <Badge containerStyle={styles.badgeTitle} value ={item.status} status ={item.TrackingStatus}/>
-            {/* <Text style={styles.statusStyle} h4>{item.status}</Text> */}
-            </View>
-            <View style={styles.loremIpsum2Stack}>
-              <Text style={styles.cardPricePaid} h4>{item.pricePaid}</Text>
-            </View>
-            <View>
-              <Text style={styles.commentStyle} h4>{item.comments}</Text>
-            </View>
+        keyExtractor={item => item.BookingID}
+        renderItem={renderBookings}
+        // renderItem={({ item }) => (
+        //   <Card containerStyle={styles.cardStyle}>
+        //     <View style={styles.imageStackStack}>
+        //     <View style={styles.imageStack}>
+        //     <Card.Title style = {styles.cardTitle}> {item.VenueName}</Card.Title>
+        //     </View>
+        //     <View>
+        //     <Badge containerStyle={styles.badgeTitle} value ={item.RequestStatus} status ='primary'/>
+        //     </View>
+        //     <View style={styles.loremIpsum2Stack}>
+        //       <Text style={styles.cardPricePaid} h4>{item.AdvancePayment}</Text>
+        //       <Text>{item.AdvancePaymentDeadlineDate} | {item.AdvancePaymentDeadlineTime}</Text>
+        //     </View>
+        //     <View>
+        //       <Text style={styles.commentStyle} h4>{item.Comment}</Text>
+        //     </View>
            
-          </View>
+        //   </View>
           
-        </Card>
-        )}
+        // </Card>
+        // )}
       />
 
 </ImageBackground>
@@ -168,190 +199,56 @@ const  TrackingStatusPage = (props) => {
 }
 
 const styles = StyleSheet.create({
+
+
   container: {
     flex: 1,
-    flexDirection: "column",
   },
-  image: {
-    // top: 0,
-    right: 9,
-    left: -2,
+  cardStyle: {
     flex: 1,
-     width: 100,
+    borderRadius: 10,
     flexDirection: "column",
-    height: 140,
-    marginTop:-65,
-    marginBottom: 3,
-    borderRadius: 5,
-    // marginRigth:8, 
-  },
-  loremIpsum2Stack: {
-    top: -205,
-    position: "absolute"
-  },
-  imageStack: {
-    top: 0,
-    left: -20,
-    width: 310,
-    height: 90,
-    position: "absolute",
-
-  },
-  badgeTitle: {
-    paddingVertical : 5,
-    height:10,
-    width:100,
-    right:-70,
-    top: -45,
-  },
-  imageStackStack: {
-    width: 199,
-    height: 9,
-    marginTop: 60,
-    marginLeft: 20,
-    // marginRight: 20,
-
-  },
-  cardStyle:{
-    // borderColor:'#800000',
-    // borderWidth:3,
-    borderRadius:10,
-    flexDirection: "row",
-    shadowColor: '#000',
-    height:160,
+    justifyContent: 'space-between',
+    shadowColor: 'black',
+    height: 160,
     shadowOffset: { width: 1, height: 1 },
-    shadowOpacity:  0.3,
+    shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
-  },
+    backgroundColor: '#EADEDB'
 
-  eachItem: 
-  {
-    flex:1,
-    // flexDirection:'row',
-    color:'rgba(0,0,0,1)',
-    marginBottom : 10
-    // backgroundColor:'yellow'
   },
-  cardTitle : {
-    color: 'black',
-    marginLeft: 10,
+  approvRejButton: {
+    marginTop: 2,
     flexDirection: 'row',
-    bottom: 135,
-    marginBottom: -2,
-    marginRight:8,
+    justifyContent: 'space-around',
+    alignSelf: 'flex-end',
   },
-  statusStyle : {
+  venueName: {
+    fontSize: 18,
     color: 'black',
-    textAlign:"left",
-    marginLeft: 90,
-    bottom: 45,
-    width: 70,
-    height:20,
+    fontWeight: 'bold'
   },
-  DividerColor: {
-    backgroundColor: 'black' ,
-    borderBottomWidth: 3,
-    borderRadius:10,
-    shadowColor: '#000',
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity:  0.5,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  commentStyle : {
-    color: 'black',
-    fontSize: 11,
-    bottom:15,
-    right: -90,
-    height:190,
-    width:195,
-    letterSpacing: 1,
-    textAlign: "left",
-  },
-  cardPricePaid : {
-    left: 220,
-    color: 'black',
+
+  bookingUser: {
+    color: 'grey',
     fontStyle: 'italic',
-    position: "absolute",
-    fontFamily: "roboto-700",
-    color: "black",
-    height: 14,
-    width: 139,
-    textAlign: "left",
-    fontSize: 11
+    fontSize: 16
+
   },
-  leftAlign:{
-    marginLeft:14,
-    flex:2,
-    icon:{
-      fontSize:45,
-      color:'rgba(255,255,255,1)',
-    }
+  requestStatus: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    color: 'orange'
   },
-  centeredAlign:{
-    content:{
-      color:'rgba(255,255,255,1)',   
-    },
-    flex:6,
+  eventTypes: {
+    alignSelf: 'flex-end'
   },
-  rightAligned:{
-    flex:2,
-    flexDirection:'row',
-    alignItems:'center',
-    content:{
-      color:'rgba(255,255,255,1)',   
-    },   
-    icon:{
-      fontSize:10,
-      color:'yellow',
-    },
-  },
-  comments:{
-      color:'rgba(255,255,255,1)'
-  },
-  searchBar:{
-    backgroundColor:'rgba(142,7,27,1)',
-    opacity:0.7,
-    icon:{
-      color:'black'
-    },
-    inputStyle:{
-      color:'white'
-    }
-  },
-  rect: {
-    width: 360,
-    height: 760,
-    backgroundColor: "rgba(222,206,206,1)"
-  },
-  rect3: {
-    height: 80,
-    position: "absolute",
-    backgroundColor: "rgba(230,230, 230,1)",
-    borderRadius: 12,
-    overflow: "visible",
-    borderWidth: 1,
-    borderColor: "rgba(87,34,34,1)",
-    shadowColor: "rgba(193,166,166,1)",
-    shadowOffset: {
-      width: 3,
-      height: 3
-    },
-    elevation: 5,
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: "row"
-  },
-  rect4: {
-    width: 285,
-    height: 48,
-    backgroundColor: "rgba(249,246,246,1)",
-    borderRadius: 15,
-    flexDirection: "row"
+  eventTypesLabel: {
+    alignSelf: 'flex-end',
+    color: 'black',
+    fontWeight: 'bold'
   },
 
  

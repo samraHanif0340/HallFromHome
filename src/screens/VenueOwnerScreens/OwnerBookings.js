@@ -4,12 +4,12 @@ import { TouchableOpacity } from "react-native";
 import { Card } from "react-native-elements";
 import { Avatar } from 'react-native-elements';
 import { Loader } from '../../components/customComponents/customComponents'
-import { BASE_URL } from '../../constants/constants'
+import { BASE_URL, ERROR_MESSAGES } from '../../constants/constants'
 import axios from 'axios';
 import { useStoreState } from 'easy-peasy';
 import Snackbar from 'react-native-snackbar';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faCircleCheck, faBan } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faBan,faShare } from '@fortawesome/free-solid-svg-icons'
 import { ConfirmDialog } from 'react-native-simple-dialogs';
 import validate from '../../shared-services/validationFunctions'
 import { TextField, DateTimePickerComp } from '../../components/customComponents/customComponents'
@@ -27,10 +27,10 @@ const validationSchema = Yup.object().shape({
   Comment: Yup.string(),
 });
 
-const validationSchemaBookCompletion = Yup.object().shape({
-  Comment: Yup.string()
-  .required('Required'),
-});
+// const validationSchemaBookCompletion = Yup.object().shape({
+//   Comment: Yup.string()
+//   .required('Required'),
+// });
 
 
 const OwnerBookingPage = (props) => {
@@ -41,13 +41,11 @@ const OwnerBookingPage = (props) => {
   const [paymentPayload, setPaymentPayload] = React.useState(null);
   const [paidPaymentPayload, setPaidPaymentPayload] = React.useState(null);
 
-
   const [rejectionCommentError, setRejectionCommentError] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false)
   const [showBookCompletionModal, setShowBookCompletionModal] = React.useState(false)
   const [showRejectModal, setShowRejectModal] = React.useState(false)
   const [showAdvancePayModal, setShowAdvancePayModal] = React.useState(false)
-  const [showDatePicker, setShowDatePicker] = React.useState(false)
   const [initialFormValues, setInitialFormValues] = React.useState({})
 
 
@@ -125,7 +123,7 @@ const OwnerBookingPage = (props) => {
         setBookingPayload(payload)
         // setShowApproveModal(true)
         setShowAdvancePayModal(true)
-        setShowRejectModal(false)
+        // setShowRejectModal(false)
 
       }
       else if (status == 'R') {
@@ -137,7 +135,7 @@ const OwnerBookingPage = (props) => {
   }
 
   const approveRejectBooking = (payload) => {
-    console.log(payload)
+    console.log('REJECTION PAYLOAD ===',payload)
     if (payload) {
       if (payload.ReqStatus == 'R') {
         if (!rejectionCommentError) {
@@ -157,9 +155,9 @@ const OwnerBookingPage = (props) => {
           approveRejectBookingService(payload)
         }
       }
-      else {
-        approveRejectBookingService(payload)
-      }
+      // else {
+      //   approveRejectBookingService(payload)
+      // }
     }
 
   }
@@ -228,8 +226,6 @@ const OwnerBookingPage = (props) => {
   };
 
   const submitAdvancePayForm = (item, formData) => {
-    console.log(formData)
-    console.log(item)
     let payload = {
       BookingID: item.BookingID,
       VenueID: item.VenueID,
@@ -238,7 +234,7 @@ const OwnerBookingPage = (props) => {
       AdvancePaymentDeadlineTime: '11:59 PM',
       ...formData
     }
-    console.log(payload)
+    console.log('SEND ADVANCE PAYMENT PAYLOAD ===',payload)
     if (payload != null || payload != {}) {
       sendAdvancePayService(payload)
     }
@@ -275,9 +271,8 @@ const OwnerBookingPage = (props) => {
         Snackbar.show({
           text: response.data.Messages[0] ? response.data.Messages[0] : 'Venue Payment Information Submitted Successfully',
           duration: Snackbar.LENGTH_LONG,
-          // color:'green'
         });
-        setInitialFormValues(null)
+        setInitialFormValues({AdvancePayment:null,AdvancePaymentDeadlineDate:null,Comment:null})
         setShowAdvancePayModal(false)
         approveRejectBookingService(bookingPayload)
 
@@ -285,7 +280,7 @@ const OwnerBookingPage = (props) => {
       } else {
         setIsLoading(false);
         setShowAdvancePayModal(false)
-        setInitialFormValues(null)
+        setInitialFormValues({AdvancePayment:null,AdvancePaymentDeadlineDate:null,Comment:null})
         Snackbar.show({
           text: response.data.ResponseDesc,
           duration: Snackbar.LENGTH_LONG,
@@ -301,7 +296,7 @@ const OwnerBookingPage = (props) => {
     } catch (error) {
       console.log(error)
       setShowAdvancePayModal(false)
-      setInitialFormValues(null)
+      setInitialFormValues({AdvancePayment:null,AdvancePaymentDeadlineDate:null,Comment:null})
       setIsLoading(false);
       Snackbar.show({
         text: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
@@ -330,20 +325,19 @@ const OwnerBookingPage = (props) => {
   }
 
   const submitBookCompletionForm = (item, formData) => {
-    console.log(formData)
-    console.log(item)
     let payload = {
       BookingID: item.BookingID,
       VenueID: item.VenueID,
       OwnerID: globalPayload.userId,
       UserID: item.BookedById,
-      ...formData,
+      // ...formData,
       ReqStatus: paidPaymentPayload.ReqStatus,
-      isPaymentRecieved: true,
+      IsPaymentReceived: true,
     }
     console.log('payload',payload)
     if (payload != null || payload != {}) {
-      // sendBookCompletionService(payload)
+      sendBookCompletionService(payload)
+      // updateVenueCalendar(paidPaymentPayload)
     }
     else {
       Snackbar.show({
@@ -362,7 +356,7 @@ const OwnerBookingPage = (props) => {
 
   const sendBookCompletionService = async (payload) => {
     const configurationObject = {
-      url: `${BASE_URL}AddPaymentDetails`,
+      url: `${BASE_URL}UpdatePaymentDetails`,
       method: "POST",
       cancelToken: source.token,
       data: { ...payload },
@@ -375,12 +369,12 @@ const OwnerBookingPage = (props) => {
 
       if (response.data.ResponseCode == "00") {
         setIsLoading(false);
-        Snackbar.show({
-          text: response.data.Messages[0] ? response.data.Messages[0] : 'Venue Booked Successfully',
-          duration: Snackbar.LENGTH_LONG,
-          // color:'green'
-        });
+        // Snackbar.show({
+        //   text: response.data.Messages[0] ? response.data.Messages[0] : 'Venue Booked Successfully',
+        //   duration: Snackbar.LENGTH_LONG,
+        // });
         setShowBookCompletionModal(false)
+        updateVenueCalendar(paidPaymentPayload)
 
 
       } else {
@@ -417,7 +411,79 @@ const OwnerBookingPage = (props) => {
     }
   };
 
+  const updateVenueCalendar = (paidPaymentData) => {
+    let payload = {
+      VenueID: paidPaymentData.VenueID,
+      // OwnerID: globalPayload.userId,
+      ReserveDate: moment(new Date(paidPaymentData.EventDate)).format('YYYY-MM-DD')
+    }
+    console.log('UPDATE CALENDAR PAYLOAD===',payload)
+    if (payload != null || payload != {}) {
+      updateVenueCalendarService(payload)
+    }
+    else {
+      Snackbar.show({
+        text: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: '#B53849',
+        textColor: 'black',
+        action: {
+          text: 'OK',
+          textColor: 'black',
+          onPress: () => { /* Do something. */ },
+        },
+      });
+    }
+  }
 
+  const updateVenueCalendarService = async (payload) => {
+    const configurationObject = {
+      url: `${BASE_URL}UpdatePaymentDetails`,
+      method: "POST",
+      cancelToken: source.token,
+      data: { ...payload },
+    };
+    try {
+      const response = await axios(
+        configurationObject
+      );
+
+      if (response.data.ResponseCode == "00") {
+        Snackbar.show({
+          text: 'Venue Booked Successfully',
+          duration: Snackbar.LENGTH_LONG,
+          // color:'green'
+        });
+        getData()
+      } else {
+        Snackbar.show({
+          text: response.data.ResponseDesc,
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: '#B53849',
+          textColor: 'black',
+          action: {
+            text: 'OK',
+            textColor: 'black',
+            onPress: () => { /* Do something. */ },
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      Snackbar.show({
+        text: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: '#B53849',
+        textColor: 'black',
+        action: {
+          text: 'OK',
+          textColor: 'black',
+          onPress: () => { /* Do something. */ },
+        },
+      });
+
+    }
+  };
 
   const renderBookings = ({ item }) =>
     <Card containerStyle={styles.cardStyle}>
@@ -436,9 +502,9 @@ const OwnerBookingPage = (props) => {
       <Text style={styles.eventTypes}>{item.EventDate} | {item.EventDay} | {item.EventTime}</Text>
 
       <View style={styles.approvRejButton}>
-        {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'A')}><FontAwesomeIcon icon={faCircleCheck} size={20} color='green' /></TouchableOpacity> : null}
-        {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'R')} ><FontAwesomeIcon icon={faBan} size={20} color='red' /></TouchableOpacity> : null}
-        {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity onPress={() => confirmPayment(item, 'C')} ><Text>Paid</Text></TouchableOpacity> : null}
+        {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'A')}><FontAwesomeIcon icon={faShare} size={20} color='black' /></TouchableOpacity> : null}
+        {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmPayment(item, 'C')} ><FontAwesomeIcon icon={faCircleCheck} size={20} color='black' /></TouchableOpacity> : null}
+        {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'R')} ><FontAwesomeIcon icon={faBan} size={20} color='black' /></TouchableOpacity> : null}
 
       </View>
     </Card>
@@ -448,9 +514,6 @@ const OwnerBookingPage = (props) => {
       <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-
-    
-
       <FlatList
         data={masterData}
         keyExtractor={item => item.BookingID}
@@ -543,17 +606,18 @@ const OwnerBookingPage = (props) => {
       {showBookCompletionModal ? <ConfirmDialog
         title="CONFIRMATION"
         visible={showBookCompletionModal}
+        message="Advance Payment Received? Are you sure you want to BOOK this venue?"
         onTouchOutside={() => { setShowBookCompletionModal(false) }}
-      // positiveButton={{
-      //   title: "YES",
-      //   onPress: () => setShowBookCompletionModal(bookingPayload)
-      // }}
-      // negativeButton={{
-      //   title: "NO",
-      //   onPress: () => setShowBookCompletionModal(false)
-      // }}
+      positiveButton={{
+        title: "YES",
+        onPress: () => submitBookCompletionForm(paidPaymentPayload)
+      }}
+      negativeButton={{
+        title: "NO",
+        onPress: () => setShowBookCompletionModal(false)
+      }}
       >
-        <View>
+        {/* <View>
           <Text>Payment Recieved from the customer?</Text>
           <Formik
             initialValues={initialFormValues}
@@ -595,7 +659,7 @@ const OwnerBookingPage = (props) => {
             }}
 
           </Formik>
-        </View>
+        </View> */}
       </ConfirmDialog> : null}
 
       {showRejectModal ? <ConfirmDialog
@@ -608,7 +672,6 @@ const OwnerBookingPage = (props) => {
         }}
         negativeButton={{
           title: "NO",
-          // onPress: () => {showApproveModal ? setShowApproveModal(false) : setShowRejectModal(false)}
           onPress: () => setShowRejectModal(false)
         }}>
         {showRejectModal ?
