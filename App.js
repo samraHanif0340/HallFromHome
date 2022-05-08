@@ -45,6 +45,8 @@ import SplashScreen from './src/screens/SplashScreen/SplashScreen';
 
 
 import { action, createStore, StoreProvider } from 'easy-peasy';
+import { UserDetailProvider } from './src/contexts/UserDetailsContext';
+
 
 // To see all the requests in the chrome Dev tools in the network tab.
 XMLHttpRequest = GLOBAL.originalXMLHttpRequest ?
@@ -125,8 +127,10 @@ const App: () => Node = () => {
   });
 
   return (
+   
     <PaperProvider theme={theme}>
       <StoreProvider store={store}>
+     
         <NavigationContainer>
           <Stack.Navigator initialRouteName="SplashScreen">
             <Stack.Screen
@@ -165,7 +169,7 @@ const App: () => Node = () => {
         </NavigationContainer>
       </StoreProvider>
     </PaperProvider>
-    // <SearchHall/>
+  
   );
 };
 

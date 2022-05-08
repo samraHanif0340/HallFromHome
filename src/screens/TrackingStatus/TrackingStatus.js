@@ -12,6 +12,7 @@ import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
 import { useStoreState } from 'easy-peasy';
 import Snackbar from 'react-native-snackbar';
+import { getStatusColor } from "../../components/utility/helper";
 
 
 
@@ -130,24 +131,20 @@ const  TrackingStatusPage = (props) => {
       size={32}
       rounded
       title={item.RequestStatus.substr(0, 1).toUpperCase()}
-      containerStyle={{ backgroundColor: 'blue', alignSelf: 'flex-start' }} /> : null }
+      containerStyle={{ backgroundColor: getStatusColor(item.RequestStatus).backgroundColor, alignSelf: 'flex-start' }} /> : null }
     <Text style={styles.venueName}> {item.VenueName}</Text>
-    {item.RequestStatus == 'Approved' ? 
+    {item.RequestStatus == 'Approved' ? <Text style={styles.eventTypesLabel}>(Advance Payment | Deadline)</Text> : null}
+    {item.RequestStatus == 'Approved' ? <Text style={styles.eventTypes}>{item.AdvancePaymentDeadlineDate} - ({item.AdvancePaymentDeadlineTime})</Text>
+     : null }
     <View>
-    <Text style={styles.eventTypesLabel}>(Advance Payment | Deadline)</Text>
-
-    <Text style={styles.bookingUser}>{item.AdvancePaymentDeadlineDate} - ({item.AdvancePaymentDeadlineTime})</Text>
-    </View> : null }
-    <View>
-      <Text style={styles.requestStatus}>({item.RequestStatus})</Text>
+    {/* <Badge containerStyle={styles.badgeTitle} value ={item.RequestStatus} status = {getStatusColor(item.RequestStatus).color}/> */}
       <Text style={styles.eventTypesLabel}>(Date | Day | Shift)</Text>
     </View>
-
     <Text style={styles.eventTypes}>{item.EventDate} | {item.EventDay} | {item.EventTime}</Text>
 
-    <View>
-      <Text>{item.Comment}</Text>
-    </View>
+    {item.Comment ? <View>
+      <Text style={styles.commentStyle}>{item.Comment}</Text>
+    </View> : null}
 
     {/* <View style={styles.approvRejButton}>
       {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'A')}><FontAwesomeIcon icon={faShare} size={20} color='black' /></TouchableOpacity> : null}
@@ -160,11 +157,7 @@ const  TrackingStatusPage = (props) => {
   return (
     <View style={styles.container}>
        <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            <ImageBackground
-                style={styles.rect1}
-                imageStyle={styles.rect1_imageStyle}
-                source={require("../../assets/images/Gradient_MI39RPu.png")}
-            >
+            
       
       <FlatList
         data={masterData}
@@ -193,7 +186,7 @@ const  TrackingStatusPage = (props) => {
         // )}
       />
 
-</ImageBackground>
+
     </View>
 );
 }
@@ -210,7 +203,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: 'space-between',
     shadowColor: 'black',
-    height: 160,
+    height: 180,
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -250,6 +243,12 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold'
   },
+  commentStyle:{
+    fontWeight:'bold',
+    color: 'red',
+    alignSelf:'flex-start',
+    fontSize:14
+  }
 
  
 

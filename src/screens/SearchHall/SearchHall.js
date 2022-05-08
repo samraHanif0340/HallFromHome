@@ -1,31 +1,45 @@
 import React, { Component, useEffect } from "react";
-import { StyleSheet, View, Text, Image, FlatList, ImageBackground, StatusBar, TouchableHighlight, ScrollView } from "react-native";
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
+import { StyleSheet, View, Text, Image, FlatList, ImageBackground, StatusBar, TouchableOpacity, ScrollView } from "react-native";
 import {  Loader } from '../../components/customComponents/customComponents'
-
-import Svg, { Ellipse } from "react-native-svg";
-import EntypoIcon from "react-native-vector-icons/Entypo";
-import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
-import MaterialCommunityIconsIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { SearchBar, Rating, Card } from 'react-native-elements';
-import { TouchableOpacity } from "react-native";
-// import SearchBar from "react-native-dynamic-search-bar";
-import { Avatar, Button, Title, Paragraph } from 'react-native-paper';
-import { Divider } from "react-native-elements";
 import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
 import { useStoreActions } from 'easy-peasy';
+import Snackbar from 'react-native-snackbar';
+import { CalendarComponent } from "../../components/customComponents/customComponents";
+import ImagedCardView from "react-native-imaged-card-view";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faCalendarDays } from '@fortawesome/free-solid-svg-icons'
+
+
+
+var signatures = {
+  JVBERi0: "application/pdf",
+  R0lGODdh: "image/gif",
+  R0lGODlh: "image/gif",
+  iVBORw0KGgo: "image/png",
+  "/9j/": "image/jpg"
+};
+
+function detectMimeType(b64) {
+  for (var s in signatures) {
+    if (b64.indexOf(s) === 0) {
+      return signatures[s];
+    }
+  }
+}
 
 
 function SearchPage(props) {
-  console.log(props)
   const setGlobalStack = useStoreActions((actions) => actions.setStackDetails);
+  const appendPayload = useStoreActions((actions) => actions.appendPayload);
   const [isLoading, setIsLoading] = React.useState(false);
   const [hasError, setErrorFlag] = React.useState(false);
   let [searchText, setSearchText] = React.useState('')
   const [filteredData, setfilteredData] = React.useState([]);
   const [masterData, setmasterData] = React.useState([]);
-  const appendPayload = useStoreActions((actions) => actions.appendPayload);
+  const [showCalendar, setShowCalendar] = React.useState(false)
+  const [markedDates, setMarkedDates] = React.useState({})
   // setGlobalStack({level:0,type:'stack',title:'Home',navigation:props.navigation})
 
 
@@ -58,6 +72,11 @@ function SearchPage(props) {
       if (response.data.ResponseCode == "00") {
         setIsLoading(false);
         if(response.data.Result_DTO){
+          for(let i=0;i<response.data.Result_DTO.length;i++){
+            let mimeType = detectMimeType(response.data.Result_DTO[i].Image)
+            response.data.Result_DTO[i].imageMimeType = mimeType
+          }
+
           setmasterData(response.data.Result_DTO)
           setfilteredData(response.data.Result_DTO)
         }
@@ -109,11 +128,6 @@ function SearchPage(props) {
   //   );
   // }
 
-  // useEffect(() => {
-  //   setGlobalStack({level:0,type:'stack',title:'Home',navigation:props.navigation})
-
-  // });
-
 
   useEffect(() => {
     getData();
@@ -121,7 +135,37 @@ function SearchPage(props) {
     return () => source.cancel("Data fetching cancelled");
   }, []);
 
-
+  const renderHallListing = ({ item }) =>
+    <View style={styles.setImageStyles}>
+      <TouchableOpacity style={styles.setActionsStyles} onPress={()=>{ openCalendar(item.VenueID)}}><FontAwesomeIcon icon={faCalendarDays} size={25} color='black' /></TouchableOpacity>
+      <ImagedCardView
+      onPress={() => {
+        appendPayload({ venueId: item.VenueID });
+        props.navigation.navigate('HallDetails', { VenueID: item.VenueID })
+      }}
+        stars={Number(item.Rating)}
+        ratings={Number(item.Rating)}
+        title={item.VenueName}
+        reviews={item.ReviewCount}
+        titleColor='black'
+        subtitleColor='grey'
+        dividerColor='black'
+        leftSideColor='black'
+        leftSideValueColor='grey'
+        rightSideColor='black'
+        rightSideValueColor='grey'
+        starColor='yellow'
+        rightSideTitle='Price'
+        rightSideValue={Number(item.RentPrice)}
+        subtitle={item.VenueTypeDesc}
+        leftSideTitle='Max Persons'
+        leftSideValue={item.MaxCapacity}
+        backgroundColor="#EADEDB"
+        borderRadius={45}
+        source={item.imageMimeType ? {uri:'data:' + item.imageMimeType + ';base64,'+item.Image} : {uri:item.Image}}
+        
+      />
+    </View> 
 
   const searchFilterFunction = (searchText) => {
     if (searchText) {
@@ -156,58 +200,96 @@ function SearchPage(props) {
     }
   };
 
+  const openCalendar = (venueId) => {
+    console.log(venueId)
+    setShowCalendar(true)
+    getReservedDates(venueId)
+  }
+
+  const getReservedDates = async (venueID) => {
+    let payload = {
+      VenueID: venueID
+    }
+    let configurationObject = {
+      url: `${BASE_URL}GetEventBookedDatesByVenue`,
+      method: "POST",
+      cancelToken: source.token,
+      data: payload,
+    }
+    try {
+      const response = await axios(
+        configurationObject,
+      );
+      if (response.data.ResponseCode === "00") {
+        if(response.data.Result_DTO){
+          let obj = {}
+          // let dateArray = ['2022-05-05', '2022-05-10', '2022-05-26', '2022-05-25','2022-05-06','2022-05-10']
+          let dateArray = response.data.Result_DTO
+          for(let i=0;i<dateArray.length;i++){
+            obj[dateArray[i]] = {
+              disabled: true, color: 'white', disableTouchEvent: true,backgroundColor:'red' ,customStyles:styles.stylesReserved
+            }
+          }
+          setMarkedDates(obj)
+        }
+        return;
+      } else {
+        setMarkedDates([])
+      }
+    } catch (error) {
+      setMarkedDates([])
+    }
+  };
+
   return (
     <View style={styles.container}>
      <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-      <ImageBackground
-        source={require("../../assets/images/Gradient_MI39RPu.png")}
-      >
+
+
         <SearchBar
-          lightTheme
+          darkTheme
           searchIcon={{ size: 25 }}
           placeholder="Search by venue, capacity, price..."
           value={searchText}
           onChangeText={text => searchFilterFunction(text)}
-          containerStyle={styles.searchBar}
+          // containerStyle={styles.searchBar}
           placeholderTextColor="#726F6F"
-          leftIconContainerStyle={styles.searchBar.icon}
+          // leftIconContainerStyle={styles.searchBar.icon}
           // showLoading="true"
-          inputStyle={styles.searchBar.inputStyle}
+          // inputStyle={styles.searchBar.inputStyle}
         />
+              {showCalendar ? <CalendarComponent markedDates={markedDates} parentCallback={()=>setShowCalendar(false)} /> : null}
+
         <ScrollView>
         <FlatList
 
           data={filteredData}
           keyExtractor={item => item.VenueID}
-          renderItem={({ item }) => (
+          renderItem={renderHallListing}
+        />
+{/* {({ item }) => (
             <Card containerStyle={styles.cardStyle}>
-
+              <TouchableHighlight onPress={()=>{ openCalendar(item.VenueID)}}><Text>View Calendar</Text></TouchableHighlight>
 
               <TouchableOpacity activeOpacity={0.2} onPress={() => {
                 appendPayload({ venueId: item.VenueID });
                 props.navigation.navigate('HallDetails', { VenueID: item.VenueID })
               }}>
                 <Image
-                  source={{ uri: item.ImageURL }}
+                source={item.imageMimeType ? {uri:'data:' + item.imageMimeType + ';base64,'+item.Image} : {uri:item.Image}}
                   resizeMode="stretch"
                   style={styles.image}
                 ></Image>
-            
-
               <View style={styles.contentView}>
                 <View style={styles.eachRowContentOne}>
                 <Text style={styles.eachRowContentOne.contentLeft}>{item.VenueName} ({item.VenueTypeDesc})</Text>
-                {/* <Text >PKR {item.RentPrice}</Text> */}
-          
                 </View>            
-
                 <View style={styles.eachRowContentTwo}>
                 <Text >Limit {item.MaxCapacity} Persons</Text>
                 <Text >PKR {item.RentPrice}</Text>
-           
-                <Rating style={styles.eachRowContentTwo.contentRight}
+               <Rating style={styles.eachRowContentTwo.contentRight}
             type="star"
             fractions={1}
             startingValue={item.Rating}         
@@ -217,10 +299,9 @@ function SearchPage(props) {
               </View>
               </TouchableOpacity>
             </Card>
-          )}
-        />
+          )} */}
 </ScrollView>
-      </ImageBackground>
+   
     </View>
   );
 }
@@ -231,6 +312,15 @@ const styles = StyleSheet.create({
     flexDirection:'column',
     justifyContent:'space-between'
 
+  },
+  setImageStyles:{
+    marginTop:10,
+    marginBottom:10,
+  },
+  setActionsStyles:{
+    alignSelf:'flex-end',
+    marginRight:22,
+    marginBottom:8
   },
   cardStyle: {
     // borderColor:'#800000',
@@ -317,6 +407,15 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     flexDirection: "row"
+  },
+  stylesReserved: {
+    container: {
+      backgroundColor: 'red'
+    },
+    text: {
+      color: 'black',
+      fontWeight: 'bold'
+    }
   },
   rect4: {
     width: 285,

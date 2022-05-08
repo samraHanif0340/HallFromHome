@@ -5,11 +5,16 @@ import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
 import { Snackbar } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { SelectCountry } from 'react-native-element-dropdown';
-import { CheckBox } from 'react-native-elements'
+import { CheckBox,Overlay } from 'react-native-elements'
 import { HelperText } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
+import { Calendar} from 'react-native-calendars';
+import moment from 'moment';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faClose } from '@fortawesome/free-solid-svg-icons'
 
 // import AnimatedLoader from "react-native-animated-loader";
 
@@ -54,6 +59,7 @@ const TextField = props => (
   <View>
     <View style={props.textFieldWrapperStyle ? props.textFieldWrapperStyle : styles.textFieldWrapper}>
       {props.nameOfIcon ? <EvilIconsIcon name={props.nameOfIcon} style={styles.icon2} onPress={props.onPress}></EvilIconsIcon> : null}
+   
       {/* <Text style={styles.label}>{props.labelName}</Text> */}
       <TextInput onSubmitEditing={Keyboard.dismiss} style={props.textFieldStyle ? props.textFieldStyle : styles.textField} keyboardType={props.keyboardType ? props.keyboardType : 'default'} placeholder={props.required ? props.placeholder + "*" : props.placeholder} placeholderTextColor={props.placeholderTextColor} defaultValue={props.defaultValue} secureTextEntry={props.secureTextEntry} maxLength={props.maxLength} value={props.value} onChangeText={props.onChangeText} onBlur={props.onBlur} disabled={props.disabled} />
     </View>
@@ -107,9 +113,6 @@ const DateTimePickerComp = (props) =>
       {props.error ? props.error.map((error, key) => <HelperText type="error" style={props.errorMsgStyle ? props.errorMsgStyle : styles.errorMsg} key={key}>{error}</HelperText>) : null}
   </View>
 )
-
-
-
 
 const MultiLineTextInput = (props) => (
   <View>
@@ -179,6 +182,69 @@ const CheckboxField = (props) => (
   </View>
 )
 
+const CalendarComponent = (props) => {
+  const [openOverlay,setShowOverlay] = React.useState(true)
+  console.log(props)
+  const changeSelection = (day) => {
+    let selectedDate = moment(day);
+    selectedDate = selectedDate.format("YYYY-MM-DD");
+    let obj = {
+      EventDate: selectedDate
+    }
+    console.log('DATE IN CUSTOM CALENDAR', obj)
+  }
+
+  const closeCalendar=() =>{
+    setShowOverlay(false)
+    props.parentCallback(false)
+  }
+
+   
+
+  return (
+    <View>
+      <Overlay isVisible={openOverlay} onBackdropPress={()=>closeCalendar()}>
+      {/* <TouchableHighlight onPress={()=>closeCalendar()}><FontAwesomeIcon icon={faClose} size={25} color='black' /></TouchableHighlight>  */}
+      <Calendar
+        hideExtraDays={true}
+        markedDates={props['markedDates']}
+        current={new Date()}
+        minDate={new Date()}
+        onDayPress={day => changeSelection(day.dateString)}
+        markingType={'custom'}
+        theme={{
+          backgroundColor: '#ffffff',
+          calendarBackground: '#ffffff',
+          textSectionTitleColor: '#b6c1cd',
+          selectedDayBackgroundColor: '#00adf5',
+          selectedDayTextColor: '#ffffff',
+          todayTextColor: '#00adf5',
+          dayTextColor: '#2d4150',
+          textDisabledColor: '#d9e1e8',
+          dotColor: '#00adf5',
+          selectedDotColor: '#ffffff',
+          arrowColor: 'red',
+          disabledArrowColor: '#d9e1e8',
+          monthTextColor: 'red',
+          indicatorColor: 'blue',
+          textDayFontFamily: 'monospace',
+          textMonthFontFamily: 'monospace',
+          textDayHeaderFontFamily: 'monospace',
+          textDayFontWeight: '300',
+          textMonthFontWeight: 'bold',
+          textDayHeaderFontWeight: '300',
+          textDayFontSize: 16,
+          textMonthFontSize: 16,
+          textDayHeaderFontSize: 16
+        }}
+      />
+      </Overlay>
+    </View>
+
+  )
+}
+
+
 const Toaster = (props) => {
 
   let [visible, setVisible] = React.useState(false)
@@ -229,4 +295,4 @@ const Loader = (props) => {
 
 
 
-export { TextField, MultiLineTextInput, DropdownField, CheckboxField, DateTimePickerComp, Toaster, Loader };
+export { TextField, MultiLineTextInput, DropdownField, CheckboxField, DateTimePickerComp,CalendarComponent, Toaster, Loader };

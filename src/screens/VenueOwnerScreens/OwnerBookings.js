@@ -16,6 +16,7 @@ import { TextField, DateTimePickerComp } from '../../components/customComponents
 import { Formik } from "formik";
 import * as Yup from "yup";
 import moment from 'moment';
+import {getStatusColor} from '../../components/utility/helper';
 
 const validationSchema = Yup.object().shape({
   AdvancePayment: Yup.string()
@@ -234,7 +235,12 @@ const OwnerBookingPage = (props) => {
       AdvancePaymentDeadlineTime: '11:59 PM',
       ...formData
     }
+
+    let selectedDate = payload.AdvancePaymentDeadlineDate.split('/')
+    let reversedDate = selectedDate.reverse().join("-")
+    payload.AdvancePaymentDeadlineDate = reversedDate
     console.log('SEND ADVANCE PAYMENT PAYLOAD ===',payload)
+
     if (payload != null || payload != {}) {
       sendAdvancePayService(payload)
     }
@@ -414,7 +420,7 @@ const OwnerBookingPage = (props) => {
   const updateVenueCalendar = (paidPaymentData) => {
     let payload = {
       VenueID: paidPaymentData.VenueID,
-      // OwnerID: globalPayload.userId,
+      BookingID: paidPaymentData.BookingID,
       ReserveDate: moment(new Date(paidPaymentData.EventDate)).format('YYYY-MM-DD')
     }
     console.log('UPDATE CALENDAR PAYLOAD===',payload)
@@ -438,7 +444,7 @@ const OwnerBookingPage = (props) => {
 
   const updateVenueCalendarService = async (payload) => {
     const configurationObject = {
-      url: `${BASE_URL}UpdatePaymentDetails`,
+      url: `${BASE_URL}ReserveVenueBooking`,
       method: "POST",
       cancelToken: source.token,
       data: { ...payload },
@@ -488,14 +494,13 @@ const OwnerBookingPage = (props) => {
   const renderBookings = ({ item }) =>
     <Card containerStyle={styles.cardStyle}>
       <Avatar
-        size={32}
-        rounded
+        size={32}      
         title={item.RequestStatus.substr(0, 1).toUpperCase()}
-        containerStyle={{ backgroundColor: 'coral', alignSelf: 'flex-start' }} />
+        containerStyle={{ backgroundColor: getStatusColor(item.RequestStatus).backgroundColor, alignSelf: 'flex-start' }}
+        rounded />
       <Text style={styles.venueName}> {item.VenueName}</Text>
       <Text style={styles.bookingUser}>{item.BookedByUsername} - ({item.ContactNumber})</Text>
       <View>
-        {/* <Text style={styles.requestStatus}>({item.RequestStatus})</Text> */}
         <Text style={styles.eventTypesLabel}>(Date | Day | Shift)</Text>
       </View>
 
@@ -503,7 +508,7 @@ const OwnerBookingPage = (props) => {
 
       <View style={styles.approvRejButton}>
         {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'A')}><FontAwesomeIcon icon={faShare} size={20} color='black' /></TouchableOpacity> : null}
-        {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmPayment(item, 'C')} ><FontAwesomeIcon icon={faCircleCheck} size={20} color='black' /></TouchableOpacity> : null}
+        {item.RequestStatus && item.RequestStatus == 'Approved' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmPayment(item, 'C')} ><FontAwesomeIcon icon={faCircleCheck} size={20} color='black' /></TouchableOpacity> : null}
         {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'R')} ><FontAwesomeIcon icon={faBan} size={20} color='black' /></TouchableOpacity> : null}
 
       </View>
@@ -524,10 +529,7 @@ const OwnerBookingPage = (props) => {
         title="Add Advance Payment"
         visible={showAdvancePayModal}
         onTouchOutside={() => setShowAdvancePayModal(false)}
-        positiveButton={{
-          title: "Send",
-          onPress: () => alert("Ok touched!")
-        }} >
+        >
         <View>
           <ScrollView>
             <Text>Are you sure you want to Approve this customer booking request? Please fill the following details to be notified to the customer</Text>
@@ -716,7 +718,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: 'space-between',
     shadowColor: 'black',
-    height: 160,
+    height: 180,
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 4,

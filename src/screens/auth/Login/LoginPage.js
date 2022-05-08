@@ -12,13 +12,17 @@ import { BASE_URL } from '../../../constants/constants'
 import Toaster, { ToastStyles } from 'react-native-toaster'
 import Snackbar from 'react-native-snackbar';
 import { useStoreActions } from 'easy-peasy';
+// import { faBan } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+
 
 
 const LoginPage = ({ navigation }) => {
-    const [userEmail, setUserEmail] = useState('hallowner@gmail.com');
+    const [userEmail, setUserEmail] = useState('samra.hanif@yahoo.com');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
-    const [userPassword, setUserPassword] = useState('testpassword');
+    const [userPassword, setUserPassword] = useState('admin123456');
     const [loading, setLoading] = useState(false);
     const [errortext, setErrortext] = useState(null);
     const [hasError, setErrorFlag] = React.useState(false);
@@ -87,7 +91,13 @@ const LoginPage = ({ navigation }) => {
             );
             console.log(response)
             if (response.data.ResponseCode === "00") {
-                appendPayload({ userId: response.data.Result_DTO.ID, isVenueOwner: response.data.Result_DTO.IsVenueOwner  });
+                let data = response.data.Result_DTO
+                let userDetails = {
+                    name:data.Name,
+                    mobileNo: data.PhoneNumber,
+                    email:data.EmailAddress
+                } 
+                appendPayload({ userId: response.data.Result_DTO.ID, isVenueOwner: response.data.Result_DTO.IsVenueOwner,userDetails  });
                 setIsLoading(false);
                 // setErrortext({text:'Success',styles:ToastStyles.success})
                 Snackbar.show({
@@ -139,6 +149,10 @@ const LoginPage = ({ navigation }) => {
         }
     };
 
+    const getIcons = () => {
+        return <FontAwesomeIcon icon={faUser} size={20} color='black' />
+    }
+
 
 
     return (
@@ -162,7 +176,7 @@ const LoginPage = ({ navigation }) => {
                         mode="outlined"
                         placeholderTextColor="#800000"
                         //left={<TextInput.Icon nameOfIcon="user" />}
-                        nameOfIcon="user"
+                        nameOfIcon='user'
                         defaultValue={userEmail}
                         maxLength={50}
                         // onSubmitEditing={() =>
