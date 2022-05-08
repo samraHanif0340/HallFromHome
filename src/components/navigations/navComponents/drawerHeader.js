@@ -1,4 +1,4 @@
-import React , {Component} from 'react'
+import React , {Component, useContext} from 'react'
 import {View,Image,StyleSheet} from 'react-native'
 import {
     useTheme,
@@ -11,9 +11,13 @@ import {
     TouchableRipple,
     Switch,
   } from 'react-native-paper';
+import { useStoreState } from 'easy-peasy';
 
-class NavigationHeader extends Component{
-    render(){
+
+
+const NavigationHeader = () => {
+  const globalPayload = useStoreState((state) => state.payload);
+
         return(
             <View style={styles.userInfoSection}>
             <Avatar.Image
@@ -23,13 +27,13 @@ class NavigationHeader extends Component{
               }}
               size={70}
             />
-            <Title style={styles.title}>Samra Hanif</Title>
-            <Caption style={styles.caption}>@samra.hanif@yahoo.com</Caption>
-            <Caption style={styles.caption}>03402042202</Caption>
+            <Title style={styles.title}>{globalPayload?.userDetails?.name}</Title>
+            <Caption style={styles.caption}>@{globalPayload?.userDetails?.email}</Caption>
+            <Caption style={styles.caption}>{globalPayload?.userDetails?.mobileNo}</Caption>
             </View>
       
         )
-    }
+ 
 }
 
 

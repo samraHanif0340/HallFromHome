@@ -11,6 +11,8 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Snackbar from 'react-native-snackbar';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faEye } from "@fortawesome/free-solid-svg-icons";
+import {getStatusColor} from '../../components/utility/helper';
+
 
 
 
@@ -183,7 +185,7 @@ const OwnerDashboard = (props) => {
           size={32}
           rounded
           title={item.RequestStatus.substr(0, 1).toUpperCase()}
-          containerStyle={{ backgroundColor: 'coral',alignSelf:'flex-end' }} />
+          containerStyle={{ backgroundColor:  getStatusColor(item.RequestStatus).backgroundColor,alignSelf:'flex-end' }} />
         <Text style={styles.venueName}> {item.VenueName}</Text>
         <Text style={styles.bookingUser}>{item.BookedByUsername} - ({item.ContactNumber})</Text>    
           <Text style={styles.eventTypesLabel}>(Date | Day | Shift)</Text>

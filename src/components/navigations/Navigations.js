@@ -231,6 +231,7 @@ const SearchHallStack = () => {
       <Stack.Screen   
             name="Home"
             component={SearchPage}
+            // component={SearchByMaps}
             options={{title: 'Home', headerShown: false }}
           />
            <Stack.Screen

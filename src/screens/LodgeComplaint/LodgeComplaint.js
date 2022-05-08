@@ -142,9 +142,9 @@ const LodgeReviewPage = (props) => {
       <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-      <ImageBackground style={styles.container}
+      {/* <ImageBackground style={styles.container}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
-      >
+      > */}
         <View style={styles.titleWrapper}>
           <Text style={styles.title}>Review/Feedback</Text>
         </View>
@@ -214,7 +214,7 @@ const LodgeReviewPage = (props) => {
 
           </Formik>
         </ScrollView>
-      </ImageBackground>
+      {/* </ImageBackground> */}
     </View>
   )
 
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     height: 111
   },
   title: {
-    color: "rgba(248,231,28,1)",
+    color: "#800000",
     fontSize: 40,
     width: 335,
     height: 70,
