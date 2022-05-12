@@ -146,6 +146,10 @@ const  TrackingStatusPage = (props) => {
       <Text style={styles.commentStyle}>{item.Comment}</Text>
     </View> : null}
 
+    {item.RequestStatus == 'C' ? <View>
+      <Text style={[{color:'blue'}]}>Your Requested Venue {item.VenueName} has been booked for {item.EventDate} by{globalPayload.userDetails.name}. The final payment will be required on the Event Day. Enjoy Your Event, MAKE YOUR DAY MEMORABLE </Text>
+    </View> : null}
+
     {/* <View style={styles.approvRejButton}>
       {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'A')}><FontAwesomeIcon icon={faShare} size={20} color='black' /></TouchableOpacity> : null}
       {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmPayment(item, 'C')} ><FontAwesomeIcon icon={faCircleCheck} size={20} color='black' /></TouchableOpacity> : null}

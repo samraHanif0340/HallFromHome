@@ -49,7 +49,7 @@ export const SelectField = props => {
         </Picker>
       </View>
       {/* {props.error ? props.error.map((error) => <Text style={styles.errorMsg}>{error}</Text>) : null} */}
-      {props.error ? props.error.map((error) => <HelperText type="error" style={styles.errorMsg}>{error}</HelperText>) : null}
+      {props.error ? props.error.map((error) => <HelperText type="error" style={props.errorMsgStyle ? props.errorMsgStyle : styles.errorMsg} >{error}</HelperText>) : null}
 
     </View>
   )

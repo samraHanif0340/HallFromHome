@@ -5,9 +5,10 @@ var height = Dimensions.get('window').height;
 
 export const styles = StyleSheet.create({
     headerContainer: {
-
+        backgroundColor:'#800000'
     },
     drawerHeader: {
+        backgroundColor:'#800000',
         borderColor: '#800000',
         shadowColor: '#800000',
         shadowOffset: { width: 1, height: 1 },
@@ -20,7 +21,7 @@ export const styles = StyleSheet.create({
     },
     drawerTitle: {
         flex: 3,
-        color: '#800000',
+        color: 'floralwhite',
         fontWeight: 'bold',
         fontSize: 18,
         textAlign: 'center',

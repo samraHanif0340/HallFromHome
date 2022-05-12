@@ -7,7 +7,7 @@ const getStatusColor = (status) => {
     if (status == 'P' || status == 'Pending') {
       statusDesc = 'Pending'
       statusColor = 'primary'
-       backgroundColor = 'coral'
+      backgroundColor = 'coral'
   
     }
     else if (status == 'A' || status == 'Approved') {
@@ -18,7 +18,7 @@ const getStatusColor = (status) => {
     else if(status == 'R' || status == 'Rejected') {
       statusDesc = 'Rejected'
       statusColor = 'error'
-      backgroundColor = '#AC3F3F'
+      backgroundColor = '#DF2D11'
     }
     else if(status == 'C' || status == 'Completed') {
       statusDesc = 'Booked'

@@ -12,33 +12,23 @@ import Snackbar from 'react-native-snackbar';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import {getStatusColor} from '../../components/utility/helper';
-
-
-
-
 export const SCREEN_WIDTH = Dimensions.get('window').width;
 export const CAROUSEL_VERTICAL_OUTPUT = 56;
 export const CAROUSEL_ITEM_WIDTH = SCREEN_WIDTH - CAROUSEL_VERTICAL_OUTPUT;
 
 const OwnerDashboard = (props) => {
-  // const appendPayload = useStoreActions((actions) => actions.appendPayload);
-  console.log('dashboard', props)
   const source = axios.CancelToken.source();
   const globalPayload = useStoreState((state) => state.payload);
   const setPayload = useStoreActions((actions) => actions.setPayload);
-  const [activeTab, setActiveTab] = React.useState(0)
   const [pendingData, setpendingData] = React.useState([]);
   const [dashboardStats, setDashboardStats] = React.useState([{ id: 1, name: 'Pending', count: 0, icon: "list" }, { id: 2, name: 'Approved', count: 0, icon: "check" }, { id: 3, name: 'Rejected', count: 0, icon: "ban" }]);
-
   const [isLoading, setIsLoading] = React.useState(false);
 
 
 
   React.useEffect(() => {
-
     getDashboardStats()
     getData();
-
   }, []);
 
   const getData = async () => {
@@ -75,11 +65,11 @@ const OwnerDashboard = (props) => {
         Snackbar.show({
           text: response.data.ResponseDesc,
           duration: Snackbar.LENGTH_LONG,
-          backgroundColor: 'black',
-          textColor: 'white',
+          backgroundColor: '#B53849',
+          textColor: 'black',
           action: {
             text: 'OK',
-            textColor: 'white',
+            textColor: 'black',
             onPress: () => { /* Do something. */ },
           },
         });
@@ -91,11 +81,11 @@ const OwnerDashboard = (props) => {
       Snackbar.show({
         text: 'Something Went Wrong',
         duration: Snackbar.LENGTH_LONG,
-        backgroundColor: 'black',
-        textColor: 'white',
+        backgroundColor: '#B53849',
+        textColor: 'black',
         action: {
           text: 'OK',
-          textColor: 'white',
+          textColor: 'black',
           onPress: () => { /* Do something. */ },
         },
       });
@@ -116,6 +106,11 @@ const OwnerDashboard = (props) => {
       );
       if (response.data.ResponseCode == "00") {
         if (response.data.Result_DTO) {
+          for(let i=0;i<response.data.Result_DTO.length;i++){
+            response.data.Result_DTO[i].color = getStatusColor(response.data.Result_DTO[i].name).backgroundColor
+            response.data.Result_DTO[i].name = response.data.Result_DTO[i].name.toUpperCase()
+
+          }
           setDashboardStats(response.data.Result_DTO)
 
         }
@@ -129,49 +124,17 @@ const OwnerDashboard = (props) => {
     }
   };
 
-
-  const goToVenueListPage = () => {
-    props.navigation.navigate('OwnerVenues')
-  }
-
   const goToOwnerBookingPage = () => {
     props.navigation.navigate('OwnerBookings')
   }
 
-
-  const getStatusDescription = (status) => {
-    let statusDesc = 'Pending'
-    let statusColor = 'primary'
-    if (status == 'P') {
-      statusDesc = 'Pending'
-      statusColor = 'primary'
-    }
-    else if (status == 'A') {
-      statusDesc = 'Approved'
-      statusColor = 'success'
-
-    }
-    else {
-      statusDesc = 'Rejected'
-      statusColor = 'error'
-
-    }
-
-    let obj = {
-      statusDecription: statusDesc,
-      color: statusColor
-
-    }
-
-    return obj
-  }
-
   const renderDashboardItem = ({ item }) => (
-    <Card containerStyle={styles.cardChildStyle}>
-      <View style={styles.requestsIcon}>
-        <Icon name={item.icon} size={30} color='black' />
-      </View>
+    <Card containerStyle={[styles.cardChildStyle,{backgroundColor:item.color,opacity:0.7}]}>
+      {/* <View style={styles.requestsIcon}>
+        
+      </View> */}
       <View style={styles.requestsContent}>
+      <Icon rounded name={item.icon} size={25} color='black' />
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={styles.itemCount}>{item.count}</Text>
       </View>
@@ -197,29 +160,21 @@ const OwnerDashboard = (props) => {
   return (
     <View style={styles.container}>
       <Loader isLoading={isLoading} />
-
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-
-
-
-      <View>
-        <Card.Title style={styles.TitleStyling}> Requests And Approvals </Card.Title>
-        <Card.Divider color='black' />
-
+      <View style={styles.cards}>
+        <Card.Title style={styles.TitleStyling}> REQUESTS & APPROVALS </Card.Title>
         <FlatList
           data={dashboardStats}
           renderItem={renderDashboardItem}
           keyExtractor={item => item.id}
-          numColumns={2}
-
+        
         />
       </View>
-      <View>
-        <Text style={styles.TitleStyling}>Recent Bookings</Text>
-        <Card.Divider color='black' />
+      <View style={styles.cards}>
+        <Text style={styles.TitleStyling}>RECENT BOOKINGS</Text>
         <TouchableOpacity style={styles.viewMoreButton} onPress={() => goToOwnerBookingPage()}>
           <View style={styles.viewMoreWrapper}>
-          <FontAwesomeIcon  icon={ faEye } size={ 20 } color='black' />
+          {/* <FontAwesomeIcon  icon={ faEye } size={ 20 } color='black' /> */}
           <Text style={styles.viewMore} >View More</Text>
           </View>
           </TouchableOpacity>
@@ -234,23 +189,6 @@ const OwnerDashboard = (props) => {
         />
       </View>
 
-
-
-      {/* <Card containerStyle={styles.cardParentStyle}>
-            <Card.Title style={styles.TitleStyling}> Your Venues </Card.Title>
-            <TouchableHighlight style={styles.viewMoreButton} onPress={() => goToVenueListPage()}><Text >View More</Text></TouchableHighlight>
-
-            <Card.Divider />
-            <FlatList
-             key={'@'}
-             keyExtractor={item => "@" + item.id}
-              data={pendingData}
-              renderItem={renderRecentBookings}
-             horizontal
-           
-            />
-          </Card> */}
-
     </View>
   );
 }
@@ -258,6 +196,23 @@ const OwnerDashboard = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent:'space-around',
+    backgroundColor: 'white',
+  },
+  cards:{
+    marginLeft:10,
+    marginRight:10,
+    marginBottom:10,
+    marginTop:10,
+    flex:6,
+    borderRadius: 10,
+    backgroundColor:'floralwhite',
+    shadowColor: '#000',
+    height: 50,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 7,
   },
   cardStyle: {
     flex: 1,
@@ -265,13 +220,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: 'space-between',
     shadowColor: '#000',
-    height: 150,
+    height: 180,
     width: 300,
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 7,
-    backgroundColor: '#F5B9AF'
+    backgroundColor: 'white',
+    
   },
  
   venueName:{
@@ -307,7 +263,7 @@ const styles = StyleSheet.create({
     fontSize:16,
     marginLeft:3,
     marginRight:3,
-    color:'black'
+    color:'#800000'
 
   },
   childParents: {
@@ -331,11 +287,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderRadius: 9,
     borderColor: '#DD928E',
-    backgroundColor: '#F5B9AF',
-    shadowColor: 'rgba(157,24,24,0.8)',
+    shadowColor: '#9F9292',
     shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
     elevation: 7,
   },
   itemName: {
@@ -359,17 +314,23 @@ const styles = StyleSheet.create({
   },
 
   itemCount: {
-    fontSize: 16,
+    textAlign:'center',
+    fontSize: 20,
     color: 'black',
     fontWeight: 'bold',
-    borderRadius: 7,
+    borderRadius: 25,
+    backgroundColor:'white',
+    height:30,
+    width:30
 
   },
   requestsIcon: {
     alignSelf: 'center'
   },
   requestsContent: {
-    alignItems: 'center'
+    alignItems: 'center',
+   justifyContent:'space-between',
+   flexDirection:'row',
   },
   viewMoreButton: {
     alignSelf: 'flex-end',

@@ -19,10 +19,10 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 
 const LoginPage = ({ navigation }) => {
-    const [userEmail, setUserEmail] = useState('samra.hanif@yahoo.com');
+    const [userEmail, setUserEmail] = useState('hallowner@gmail.com');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
-    const [userPassword, setUserPassword] = useState('admin123456');
+    const [userPassword, setUserPassword] = useState('testpassword');
     const [loading, setLoading] = useState(false);
     const [errortext, setErrortext] = useState(null);
     const [hasError, setErrorFlag] = React.useState(false);

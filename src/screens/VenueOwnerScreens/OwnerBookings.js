@@ -20,7 +20,7 @@ import {getStatusColor} from '../../components/utility/helper';
 
 const validationSchema = Yup.object().shape({
   AdvancePayment: Yup.string()
-    .min(5, 'Name must be atleast 5 characters long')
+    .min(4, 'Name must be atleast 4 characters long')
     .max(20, 'Name must be atmost 20 characters long')
     .required('Required'),
   AdvancePaymentDeadlineDate: Yup.string()
@@ -139,7 +139,7 @@ const OwnerBookingPage = (props) => {
     console.log('REJECTION PAYLOAD ===',payload)
     if (payload) {
       if (payload.ReqStatus == 'R') {
-        if (!rejectionCommentError) {
+        if (!bookingPayload.RejectionComment) {
           Snackbar.show({
             text: 'Please Add the Rejection Comments',
             duration: Snackbar.LENGTH_LONG,
@@ -280,7 +280,8 @@ const OwnerBookingPage = (props) => {
         });
         setInitialFormValues({AdvancePayment:null,AdvancePaymentDeadlineDate:null,Comment:null})
         setShowAdvancePayModal(false)
-        approveRejectBookingService(bookingPayload)
+        getData()
+        // approveRejectBookingService(bookingPayload)
 
 
       } else {
@@ -421,7 +422,7 @@ const OwnerBookingPage = (props) => {
     let payload = {
       VenueID: paidPaymentData.VenueID,
       BookingID: paidPaymentData.BookingID,
-      ReserveDate: moment(new Date(paidPaymentData.EventDate)).format('YYYY-MM-DD')
+      EventDate: moment(new Date(paidPaymentData.EventDate)).format('YYYY-MM-DD')
     }
     console.log('UPDATE CALENDAR PAYLOAD===',payload)
     if (payload != null || payload != {}) {
@@ -505,6 +506,10 @@ const OwnerBookingPage = (props) => {
       </View>
 
       <Text style={styles.eventTypes}>{item.EventDate} | {item.EventDay} | {item.EventTime}</Text>
+      {item.RejectionComment && item.RequestStatus == 'Rejected' ? <Text style={styles.eventTypes}>{item.RejectionComment}</Text> : null}
+
+
+      
 
       <View style={styles.approvRejButton}>
         {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'A')}><FontAwesomeIcon icon={faShare} size={20} color='black' /></TouchableOpacity> : null}
@@ -619,49 +624,6 @@ const OwnerBookingPage = (props) => {
         onPress: () => setShowBookCompletionModal(false)
       }}
       >
-        {/* <View>
-          <Text>Payment Recieved from the customer?</Text>
-          <Formik
-            initialValues={initialFormValues}
-            validationSchema={validationSchemaBookCompletion}
-            enableReinitialize={true}
-            onSubmit={(values, errors) => submitBookCompletionForm(paidPaymentPayload, values)}>
-            {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValidating }) => {
-
-              const myChangeFunc = (key, val) => {
-                setInitialFormValues({ ...initialFormValues, [key]: val });
-                return handleChange(val)
-              }
-
-              return (
-                <View>
-                  <TextField
-                    placeholder="Comment" textFieldWrapperStyle={styles.textFieldWrapper}
-                    textFieldStyle={styles.textField}
-                    errorMsgStyle={styles.errorMsg}
-                    keyboardType='default'
-                    mode="outlined"
-                    placeholderTextColor="black"
-                    maxLength={300}
-                    onChangeText={(e) => { myChangeFunc('Comment', e) }}
-                    onBlur={handleBlur('Comment')}
-                    value={values.Comment}
-                    error={[errors.Comment]}
-                  />
-
-                  <TouchableOpacity
-                    onPress={handleSubmit}
-                    style={styles.submitButtonWrapper}
-
-                  >
-                    <Text style={styles.submitButtonText}>BOOK</Text>
-                  </TouchableOpacity>
-                </View>
-              )
-            }}
-
-          </Formik>
-        </View> */}
       </ConfirmDialog> : null}
 
       {showRejectModal ? <ConfirmDialog
@@ -723,7 +685,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
-    backgroundColor: '#EADEDB'
+    backgroundColor:'floralwhite',
+    // backgroundColor: '#EADEDB'
 
   },
   approvRejButton: {

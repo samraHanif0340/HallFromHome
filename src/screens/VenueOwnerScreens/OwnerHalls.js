@@ -25,7 +25,6 @@ const  OwnerHallsPage = (props) => {
 
   React.useEffect(() => {
     getData();
-
     return () => source.cancel("Data fetching cancelled");
   }, []);
 
@@ -55,11 +54,11 @@ const  OwnerHallsPage = (props) => {
         Snackbar.show({
           text: response.data.ResponseDesc,
           duration: Snackbar.LENGTH_LONG,
-          backgroundColor: 'black',
-          textColor: 'white',
+          backgroundColor: '#B53849',
+          textColor: 'black',
           action: {
             text: 'OK',
-            textColor: 'white',
+            textColor: 'black',
             onPress: () => { /* Do something. */ },
           },
         });
@@ -71,11 +70,11 @@ const  OwnerHallsPage = (props) => {
       Snackbar.show({
         text: 'Something Went Wrong',
         duration: Snackbar.LENGTH_LONG,
-        backgroundColor: 'black',
-        textColor: 'white',
+        backgroundColor: '#B53849',
+        textColor: 'black',
         action: {
           text: 'OK',
-          textColor: 'white',
+          textColor: 'black',
           onPress: () => { /* Do something. */ },
         },
       });
@@ -83,51 +82,43 @@ const  OwnerHallsPage = (props) => {
     }
   };
 
- 
-
   const addEditHallDetail = () =>{
       props.navigation.push('AddNewVenue')
   }
 
-  const renderHallListing = ({item}) => 
-  <View style={styles.setImageStyles}>
-  <ImagedCardView 
-stars={Number(item.Rating)}
-ratings={Number(item.Rating)}
-title={item.VenueName}
-reviews={item.ReviewCount}
-titleColor='black'
-subtitleColor='grey'
-dividerColor='black'
-leftSideColor='black'
-leftSideValueColor='grey'
-rightSideColor='black'
-rightSideValueColor='grey'
-starColor='yellow'
-rightSideTitle = 'Price'
-rightSideValue={Number(item.RentPrice)}
-subtitle={item.VenueTypeDesc}
-leftSideTitle='Max Persons'
-leftSideValue={item.MaxCapacity}
-backgroundColor="#EADEDB"
-borderRadius={45}
-source={
-require('../../assets/images/download2.jpg')
-}
-/>
- </View>   
+  const renderHallListing = ({ item }) =>
+    <View style={styles.setImageStyles}>
+      <ImagedCardView
+        stars={Number(item.Rating)}
+        ratings={Number(item.Rating)}
+        title={item.VenueName}
+        reviews={item.ReviewCount}
+        titleColor='black'
+        subtitleColor='grey'
+        dividerColor='black'
+        leftSideColor='black'
+        leftSideValueColor='grey'
+        rightSideColor='black'
+        rightSideValueColor='grey'
+        starColor='yellow'
+        rightSideTitle='Price'
+        rightSideValue={Number(item.RentPrice)}
+        subtitle={item.VenueTypeDesc}
+        leftSideTitle='Max Persons'
+        leftSideValue={item.MaxCapacity}
+        backgroundColor="#EADEDB"
+        borderRadius={45}
+        source={
+          require('../../assets/images/download2.jpg')
+        }
+      />
+    </View>   
 
- 
   return (
     <View style={styles.container}>
       <Loader isLoading={isLoading} />
        <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            {/* <ImageBackground
-                
-                style={styles.rect1}
-                imageStyle={styles.rect1_imageStyle}
-                source={require("../../assets/images/Gradient_MI39RPu.png")}
-            > */}
+
      <FlatList
         data={masterData}
         keyExtractor={item => item.VenueID}
@@ -141,9 +132,6 @@ require('../../assets/images/download2.jpg')
           icon={{ name: 'add', color: 'white' }}
           color="maroon"
         />}  
-
-{/* </ImageBackground> */}
-
     </View>
 );
 }

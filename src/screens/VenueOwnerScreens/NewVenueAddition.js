@@ -4,16 +4,10 @@ import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handl
 
 import { Formik, useFormikContext, useFormik } from "formik";
 import * as Yup from "yup";
-
 import { TextField, SelectField, Loader } from '../../components/customComponents/customComponents'
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
-import Snackbar from 'react-native-snackbar';
-import { Avatar } from "react-native-elements";
-import moment from 'moment';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { useStoreState,useStoreActions } from 'easy-peasy';
-import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 
 const source = axios.CancelToken.source();
@@ -35,7 +29,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^[0][3][\d]{9}$/, 'Mobile Number should be in format 03xxxxxxxxx')
     .required('Required'),
 
-  MaxCapacity: Yup.string()
+    MaxCapacity: Yup.string()
     .min(2,'Capacity must be 2 digit long')
     .max(7,'Capacity must be atmost 7 digits long')
     .required('Required'),
@@ -76,24 +70,10 @@ const NewVenueAdditionPage = (props) => {
   const [isLoading, setIsLoading] = React.useState(false)
   const [showCalendar, setShowCalendar] = React.useState(false)
   const [markedDates, setMarkedDates] = React.useState({})
-
-  const [shiftList, setShiftList] = React.useState([{label:'Day',value:1}])
-  const [VenueType, setVenueType] = React.useState([
-    {label:'Banquet',value:'Banquet',enable:false},
-    {label:'Fixed Marquee',value:'Fixed Marquee',enable:true},
-    {label:'Hall Indoor',value:'Hall Indoor',enable:true},
-    {label:'Outdoor Lawn',value:'Outdoor Lawn',enable:false}
-
-  ])
-  const [City, setCity] = React.useState([
-    {label:'Karachi',value:'Karachi',enable:true}
-
-  ])
-
-  const [AreaDropdown, setAreaDropdown] = React.useState([
-    {label:'Karachi',value:'Karachi',enable:true}
-
-  ])
+  const [shiftList, setShiftList] = React.useState([])
+  const [VenueType, setVenueType] = React.useState([])
+  const [City, setCity] = React.useState([])
+  const [AreaDropdown, setAreaDropdown] = React.useState([])
 
   const [initialFormValues, setInitialFormValues] = React.useState({
     VenueName: 'Sample Banquet 1',
@@ -109,11 +89,8 @@ const NewVenueAdditionPage = (props) => {
     CityId: '',
     AreaId:''
   })
-  // const [EventDate, setEventDate] = React.useState('')
-  // const [venueID, setVenueID] = React.useState(route.params.venueID)
   const appendPayload = useStoreActions((actions) => actions.appendPayload);
   const globalPayload = useStoreState((state) => state.payload);
-
 
   React.useEffect(() => {
     getTimesDropdown()
@@ -123,7 +100,6 @@ const NewVenueAdditionPage = (props) => {
   }, [])
 
   const getTimesDropdown = async () => {
-
     let configurationObject = {
       url: `${BASE_URL}GetShiftTimeLOV`,
       method: "GET",
@@ -148,6 +124,7 @@ const NewVenueAdditionPage = (props) => {
 
     }
   };
+
   const getVenueTypeDropdown = async () => {
     let configurationObject = {
       url: `${BASE_URL}GetVenueTypeList`,
@@ -170,6 +147,7 @@ const NewVenueAdditionPage = (props) => {
       setVenueType([])
     }
   };
+
   const getCityDropdown = async () => {
     let configurationObject = {
       url: `${BASE_URL}GetCityList`,
@@ -195,6 +173,7 @@ const NewVenueAdditionPage = (props) => {
 
     }
   };
+
   const getAreaDropdown = async () => {
     let configurationObject = {
       url: `${BASE_URL}GetAreaList`,
@@ -221,7 +200,6 @@ const NewVenueAdditionPage = (props) => {
     }
   };
 
-
   const submitForm = (formData) => {
     // goToPicsAdditionPage()
 
@@ -238,70 +216,6 @@ const NewVenueAdditionPage = (props) => {
    
   }
 
-  const saveData = async (data) => {
-    let formData = Object.assign({}, data)
-    let configurationObject = {
-      url: `${BASE_URL}VenueBooking`,
-      method: "POST",
-      cancelToken: source.token,
-      // data: { ...formData, CateringID : globalPayload.addons.CateringID, VenueID: globalPayload.venueId, userId: globalPayload.userId },
-    }
-    // navigation.navigate('BookingConfirm')
-
-    console.log('in save data')
-    try {
-      setIsLoading(true);
-      const response = await axios(
-        configurationObject,
-      );
-      if (response.data.ResponseCode === "00") {
-        setIsLoading(false);
-        Snackbar.show({
-          text: response.data.ResponseDesc,
-          duration: Snackbar.LENGTH_LONG,
-        });
-        setInitialFormValues({ VenueName: '',
-        POCName:'',
-        ContactNumber:'',
-        MaxCapacity: '',
-        RentPrice: '',
-        Longitude: '',
-        Latitude: '',
-        Shift: '',
-        Address: '',
-        CityId: '',
-        AreaId:'',
-        VenueTypeId: ''})
-        setMarkedDates({})
-        navigation.navigate('BookingConfirm')
-        return;
-      } else {
-        setIsLoading(false);
-        Snackbar.show({
-          text: response.data.ResponseDesc,
-          duration: Snackbar.LENGTH_LONG,
-          action: {
-            text: 'OK',
-            textColor: 'white',
-            onPress: () => { /* Do something. */ },
-          },
-        });
-      }
-    } catch (error) {
-      setIsLoading(false);
-      Snackbar.show({
-        text: 'Something Went Wrong',
-        duration: Snackbar.LENGTH_LONG,
-        action: {
-          text: 'OK',
-          textColor: 'white',
-          onPress: () => { /* Do something. */ },
-        },
-      });
-
-    }
-  };
-
   const goToPicsAdditionPage = () =>{
     props.navigation.push('VenuePicVideos')
   }
@@ -311,13 +225,13 @@ const NewVenueAdditionPage = (props) => {
       <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-      <ImageBackground style={styles.container}
+      {/* <ImageBackground style={styles.container}
         source={require("../../assets/images/Gradient_MI39RPu.png")}
-      >
+      > */}
         <View style={styles.titleWrapper}>
           <Text style={styles.title}>Add New Venue</Text>
         </View>
-        <ScrollView keyboardShouldPersistTaps='handled'>
+        <ScrollView style={styles.scrollView} keyboardShouldPersistTaps='handled'>
           <Formik
             initialValues={initialFormValues}
             validationSchema={validationSchema}
@@ -333,6 +247,8 @@ const NewVenueAdditionPage = (props) => {
               return (
                 <View>
                   <TextField
+  
+                   errorMsgStyle={styles.errorMsg}
                     placeholder="Venue Name" style={styles.labelText}
                     keyboardType='default'
                     mode="outlined"
@@ -345,6 +261,7 @@ const NewVenueAdditionPage = (props) => {
                     error={[errors.VenueName]}
                   />
                    <SelectField 
+                    errorMsgStyle={styles.errorMsg}
                     placeholder="Please Select Venue Type" 
                     items={VenueType} 
                     value={values.VenueTypeId} 
@@ -354,6 +271,7 @@ const NewVenueAdditionPage = (props) => {
                     mode="dialog" /> 
 
                      <SelectField 
+                      errorMsgStyle={styles.errorMsg}
                    placeholder="Please Select City" 
                     items={City} 
                     value={values.CityId} 
@@ -363,6 +281,7 @@ const NewVenueAdditionPage = (props) => {
                     mode="dialog" /> 
 
                     <SelectField 
+                     errorMsgStyle={styles.errorMsg}
                     placeholder="Please Select Area" 
                     items={AreaDropdown} 
                     value={values.AreaId} 
@@ -372,6 +291,8 @@ const NewVenueAdditionPage = (props) => {
                     mode="dialog" /> 
 
                     <TextField
+          
+                     errorMsgStyle={styles.errorMsg}
                     placeholder="Address" style={styles.labelText}
                     keyboardType='default'
                     mode="outlined"
@@ -384,6 +305,8 @@ const NewVenueAdditionPage = (props) => {
                     error={[errors.Address]}
                   />
                   <TextField
+       
+                   errorMsgStyle={styles.errorMsg}
                     placeholder="Longitude" style={styles.labelText}
                     keyboardType='phone-pad'
                     mode="outlined"
@@ -396,6 +319,8 @@ const NewVenueAdditionPage = (props) => {
                     error={[errors.Longitude]}
                   />
                   <TextField
+
+                   errorMsgStyle={styles.errorMsg}
                     placeholder="Latitude" style={styles.labelText}
                     keyboardType='phone-pad'
                     mode="outlined"
@@ -408,6 +333,8 @@ const NewVenueAdditionPage = (props) => {
                     error={[errors.Latitude]}
                   />
                    <TextField
+
+                    errorMsgStyle={styles.errorMsg}
                     placeholder="MaxCapacity" style={styles.labelText}
                     keyboardType='phone-pad'
                     mode="outlined"
@@ -420,6 +347,8 @@ const NewVenueAdditionPage = (props) => {
                     error={[errors.MaxCapacity]}
                   />
                    <TextField
+
+                    errorMsgStyle={styles.errorMsg}
                     placeholder="Rent Price" style={styles.labelText}
                     keyboardType='phone-pad'
                     mode="outlined"
@@ -432,6 +361,7 @@ const NewVenueAdditionPage = (props) => {
                     error={[errors.RentPrice]}
                   />
                   <SelectField 
+                   errorMsgStyle={styles.errorMsg}
                    placeholder="Please Select Shifts" 
                     items={shiftList} 
                     value={values.Shift} 
@@ -441,6 +371,8 @@ const NewVenueAdditionPage = (props) => {
                     mode="dialog" /> 
 
                   <TextField
+
+                   errorMsgStyle={styles.errorMsg}
                     placeholder="POC Name" style={styles.labelText}
                     keyboardType='default'
                     mode="outlined"
@@ -454,6 +386,8 @@ const NewVenueAdditionPage = (props) => {
                   />
 
                   <TextField
+                   
+                   errorMsgStyle={styles.errorMsg}
                     placeholder="POC Number" style={styles.labelText}
                     keyboardType='phone-pad'
                     mode="outlined"
@@ -479,7 +413,7 @@ const NewVenueAdditionPage = (props) => {
 
           </Formik>
         </ScrollView>
-      </ImageBackground>
+      {/* </ImageBackground> */}
     </View>
   )
 }
@@ -489,6 +423,19 @@ const NewVenueAdditionPage = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent:'space-around',
+    backgroundColor: 'white',
+  },
+  scrollView:{
+   
+    // borderRadius: 10,
+    // backgroundColor:'floralwhite',
+    // shadowColor: '#000',
+    // height: 50,
+    // shadowOffset: { width: 1, height: 1 },
+    // shadowOpacity: 0.3,
+    // shadowRadius: 4,
+    // elevation: 7,
   },
   titleWrapper: {
     width: 278,
@@ -497,7 +444,7 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   title: {
-    color: "rgba(248,231,28,1)",
+    color: "black",
     fontSize: 40,
     width: 335,
     height: 70,
@@ -559,6 +506,32 @@ const styles = StyleSheet.create({
       color: 'black',
       fontWeight: 'bold'
     }
+  },
+  textFieldWrapper: {
+    height: 60,
+    backgroundColor: "rgba(255,255,255,1)",
+    Opacity: 0.2,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: "black",
+    marginRight: 20,
+    marginLeft: 20,
+    marginTop: 10,
+    marginBottom: 10
+  },
+  textField: {
+    height: 40,
+    fontSize: 15,
+    color: "black",
+    marginLeft: 5,
+    marginBottom: 5
+  },
+  errorMsg: {
+    color: 'red',
+    marginRight: 20,
+    marginLeft: 20,
+    fontSize: 11,
+    fontStyle: 'italic',
   },
 
 })

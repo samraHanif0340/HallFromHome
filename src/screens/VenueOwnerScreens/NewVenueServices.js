@@ -173,10 +173,10 @@ const NewVenueServicesPage = (props) => {
         <View style={styles.container}>
 <Loader isLoading={isLoading} />
             <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            <ImageBackground style={styles.container}
+            {/* <ImageBackground style={styles.container}
                 source={require("../../assets/images/Gradient_MI39RPu.png")}
 
-            >
+            > */}
               <View style={styles.titleWrapper}>
             <Text style={styles.title}>Venue Services</Text>
             
@@ -339,7 +339,7 @@ const NewVenueServicesPage = (props) => {
             </ScrollView>
    
 
-            </ImageBackground>
+            {/* </ImageBackground> */}
         </View>
     );
 }
@@ -348,6 +348,7 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
+        backgroundColor: 'white',
         
     },
     titleWrapper: {
