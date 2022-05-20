@@ -4,13 +4,13 @@ const getStatusColor = (status) => {
   let statusColor = 'primary'
   let backgroundColor = 'coral'
   if(status){
-    if (status == 'P' || status == 'Pending') {
+    if (status == 'P' || status == 'Pending' || status == 'Pending Bookings')  {
       statusDesc = 'Pending'
       statusColor = 'primary'
       backgroundColor = 'coral'
   
     }
-    else if (status == 'A' || status == 'Approved') {
+    else if (status == 'A' || status == 'Approved' || status == 'Successfully Booked') {
       statusDesc = 'Approved'
       statusColor = 'success'
       backgroundColor = '#1E9E4D'
@@ -40,4 +40,21 @@ const getStatusColor = (status) => {
 
 }
 
-export {getStatusColor}
+const Signatures = {
+  JVBERi0: "application/pdf",
+  R0lGODdh: "image/gif",
+  R0lGODlh: "image/gif",
+  iVBORw0KGgo: "image/png",
+  "/9j/": "image/jpg"
+};
+
+const detectMimeType = (b64) => {
+  for (var s in Signatures) {
+    if (b64.indexOf(s) === 0) {
+      return Signatures[s];
+    }
+  }
+}
+
+
+export {getStatusColor,detectMimeType,Signatures}

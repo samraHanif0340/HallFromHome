@@ -11,6 +11,7 @@ import { Loader } from '../../components/customComponents/customComponents'
 import { useStoreState } from 'easy-peasy';
 import Snackbar from 'react-native-snackbar';
 import ImagedCardView from "react-native-imaged-card-view";
+import { detectMimeType } from "../../components/utility/helper";
 
 
 
@@ -44,6 +45,11 @@ const  OwnerHallsPage = (props) => {
       if (response.data.ResponseCode == "00") {
         setIsLoading(false);
         if (response.data.Result_DTO) {
+          for(let i=0;i<response.data.Result_DTO.length;i++){
+            let mimeType = response.data.Result_DTO[i].Image ? detectMimeType(response.data.Result_DTO[i].Image) : null
+            response.data.Result_DTO[i].imageMimeType = mimeType
+          }
+
           setmasterData(response.data.Result_DTO)
         }
 
@@ -108,9 +114,10 @@ const  OwnerHallsPage = (props) => {
         leftSideValue={item.MaxCapacity}
         backgroundColor="#EADEDB"
         borderRadius={45}
-        source={
-          require('../../assets/images/download2.jpg')
-        }
+        source={item.imageMimeType ? {uri:'data:' + item.imageMimeType + ';base64,'+item.Image} : {uri:item.Image}}
+        // source={
+        //   require('../../assets/images/download2.jpg')
+        // }
       />
     </View>   
 

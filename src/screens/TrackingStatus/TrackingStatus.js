@@ -1,18 +1,14 @@
-import React, { Component } from "react";
+import React from "react";
 import { StyleSheet, View, Text, Image, FlatList, TouchableHighlight,StatusBar,ImageBackground } from "react-native";
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
-import { SearchBar, Rating } from 'react-native-elements';
-import { TouchableOpacity } from "react-native";
-import {  Button, Title, Paragraph} from 'react-native-paper';
-import { Divider, Card } from "react-native-elements";
-import { Avatar, Badge, withBadge } from 'react-native-elements';
-// import SearchBar from "react-native-dynamic-search-bar";
-import {ListItem, Icon } from 'react-native-elements'
+import {  Card } from "react-native-elements";
+import { Avatar} from 'react-native-elements';
 import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
 import { useStoreState } from 'easy-peasy';
 import Snackbar from 'react-native-snackbar';
 import { getStatusColor } from "../../components/utility/helper";
+import { Loader} from '../../components/customComponents/customComponents'
+
 
 
 
@@ -20,51 +16,7 @@ const  TrackingStatusPage = (props) => {
   const source = axios.CancelToken.source();
   const globalPayload = useStoreState((state) => state.payload);
   const [isLoading, setIsLoading] = React.useState(false)
-  const [masterData, setmasterData] = React.useState([{
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    TrackingStatus: 'success',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Modern Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    TrackingStatus: 'success',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name\n Samra Hanif for 24 December 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Ayan Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    status: 'Approved',
-    TrackingStatus: 'success',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Diamond Palace",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    TrackingStatus: 'success',
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  },
-  {
-    hallName: "Majestic Banquet",
-    userName: 'Samra Hanif',
-    pricePaid: "PKR 150000",
-    TrackingStatus: 'success',
-    status: 'Approved',
-    setReservation: "Reserved",
-    comments: 'Your venue has been booked under name Samra Hanif for 24 October 2021 timing should be 6pm - 10pm'
-  }]);
+  const [masterData, setmasterData] = React.useState([]);
 
   React.useEffect(() => {
     getData();
@@ -137,7 +89,6 @@ const  TrackingStatusPage = (props) => {
     {item.RequestStatus == 'Approved' ? <Text style={styles.eventTypes}>{item.AdvancePaymentDeadlineDate} - ({item.AdvancePaymentDeadlineTime})</Text>
      : null }
     <View>
-    {/* <Badge containerStyle={styles.badgeTitle} value ={item.RequestStatus} status = {getStatusColor(item.RequestStatus).color}/> */}
       <Text style={styles.eventTypesLabel}>(Date | Day | Shift)</Text>
     </View>
     <Text style={styles.eventTypes}>{item.EventDate} | {item.EventDay} | {item.EventTime}</Text>
@@ -149,57 +100,27 @@ const  TrackingStatusPage = (props) => {
     {item.RequestStatus == 'C' ? <View>
       <Text style={[{color:'blue'}]}>Your Requested Venue {item.VenueName} has been booked for {item.EventDate} by{globalPayload.userDetails.name}. The final payment will be required on the Event Day. Enjoy Your Event, MAKE YOUR DAY MEMORABLE </Text>
     </View> : null}
-
-    {/* <View style={styles.approvRejButton}>
-      {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'A')}><FontAwesomeIcon icon={faShare} size={20} color='black' /></TouchableOpacity> : null}
-      {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmPayment(item, 'C')} ><FontAwesomeIcon icon={faCircleCheck} size={20} color='black' /></TouchableOpacity> : null}
-      {!item.RequestStatus || item.RequestStatus == 'Pending' ? <TouchableOpacity style={{ marginRight: 4 }} onPress={() => confirmApproveRejectBooking(item, 'R')} ><FontAwesomeIcon icon={faBan} size={20} color='black' /></TouchableOpacity> : null}
-
-    </View> */}
   </Card>
  
   return (
     <View style={styles.container}>
-       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            
-      
+       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />         
+       <Loader isLoading={isLoading} />
       <FlatList
         data={masterData}
         keyExtractor={item => item.BookingID}
         renderItem={renderBookings}
-        // renderItem={({ item }) => (
-        //   <Card containerStyle={styles.cardStyle}>
-        //     <View style={styles.imageStackStack}>
-        //     <View style={styles.imageStack}>
-        //     <Card.Title style = {styles.cardTitle}> {item.VenueName}</Card.Title>
-        //     </View>
-        //     <View>
-        //     <Badge containerStyle={styles.badgeTitle} value ={item.RequestStatus} status ='primary'/>
-        //     </View>
-        //     <View style={styles.loremIpsum2Stack}>
-        //       <Text style={styles.cardPricePaid} h4>{item.AdvancePayment}</Text>
-        //       <Text>{item.AdvancePaymentDeadlineDate} | {item.AdvancePaymentDeadlineTime}</Text>
-        //     </View>
-        //     <View>
-        //       <Text style={styles.commentStyle} h4>{item.Comment}</Text>
-        //     </View>
-           
-        //   </View>
-          
-        // </Card>
-        // )}
       />
-
-
     </View>
 );
 }
 
 const styles = StyleSheet.create({
-
-
   container: {
     flex: 1,
+    justifyContent:'space-between',
+    flexDirection:'column',
+    backgroundColor:'white'
   },
   cardStyle: {
     flex: 1,
@@ -207,37 +128,18 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: 'space-between',
     shadowColor: 'black',
-    height: 180,
+    height: 190,
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
-    backgroundColor: '#EADEDB'
+    backgroundColor: 'floralwhite'
 
-  },
-  approvRejButton: {
-    marginTop: 2,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignSelf: 'flex-end',
   },
   venueName: {
     fontSize: 18,
     color: 'black',
     fontWeight: 'bold'
-  },
-
-  bookingUser: {
-    color: 'grey',
-    fontStyle: 'italic',
-    fontSize: 16
-
-  },
-  requestStatus: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    fontStyle: 'italic',
-    color: 'orange'
   },
   eventTypes: {
     alignSelf: 'flex-end'
@@ -253,10 +155,6 @@ const styles = StyleSheet.create({
     alignSelf:'flex-start',
     fontSize:14
   }
-
- 
-
- 
 });
 
 export default TrackingStatusPage;

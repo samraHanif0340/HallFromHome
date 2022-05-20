@@ -3,12 +3,14 @@ import { StyleSheet, View, StatusBar, ImageBackground, SafeAreaView, Text, Image
 import { Loader } from '../../components/customComponents/customComponents'
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
-import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import DocumentPicker from 'react-native-document-picker';
 var RNFS = require('react-native-fs');
 import { useStoreState, useStoreActions } from 'easy-peasy';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
+import Snackbar from 'react-native-snackbar';
+
 
 const source = axios.CancelToken.source();
 const HallVideoPicturesPage = (props) => {
@@ -29,7 +31,15 @@ const HallVideoPicturesPage = (props) => {
       appendPayload({ ImageList: ImageList });
       goToInternalServicesPage()
     } else {
-      alert('Please Select File first');
+      Snackbar.show({
+        text: 'Please Select a File',
+        duration: Snackbar.LENGTH_LONG,
+        action: {
+          text: 'OK',
+          textColor: 'white',
+          onPress: () => { /* Do something. */ },
+        },
+      });
     }
   };
 
@@ -92,9 +102,7 @@ const HallVideoPicturesPage = (props) => {
         <TouchableOpacity onPress={handleDocumentSelection} style={styles.uploadFileWrapper}>
           <Text style={styles.uploadFileIcon}><FontAwesomeIcon icon={faFileUpload} size={100} color='#800000' /></Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={uploadDocument} style={styles.selectFileButton}>
-          <Text style={styles.selectFileText}>Upload</Text>
-        </TouchableOpacity>
+        
         {filesArray != null && filesArray.length > 0 ? <Text style={styles.pictureListTitle}>Pictures List</Text> : null}
         {
           filesArray != null && filesArray.length > 0 ? filesArray.map((file, index) => (
@@ -111,6 +119,10 @@ const HallVideoPicturesPage = (props) => {
 
             </>
           )) : null}
+
+        <TouchableOpacity onPress={uploadDocument} style={styles.selectFileButton}>
+          <Text style={styles.selectFileText}>Upload</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </View>
   );
@@ -176,7 +188,7 @@ const styles = StyleSheet.create({
   pictureListTitle: {
     fontSize: 20,
     textAlign: 'center',
-    color: 'rgba(248,231,28,1)'
+    color: 'black'
   },
   ImageDisplayContainer: {
     flexDirection: 'row',
@@ -189,9 +201,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
-    backgroundColor: '#EADEDB',
-    marginLeft: 10,
-    marginRight: 10
+    backgroundColor: 'floralwhite',
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop:10
   },
   uploadedImage: {
     width: 100,

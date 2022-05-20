@@ -5,9 +5,12 @@ import { MultiLineTextInput, SelectField, Loader, TextField } from '../../compon
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
 import Snackbar from 'react-native-snackbar';
+import { AirbnbRating, Rating } from "react-native-elements";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useStoreState } from 'easy-peasy';
+import { HelperText } from 'react-native-paper';
+
 
 const source = axios.CancelToken.source();
 
@@ -29,7 +32,7 @@ const LodgeReviewPage = (props) => {
 
   const [isLoading, setIsLoading] = React.useState(false)
   const [initialFormValues, setInitialFormValues] = React.useState({
-    VenueID: null,
+    VenueID: '',
     Rating: '',
     ReviewText: '',
   })
@@ -142,9 +145,6 @@ const LodgeReviewPage = (props) => {
       <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-      {/* <ImageBackground style={styles.container}
-        source={require("../../assets/images/Gradient_MI39RPu.png")}
-      > */}
         <View style={styles.titleWrapper}>
           <Text style={styles.title}>Review/Feedback</Text>
         </View>
@@ -165,17 +165,18 @@ const LodgeReviewPage = (props) => {
               const mySelectFunc = (key, val) => {
                 console.log(key, val)
                 setInitialFormValues({ ...initialFormValues, [key]: val });
-                // return handleChange(val)
               }
 
               return (
                 <View>
-                  <SelectField items={venueList} value={values.VenueID} 
+                  <SelectField 
+                   errorMsgStyle={styles.errorMsg}
+                  items={venueList} value={values.VenueID} 
                   onChange={(e) => { mySelectFunc('VenueID', e) }} 
                   error={[errors.VenueID]} 
-                  nameOfIcon="envelope" mode="dialog"  pleaseSelectPlaceholder="Select Venue"/>
+                  nameOfIcon="envelope" mode="dialog"  placeholder="Select Venue"/>
 
-                  <TextField
+                  {/* <TextField
                     placeholder="Rating" style={styles.labelText}
                     keyboardType='phone-pad'
                     mode="outlined"
@@ -186,9 +187,27 @@ const LodgeReviewPage = (props) => {
                     onBlur={handleBlur('Rating')}
                     value={values.Rating}
                     error={[errors.Rating]}
+                  /> */}
+                <View style={styles.rating}>
+                  <Text style={styles.rating.ratingLabel}>Ratings:</Text>
+                <View style={styles.rating.ratingStar}>
+                <Rating
+                    type="custom"
+                    ratingColor='#800000'
+                    count={5}
+                    defaultRating = {initialFormValues.Rating}
+                    onFinishRating={(rating) => myChangeFunc('Rating', rating.toString())}
                   />
+                {errors.Rating ? <HelperText type="error" style={styles.errorMsg} >{errors.Rating}</HelperText> : null}
+
+                </View>
+                
+                </View>
+               
+
                   <MultiLineTextInput
-                    placeholder="Review" style={styles.labelText}
+                   errorMsgStyle={styles.errorMsg}
+                    placeholder="Enter Review .." style={styles.labelText}
                     keyboardType='default'
                     mode="outlined"
                     placeholderTextColor="#800000"
@@ -214,7 +233,6 @@ const LodgeReviewPage = (props) => {
 
           </Formik>
         </ScrollView>
-      {/* </ImageBackground> */}
     </View>
   )
 
@@ -223,13 +241,15 @@ const LodgeReviewPage = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent:'space-between',
+    flexDirection:'column'
   },
   titleWrapper: {
     width: 278,
     height: 111
   },
   title: {
-    color: "#800000",
+    color: "black",
     fontSize: 40,
     width: 335,
     height: 70,
@@ -239,7 +259,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     alignContent: "center",
     textAlign: "center",
-    //fontFamily: "dancing-script-regular",
     marginBottom: 28
   },
   submitButtonWrapper: {
@@ -259,6 +278,28 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: "center"
   },
+  rating:{
+    height: 59,
+    backgroundColor: "rgba(255,255,255,1)",
+    Opacity: 0.2,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: "rgba(157,24,24,0.8)",
+    flexDirection: "row",
+    margin:20,
+    flexDirection:'row',
+    ratingLabel:{
+      margin: 15,
+      alignSelf:'flex-start',
+      height: 50,
+      fontSize: 15,
+      color: "#800000",
+    },
+    ratingStar:{
+      fontSize:16,
+      marginTop:8
+    }
+  },
   eventDetails: {
     marginRight: 20,
     marginLeft: 20,
@@ -270,6 +311,13 @@ const styles = StyleSheet.create({
     height: 50,
     color: "rgba(255,255,255,1)",
     marginTop: 14,
+  },
+  errorMsg: {
+    color: 'red',
+    marginRight: 20,
+    marginLeft: 20,
+    fontSize: 11,
+    fontStyle: 'italic',
   },
   eventChilds: {
     flex: 6,

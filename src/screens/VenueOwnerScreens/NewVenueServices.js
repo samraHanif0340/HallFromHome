@@ -9,7 +9,7 @@ import Carousel from 'react-native-snap-carousel';
 import { Card } from 'react-native-elements'
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import axios from 'axios';
-import { BASE_URL } from '../../constants/constants'
+import { BASE_URL,ERROR_MESSAGES } from '../../constants/constants'
 import Snackbar from 'react-native-snackbar';
 import { CheckBox, Icon } from 'react-native-elements';
 // import { Checkbox } from 'react-native-paper';
@@ -147,9 +147,11 @@ const NewVenueServicesPage = (props) => {
           Snackbar.show({
             text: response.data.ResponseDesc,
             duration: Snackbar.LENGTH_LONG,
+            backgroundColor: '#B53849',
+            textColor: 'black',
             action: {
               text: 'OK',
-              textColor: 'white',
+              textColor: 'black',
               onPress: () => { /* Do something. */ },
             },
           });
@@ -157,13 +159,15 @@ const NewVenueServicesPage = (props) => {
       } catch (error) {
         setIsLoading(false);
         Snackbar.show({
-          text: 'Something Went Wrong',
+          text: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
           duration: Snackbar.LENGTH_LONG,
-          action: {
-            text: 'OK',
-            textColor: 'white',
-            onPress: () => { /* Do something. */ },
-          },
+          backgroundColor: '#B53849',
+        textColor: 'black',
+        action: {
+          text: 'OK',
+          textColor: 'black',
+          onPress: () => { /* Do something. */ },
+        },
         });
   
       }
@@ -205,9 +209,9 @@ const NewVenueServicesPage = (props) => {
              <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Segregation"
-            textStyle = {{fontSize: 20,color:'maroon'}}
+            textStyle = {styles.CheckBoxTextStyle}
             checked={initialFormValues.Segregation}
-            checkedColor="red"
+            checkedColor="black"
             onPress={(e) => myCheckBoxFunc('Segregation', !initialFormValues.Segregation)}
          
           />
@@ -215,9 +219,9 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Projector"
-            textStyle = {{fontSize: 20,color:'maroon'}}
+            textStyle = {styles.CheckBoxTextStyle}
             checked={initialFormValues.Projector}
-            checkedColor="red"
+            checkedColor="black"
             onPress={(e) => myCheckBoxFunc('Projector', !initialFormValues.Projector)}
          
           />
@@ -225,9 +229,9 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Stage Decoration"
-            textStyle = {{fontSize: 20,color:'maroon'}}
+            textStyle = {styles.CheckBoxTextStyle}
             checked={initialFormValues.Stage_Decoration}
-            checkedColor="red"
+            checkedColor="black"
             onPress={(e) => myCheckBoxFunc('Stage_Decoration', !initialFormValues.Stage_Decoration)}
          
           />
@@ -236,9 +240,9 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Waitress"
-            textStyle = {{fontSize: 20,color:'maroon'}}
+            textStyle = {styles.CheckBoxTextStyle}
             checked={initialFormValues.Waitress}
-            checkedColor="red"
+            checkedColor="black"
             onPress={(e) => myCheckBoxFunc('Waitress', !initialFormValues.Waitress)}
          
           />
@@ -246,9 +250,9 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Wifi"
-            textStyle = {{fontSize: 20,color:'maroon'}}
+            textStyle = {styles.CheckBoxTextStyle}
             checked={initialFormValues.Wifi}
-            checkedColor="red"
+            checkedColor="black"
             onPress={(e) => myCheckBoxFunc('Wifi', !initialFormValues.Wifi)}
          
           />
@@ -256,9 +260,9 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Music System"
-            textStyle = {{fontSize: 20,color:'maroon'}}
+            textStyle = {styles.CheckBoxTextStyle}
             checked={initialFormValues.Music_System}
-            checkedColor="red"
+            checkedColor="black"
             onPress={(e) => myCheckBoxFunc('Music_System', !initialFormValues.Music_System)}
          
           />
@@ -266,9 +270,9 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Special Lights"
-            textStyle = {{fontSize: 20,color:'maroon'}}
+            textStyle = {styles.CheckBoxTextStyle}
             checked={initialFormValues.SpecialLights}
-            checkedColor="red"
+            checkedColor="black"
             onPress={(e) => myCheckBoxFunc('SpecialLights', !initialFormValues.SpecialLights)}
          
           />
@@ -276,25 +280,27 @@ const NewVenueServicesPage = (props) => {
 <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="Air Condition"
-            textStyle = {{fontSize: 20,color:'maroon'}}
+            textStyle = {styles.CheckBoxTextStyle}
             checked={initialFormValues.Air_Condition}
-            checkedColor="red"
+            checkedColor="black"
             onPress={(e) => myCheckBoxFunc('Air_Condition', !initialFormValues.Air_Condition)}
          
           />
 
-<CheckBox containerStyle = {styles.CheckboxWrapper}
+          <CheckBox containerStyle = {styles.CheckboxWrapper}
             left
             title="DJ"
-            textStyle = {{fontSize: 20,color:'maroon'}}
+            textStyle = {styles.CheckBoxTextStyle}
             checked={initialFormValues.DJ}
-            checkedColor="red"
+            checkedColor="black"
             onPress={(e) => myCheckBoxFunc('DJ', !initialFormValues.DJ)}
          
           />
 
-<TextField
-                    placeholder="Website URL (If any)" style={styles.labelText}
+                <TextField
+                    placeholder="Website URL (If any)"  
+                    textFieldWrapperStyle={styles.textFieldWrapper}
+                    textFieldStyle={styles.textField}
                     keyboardType='default'
                     mode="outlined"
                     placeholderTextColor="#800000"
@@ -306,8 +312,10 @@ const NewVenueServicesPage = (props) => {
                     error={[errors.Website]}
                   />
 
-<TextField
-                    placeholder="Facebook Page URL (If any)" style={styles.labelText}
+                <TextField
+                textFieldWrapperStyle={styles.textFieldWrapper}
+                textFieldStyle={styles.textField}
+                    placeholder="Facebook Page URL (If any)" 
                     keyboardType='default'
                     mode="outlined"
                     placeholderTextColor="#800000"
@@ -358,7 +366,7 @@ const styles = StyleSheet.create({
       textAlign: "center"
     },
     title: {
-      color: "rgba(248,231,28,1)",
+      color: "black",
       fontSize: 40,
       width: 335,
       height: 70,
@@ -426,15 +434,10 @@ const styles = StyleSheet.create({
         content: {
             fontSize: 20,
            // color: 'rgba(157,24,24,0.8)',
-           color: 'black'
-            
-          
-        }
-       
+           color: 'black'         
+        }       
     },
-  
-    leftAlign: {
-       
+    leftAlign: {      
         backgroundColor:'purple',
         borderRadius: 7,
             shadowColor: 'black',
@@ -444,17 +447,10 @@ const styles = StyleSheet.create({
             elevation: 10,
            
     },
-    rightAlign: {
-      
+    rightAlign: {   
       backgroundColor:'green'
     },
-    title: {
-        fontSize: 24,
-        fontFamily: 'cursive',
-        color: 'rgba(157,24,24,0.8)',
-        alignItems: 'center',
-        alignSelf: 'center'
-    },
+
     subTitle: {
         fontSize: 14,
         fontStyle: 'italic',
@@ -470,41 +466,47 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     heading: {
-        //color:'floralwhite',
         color: 'black',
         backgroundColor:'black',
         fontSize: 16
     },
-    titleWrapper: {
-      width: 278,
-      height: 111
-    },
     CheckboxWrapper: {
-      width: 370,
-      borderColor:'maroon',
+      width: 350,
+      borderColor:'rgba(157,24,24,0.8)',
     borderWidth:2,
       backgroundColor:'white',
       borderRadius: 5,
-      alignItems:'flex-start',
-      alignSelf: 'center',
+      alignSelf: 'flex-start',
       height: 60,
-      
+      marginRight: 20,
+      marginLeft:20
+    },
+    CheckBoxTextStyle : {
+      fontSize: 15,
+      color:'#800000',
+      marginLeft : 20
+    },
+    textFieldWrapper: {
+      height: 59,
+      backgroundColor: "rgba(255,255,255,1)",
+      Opacity: 0.2,
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: "rgba(157,24,24,0.8)",
+      flexDirection: "row",
+      marginRight: 22,
+      marginLeft: 22,
+      marginTop:5
     
-    },
-    title: {
-      color: "rgba(248,231,28,1)",
-      fontSize: 40,
-      width: 335,
-      height: 70,
-      flex: 1,
-      fontFamily: "cursive",
-      marginLeft: 10,
-      marginTop: 30,
-      alignContent: "center",
-      textAlign: "center",
-      //fontFamily: "dancing-script-regular",
-      marginBottom: 28
-    },
+  },
+  textField: {
+      flex: 8,
+      height: 50,
+      fontSize: 15,
+      color: "#800000",
+      marginTop: 4,
+  },
+
     checkAvailability: {
         backgroundColor: "rgba(142,7,27,1)",
         marginLeft: 45,

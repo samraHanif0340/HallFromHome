@@ -35,20 +35,15 @@ export const SelectField = props => {
   return (
     <View>
       <View style={styles.selectFieldWrapper}>
-        {/* <Text style={styles.selectLabel}>{props.labelName}</Text> */}
         {props.nameOfIcon ? <EvilIconsIcon name={props.nameOfIcon} style={styles.icon2}></EvilIconsIcon> : null}
         <Picker style={styles.selectField} mode={props.mode} placeholder={props.placeholder} selectedValue={props.value} onValueChange={props.onChange}>
           <Picker.Item label={props.placeholder} value='' enabled={true} />
           {props.items.map(item => (
-            // <Picker.Item key={item.VenueID} label={item.VenueName} value={item.VenueID} enabled={item.enable}
-            // />
-
             <Picker.Item key={item.value} label={item.label} value={item.value} enabled={item.enable}
             />
           ))}
         </Picker>
       </View>
-      {/* {props.error ? props.error.map((error) => <Text style={styles.errorMsg}>{error}</Text>) : null} */}
       {props.error ? props.error.map((error) => <HelperText type="error" style={props.errorMsgStyle ? props.errorMsgStyle : styles.errorMsg} >{error}</HelperText>) : null}
 
     </View>
@@ -121,7 +116,7 @@ const MultiLineTextInput = (props) => (
       {/* <Text style={styles.label}>{props.labelName}</Text> */}
       <TextInput style={styles.textField} multiline numberOfLines={props.numberOfLines} keyboardType={props.keyboardType ? props.keyboardType : 'default'} placeholder={props.placeholder} placeholderTextColor={props.placeholderTextColor} defaultValue={props.defaultValue} secureTextEntry={props.secureTextEntry} maxLength={props.maxLength} value={props.value} onChangeText={props.onChangeText} onBlur={props.onBlur} />
     </View>
-    {props.error ? props.error.map((error, key) => <HelperText style={styles.errorMsg} key={key}>{error}</HelperText>) : null}
+    {props.error ? props.error.map((error, key) => <HelperText style={props.errorMsgStyle ? props.errorMsgStyle : styles.errorMsg} key={key}>{error}</HelperText>) : null}
   </View>
 )
 

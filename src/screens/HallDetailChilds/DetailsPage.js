@@ -1,14 +1,17 @@
 import React, { Component, useEffect } from "react";
-import { StyleSheet, View, Text, StatusBar, ImageBackground, Image, Dimensions, ScrollView, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, StatusBar, ImageBackground, Image, Dimensions, ScrollView, TouchableOpacity ,FlatList} from "react-native";
 import { Divider } from 'react-native-paper';
 import {Card} from 'react-native-elements'
 import axios from 'axios';
 import { BASE_URL } from '../../constants/constants'
+import {detectMimeType} from '../../components/utility/helper'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import Carousel, { Pagination, ParallaxImage } from 'react-native-snap-carousel';
+import Accordion from 'react-native-collapsible/Accordion';
+import * as Animatable from 'react-native-animatable';
 
 
 const IS_ANDROID = Platform.OS === 'android';
@@ -19,9 +22,19 @@ const SCREEN_HEIGHT = Dimensions.get('window').height
 
 
 // import SearchBar from "react-native-dynamic-search-bar";
-
+const SECTIONS = [
+  {
+    title: 'Pictures',
+    content: 'Lorem ipsum. pictures..',
+  },
+  {
+    title: 'Details',
+    content: 'Lorem ipsum. details..',
+  },
+];
 function DetailOfHallPage(props) {
   console.log(props)
+  const [activeSections,setActiveSections] = React.useState([])
   const [sliderActive, setSliderActive] = React.useState(SLIDER_1_FIRST_ITEM)
   const [showDetails, setShowDetails] = React.useState(false)
 
@@ -60,6 +73,47 @@ function DetailOfHallPage(props) {
     data: { venueID: props.venueID },
   };
 
+  const updateSections = (activeSections) => {
+    console.log('active tabs,',activeSections)
+    setActiveSections(activeSections);
+  };
+
+  const _renderHeader = (section) => {
+    return (
+      <View style={styles.header}>
+        <Text style={styles.headerText}>{section.title}</Text>
+      </View>
+    );
+  };
+
+  const _renderContent = (section) => {
+    console.log(section)
+    return (
+      <View style={styles.content}>
+        {activeSections && activeSections[0] === 0 ? 
+       
+        <Text>Pictures page</Text>
+        : 
+        <Text>DetailsPage</Text>}
+      </View>
+    );
+  };
+
+  const renderPictures = ({item}) => {
+    return(
+      <Image source={item.mimeType ? {uri:'data:' + item.mimeType + ';base64,'+item.Image} : {uri:item.Image}} />
+
+    )
+  }
+
+  const _renderSectionTitle = (section) => {
+    return (
+      <View style={styles.content}>
+        <Text>{section.content}</Text>
+      </View>
+    );
+  };
+
   const getData = async () => {
     try {
       setIsLoading(true);
@@ -68,15 +122,21 @@ function DetailOfHallPage(props) {
       );
       if (response.data.ResponseCode === "00") {
         setIsLoading(false);
+        let images = []
+        for(let i=0;i<response.data.Result_DTO.ImageList.length;i++){
+          let obj = {}
+          obj.mimeType = response.data.Result_DTO['ImageList'][i] ? detectMimeType(response.data.Result_DTO['ImageList'][i]) : null
+          obj.Image = response.data.Result_DTO['ImageList'][i] ? response.data.Result_DTO['ImageList'][i] : null
+          images.push(obj) 
+        }
+        response.data.Result_DTO.Images = images
+        console.log('image added check',response.data.Result_DTO)
         setDetail(response.data.Result_DTO)
         return;
       } else {
-        // throw new Error("Failed to fetch users");
       }
     } catch (error) {
-      // handle error
       setIsLoading(false)
-
     }
   };
 
@@ -90,7 +150,7 @@ function DetailOfHallPage(props) {
     return (
       <View style={styles.item}>
         <ParallaxImage
-          source={{ uri: item.ImageURL }}
+          source={item.mimeType ? {uri:'data:' + item.mimeType + ';base64,'+item.Image} : {uri:item.Image}}
           containerStyle={styles.imageContainer}
           style={styles.image}
           parallaxFactor={0.6}
@@ -106,21 +166,35 @@ function DetailOfHallPage(props) {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-      <ImageBackground
-        style={styles.rect1}
-        imageStyle={styles.rect1_imageStyle}
-        source={require("../../assets/images/Gradient_MI39RPu.png")}
-      >
+    
         <View style={styles.container}>
+        {/* <Accordion
+        sections={SECTIONS}
+        activeSections={activeSections}
+        renderSectionTitle={_renderSectionTitle}
+        renderHeader={_renderHeader}
+        renderContent={_renderContent}
+        onChange={updateSections}
+      /> */}
+
+
+
+
+
+
+<FlatList
+         data={detail.Images}
+        keyExtractor={item => item.Image}
+        renderItem={renderPictures} /> 
           <TouchableOpacity style={styles.viewWrapper} onPress={() => setShowDetails(!showDetails)}>
             {showDetails ? <Text style={styles.viewWrapper.content}>Hide Details</Text> : <Text style={styles.viewWrapper.content}>View Details</Text>}
             </TouchableOpacity>
+            
           <Carousel
-            // ref={carouselRef}
             sliderWidth={SCREEN_WIDTH}
             sliderHeight={SCREEN_HEIGHT - 5}
             itemWidth={SCREEN_WIDTH - 20}
-            data={pictures}
+            data={detail.Images}
             renderItem={_renderItemWithParallax}
             hasParallaxImages={true}
             onSnapToItem={(index) => setSliderActive(index)}
@@ -128,9 +202,8 @@ function DetailOfHallPage(props) {
           />
 
           <Pagination
-            dotsLength={pictures.length}
+            dotsLength={detail?.Images?.length}
             activeDotIndex={sliderActive}
-            // containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
             dotStyle={{
               width: 10,
               height: 10,
@@ -188,7 +261,7 @@ function DetailOfHallPage(props) {
             </Card>
 
           </ScrollView>  : null}
-      </ImageBackground>
+     
     </View>
   );
 }

@@ -26,16 +26,12 @@ const styles = StyleSheet.create({
   
     textFieldWrapper: {
         height: 59,
-        //backgroundColor: "rgba(251,247,247,0.25)",
         backgroundColor: "rgba(255,255,255,1)",
         Opacity: 0.2,
         borderRadius: 5,
         borderWidth: 2,
-        //borderColor: "rgba(255,255,255,0.3)",
         borderColor: "rgba(157,24,24,0.8)",
         flexDirection: "row",
-
-        // flex:1,
         marginRight: 20,
         marginLeft: 20,
         marginTop: 10,

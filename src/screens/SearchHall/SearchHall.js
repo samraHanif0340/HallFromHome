@@ -1,7 +1,7 @@
 import React, { Component, useEffect } from "react";
 import { StyleSheet, View, Text, Image, FlatList, ImageBackground, StatusBar, TouchableOpacity, ScrollView } from "react-native";
-import {  Loader } from '../../components/customComponents/customComponents'
-import { SearchBar, Rating, Card } from 'react-native-elements';
+import { Loader } from '../../components/customComponents/customComponents'
+import { SearchBar, Rating, Card, Overlay } from 'react-native-elements';
 import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
 import { useStoreActions } from 'easy-peasy';
@@ -9,9 +9,20 @@ import Snackbar from 'react-native-snackbar';
 import { CalendarComponent } from "../../components/customComponents/customComponents";
 import ImagedCardView from "react-native-imaged-card-view";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faCalendarDays } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarDays, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { ConfirmDialog } from 'react-native-simple-dialogs';
+import { Formik } from "formik";
+import * as Yup from "yup";
 
-
+const validationSchema = Yup.object().shape({
+  AdvancePayment: Yup.string()
+    .min(4, 'Name must be atleast 4 characters long')
+    .max(20, 'Name must be atmost 20 characters long')
+    .required('Required'),
+  AdvancePaymentDeadlineDate: Yup.string()
+    .required('Required'),
+  Comment: Yup.string(),
+});
 
 var signatures = {
   JVBERi0: "application/pdf",
@@ -40,6 +51,10 @@ function SearchPage(props) {
   const [masterData, setmasterData] = React.useState([]);
   const [showCalendar, setShowCalendar] = React.useState(false)
   const [markedDates, setMarkedDates] = React.useState({})
+  const [showFilterModal,setShowFilterModal] = React.useState(false)
+  const [initialFormValues, setInitialFormValues] = React.useState({})
+  const [paymentPayload, setPaymentPayload] = React.useState(null);
+
   // setGlobalStack({level:0,type:'stack',title:'Home',navigation:props.navigation})
 
 
@@ -56,7 +71,7 @@ function SearchPage(props) {
     props.navigation.addListener('focus',
       () => {
         console.log('focus is called from SEARCH');
-        setGlobalStack({level:0,type:'stack',title:'Home',navigation:props.navigation})
+        setGlobalStack({ level: 0, type: 'stack', title: 'Home', navigation: props.navigation })
         //your logic here.
       }
     );
@@ -71,8 +86,8 @@ function SearchPage(props) {
 
       if (response.data.ResponseCode == "00") {
         setIsLoading(false);
-        if(response.data.Result_DTO){
-          for(let i=0;i<response.data.Result_DTO.length;i++){
+        if (response.data.Result_DTO) {
+          for (let i = 0; i < response.data.Result_DTO.length; i++) {
             let mimeType = detectMimeType(response.data.Result_DTO[i].Image)
             response.data.Result_DTO[i].imageMimeType = mimeType
           }
@@ -90,26 +105,26 @@ function SearchPage(props) {
           backgroundColor: 'black',
           textColor: 'white',
           action: {
-              text: 'OK',
-              textColor: 'white',
-              onPress: () => { /* Do something. */ },
+            text: 'OK',
+            textColor: 'white',
+            onPress: () => { /* Do something. */ },
           },
-      });
+        });
       }
     } catch (error) {
       setmasterData([])
       setfilteredData([])
-        setIsLoading(false);
-        Snackbar.show({
-          text: 'Something Went Wrong',
-          duration: Snackbar.LENGTH_LONG,
-          backgroundColor: 'black',
+      setIsLoading(false);
+      Snackbar.show({
+        text: 'Something Went Wrong',
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: 'black',
+        textColor: 'white',
+        action: {
+          text: 'OK',
           textColor: 'white',
-          action: {
-              text: 'OK',
-              textColor: 'white',
-              onPress: () => { /* Do something. */ },
-          },
+          onPress: () => { /* Do something. */ },
+        },
       });
     }
   };
@@ -131,18 +146,17 @@ function SearchPage(props) {
 
   useEffect(() => {
     getData();
-
     return () => source.cancel("Data fetching cancelled");
   }, []);
 
   const renderHallListing = ({ item }) =>
     <View style={styles.setImageStyles}>
-      <TouchableOpacity style={styles.setActionsStyles} onPress={()=>{ openCalendar(item.VenueID)}}><FontAwesomeIcon icon={faCalendarDays} size={25} color='black' /></TouchableOpacity>
+     
       <ImagedCardView
-      onPress={() => {
-        appendPayload({ venueId: item.VenueID });
-        props.navigation.navigate('HallDetails', { VenueID: item.VenueID })
-      }}
+        onPress={() => {
+          appendPayload({ venueId: item.VenueID });
+          props.navigation.navigate('HallDetails', { VenueID: item.VenueID })
+        }}
         stars={Number(item.Rating)}
         ratings={Number(item.Rating)}
         title={item.VenueName}
@@ -161,11 +175,12 @@ function SearchPage(props) {
         leftSideTitle='Max Persons'
         leftSideValue={item.MaxCapacity}
         backgroundColor="#EADEDB"
-        borderRadius={45}
-        source={item.imageMimeType ? {uri:'data:' + item.imageMimeType + ';base64,'+item.Image} : {uri:item.Image}}
-        
+        borderRadius={35}
+        source={item.imageMimeType ? { uri: 'data:' + item.imageMimeType + ';base64,' + item.Image } : { uri: item.Image }}
+
       />
-    </View> 
+       <TouchableOpacity style={styles.setActionsStyles} onPress={() => { openCalendar(item.VenueID) }}><FontAwesomeIcon icon={faCalendarDays} size={25} color='black' /></TouchableOpacity>
+    </View>
 
   const searchFilterFunction = (searchText) => {
     if (searchText) {
@@ -175,21 +190,21 @@ function SearchPage(props) {
           const vName = item.VenueName
             ? item.VenueName.toUpperCase()
             : ''.toUpperCase();
-            const vType = item.VenueTypeDesc
+          const vType = item.VenueTypeDesc
             ? item.VenueTypeDesc.toUpperCase()
             : ''.toUpperCase();
-            const vRent = item.RentPrice
+          const vRent = item.RentPrice
             ? item.RentPrice
             : 0
-            // const vMaxCap = item.MaxCapacity
-            // ? item.MaxCapacity.toString() : "0"
-            const vRating = item.Rating
+          // const vMaxCap = item.MaxCapacity
+          // ? item.MaxCapacity.toString() : "0"
+          const vRating = item.Rating
             ? item.Rating
             : 0
-          const textData =  hasNumber.test(searchText) ? searchText :  searchText.toUpperCase();
-          return (vName.indexOf(textData) > -1 
-          || vType.indexOf(textData) > -1 || 
-          vRent.indexOf(textData) > -1
+          const textData = hasNumber.test(searchText) ? searchText : searchText.toUpperCase();
+          return (vName.indexOf(textData) > -1
+            || vType.indexOf(textData) > -1 ||
+            vRent.indexOf(textData) > -1
           )
         });
       setfilteredData(newData);
@@ -204,6 +219,10 @@ function SearchPage(props) {
     console.log(venueId)
     setShowCalendar(true)
     getReservedDates(venueId)
+  }
+
+  const openFilters = () => {
+    setShowFilterModal(true)
   }
 
   const getReservedDates = async (venueID) => {
@@ -221,13 +240,13 @@ function SearchPage(props) {
         configurationObject,
       );
       if (response.data.ResponseCode === "00") {
-        if(response.data.Result_DTO){
+        if (response.data.Result_DTO) {
           let obj = {}
           // let dateArray = ['2022-05-05', '2022-05-10', '2022-05-26', '2022-05-25','2022-05-06','2022-05-10']
           let dateArray = response.data.Result_DTO
-          for(let i=0;i<dateArray.length;i++){
+          for (let i = 0; i < dateArray.length; i++) {
             obj[dateArray[i]] = {
-              disabled: true, color: 'white', disableTouchEvent: true,backgroundColor:'red' ,customStyles:styles.stylesReserved
+              disabled: true, color: 'white', disableTouchEvent: true, backgroundColor: 'red', customStyles: styles.stylesReserved
             }
           }
           setMarkedDates(obj)
@@ -243,65 +262,84 @@ function SearchPage(props) {
 
   return (
     <View style={styles.container}>
-     <Loader isLoading={isLoading} />
-
+      <Loader isLoading={isLoading} />
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-
-
+      <View style={styles.filters}>
         <SearchBar
-          darkTheme
+          round
+          lightTheme
           searchIcon={{ size: 25 }}
           placeholder="Search by venue, capacity, price..."
           value={searchText}
           onChangeText={text => searchFilterFunction(text)}
-          // containerStyle={styles.searchBar}
-          placeholderTextColor="#726F6F"
-          // leftIconContainerStyle={styles.searchBar.icon}
-          // showLoading="true"
-          // inputStyle={styles.searchBar.inputStyle}
+          containerStyle={styles.searchBar.container}
+          placeholderTextColor="black"
+          inputContainerStyle={styles.searchBar.inputContainer}
+        inputStyle={styles.searchBar.input}
+        leftIconContainerStyle={styles.searchBar.leftIcon}
         />
-              {showCalendar ? <CalendarComponent markedDates={markedDates} parentCallback={()=>setShowCalendar(false)} /> : null}
+        <TouchableOpacity style={styles.searchFilterButton} onPress={() => openFilters() }><FontAwesomeIcon icon={faFilter} size={25} color='#800000' /></TouchableOpacity>
+        
+        {showFilterModal ? 
+        // <Overlay isVisible={showFilterModal} onBackdropPress={()=>setShowFilterModal(false)}>
+        <ConfirmDialog
+        title="Filters"
+        visible={showFilterModal}
+        onTouchOutside={() => setShowFilterModal(false)}
+        >
+        <View>
+          <ScrollView>
+            <Text>Select the filter options</Text>
+            <Formik
+              initialValues={initialFormValues}
+              validationSchema={validationSchema}
+              enableReinitialize={true}
+              onSubmit={(values, errors) => applyFilters(paymentPayload, values)}>
+              {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValidating }) => {
 
-        <ScrollView>
+                const myChangeFunc = (key, val) => {
+                  setInitialFormValues({ ...initialFormValues, [key]: val });
+                  return handleChange(val)
+                }
+
+                return (
+                  <View>
+                    <Text>Inside Filter</Text>
+                    <TouchableOpacity
+                      onPress={handleSubmit}
+                      style={styles.submitButtonWrapper}
+
+                    >
+                      <Text style={styles.submitButtonText}>APPLY FILTER</Text>
+                    </TouchableOpacity>
+                  </View>
+                )
+              }}
+
+            </Formik>
+          </ScrollView>
+        </View>
+
+      </ConfirmDialog> 
+      // </Overlay>
+      : null}
+      
+      </View>
+
+
+      <View>
+        <Text>Inside Maps</Text>
+        <Image source={{uri: require('../../assets/images/maps.png')}}/>
+      </View>
+      {showCalendar ? <CalendarComponent markedDates={markedDates} parentCallback={() => setShowCalendar(false)} /> : null}
+
+      <ScrollView>
         <FlatList
-
           data={filteredData}
           keyExtractor={item => item.VenueID}
           renderItem={renderHallListing}
         />
-{/* {({ item }) => (
-            <Card containerStyle={styles.cardStyle}>
-              <TouchableHighlight onPress={()=>{ openCalendar(item.VenueID)}}><Text>View Calendar</Text></TouchableHighlight>
-
-              <TouchableOpacity activeOpacity={0.2} onPress={() => {
-                appendPayload({ venueId: item.VenueID });
-                props.navigation.navigate('HallDetails', { VenueID: item.VenueID })
-              }}>
-                <Image
-                source={item.imageMimeType ? {uri:'data:' + item.imageMimeType + ';base64,'+item.Image} : {uri:item.Image}}
-                  resizeMode="stretch"
-                  style={styles.image}
-                ></Image>
-              <View style={styles.contentView}>
-                <View style={styles.eachRowContentOne}>
-                <Text style={styles.eachRowContentOne.contentLeft}>{item.VenueName} ({item.VenueTypeDesc})</Text>
-                </View>            
-                <View style={styles.eachRowContentTwo}>
-                <Text >Limit {item.MaxCapacity} Persons</Text>
-                <Text >PKR {item.RentPrice}</Text>
-               <Rating style={styles.eachRowContentTwo.contentRight}
-            type="star"
-            fractions={1}
-            startingValue={item.Rating}         
-            imageSize={12}        
-          />
-                </View>
-              </View>
-              </TouchableOpacity>
-            </Card>
-          )} */}
-</ScrollView>
-   
+      </ScrollView>
     </View>
   );
 }
@@ -309,84 +347,135 @@ function SearchPage(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection:'column',
-    justifyContent:'space-between'
-
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    backgroundColor:'white',
   },
-  setImageStyles:{
-    marginTop:10,
-    marginBottom:10,
+  filters: {
+    flexDirection: 'row',
+    backgroundColor:'white',
+    justifyContent:'space-around',
   },
-  setActionsStyles:{
-    alignSelf:'flex-end',
-    marginRight:22,
-    marginBottom:8
+  searchBar:{
+    container:{
+      flex: 10,
+      alignSelf:'flex-start',
+      alignItems:'center',
+      backgroundColor:'white',
+      borderColor:'white'
+    },
+    inputContainer:{
+      backgroundColor:'#DEDDDD',
+     
+    },
+    input:{
+      fontFamily:'times new roman',
+      fontSize:13,
+      opacity:0.5,
+      color:'black',
+      fontStyle:'italic'
+    },
+    leftIcon:{
+      color:'black',
+    }
+  },
+  searchFilterButton: {
+    flex: 2,
+    textAlign:'center', 
+    position:'absolute',
+    top:20,
+    right:20,
+    borderShadow: 'white',
+    elevation:7,
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 5,
+  
+  },
+  setImageStyles: {
+    marginTop: 20,
+    marginBottom: 20,
+    marginHorizontal:10,
+    // backgroundColor:'floralwhite',
+    // borderShadow: 'white',
+    // elevation:7,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 1, height: 1 },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 4,
+    // elevation: 5,
+    // height:250
+  },
+  setActionsStyles: {
+    alignSelf: 'flex-end',
+    marginRight: 22,
+    marginBottom: 8 ,
+    position:'absolute',
+    top:15,
+    right:2
   },
   cardStyle: {
-    // borderColor:'#800000',
-    // borderWidth:3,
     borderRadius: 6,
     shadowColor: '#000',
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5,
-    flexDirection:'column',
-    justifyContent:"space-between",
-    backgroundColor:'rgba(222,206,206,1)', 
+    flexDirection: 'column',
+    justifyContent: "space-between",
+    backgroundColor: 'floralwhite',
   },
 
-  contentView:{
-    flexDirection:'column',
-    justifyContent:'space-around'
+  contentView: {
+    flexDirection: 'column',
+    justifyContent: 'space-around'
   },
-  eachRowContentOne:{
-    flexDirection:'row',
-    justifyContent:'space-between',  
-    contentRight:{
-      alignSelf:'flex-end'
+  eachRowContentOne: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    contentRight: {
+      alignSelf: 'flex-end'
     },
-    contentLeft:{
-      alignSelf:'flex-start',
-      fontSize:12,
-      fontWeight:'bold',
-      color:'black'
+    contentLeft: {
+      alignSelf: 'flex-start',
+      fontSize: 12,
+      fontWeight: 'bold',
+      color: 'black'
     }
   },
 
-  eachRowContentTwo:{
-    flexDirection:'row',
-    justifyContent:'space-between',  
-    contentRight:{
-      alignSelf:'flex-end'
+  eachRowContentTwo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    contentRight: {
+      alignSelf: 'flex-end'
     },
-    contentLeft:{
-      alignSelf:'flex-start',
-      fontSize:12,
-      fontWeight:'bold',
-      color:'black'
+    contentLeft: {
+      alignSelf: 'flex-start',
+      fontSize: 12,
+      fontWeight: 'bold',
+      color: 'black'
     }
   },
 
-  searchBar: {
-    // backgroundColor: '#800000',
-    // opacity: 1,
-    // borderColor: '#800000',
-    // borderWidth: 3,
-    borderRadius: 6,
-    shadowColor: '#8E4141',
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 7,
-    icon: {
-      color: '#726F6F'
-    },
-    inputStyle: {
-      color: '#726F6F',
-      fontWeight:'italic'
-    }
-  },
+  // searchBar: {
+
+  //   borderRadius: 6,
+  //   shadowColor: '#8E4141',
+  //   shadowOffset: { width: 1, height: 1 },
+  //   shadowOpacity: 0.5,
+  //   shadowRadius: 4,
+  //   elevation: 7,
+  //   icon: {
+  //     color: '#726F6F'
+  //   },
+  //   inputStyle: {
+  //     color: '#726F6F',
+  //     fontWeight: 'italic'
+  //   }
+  // },
   rect3: {
     height: 80,
     position: "absolute",
@@ -572,7 +661,7 @@ const styles = StyleSheet.create({
     // marginRight: 20,
 
   },
- 
+
   limit500Persons: {
     top: 18,
     left: 1,

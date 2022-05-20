@@ -14,7 +14,7 @@ import { CommonActions } from '@react-navigation/native';
 
 import NavigationHeader from './navComponents/drawerHeader'
 import Header from '../Header/Header'
-import CustomerDashboardPage from '../../screens/CustomerDashboard/CustomerDashboard';
+import CustDashboard from '../../screens/CustomerDashboard/Dashboard';
 import SearchPage from '../../screens/SearchHall/SearchHall';
 import SearchByMaps from '../../screens/SearchHall/SearchByMaps';
 import HallDetailPage from '../../screens/HallDetailsPage/HallDetailsPage';
@@ -116,7 +116,7 @@ const CustomerDrawerNavigator = () => {
         // groupName: 'Category 1',
         //activeTintColor: '#FF6F00',
         activeTintColor: '#8b0000',
-      }} component={CustomerDashboardPage} />
+      }} component={CustDashboard} />
 
 
      <Drawer.Screen name="Tracking/Status"  options={{

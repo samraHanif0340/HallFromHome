@@ -7,7 +7,7 @@ import * as Yup from "yup";
 
 import { TextField,Loader } from '../../../components/customComponents/customComponents'
 import axios from 'axios';
-import { BASE_URL } from '../../../constants/constants'
+import { BASE_URL,ERROR_MESSAGES } from '../../../constants/constants'
 import Snackbar from 'react-native-snackbar';
 
 const source = axios.CancelToken.source();
@@ -76,11 +76,11 @@ const VenueOwnerRegistrationPage = ({navigation}) => {
             Snackbar.show({
               text: response.data.ResponseDesc,
               duration: Snackbar.LENGTH_LONG,
-              backgroundColor:'black',
-              textColor:'white',
+               backgroundColor: '#B53849',
+              textColor: 'black',
               action: {
                 text: 'OK',
-                textColor: 'white',
+                textColor: 'black',
                 onPress: () => { /* Do something. */ },
               },
             });
@@ -88,13 +88,13 @@ const VenueOwnerRegistrationPage = ({navigation}) => {
     } catch (error) {
         setIsLoading(false);
         Snackbar.show({
-          text: 'Something Went Wrong',
+          text: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
           duration: Snackbar.LENGTH_LONG,
-          backgroundColor:'black',
-          textColor:'white',
+          backgroundColor: '#B53849',
+          textColor: 'black',
           action: {
             text: 'OK',
-            textColor: 'white',
+            textColor: 'black',
             onPress: () => { /* Do something. */ },
           },
         });
@@ -108,9 +108,7 @@ const VenueOwnerRegistrationPage = ({navigation}) => {
      <Loader isLoading={isLoading} />
      
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-      <ImageBackground style={styles.container}
-        source={require("../../../assets/images/Gradient_MI39RPu.png")}
-      >
+
         <View style={styles.titleWrapper}>
           <Text style={styles.title}>Create Account</Text>
         </View>
@@ -128,6 +126,7 @@ const VenueOwnerRegistrationPage = ({navigation}) => {
           {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValidating }) => (
             <View>
               <TextField
+                errorMsgStyle={styles.errorMsg}
                 placeholder="Name" style={styles.labelText}
                 keyboardType='default'
                 mode="outlined"
@@ -141,6 +140,7 @@ const VenueOwnerRegistrationPage = ({navigation}) => {
               />
 
               <TextField
+                errorMsgStyle={styles.errorMsg} 
                 placeholder="Email" style={styles.labelText}
                 keyboardType='email-address'
                 mode="outlined"
@@ -153,6 +153,7 @@ const VenueOwnerRegistrationPage = ({navigation}) => {
                 error={[errors.EmailAddress]}
               />
               <TextField
+                errorMsgStyle={styles.errorMsg}
                 placeholder="Mobile Number" style={styles.labelText}
                 keyboardType='phone-pad'
                 mode="outlined"
@@ -165,6 +166,7 @@ const VenueOwnerRegistrationPage = ({navigation}) => {
                 error={[errors.PhoneNumber]}
               />
               <TextField
+                errorMsgStyle={styles.errorMsg}
                 placeholder="CNIC" style={styles.labelText}
                 keyboardType='phone-pad'
                 mode="outlined"
@@ -178,6 +180,7 @@ const VenueOwnerRegistrationPage = ({navigation}) => {
               />
 
               <TextField
+                errorMsgStyle={styles.errorMsg}
                 placeholder="Password" style={styles.labelText}
                 keyboardType='default'
                 mode="outlined"
@@ -202,7 +205,7 @@ const VenueOwnerRegistrationPage = ({navigation}) => {
 
         </Formik>
 </ScrollView>
-      </ImageBackground>
+
     </View>
   )
 }
@@ -212,23 +215,27 @@ const VenueOwnerRegistrationPage = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent:'space-around',
+    backgroundColor: 'white',
   },
   titleWrapper: {
     width: 278,
-    height: 111
+    height: 111,
+    alignContent: "center",
+    textAlign: "center"
   },
   title: {
-    color: "rgba(248,231,28,1)",
+    color: "black",
     fontSize: 40,
     width: 335,
     height: 70,
     flex: 1,
     fontFamily: "cursive",
-    marginLeft: 10,
+    marginLeft: 30,
     marginTop: 30,
+    marginRight: 30,
     alignContent: "center",
     textAlign: "center",
-    //fontFamily: "dancing-script-regular",
     marginBottom: 28
   },
   submitButtonWrapper: {
@@ -247,6 +254,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     alignSelf: "center"
+  },
+  errorMsg: {
+    color: 'red',
+    marginRight: 20,
+    marginLeft: 20,
+    fontSize: 11,
+    fontStyle: 'italic',
   },
 
 })

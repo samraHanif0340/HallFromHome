@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, FlatList, StatusBar, ScrollView } from "react-n
 import { TouchableOpacity } from "react-native";
 import { Card } from "react-native-elements";
 import { Avatar } from 'react-native-elements';
-import { Loader } from '../../components/customComponents/customComponents'
 import { BASE_URL, ERROR_MESSAGES } from '../../constants/constants'
 import axios from 'axios';
 import { useStoreState } from 'easy-peasy';
@@ -12,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCircleCheck, faBan,faShare } from '@fortawesome/free-solid-svg-icons'
 import { ConfirmDialog } from 'react-native-simple-dialogs';
 import validate from '../../shared-services/validationFunctions'
-import { TextField, DateTimePickerComp } from '../../components/customComponents/customComponents'
+import { TextField, DateTimePickerComp ,Loader} from '../../components/customComponents/customComponents'
 import { Formik } from "formik";
 import * as Yup from "yup";
 import moment from 'moment';
@@ -659,11 +658,6 @@ const OwnerBookingPage = (props) => {
               error={rejectionCommentError}
             />
           </View> : null}
-        {/* {showApproveModal ?
-           <View>
-             <Text>Are you sure you want to Approve this customer booking request? Please fill the following details to be notified to the customer</Text>
-              
-          </View> : null } */}
       </ConfirmDialog> : null}
 
     </View>
@@ -686,8 +680,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     backgroundColor:'floralwhite',
-    // backgroundColor: '#EADEDB'
-
   },
   approvRejButton: {
     marginTop: 2,
