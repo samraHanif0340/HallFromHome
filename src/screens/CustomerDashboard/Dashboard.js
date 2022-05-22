@@ -18,17 +18,19 @@ const CustDashboard = (props) => {
   const source = axios.CancelToken.source();
   const globalPayload = useStoreState((state) => state.payload);
   const setPayload = useStoreActions((actions) => actions.setPayload);
+  const [customerReviews, setCustomerReviews] = React.useState([]);
   const [pendingData, setpendingData] = React.useState([]);
   const [dashboardStats, setDashboardStats] = React.useState([{ id: 1, name: 'Pending Bookings', count: 0, icon: "list" }, { id: 2, name: 'Successfully Booked', count: 0, icon: "check" }, { id: 3, name: 'Rejected', count: 0, icon: "ban" }]);
   const [isLoading, setIsLoading] = React.useState(false);
 
 
   React.useEffect(() => {
-    // getDashboardStats()
-    getData();
+    getDashboardStats()
+    getBookingData();
+    getCustomerReviews()
   }, []);
 
-  const getData = async () => {
+  const getBookingData = async () => {
     const configurationObject = {
       url: `${BASE_URL}GetBookingDetails`,
       method: "POST",
@@ -90,12 +92,74 @@ const CustDashboard = (props) => {
     }
   };
 
-  const getDashboardStats = async () => {
+  const getCustomerReviews = async () => {
     const configurationObject = {
-      url: `${BASE_URL}GetRequestStatistics`,
+      url: `${BASE_URL}GetCustomerReviews`,
       method: "POST",
       cancelToken: source.token,
-      data: { OwnerID: globalPayload.userId },
+      data: { UserID: globalPayload.userId},
+    };
+    try {
+      setIsLoading(true);
+      const response = await axios(
+        configurationObject
+      );
+
+      if (response.data.ResponseCode == "00") {
+        setIsLoading(false);
+        if (response.data.Result_DTO) {
+          let newArray = []
+          if (response.data.Result_DTO.length > 3) {
+            newArray = JSON.parse(JSON.stringify(response.data.Result_DTO.slice(0, 3)))
+          }
+          else {
+            newArray = JSON.parse(JSON.stringify(response.data.Result_DTO))
+          }
+          setCustomerReviews(newArray)
+
+        }
+
+      } else {
+        setIsLoading(false);
+
+        setCustomerReviews([])
+        Snackbar.show({
+          text: response.data.ResponseDesc,
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: '#B53849',
+          textColor: 'black',
+          action: {
+            text: 'OK',
+            textColor: 'black',
+            onPress: () => { /* Do something. */ },
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      setCustomerReviews([])
+      setIsLoading(false);
+      Snackbar.show({
+        text: 'Something Went Wrong',
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: '#B53849',
+        textColor: 'black',
+        action: {
+          text: 'OK',
+          textColor: 'black',
+          onPress: () => { /* Do something. */ },
+        },
+      });
+
+    }
+  };
+
+  const getDashboardStats = async () => {
+    const configurationObject = {
+      url: `${BASE_URL}GetCustomerBookingStatistics`,
+      method: "POST",
+      cancelToken: source.token,
+      data: { UserID: globalPayload.userId },
     };
     try {
       const response = await axios(
@@ -135,7 +199,6 @@ const CustDashboard = (props) => {
     </Card>
   );
 
-
   const renderRecentBookings = ({ item }) => (
     <Card containerStyle={styles.cardStyle}>   
         <Avatar
@@ -144,9 +207,35 @@ const CustDashboard = (props) => {
           title={item.RequestStatus.substr(0, 1).toUpperCase()}
           containerStyle={{ backgroundColor:  getStatusColor(item.RequestStatus).backgroundColor,alignSelf:'flex-end' }} />
         <Text style={styles.venueName}> {item.VenueName}</Text>
-        <Text style={styles.bookingUser}>{item.BookedByUsername} - ({item.ContactNumber})</Text>    
+        <Text style={styles.bookingUser}>{item.BookedByUsername} - ({item.ContactNumber})</Text>  
+        {item.RequestStatus == 'Approved' ? <Text style={styles.eventTypesLabel}>(Advance Payment | Deadline)</Text> : null}
+    {item.RequestStatus == 'Approved' ? <Text style={styles.eventTypes}>{item.AdvancePaymentDeadlineDate} - ({item.AdvancePaymentDeadlineTime})</Text>
+     : null }  
           <Text style={styles.eventTypesLabel}>(Date | Day | Shift)</Text>
         <Text style={styles.eventTypes}>{item.EventDate} | {item.EventDay} | {item.EventTime}</Text>
+
+      
+    {item.Comment ? <View>
+      <Text style={styles.commentStyle}>{item.Comment}</Text>
+    </View> : null}
+
+    {item.RequestStatus == 'C' ? <View>
+      <Text style={[{color:'blue'}]}>Your Requested Venue {item.VenueName} has been booked for {item.EventDate} by{globalPayload.userDetails.name}. The final payment will be required on the Event Day. Enjoy Your Event, MAKE YOUR DAY MEMORABLE </Text>
+    </View> : null}
+    </Card>
+
+  )
+
+  const renderCustomerReviews = ({ item }) => (
+    <Card containerStyle={styles.cardStyle}>   
+        <Avatar
+          size={32}
+          rounded
+          title={item.UserName.substr(0, 1).toUpperCase()}
+          containerStyle={{ backgroundColor:  'coral',alignSelf:'flex-end' }} />
+        <Text style={styles.venueName}> {item.VenueName}</Text>
+        <Text style={styles.bookingUser}>{item.UserName} </Text>    
+        <Text style={styles.eventTypes}>{item.ReviewText} </Text>
     </Card>
 
   )
@@ -187,17 +276,17 @@ const CustDashboard = (props) => {
 
       <View style={styles.cards}>
         <Text style={styles.TitleStyling}>YOUR REVIEWS & FEEDBACKS</Text>
-        <TouchableOpacity style={styles.viewMoreButton} onPress={() => goToOwnerBookingPage()}>
+        {/* <TouchableOpacity style={styles.viewMoreButton} onPress={() => goToOwnerBookingPage()}>
           <View style={styles.viewMoreWrapper}>
           <Text style={styles.viewMore} >View More</Text>
           </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         
 
         <FlatList
           keyExtractor={item => item.BookingID}
-          data={pendingData}
-          renderItem={renderRecentBookings}
+          data={customerReviews}
+          renderItem={renderCustomerReviews}
           horizontal
 
         />
@@ -247,7 +336,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: 'space-between',
     shadowColor: '#000',
-    height: 180,
+    height: 190,
     width: 300,
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.3,
@@ -258,7 +347,7 @@ const styles = StyleSheet.create({
   },
  
   venueName:{
-    fontSize:20,
+    fontSize:16,
     color:'black',
     fontWeight: 'bold'
   },
@@ -266,7 +355,7 @@ const styles = StyleSheet.create({
   bookingUser:{
     color:'black',
     fontStyle:'italic',
-    fontSize:16
+    fontSize:20
   },
   requestStatus:{
     fontSize:16,
@@ -275,7 +364,7 @@ const styles = StyleSheet.create({
     color: 'coral'
   },
   eventTypes:{
-    alignSelf:'flex-end'
+    alignSelf:'flex-start'
   },
   eventTypesLabel:{
     alignSelf:'flex-end',

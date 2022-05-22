@@ -9,7 +9,7 @@ import Snackbar from 'react-native-snackbar';
 import { CalendarComponent } from "../../components/customComponents/customComponents";
 import ImagedCardView from "react-native-imaged-card-view";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faCalendarDays, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarDays, faFilter ,faArrowRight} from '@fortawesome/free-solid-svg-icons'
 import { ConfirmDialog } from 'react-native-simple-dialogs';
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -327,10 +327,14 @@ function SearchPage(props) {
       </View>
 
 
-      <View>
-        <Text>Inside Maps</Text>
-        <Image source={{uri: require('../../assets/images/maps.png')}}/>
-      </View>
+              <View style={styles.mapContainer}>
+        <Text style={styles.mapText}>Explore Venues around you</Text>
+
+        <Image  style={styles.mapImage} source={require('../../assets/images/maps.png')}/>
+        <TouchableOpacity style={styles.mapButton}><Text style={styles.mapButton.buttonText}>Show Map<FontAwesomeIcon style={styles.mapButton.buttonIcon} icon={faArrowRight} size={20} color='#800000' /></Text></TouchableOpacity>
+      
+              </View>
+      
       {showCalendar ? <CalendarComponent markedDates={markedDates} parentCallback={() => setShowCalendar(false)} /> : null}
 
       <ScrollView>
@@ -392,6 +396,60 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5,
+  },
+    mapContainer:{
+      flexDirection:'column',
+      margin:20,
+    },
+    mapImage:{
+      opacity:0.7,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 5,
+    backgroundColor: 'floralwhite',
+    height: 150,
+    width:350, 
+    },  
+    mapButton:{
+      position:'absolute',
+      marginVertical:125,
+      marginHorizontal:10,
+      alignSelf:'flex-start',
+      textAlign:'center',
+      borderStyle:'solid',
+      borderWidth:0.5,
+      borderColor:'#800000',
+      borderRadius: 20,
+      shadowColor: '#000',
+      shadowOffset: { width: 1, height: 1 },
+      shadowOpacity: 0.5,
+      shadowRadius: 5,
+      elevation: 5,
+      backgroundColor: 'floralwhite',
+    buttonText:{
+      margin:10,
+      color:'black',
+      alignItems:'center',
+      fontSize:16
+    },
+    buttonIcon:{
+      textAlign:'center',
+      alignItems:'center',
+      color:'#800000'
+    }
+    // position:'absolute',
+    // top:20,
+    // left:22,
+  },
+  mapText:{
+    marginHorizontal:15,
+    marginVertical:5,
+    color:'black',
+    fontWeight:'bold',
+    fontFamily:'calibiri',
   
   },
   setImageStyles: {

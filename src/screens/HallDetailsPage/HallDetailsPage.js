@@ -198,13 +198,6 @@ const HallDetailPage = ({ route, navigation }) => {
 
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-      <ImageBackground
-        style={styles.rect1}
-        imageStyle={styles.rect1_imageStyle}
-        source={require("../../assets/images/Gradient_MI39RPu.png")}
-      >
-
-
 
 
 
@@ -219,8 +212,7 @@ const HallDetailPage = ({ route, navigation }) => {
           params: { VenueID: route.params.VenueID }
         })}><Text style={styles.checkAvailability.Availabilitycontent}>BOOK</Text></TouchableOpacity>
 
-        {/* <TouchableOpacity style={styles.bookHall} onPress={() => navigation.navigate('Booking Confirmed')}><Text style={styles.bookHall.content}>BOOK</Text></TouchableOpacity> */}
-      </ImageBackground>
+
     </View>
   );
 }
@@ -228,7 +220,8 @@ const HallDetailPage = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    justifyContent:'space-between',
   },
   rect1: {
     flex: 1

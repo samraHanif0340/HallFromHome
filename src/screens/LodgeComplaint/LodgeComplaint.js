@@ -195,8 +195,10 @@ const LodgeReviewPage = (props) => {
                     type="custom"
                     ratingColor='#800000'
                     count={5}
-                    defaultRating = {initialFormValues.Rating}
+                    imageSize={35}
+                    startingValue={initialFormValues.Rating}
                     onFinishRating={(rating) => myChangeFunc('Rating', rating.toString())}
+                    style={styles.RatingStyle}
                   />
                 {errors.Rating ? <HelperText type="error" style={styles.errorMsg} >{errors.Rating}</HelperText> : null}
 
@@ -277,6 +279,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     alignSelf: "center"
+  },
+  RatingStyle:{
+    margin:5,
+    textAlign:'center',
+    alignSelf:'center'
   },
   rating:{
     height: 59,

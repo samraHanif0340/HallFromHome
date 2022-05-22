@@ -109,24 +109,9 @@ function HallReviewsPage(props) {
       <Loader isLoading={isLoading} />
 
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-      <ImageBackground style={styles.container}
-        source={require("../../assets/images/Gradient_MI39RPu.png")}
-      >
-
-        {/* <SearchBar
-          lightTheme
-          searchIcon={{ size: 25, color: 'white'}}
-          placeholder="Search for halls reviews..."
-          value={searchText}
-          onChangeText={text => searchFilterFunction(text)}
-          containerStyle={styles.searchBar}
-          placeholderTextColor="white"
-          leftIconContainerStyle={styles.searchBar.icon}
-          inputStyle={styles.searchBar.inputStyle}
-        /> */}
-
+     
         <ScrollView nestedScrollEnabled={true}>
-          <FlatList style={styles.container}
+          <FlatList 
             data={masterData}
             renderItem={({ item }) => (
               <Card containerStyle={styles.cardStyle}>
@@ -139,19 +124,22 @@ function HallReviewsPage(props) {
 
                   <View style={styles.middleView}>
                     <Text style={[styles.title, { flexShrink: 1 }]}>{item.UserName}</Text>
+                    <Text style={[styles.venueName, { flexShrink: 1 }]}>({item.VenueName})</Text>
                     <Text style={[styles.review, { flexShrink: 1 }]}>{item.ReviewText}</Text>
 
                   </View>
-                  <Rating
-                    type="star"
-                    fractions={1}
-                    startingValue={item.Rating}
-                    imageSize={12}
-                    style={styles.rating}
-                  />
+                
 
 
                 </View>
+                <Rating
+                    readonly
+                    type="star"
+                    fractions={1}
+                    startingValue={item.Rating}
+                    imageSize={15}
+                    style={styles.rating}
+                  />
               </Card>
 
             )}
@@ -160,40 +148,43 @@ function HallReviewsPage(props) {
         </ScrollView>
 
 
-      </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex:1,
+    justifyContent:'space-between',
+    backgroundColor:'white',
+    flexDirection:'column'
 
   },
   cardStyle: {
-
-    borderRadius: 6,
-    // backgroundColor:'rgba(222,206,206,1)', 
-    shadowColor: '#000',
+    flex: 1,
+    borderRadius: 10,
+    flexDirection: "column",
+    justifyContent: 'space-around',
+    shadowColor: 'black',
+    height: 130,
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
-
+    backgroundColor: 'floralwhite'
   },
   mainView: {
+    marginHorizontal:5,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     flexShrink: 1
 
   },
   middleView: {
-
     flexDirection: 'column',
+    marginHorizontal:5,
     flexShrink: 1,
     justifyContent: 'flex-start'
-
-
   },
   rating: {
     flex: 2,
@@ -211,7 +202,17 @@ const styles = StyleSheet.create({
   review: {
     flexWrap: 'wrap',
     fontSize: 10,
-    alignSelf: 'center'
+    alignSelf: 'flex-start'
+    // color:'red',
+    // fontFamily:'cursive',
+
+  },
+  venueName: {
+    flexWrap: 'wrap',
+    fontSize: 11,
+    color:'grey',
+    fontFamily:'times new roman',
+    fontStyle:'italic'
     // color:'red',
     // fontFamily:'cursive',
 
