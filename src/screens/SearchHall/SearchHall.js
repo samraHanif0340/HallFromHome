@@ -2,6 +2,7 @@ import React, { Component, useEffect } from "react";
 import { StyleSheet, View, Text, Image, FlatList, ImageBackground, StatusBar, TouchableOpacity, ScrollView } from "react-native";
 import { Loader } from '../../components/customComponents/customComponents'
 import { SearchBar, Rating, Card, Overlay } from 'react-native-elements';
+import { RadioButton } from "react-native-paper";
 import { BASE_URL } from '../../constants/constants'
 import axios from 'axios';
 import { useStoreActions } from 'easy-peasy';
@@ -15,13 +16,9 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  AdvancePayment: Yup.string()
-    .min(4, 'Name must be atleast 4 characters long')
-    .max(20, 'Name must be atmost 20 characters long')
-    .required('Required'),
-  AdvancePaymentDeadlineDate: Yup.string()
-    .required('Required'),
-  Comment: Yup.string(),
+  Type: Yup.string('default'),
+  PriceType: Yup.string('default')
+  
 });
 
 var signatures = {
@@ -39,6 +36,9 @@ function detectMimeType(b64) {
     }
   }
 }
+
+
+
 
 
 function SearchPage(props) {
@@ -225,6 +225,76 @@ function SearchPage(props) {
     setShowFilterModal(true)
   }
 
+  const applyFilters = (formData) => {
+    console.log(formData)
+    if (formData != null || formData != {}) {
+      // saveData(formData)
+      console.log('Filter Values',formData)
+    }
+  }
+
+  const clearFilters = () => {
+    setInitialFormValues({
+      Type:'default',
+      PriceType:''
+    })
+  }
+
+  const applyFiltersService = async (data) => {
+    let formData = Object.assign({}, data)
+    let configurationObject = {
+      url: `${BASE_URL}AddNewVenue`,
+      method: "POST",
+      cancelToken: source.token,
+      // data: { ...formData, UserID: globalPayload.userId , ...globalPayload.venueAdditionPayload, ImageList:globalPayload.ImageList}
+    }
+    // navigation.navigate('BookingConfirm')
+
+    console.log('in save data')
+    try {
+      setIsLoading(true);
+      const response = await axios(
+        configurationObject,
+      );
+      if (response.data.ResponseCode === "00") {
+        setIsLoading(false);
+        Snackbar.show({
+          text: response.data.Messages[0] ?  response.data.Messages[0] : 'Venue Request Submitted Successfully',
+          duration: Snackbar.LENGTH_LONG,
+        });
+        
+        return;
+      } else {
+        setIsLoading(false);
+        Snackbar.show({
+          text: response.data.ResponseDesc,
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: '#B53849',
+          textColor: 'black',
+          action: {
+            text: 'OK',
+            textColor: 'black',
+            onPress: () => { /* Do something. */ },
+          },
+        });
+      }
+    } catch (error) {
+      setIsLoading(false);
+      Snackbar.show({
+        text: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: '#B53849',
+      textColor: 'black',
+      action: {
+        text: 'OK',
+        textColor: 'black',
+        onPress: () => { /* Do something. */ },
+      },
+      });
+
+    }
+  };
+
   const getReservedDates = async (venueID) => {
     let payload = {
       VenueID: venueID
@@ -281,7 +351,6 @@ function SearchPage(props) {
         <TouchableOpacity style={styles.searchFilterButton} onPress={() => openFilters() }><FontAwesomeIcon icon={faFilter} size={25} color='#800000' /></TouchableOpacity>
         
         {showFilterModal ? 
-        // <Overlay isVisible={showFilterModal} onBackdropPress={()=>setShowFilterModal(false)}>
         <ConfirmDialog
         title="Filters"
         visible={showFilterModal}
@@ -289,12 +358,12 @@ function SearchPage(props) {
         >
         <View>
           <ScrollView>
-            <Text>Select the filter options</Text>
+      
             <Formik
               initialValues={initialFormValues}
               validationSchema={validationSchema}
               enableReinitialize={true}
-              onSubmit={(values, errors) => applyFilters(paymentPayload, values)}>
+              onSubmit={(values, errors) => applyFilters(values)}>
               {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValidating }) => {
 
                 const myChangeFunc = (key, val) => {
@@ -304,14 +373,40 @@ function SearchPage(props) {
 
                 return (
                   <View>
-                    <Text>Inside Filter</Text>
+                    <RadioButton.Group onValueChange={value => myChangeFunc('Type',value)} value={values.Type}>
+                      <RadioButton.Item label="Default (Recommended)" value="default"  color="#800000"/>
+                      <RadioButton.Item label="Top Rated" value="topRated" color="#800000"/>
+                      <RadioButton.Item label="Price" value="price" color="#800000"/>
+                    </RadioButton.Group>
+    
+
+                   { values.Type === 'price' ? <View style={styles.priceFilterWrapper}>
+                     <RadioButton.Group onValueChange={value => myChangeFunc('PriceType',value)} value={values.PriceType}>
+                      <RadioButton.Item label="Default (Recommended)" value="default"  labelStyle={styles.priceFilter} color="#800000"/>
+                      <RadioButton.Item label="Low to High" value="lowToHigh" labelStyle={styles.priceFilter} color="#800000"/>
+                      <RadioButton.Item label="High to Low" value="highToLow"  labelStyle={styles.priceFilter} color="#800000"/>
+                    </RadioButton.Group>
+                    </View>
+                    : null}
+
                     <TouchableOpacity
                       onPress={handleSubmit}
                       style={styles.submitButtonWrapper}
 
                     >
                       <Text style={styles.submitButtonText}>APPLY FILTER</Text>
+                      
                     </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={clearFilters}
+                      style={styles.submitButtonWrapper}
+
+                    >
+                      <Text style={styles.submitButtonText}>CLEAR FILTER</Text>
+                      
+                    </TouchableOpacity>
+
                   </View>
                 )
               }}
@@ -321,12 +416,8 @@ function SearchPage(props) {
         </View>
 
       </ConfirmDialog> 
-      // </Overlay>
-      : null}
-      
+      : null}   
       </View>
-
-
               <View style={styles.mapContainer}>
         <Text style={styles.mapText}>Explore Venues around you</Text>
 
@@ -397,6 +488,15 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  priceFilterWrapper:{
+   marginHorizontal:10,
+   backgroundColor:'floralwhite'
+  },
+  priceFilter:{
+    fontSize:12,
+    fontFamily:'times new roman',
+    fontStyle:'italic'
+  },
     mapContainer:{
       flexDirection:'column',
       margin:20,
@@ -451,6 +551,23 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     fontFamily:'calibiri',
   
+  },
+  submitButtonWrapper: {
+    height: 59,
+    //backgroundColor: "rgba(31,178,204,1)",
+    backgroundColor: "rgba(142,7,27,1)",
+    borderRadius: 5,
+    justifyContent: "center",
+    marginRight: 20,
+    marginLeft: 20,
+    marginTop: 14,
+    marginBottom: 14
+  },
+  submitButtonText: {
+    color: "rgba(255,255,255,1)",
+    textAlign: "center",
+    fontSize: 20,
+    alignSelf: "center"
   },
   setImageStyles: {
     marginTop: 20,

@@ -43,6 +43,7 @@
     "react-native-elements": "^3.4.2",
     "react-native-fs": "^2.19.0",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-google-places-autocomplete": "^2.4.1",
     "react-native-image-base64": "^0.1.4",
     "react-native-imaged-card-view": "^0.0.11",
     "react-native-linear-gradient": "^2.5.6",

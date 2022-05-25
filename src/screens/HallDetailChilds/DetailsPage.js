@@ -181,11 +181,11 @@ function DetailOfHallPage(props) {
 
 
 
-
+{/* 
 <FlatList
          data={detail.Images}
         keyExtractor={item => item.Image}
-        renderItem={renderPictures} /> 
+        renderItem={renderPictures} />  */}
           <TouchableOpacity style={styles.viewWrapper} onPress={() => setShowDetails(!showDetails)}>
             {showDetails ? <Text style={styles.viewWrapper.content}>Hide Details</Text> : <Text style={styles.viewWrapper.content}>View Details</Text>}
             </TouchableOpacity>

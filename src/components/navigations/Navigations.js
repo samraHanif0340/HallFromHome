@@ -230,8 +230,8 @@ const SearchHallStack = () => {
 <Stack.Navigator initialRouteName="Home" >
       <Stack.Screen   
             name="Home"
-            component={SearchPage}
-            // component={SearchByMaps}
+            // component={SearchPage}
+            component={SearchByMaps}
             options={{title: 'Home', headerShown: false }}
           />
            <Stack.Screen

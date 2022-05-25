@@ -168,9 +168,9 @@ const AddonsPage = (props) => {
     return (
         <View style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-            <ImageBackground style={styles.container}
+            {/* <ImageBackground style={styles.container}
                 source={require("../../assets/images/Gradient_MI39RPu.png")}
-            >
+            > */}
                 <CheckboxField center={true} checked={additionalServices.foodService}
                     onChangeText={onFoodServiceSelection}
                     label="We have tremendous catering services available, Do you want additional food services?" />
@@ -194,7 +194,7 @@ const AddonsPage = (props) => {
                     : null}
                 {/* <TouchableOpacity style={styles.checkAvailability} onPress={submitAddonDetails()}><Text style={styles.checkAvailability.Availabilitycontent}>Save Add ons</Text></TouchableOpacity> */}
 
-            </ImageBackground>
+            {/* </ImageBackground> */}
         </View>
     );
 }
