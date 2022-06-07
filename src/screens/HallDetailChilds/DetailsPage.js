@@ -1,25 +1,32 @@
-import React, { Component, useEffect } from "react";
-import { StyleSheet, View, Text, StatusBar, ImageBackground, Image, Dimensions, ScrollView, TouchableOpacity ,FlatList} from "react-native";
-import { Divider } from 'react-native-paper';
-import {Card} from 'react-native-elements'
+import React, {Component, useEffect} from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  StatusBar,
+  ImageBackground,
+  Image,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
+import {Divider} from 'react-native-paper';
+import {Card} from 'react-native-elements';
 import axios from 'axios';
-import { BASE_URL } from '../../constants/constants'
-import {detectMimeType} from '../../components/utility/helper'
-import Icon from 'react-native-vector-icons/FontAwesome';
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
+import {BASE_URL} from '../../constants/constants';
+import {detectMimeType} from '../../components/utility/helper';
 
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
-import Carousel, { Pagination, ParallaxImage } from 'react-native-snap-carousel';
-import Accordion from 'react-native-collapsible/Accordion';
-import * as Animatable from 'react-native-animatable';
+import Carousel, {Pagination, ParallaxImage} from 'react-native-snap-carousel';
 
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faEyeSlash, faEye} from '@fortawesome/free-solid-svg-icons';
 
 const IS_ANDROID = Platform.OS === 'android';
 const SLIDER_1_FIRST_ITEM = 1;
-const SCREEN_WIDTH = Dimensions.get('window').width
-const SCREEN_HEIGHT = Dimensions.get('window').height
-
-
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 // import SearchBar from "react-native-dynamic-search-bar";
 const SECTIONS = [
@@ -33,52 +40,50 @@ const SECTIONS = [
   },
 ];
 function DetailOfHallPage(props) {
-  console.log(props)
-  const [activeSections,setActiveSections] = React.useState([])
-  const [sliderActive, setSliderActive] = React.useState(SLIDER_1_FIRST_ITEM)
-  const [showDetails, setShowDetails] = React.useState(false)
+  console.log(props);
+  const [activeSections, setActiveSections] = React.useState([]);
+  const [sliderActive, setSliderActive] = React.useState(SLIDER_1_FIRST_ITEM);
+  const [showDetails, setShowDetails] = React.useState(false);
 
   const [detail, setDetail] = React.useState({});
   const [hasError, setErrorFlag] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [pictures, setPictures] = React.useState([
     {
-
-      "ImageURL": "https://profiles.sulekha.com/mstore/40410510/albums/default/thumbnailfull/shutterstock-1450052012-1-2.jpg",
-      title: 'Back View'
-
+      ImageURL:
+        'https://profiles.sulekha.com/mstore/40410510/albums/default/thumbnailfull/shutterstock-1450052012-1-2.jpg',
+      title: 'Back View',
     },
     {
-      "ImageURL": "https://www.pchotels.com/uploads/wed-and-cel/c9a5690c1e23f1248e628bbfcabec7211564221003.jpg",
-      title: 'Forward View'
-
-
+      ImageURL:
+        'https://www.pchotels.com/uploads/wed-and-cel/c9a5690c1e23f1248e628bbfcabec7211564221003.jpg',
+      title: 'Forward View',
     },
     {
-      "ImageURL": "https://lh5.googleusercontent.com/p/AF1QipO7vBvmWcmop3O1FIdO14Y53hOovYm-JubMVQpX=w1080-k-no",
-      title: 'Stage Decoration'
-
+      ImageURL:
+        'https://lh5.googleusercontent.com/p/AF1QipO7vBvmWcmop3O1FIdO14Y53hOovYm-JubMVQpX=w1080-k-no',
+      title: 'Stage Decoration',
     },
     {
-      "ImageURL": "https://www.pchotels.com/uploads/wed-and-cel/c9a5690c1e23f1248e628bbfcabec7211564221003.jpg",
-      title: 'Tables View'
-    }
-
-  ])
+      ImageURL:
+        'https://www.pchotels.com/uploads/wed-and-cel/c9a5690c1e23f1248e628bbfcabec7211564221003.jpg',
+      title: 'Tables View',
+    },
+  ]);
   const source = axios.CancelToken.source();
   const configurationObject = {
     url: `${BASE_URL}GetVenueInfo`,
-    method: "POST",
+    method: 'POST',
     cancelToken: source.token,
-    data: { venueID: props.venueID },
+    data: {venueID: props.venueID},
   };
 
-  const updateSections = (activeSections) => {
-    console.log('active tabs,',activeSections)
+  const updateSections = activeSections => {
+    console.log('active tabs,', activeSections);
     setActiveSections(activeSections);
   };
 
-  const _renderHeader = (section) => {
+  const _renderHeader = section => {
     return (
       <View style={styles.header}>
         <Text style={styles.headerText}>{section.title}</Text>
@@ -86,27 +91,32 @@ function DetailOfHallPage(props) {
     );
   };
 
-  const _renderContent = (section) => {
-    console.log(section)
+  const _renderContent = section => {
+    console.log(section);
     return (
       <View style={styles.content}>
-        {activeSections && activeSections[0] === 0 ? 
-       
-        <Text>Pictures page</Text>
-        : 
-        <Text>DetailsPage</Text>}
+        {activeSections && activeSections[0] === 0 ? (
+          <Text>Pictures page</Text>
+        ) : (
+          <Text>DetailsPage</Text>
+        )}
       </View>
     );
   };
 
   const renderPictures = ({item}) => {
-    return(
-      <Image source={item.mimeType ? {uri:'data:' + item.mimeType + ';base64,'+item.Image} : {uri:item.Image}} />
+    return (
+      <Image
+        source={
+          item.mimeType
+            ? {uri: 'data:' + item.mimeType + ';base64,' + item.Image}
+            : {uri: item.Image}
+        }
+      />
+    );
+  };
 
-    )
-  }
-
-  const _renderSectionTitle = (section) => {
+  const _renderSectionTitle = section => {
     return (
       <View style={styles.content}>
         <Text>{section.content}</Text>
@@ -117,40 +127,46 @@ function DetailOfHallPage(props) {
   const getData = async () => {
     try {
       setIsLoading(true);
-      const response = await axios(
-        configurationObject
-      );
-      if (response.data.ResponseCode === "00") {
+      const response = await axios(configurationObject);
+      if (response.data.ResponseCode === '00') {
         setIsLoading(false);
-        let images = []
-        for(let i=0;i<response.data.Result_DTO.ImageList.length;i++){
-          let obj = {}
-          obj.mimeType = response.data.Result_DTO['ImageList'][i] ? detectMimeType(response.data.Result_DTO['ImageList'][i]) : null
-          obj.Image = response.data.Result_DTO['ImageList'][i] ? response.data.Result_DTO['ImageList'][i] : null
-          images.push(obj) 
+        let images = [];
+        for (let i = 0; i < response.data.Result_DTO.ImageList.length; i++) {
+          let obj = {};
+          obj.mimeType = response.data.Result_DTO['ImageList'][i]
+            ? detectMimeType(response.data.Result_DTO['ImageList'][i])
+            : null;
+          obj.Image = response.data.Result_DTO['ImageList'][i]
+            ? response.data.Result_DTO['ImageList'][i]
+            : null;
+          images.push(obj);
         }
-        response.data.Result_DTO.Images = images
-        console.log('image added check',response.data.Result_DTO)
-        setDetail(response.data.Result_DTO)
+        response.data.Result_DTO.Images = images;
+        console.log('image added check', response.data.Result_DTO);
+        setDetail(response.data.Result_DTO);
         return;
       } else {
       }
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     getData();
 
-    return () => source.cancel("Data fetching cancelled");
+    // return () => source.cancel('Data fetching cancelled');
   }, []);
 
-  const _renderItemWithParallax = ({ item, index }, parallaxProps) => {
+  const _renderItemWithParallax = ({item, index}, parallaxProps) => {
     return (
       <View style={styles.item}>
         <ParallaxImage
-          source={item.mimeType ? {uri:'data:' + item.mimeType + ';base64,'+item.Image} : {uri:item.Image}}
+          source={
+            item.mimeType
+              ? {uri: 'data:' + item.mimeType + ';base64,' + item.Image}
+              : {uri: item.Image}
+          }
           containerStyle={styles.imageContainer}
           style={styles.image}
           parallaxFactor={0.6}
@@ -161,35 +177,23 @@ function DetailOfHallPage(props) {
         </Text>
       </View>
     );
-  }
+  };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-    
-        <View style={styles.container}>
-        {/* <Accordion
-        sections={SECTIONS}
-        activeSections={activeSections}
-        renderSectionTitle={_renderSectionTitle}
-        renderHeader={_renderHeader}
-        renderContent={_renderContent}
-        onChange={updateSections}
-      /> */}
+      <TouchableOpacity
+        style={styles.viewWrapper}
+        onPress={() => setShowDetails(!showDetails)}>
+        {showDetails ? (
+          <FontAwesomeIcon icon={faEye} size={25} color="black" />
+        ) : (
+          <FontAwesomeIcon icon={faEyeSlash} size={25} color="black" />
+        )}
+      </TouchableOpacity>
 
-
-
-
-
-{/* 
-<FlatList
-         data={detail.Images}
-        keyExtractor={item => item.Image}
-        renderItem={renderPictures} />  */}
-          <TouchableOpacity style={styles.viewWrapper} onPress={() => setShowDetails(!showDetails)}>
-            {showDetails ? <Text style={styles.viewWrapper.content}>Hide Details</Text> : <Text style={styles.viewWrapper.content}>View Details</Text>}
-            </TouchableOpacity>
-            
+      {!showDetails && (
+        <View>
           <Carousel
             sliderWidth={SCREEN_WIDTH}
             sliderHeight={SCREEN_HEIGHT - 5}
@@ -197,8 +201,7 @@ function DetailOfHallPage(props) {
             data={detail.Images}
             renderItem={_renderItemWithParallax}
             hasParallaxImages={true}
-            onSnapToItem={(index) => setSliderActive(index)}
-
+            onSnapToItem={index => setSliderActive(index)}
           />
 
           <Pagination
@@ -211,57 +214,63 @@ function DetailOfHallPage(props) {
               marginHorizontal: 8,
               backgroundColor: 'rgba(142,7,27,1)',
             }}
-            inactiveDotStyle={
-              {
-                width: 10,
-                height: 10,
-                borderRadius: 5,
-                marginHorizontal: 8,
-                backgroundColor: 'white'
-
-              }}
+            inactiveDotStyle={{
+              width: 10,
+              height: 10,
+              borderRadius: 5,
+              marginHorizontal: 8,
+              backgroundColor: 'white',
+            }}
             inactiveDotOpacity={0.5}
             inactiveDotScale={0.7}
           />
-        
         </View>
-       
-        {showDetails ?  
+      )}
+
+      {showDetails ? (
         <ScrollView>
-            <Card containerStyle={styles.cardVenueDetails}>
-              <View style={styles.centeredAlign}>
-                {/* <Icon style={styles.icon} name="home" size={20}></Icon> */}
-                <Text style={styles.centeredAlign.content}>{detail.VenueName}</Text>
+          <Card containerStyle={styles.cardVenueDetails}>
+            <View style={styles.centeredAlign}>
+              <Text style={styles.centeredAlign.content}>
+                {detail.VenueName}
+              </Text>
 
-                {/* <Icon style={styles.Hallicon} name="home" size={20}></Icon> */}
-                <Text style={styles.centeredAlign.content}>{detail.VenueTypeDesc}</Text>
+              <Text style={styles.centeredAlign.content}>
+                {detail.VenueTypeDesc}
+              </Text>
 
+              <Text style={styles.centeredAlign.content}>{detail.Address}</Text>
 
-                <Text style={styles.centeredAlign.content}>{detail.Address}</Text>
+              <Text style={styles.centeredAlign.content}>
+                Provides Accommodation for {detail.MaxCapacity} Persons
+              </Text>
+              <Divider style={styles.DividerColor} />
+              <Text style={styles.centeredAlign.content}>
+                Price : PKR ({detail.RentPrice})
+              </Text>
 
-                <Text style={styles.centeredAlign.content}>Provides Accommodation for {detail.MaxCapacity} Persons</Text>
-                <Divider style={styles.DividerColor} />
-                <Text style={styles.centeredAlign.content}>Price : PKR ({detail.RentPrice})</Text>
+              <Text style={styles.centeredAlign.content}>
+                Rating : ({detail.Rating})
+              </Text>
 
-                <Text style={styles.centeredAlign.content}>Rating : ({detail.Rating})</Text>
-                {/* <FontAwesomeIcon
-                  name="star"
-                  style={styles.icon6}
-                ></FontAwesomeIcon> */}
+              <Text style={styles.centeredAlign.content}>
+                Provides Lightening : {detail.Lights == 'Y' ? 'Yes' : 'No'}
+              </Text>
 
+              <Text style={styles.centeredAlign.content}>
+                Provides Waiters : {detail.Waitress == 'Y' ? 'Yes' : 'No'}
+              </Text>
 
-                <Text style={styles.centeredAlign.content}>Provides Lightening : {detail.Lights == 'Y' ? 'Yes' : 'No'}</Text>
-
-                <Text style={styles.centeredAlign.content}>Provides Waiters : {detail.Waitress == 'Y'  ? 'Yes' : 'No'}</Text>
-
-                <Text style={styles.centeredAlign.content}>Website: {detail.Website == "N" ? 'Not Website Available' : detail.Website}</Text>
-
-
-              </View>
-            </Card>
-
-          </ScrollView>  : null}
-     
+              <Text style={styles.centeredAlign.content}>
+                Website:{' '}
+                {detail.Website == 'N'
+                  ? 'Not Website Available'
+                  : detail.Website}
+              </Text>
+            </View>
+          </Card>
+        </ScrollView>
+      ) : null}
     </View>
   );
 }
@@ -269,39 +278,37 @@ function DetailOfHallPage(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection:'column',
-    justifyContent:'space-between'
+    flexDirection: 'column',
   },
   rect1: {
-    flex: 1
+    flex: 1,
   },
   DividerColor: {
     backgroundColor: 'white',
   },
   title: {
     color: 'black',
-    fontFamily: 'cursive'
+    fontFamily: 'cursive',
   },
   parallaxStyle: {
-    color: "#800000",
+    color: '#800000',
   },
-  cardVenueDetails:{
-    flexDirection:'column',
-    justifyContent:'space-between',  
+  cardVenueDetails: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     borderRadius: 6,
-    // backgroundColor:'rgba(222,206,206,1)', 
+    // backgroundColor:'rgba(222,206,206,1)',
     shadowColor: '#000',
-    shadowOffset: { width: 1, height: 1 },
+    shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
   },
-  eachItem:
-  {
+  eachItem: {
     flex: 1,
     height: 500,
     color: 'white',
-    margin: 15
+    margin: 15,
     // backgroundColor:'yellow'
   },
   leftAlign: {
@@ -310,7 +317,7 @@ const styles = StyleSheet.create({
     icon: {
       fontSize: 35,
       color: 'black',
-    }
+    },
   },
   centeredAlign: {
     content: {
@@ -338,29 +345,29 @@ const styles = StyleSheet.create({
   icon6: {
     top: 275,
     left: 128,
-    position: "absolute",
-    color: "yellow",
+    position: 'absolute',
+    color: 'yellow',
     fontSize: 15,
     height: 20,
-    width: 19
+    width: 19,
   },
   rect: {
     width: 360,
     height: 760,
-    backgroundColor: "rgba(222,206,206,1)"
+    backgroundColor: 'rgba(222,206,206,1)',
   },
   rect3: {
     height: 80,
-    position: "absolute",
-    backgroundColor: "rgba(230,230, 230,1)",
+    position: 'absolute',
+    backgroundColor: 'rgba(230,230, 230,1)',
     borderRadius: 12,
-    overflow: "visible",
+    overflow: 'visible',
     borderWidth: 1,
-    borderColor: "rgba(87,34,34,1)",
-    shadowColor: "rgba(193,166,166,1)",
+    borderColor: 'rgba(87,34,34,1)',
+    shadowColor: 'rgba(193,166,166,1)',
     shadowOffset: {
       width: 3,
-      height: 3
+      height: 3,
     },
     elevation: 5,
     shadowOpacity: 1,
@@ -368,63 +375,61 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    flexDirection: "row"
+    flexDirection: 'row',
   },
   capacityicon: {
     top: 185,
     left: 12,
-    position: "absolute",
-    color: "white",
+    position: 'absolute',
+    color: 'white',
     //fontSize: 40,
     height: 44,
-    width: 40
+    width: 40,
   },
   mapicon: {
     top: 98,
     left: 12,
-    position: "absolute",
-    color: "white",
+    position: 'absolute',
+    color: 'white',
     //fontSize: 40,
     height: 44,
-    width: 40
+    width: 40,
   },
   Hallicon: {
     top: 52,
     left: 7,
-    position: "absolute",
-    color: "white",
+    position: 'absolute',
+    color: 'white',
     //fontSize: 40,
     height: 44,
-    width: 40
+    width: 40,
   },
   icon: {
     top: 6,
     left: 7,
-    position: "absolute",
-    color: "white",
+    position: 'absolute',
+    color: 'white',
     //fontSize: 40,
     height: 44,
-    width: 40
+    width: 40,
   },
 
   home: {
-    fontFamily: "roboto-700",
-    color: "rgba(249,242,242,1)",
+    fontFamily: 'roboto-700',
+    color: 'rgba(249,242,242,1)',
     fontSize: 24,
     marginLeft: 25,
-    marginTop: 10
+    marginTop: 10,
   },
-
 
   image: {
     top: 0,
     left: 0,
     width: 335,
     height: 175,
-    position: "absolute",
-    borderRadius: 16
+    position: 'absolute',
+    borderRadius: 16,
   },
-
 
   image2: {
     // width: 335,
@@ -435,19 +440,19 @@ const styles = StyleSheet.create({
   },
   rectRow: {
     height: 760,
-    flexDirection: "row",
+    flexDirection: 'row',
     flex: 1,
-    marginRight: -2473
+    marginRight: -2473,
   },
   item: {
     height: SCREEN_WIDTH - 80,
     width: SCREEN_WIDTH - 60,
     margin: 10,
-    overflow: "visible",
-    shadowColor: "rgba(193,166,166,1)",
+    overflow: 'visible',
+    shadowColor: 'rgba(193,166,166,1)',
     shadowOffset: {
       width: 3,
-      height: 3
+      height: 3,
     },
     elevation: 5,
     shadowOpacity: 1,
@@ -458,19 +463,18 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    marginBottom: Platform.select({ ios: 0, android: 1 }), // Prevent a random Android rendering issue
+    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
     backgroundColor: 'white',
     borderRadius: 8,
     // height: SCREEN_WIDTH - 60,
     // width: SCREEN_WIDTH - 60,
-    // height: 
+    // height:
     // width :200,
     // heigth: 500
   },
   image: {
     ...StyleSheet.absoluteFillObject,
     resizeMode: 'stretch',
-
   },
   title: {
     fontSize: 24,
@@ -481,14 +485,12 @@ const styles = StyleSheet.create({
     shadowColor: 'black',
     marginRight: 20,
     marginTop: 10,
-    shadowOffset: { width: 1, height: 1 },
+    shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.8,
     shadowRadius: 4,
     elevation: 6,
-
   },
   viewWrapper: {
-   
     backgroundColor: 'floralwhite',
     borderRadius: 5,
     justifyContent: 'space-around',
@@ -496,17 +498,15 @@ const styles = StyleSheet.create({
     shadowColor: 'white',
     marginRight: 20,
     marginTop: 10,
-    shadowOffset: { width: 1, height: 1 },
+    shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.8,
     shadowRadius: 4,
     elevation: 6,
     content: {
       fontSize: 15,
-      color: 'rgba(157,24,24,0.8)'
-    }
-  }
+      color: 'rgba(157,24,24,0.8)',
+    },
+  },
 });
 
 export default DetailOfHallPage;
-
-

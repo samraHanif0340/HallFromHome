@@ -25,15 +25,11 @@ import {
 import axios from 'axios';
 import {BASE_URL} from '../../../constants/constants';
 import Snackbar from 'react-native-snackbar';
+import {useStoreState} from 'easy-peasy';
 
 const source = axios.CancelToken.source();
 
 const validationSchema = Yup.object().shape({
-  Name: Yup.string()
-    .min(2, 'Name must be atleast 6 characters long')
-    .max(80, 'Name must be atmost 80 characters long')
-    .required('Required'),
-
   EmailAddress: Yup.string()
     .email('Enter a valid EMAIL (abc@abc.com)')
     .required('Required')
@@ -42,27 +38,31 @@ const validationSchema = Yup.object().shape({
     .min(10, 'Password must be atleast 10 characters long')
     .max(20, 'Password must be atmost 20 characters long')
     .required('Required'),
-  PhoneNumber: Yup.string()
-    .min(11, 'Mobile Number should be in format 03xxxxxxxxx')
-    .max(11, 'Mobile Number should be in format 03xxxxxxxxx')
-    .matches(/^[0][3][\d]{9}$/, 'Mobile Number should be in format 03xxxxxxxxx')
-    .required('Required'),
+  ConfirmPassword: Yup.string()
+    .min(10, 'Password must be atleast 10 characters long')
+    .max(20, 'Password must be atmost 20 characters long')
+    .required('Required')
+    .oneOf([Yup.ref('Password'), null], 'Both the passwords must match'),
 });
 
-const RegistrationPage = ({navigation}) => {
+const ForgotPasswordPage = ({navigation}) => {
+  const globalPayload = useStoreState(state => state.payload);
+
   const [isLoading, setIsLoading] = React.useState(false);
 
   const submitForm = formData => {
     console.log(formData);
-    if (formData != null || formData != {}) {
-      saveData(formData);
+    let newObject = {...formData};
+    delete newObject.ConfirmPassword;
+    if (newObject != null || newObject != {}) {
+      saveData(newObject);
     }
   };
 
   const saveData = async data => {
     let formData = Object.assign({}, data);
     let configurationObject = {
-      url: `${BASE_URL}UserRegistration`,
+      url: `${BASE_URL}ForgotPassword`,
       method: 'POST',
       cancelToken: source.token,
       data: formData,
@@ -75,12 +75,11 @@ const RegistrationPage = ({navigation}) => {
         setIsLoading(false);
         Snackbar.show({
           text: 'Success',
-          backgroundColor: 'green',
+          backgroundColor: 'white',
           textColor: 'white',
           duration: Snackbar.LENGTH_LONG,
         });
         navigation.navigate('Login');
-
         return;
       } else {
         setIsLoading(false);
@@ -119,19 +118,16 @@ const RegistrationPage = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Loader isLoading={isLoading} />
-
       <StatusBar barStyle="light-content" backgroundColor="rgba(142,7,27,1)" />
-
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>Create Account</Text>
+        <Text style={styles.title}>Forgot Password</Text>
       </View>
       <ScrollView>
         <Formik
           initialValues={{
-            Name: '',
             EmailAddress: '',
             Password: '',
-            PhoneNumber: '',
+            ConfirmPassword: '',
           }}
           validationSchema={validationSchema}
           onSubmit={(values, errors) => submitForm(values)}>
@@ -145,20 +141,6 @@ const RegistrationPage = ({navigation}) => {
             isValidating,
           }) => (
             <View>
-              <TextField
-                placeholder="Name"
-                style={styles.labelText}
-                errorMsgStyle={styles.errorMsg}
-                keyboardType="default"
-                mode="outlined"
-                placeholderTextColor="#800000"
-                nameOfIcon="user"
-                maxLength={80}
-                onChangeText={handleChange('Name')}
-                onBlur={handleBlur('Name')}
-                value={values.Name}
-                error={[errors.Name]}
-              />
               <TextField
                 placeholder="Email"
                 style={styles.labelText}
@@ -174,22 +156,6 @@ const RegistrationPage = ({navigation}) => {
                 error={[errors.EmailAddress]}
               />
               <TextField
-                placeholder="Mobile Number"
-                style={styles.labelText}
-                errorMsgStyle={styles.errorMsg}
-                keyboardType="phone-pad"
-                mode="outlined"
-                placeholderTextColor="#800000"
-                nameOfIcon="bell"
-                maxLength={11}
-                onChangeText={handleChange('PhoneNumber')}
-                onBlur={handleBlur('PhoneNumber')}
-                value={values.PhoneNumber}
-                error={[errors.PhoneNumber]}
-              />
-
-              <TextField
-                errorMsgStyle={styles.errorMsg}
                 placeholder="Password"
                 style={styles.labelText}
                 keyboardType="default"
@@ -202,12 +168,29 @@ const RegistrationPage = ({navigation}) => {
                 onBlur={handleBlur('Password')}
                 value={values.Password}
                 error={[errors.Password]}
+                errorMsgStyle={styles.errorMsg}
+              />
+
+              <TextField
+                placeholder="Confirm Password"
+                style={styles.labelText}
+                keyboardType="default"
+                mode="outlined"
+                secureTextEntry={true}
+                placeholderTextColor="#800000"
+                nameOfIcon="eye"
+                maxLength={20}
+                onChangeText={handleChange('ConfirmPassword')}
+                onBlur={handleBlur('ConfirmPassword')}
+                value={values.ConfirmPassword}
+                error={[errors.ConfirmPassword]}
+                errorMsgStyle={styles.errorMsg}
               />
 
               <TouchableOpacity
                 onPress={handleSubmit}
                 style={styles.submitButtonWrapper}>
-                <Text style={styles.submitButtonText}>CONTINUE</Text>
+                <Text style={styles.submitButtonText}>CHANGE PASSWORD</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -263,4 +246,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegistrationPage;
+export default ForgotPasswordPage;

@@ -2,17 +2,18 @@
   package="com.hallfromhome">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
    android:icon="@mipmap/ic_launcher"
-     
+
       android:allowBackup="false"
       android:theme="@style/AppTheme">
 
-     <meta-data android:name="com.google.android.geo.API_KEY" 
-android:value="AIzaSyAOUUINaP9VLf1rjGzETsvcybLOoj5jZ8I"/>
+     <meta-data android:name="com.google.android.geo.API_KEY"
+android:value="AIzaSyBHJVA7cHvvbsXvhfLOatNu07TkcAg0u5s"/>
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
@@ -26,4 +27,3 @@ android:value="AIzaSyAOUUINaP9VLf1rjGzETsvcybLOoj5jZ8I"/>
       </activity>
     </application>
 </manifest>
-    
